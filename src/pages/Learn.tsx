@@ -124,7 +124,7 @@ const LearnPage = () => {
                   {modules.filter(m => m.type === selectedMethod).map((m, i) => (
                     <TabsContent key={i} value={`m-${i}`}>
                       <article className="rounded-2xl border border-border bg-card p-6 shadow-elegant">
-                        {m.type === "flashcards" && <Flashcards cards={m.cards} />}
+                        {m.type === "flashcards" && <Flashcards cards={m.cards} categoryId={categoryId} moduleIndex={i} />}
                         {m.type === "quiz" && <Quiz questions={m.questions} />}
                         {m.type === "matching" && <Matching pairs={m.pairs} />}
                         {m.type === "code" && <CodeChallengeComponent challenges={m.challenges} />}

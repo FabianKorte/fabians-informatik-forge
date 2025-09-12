@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import type { Flashcard } from "@/types/learn";
+import { useProgress } from "@/hooks/useProgress";
 
 interface FlashcardsProps {
   cards: Flashcard[];
+  categoryId: string;
+  moduleIndex: number;
 }
 
-export const Flashcards = ({ cards }: FlashcardsProps) => {
+export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) => {
   // Learning state
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
@@ -16,19 +19,40 @@ export const Flashcards = ({ cards }: FlashcardsProps) => {
   const [historyPtr, setHistoryPtr] = useState<number>(-1);
   const [shownThisRound, setShownThisRound] = useState<Set<number>>(new Set());
 
-  // Initialize on cards load with a random start
+  // Progress tracking
+  const { progressData, saveFlashcardProgress } = useProgress(categoryId, "flashcards", moduleIndex);
+
+  // Initialize on cards load with a random start + load saved progress
   useEffect(() => {
     if (!cards || cards.length === 0) return;
-    const start = Math.floor(Math.random() * cards.length);
-    setIndex(start);
+    
+    // Load saved progress if available
+    const savedProgress = progressData.flashcards;
+    if (savedProgress) {
+      setKnownCards(new Set(savedProgress.knownCards || []));
+      setUnknownCards(new Set(savedProgress.unknownCards || []));
+      setIndex(savedProgress.lastIndex || 0);
+      setHistory([savedProgress.lastIndex || 0]);
+      setHistoryPtr(0);
+    } else {
+      // Fresh start with random card
+      const start = Math.floor(Math.random() * cards.length);
+      setIndex(start);
+      setHistory([start]);
+      setHistoryPtr(0);
+    }
+    
     setFlipped(false);
-    setKnownCards(new Set());
-    setUnknownCards(new Set());
-    setHistory([start]);
-    setHistoryPtr(0);
     setShownThisRound(new Set());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cards.length]);
+  }, [cards.length, progressData]);
+
+  // Auto-save progress whenever cards change
+  useEffect(() => {
+    if (cards && cards.length > 0) {
+      saveFlashcardProgress(knownCards, unknownCards, index);
+    }
+  }, [knownCards, unknownCards, index, cards, saveFlashcardProgress]);
 
   if (!cards || cards.length === 0) {
     return (
@@ -135,6 +159,18 @@ export const Flashcards = ({ cards }: FlashcardsProps) => {
 
   return (
     <div className="space-y-6">
+      {/* Lernhilfe-Einführung */}
+      <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
+        <h3 className="font-semibold text-foreground mb-2">📚 Lernhilfe - Karteikarten optimal nutzen</h3>
+        <p className="text-sm text-muted-foreground mb-2">
+          <strong>Effektive Lernstrategie:</strong> Karteikarten helfen beim aktiven Abruf von Wissen. 
+          Versuche erst selbst zu antworten, bevor du die Karte umdrehst.
+        </p>
+        <p className="text-xs text-muted-foreground">
+          💡 <strong>Tipp:</strong> Schwierige Karten werden öfter wiederholt. Dein Lernfortschritt wird automatisch gespeichert.
+        </p>
+      </div>
+
       {/* Card */}
       <div
         className={`relative h-56 md:h-64 rounded-2xl border shadow-elegant overflow-hidden select-none cursor-pointer flip-3d ${
