@@ -1288,7 +1288,7 @@ export const learnContent: Record<string, LearnModule[]> = {
         }
       ]
     }
-  ]
+  ],
   pruefungsvorbereitung: [
     {
       type: "flashcards",
