@@ -1,16 +1,21 @@
-import { 
-  Code2, 
-  Database, 
-  Shield, 
-  Network, 
-  Server, 
+import {
+  Code2,
+  Database,
+  Shield,
+  Network,
+  Server,
   Smartphone,
   Globe,
   Settings,
   BookOpen,
   Users,
   FileText,
-  Brain
+  Brain,
+  BarChart3,
+  Scale,
+  Lock,
+  Cable,
+  Braces
 } from "lucide-react";
 
 export interface Category {
@@ -144,5 +149,55 @@ export const categories: Category[] = [
     icon: Brain,
     difficulty: "Experte",
     gradient: "from-teal-500 to-cyan-600"
+  },
+  {
+    id: "bwl",
+    title: "BWL",
+    description: "Kostenrechnung, Bilanz, Kennzahlen und Investitionen",
+    totalElements: 70,
+    completedElements: 0,
+    icon: BarChart3,
+    difficulty: "Fortgeschritten",
+    gradient: "from-amber-500 to-yellow-600"
+  },
+  {
+    id: "wiso",
+    title: "Wirtschafts- und Sozialkunde (WiSo)",
+    description: "Arbeitsrecht, Wirtschaft, Soziales und Tarifverträge",
+    totalElements: 80,
+    completedElements: 0,
+    icon: Scale,
+    difficulty: "Anfänger",
+    gradient: "from-lime-500 to-green-600"
+  },
+  {
+    id: "datenschutz",
+    title: "Datenschutz",
+    description: "DSGVO, TOMs, Verzeichnisse und Betroffenenrechte",
+    totalElements: 75,
+    completedElements: 0,
+    icon: Lock,
+    difficulty: "Fortgeschritten",
+    gradient: "from-teal-500 to-emerald-600"
+  },
+  {
+    id: "fachmodul-systemintegration",
+    title: "Fachmodul Systemintegration",
+    description: "Netzwerke, Server, Virtualisierung und IT-Betrieb",
+    totalElements: 120,
+    completedElements: 0,
+    icon: Cable,
+    difficulty: "Experte",
+    gradient: "from-sky-500 to-blue-600"
+  },
+  {
+    id: "fachmodul-anwendungsentwicklung",
+    title: "Fachmodul Anwendungsentwicklung",
+    description: "OOP, Entwurfsmuster, Testing und Clean Code",
+    totalElements: 120,
+    completedElements: 0,
+    icon: Braces,
+    difficulty: "Experte",
+    gradient: "from-fuchsia-500 to-purple-600"
   }
 ];

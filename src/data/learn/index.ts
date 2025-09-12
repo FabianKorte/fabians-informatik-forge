@@ -439,6 +439,392 @@ const extraLearnContent: Record<string, LearnModule[]> = {
         }
       ]
     }
+  ],
+  bwl: [
+    {
+      type: "flashcards",
+      title: "BWL-Grundbegriffe",
+      cards: [
+        { front: "Fixkosten", back: "Kosten, die unabhängig von der Auslastung anfallen." },
+        { front: "Variable Kosten", back: "Kosten, die mit der produz. Menge steigen." },
+        { front: "Deckungsbeitrag", back: "Erlös minus variable Kosten." },
+        { front: "Break-even", back: "Schwelle, ab der Gewinn erzielt wird." },
+        { front: "ROI", back: "Rendite des eingesetzten Kapitals." },
+        { front: "Abschreibung (AfA)", back: "Wertminderung über die Nutzungsdauer." }
+      ]
+    },
+    {
+      type: "quiz",
+      title: "Kostenrechnung & Controlling",
+      questions: [
+        { question: "Break-even liegt bei...", options: ["Erlös=Kosten", "Kosten=0", "Erlös>Gewinn", "Gewinn=0 bei negativen Kosten"], correctIndex: 0 },
+        { question: "Deckungsbeitrag ist...", options: ["Erlös + Fixkosten", "Erlös – variable Kosten", "Fixkosten – variable Kosten", "Gewinn – Steuern"], correctIndex: 1 },
+        { question: "ROI misst...", options: ["Liquidität", "Rendite", "Risiko", "Bestand"], correctIndex: 1 },
+        { question: "AfA steht für...", options: ["Aufwand für Anlagen", "Absetzung für Abnutzung", "Abschreibung für Aktiva", "Allgemeine fixe Ausgaben"], correctIndex: 1 }
+      ]
+    },
+    {
+      type: "matching",
+      title: "Kennzahlen zuordnen",
+      pairs: [
+        { left: "ROI", right: "Rendite" },
+        { left: "Liquidität 1. Grades", right: "Liquide Mittel / kurzfr. Verbindlichkeiten" },
+        { left: "EK-Quote", right: "Eigenkapital / Gesamtkapital" },
+        { left: "EBIT", right: "Gewinn vor Zinsen und Steuern" }
+      ]
+    },
+    {
+      type: "dragdrop",
+      title: "Kostenarten zuordnen",
+      games: [
+        {
+          title: "Einzelkosten vs. Gemeinkosten",
+          description: "Ordne die Kostenarten der passenden Kategorie zu.",
+          categories: ["Einzelkosten", "Gemeinkosten"],
+          items: [
+            { id: "k1", content: "Material", category: "Einzelkosten" },
+            { id: "k2", content: "Fertigungslöhne", category: "Einzelkosten" },
+            { id: "k3", content: "Miete", category: "Gemeinkosten" },
+            { id: "k4", content: "Strom", category: "Gemeinkosten" },
+            { id: "k5", content: "Abschreibungen", category: "Gemeinkosten" }
+          ]
+        }
+      ]
+    },
+    {
+      type: "memory",
+      title: "Buchführung Basics",
+      games: [
+        {
+          title: "Grundbegriffe",
+          description: "Merke dir zentrale Begriffe.",
+          pairs: [
+            { id: "b1", content: "Aktiva", match: "Vermögenswerte" },
+            { id: "b2", content: "Passiva", match: "Kapital" },
+            { id: "b3", content: "GuV", match: "Erfolgskonten" },
+            { id: "b4", content: "Inventur", match: "Bestandsaufnahme" }
+          ]
+        }
+      ]
+    },
+    {
+      type: "scenario",
+      title: "Investitionsentscheidung",
+      scenarios: [
+        {
+          title: "Zwei Maschinen im Vergleich",
+          description: "Unterschiedliche Anschaffungskosten und laufende Kosten.",
+          scenario: "Maschine A ist teuer in der Anschaffung, aber günstig im Betrieb. Maschine B ist günstig, hat aber hohe laufende Kosten.",
+          choices: [
+            { text: "Kapitalwert/Amortisationsdauer berechnen und vergleichen", consequence: "Fundierte Entscheidung auf Basis betriebswirtschaftlicher Kennzahlen.", isCorrect: true },
+            { text: "Bauchgefühl entscheiden lassen", consequence: "Riskant und nicht prüfungstauglich.", isCorrect: false }
+          ]
+        }
+      ]
+    }
+  ],
+  wiso: [
+    {
+      type: "flashcards",
+      title: "Arbeitswelt & Soziales",
+      cards: [
+        { front: "Probezeit", back: "Zeitraum zu Beginn eines Arbeitsverhältnisses mit verkürzter Kündigungsfrist." },
+        { front: "Tarifvertrag", back: "Vertrag zwischen Gewerkschaften und Arbeitgeberverbänden." },
+        { front: "Mitbestimmung", back: "Beteiligung der Arbeitnehmer im Betrieb (Betriebsrat)." },
+        { front: "Brutto/Netto", back: "Brutto vor Abzügen, Netto nach Abzügen." },
+        { front: "Sozialversicherung", back: "Kranken-, Pflege-, Renten-, Arbeitslosen- und Unfallversicherung." },
+        { front: "Kündigungsfrist", back: "Frist zwischen Kündigungserklärung und Beendigung." }
+      ]
+    },
+    {
+      type: "quiz",
+      title: "Wirtschaftsgrundlagen",
+      questions: [
+        { question: "Inflation bedeutet...", options: ["Preisanstieg", "Preissenkung", "Lohnsenkung", "Steuererhöhung"], correctIndex: 0 },
+        { question: "Oligopol ist...", options: ["Viele Anbieter", "Wenige Anbieter", "Ein Anbieter", "Kein Anbieter"], correctIndex: 1 },
+        { question: "BIP misst...", options: ["Staatsverschuldung", "Wirtschaftsleistung", "Inflationsrate", "Arbeitslosenquote"], correctIndex: 1 },
+        { question: "Betriebsrat wird gewählt ab...", options: ["5 Arbeitnehmern", "10", "20", "50"], correctIndex: 0 }
+      ]
+    },
+    {
+      type: "matching",
+      title: "Verträge & Rechte",
+      pairs: [
+        { left: "Kaufvertrag", right: "Übereignung einer Sache gegen Preis" },
+        { left: "Dienstvertrag", right: "Leistung von Diensten, kein Erfolg geschuldet" },
+        { left: "Werkvertrag", right: "Herstellung eines Erfolgs geschuldet" },
+        { left: "Mietvertrag", right: "Überlassung einer Sache auf Zeit" }
+      ]
+    },
+    {
+      type: "dragdrop",
+      title: "Sozialversicherung zuordnen",
+      games: [
+        {
+          title: "Träger und Bereiche",
+          description: "Ordne Beispiele dem richtigen Zweig zu.",
+          categories: ["Krankenversicherung", "Rentenversicherung", "Arbeitslosenversicherung", "Pflegeversicherung", "Unfallversicherung"],
+          items: [
+            { id: "s1", content: "AOK (Beispiel)", category: "Krankenversicherung" },
+            { id: "s2", content: "Deutsche Rentenversicherung", category: "Rentenversicherung" },
+            { id: "s3", content: "Bundesagentur für Arbeit", category: "Arbeitslosenversicherung" },
+            { id: "s4", content: "Pflegekasse", category: "Pflegeversicherung" },
+            { id: "s5", content: "Berufsgenossenschaft", category: "Unfallversicherung" }
+          ]
+        }
+      ]
+    },
+    {
+      type: "scenario",
+      title: "Arbeitsrechtlicher Fall",
+      scenarios: [
+        {
+          title: "Verspätung und Abmahnung",
+          description: "Mitarbeiter kommt mehrfach zu spät.",
+          scenario: "Wie reagiert der Arbeitgeber rechtssicher?",
+          choices: [
+            { text: "Abmahnung aussprechen, Gespräch suchen", consequence: "Verhältnismäßig und rechtssicher.", isCorrect: true },
+            { text: "Fristlose Kündigung ohne Vorwarnung", consequence: "Unverhältnismäßig, rechtlich angreifbar.", isCorrect: false }
+          ]
+        }
+      ]
+    }
+  ],
+  datenschutz: [
+    {
+      type: "flashcards",
+      title: "DSGVO-Prinzipien",
+      cards: [
+        { front: "Rechtmäßigkeit", back: "Verarbeitung nur bei gültiger Rechtsgrundlage." },
+        { front: "Zweckbindung", back: "Nur für festgelegte, eindeutige Zwecke." },
+        { front: "Datenminimierung", back: "So wenig Daten wie möglich." },
+        { front: "Richtigkeit", back: "Daten müssen sachlich richtig sein." },
+        { front: "Speicherbegrenzung", back: "Nur so lange wie nötig speichern." },
+        { front: "Integrität & Vertraulichkeit", back: "Angemessene Sicherheit (TOMs)." }
+      ]
+    },
+    {
+      type: "quiz",
+      title: "Rechtsgrundlagen",
+      questions: [
+        { question: "Newsletter-Versand basiert i.d.R. auf...", options: ["Vertrag", "Einwilligung", "Gesetzliche Pflicht", "Berechtigtes Interesse"], correctIndex: 1 },
+        { question: "Auftragsverarbeitung ist geregelt in...", options: ["Art. 28 DSGVO", "Art. 6 DSGVO", "Art. 5 DSGVO", "Art. 32 DSGVO"], correctIndex: 0 },
+        { question: "Meldepflicht Datenpanne:", options: ["24h", "48h", "72h", "1 Woche"], correctIndex: 2 }
+      ]
+    },
+    {
+      type: "matching",
+      title: "Rollen im Datenschutz",
+      pairs: [
+        { left: "Verantwortlicher", right: "Entscheidet über Zwecke und Mittel" },
+        { left: "Auftragsverarbeiter", right: "Verarbeitet im Auftrag" },
+        { left: "Betroffene Person", right: "Von Datenverarbeitung betroffen" },
+        { left: "Datenschutzbeauftragter", right: "Berät, überwacht, schult" }
+      ]
+    },
+    {
+      type: "dragdrop",
+      title: "TOMs kategorisieren",
+      games: [
+        {
+          title: "Technisch vs. Organisatorisch vs. Physisch",
+          description: "Ordne Maßnahmen der passenden Kategorie zu.",
+          categories: ["Technisch", "Organisatorisch", "Physisch"],
+          items: [
+            { id: "t1", content: "Verschlüsselung", category: "Technisch" },
+            { id: "t2", content: "Passwortrichtlinie", category: "Organisatorisch" },
+            { id: "t3", content: "Zutrittskontrolle", category: "Physisch" },
+            { id: "t4", content: "Pseudonymisierung", category: "Technisch" },
+            { id: "t5", content: "Mitarbeiterschulung", category: "Organisatorisch" }
+          ]
+        }
+      ]
+    },
+    {
+      type: "memory",
+      title: "Betroffenenrechte",
+      games: [
+        {
+          title: "Rechte zuordnen",
+          description: "Merke dir die wichtigsten Betroffenenrechte.",
+          pairs: [
+            { id: "r1", content: "Auskunft", match: "Art. 15" },
+            { id: "r2", content: "Berichtigung", match: "Art. 16" },
+            { id: "r3", content: "Löschung", match: "Art. 17" },
+            { id: "r4", content: "Datenübertragbarkeit", match: "Art. 20" }
+          ]
+        }
+      ]
+    },
+    {
+      type: "scenario",
+      title: "DSFA (DPIA) Entscheidung",
+      scenarios: [
+        {
+          title: "Neues KI-Feature",
+          description: "Hohe Risiken für Rechte und Freiheiten?",
+          scenario: "Ein neues KI-Modul analysiert Kundendaten zur Kreditwürdigkeit.",
+          choices: [
+            { text: "DSFA prüfen/ durchführen, DSB einbeziehen", consequence: "Risikoorientiert und DSGVO-konform.", isCorrect: true },
+            { text: "Direkt live schalten", consequence: "Rechtliches Risiko, Bußgeld droht.", isCorrect: false }
+          ]
+        }
+      ]
+    }
+  ],
+  "fachmodul-systemintegration": [
+    {
+      type: "flashcards",
+      title: "Infrastruktur-Konzepte",
+      cards: [
+        { front: "Active Directory", back: "Verzeichnisdienst für Authentifizierung." },
+        { front: "DNS", back: "Namensauflösung im Netzwerk." },
+        { front: "DHCP", back: "Automatische IP-Vergabe." },
+        { front: "VLAN", back: "Logische Netzsegmentierung." },
+        { front: "Hypervisor", back: "Virtualisierungsplattform." },
+        { front: "NAT", back: "Adressübersetzung." }
+      ]
+    },
+    {
+      type: "quiz",
+      title: "Virtualisierung & Dienste",
+      questions: [
+        { question: "VM-Snapshots sind...", options: ["Backups", "Zeitpunkte des Systemzustands", "Container", "Images"], correctIndex: 1 },
+        { question: "RDP nutzt Port...", options: ["22", "3389", "445", "1433"], correctIndex: 1 },
+        { question: "High Availability erreicht man durch...", options: ["Single Server", "Redundanz/Failover", "Mehr RAM", "Schnellere CPU"], correctIndex: 1 }
+      ]
+    },
+    {
+      type: "matching",
+      title: "RAID-Level zuordnen",
+      pairs: [
+        { left: "RAID 0", right: "Striping (Leistung, keine Redundanz)" },
+        { left: "RAID 1", right: "Mirroring (Redundanz)" },
+        { left: "RAID 5", right: "Parity (Leistung + Redundanz)" }
+      ]
+    },
+    {
+      type: "dragdrop",
+      title: "Services zu Ports",
+      games: [
+        {
+          title: "Ordne Dienste den Ports zu",
+          description: "Klassische Admin-Prüfungsfrage.",
+          categories: ["22", "80", "3389", "445"],
+          items: [
+            { id: "si1", content: "SSH", category: "22" },
+            { id: "si2", content: "HTTP", category: "80" },
+            { id: "si3", content: "RDP", category: "3389" },
+            { id: "si4", content: "SMB", category: "445" }
+          ]
+        }
+      ]
+    },
+    {
+      type: "memory",
+      title: "Backup-Strategien",
+      games: [
+        {
+          title: "Backup-Arten",
+          description: "Verbinde Begriff und Beschreibung.",
+          pairs: [
+            { id: "m1", content: "Vollbackup", match: "Alle Daten vollständig sichern" },
+            { id: "m2", content: "Inkrementell", match: "Nur Änderungen seit letztem Backup" },
+            { id: "m3", content: "Differenziell", match: "Änderungen seit letztem Vollbackup" }
+          ]
+        }
+      ]
+    },
+    {
+      type: "scenario",
+      title: "Server-Migration",
+      scenarios: [
+        {
+          title: "Downtime minimieren",
+          description: "Altsystem muss abgelöst werden.",
+          scenario: "Ein Fileserver wird auf neue Hardware migriert.",
+          choices: [
+            { text: "Parallelbetrieb + geplanter Cutover", consequence: "Minimiert Risiko und Ausfallzeit.", isCorrect: true },
+            { text: "Spontan in Produktion tauschen", consequence: "Hohes Risiko, ggf. Datenverlust.", isCorrect: false }
+          ]
+        }
+      ]
+    }
+  ],
+  "fachmodul-anwendungsentwicklung": [
+    {
+      type: "flashcards",
+      title: "OOP & Patterns",
+      cards: [
+        { front: "Kapselung", back: "Daten verbergen hinter Schnittstellen." },
+        { front: "Polymorphie", back: "Gleiches Interface, unterschiedliche Implementierung." },
+        { front: "Abstraktion", back: "Wesentliches hervorheben." },
+        { front: "Singleton", back: "Genau eine Instanz global zugänglich." },
+        { front: "Observer", back: "Benachrichtigung bei Zustandsänderungen." }
+      ]
+    },
+    {
+      type: "quiz",
+      title: "Git & Testing",
+      questions: [
+        { question: "Pull Request dient...", options: ["Branch löschen", "Code Review", "Merge verhindern", "Build starten"], correctIndex: 1 },
+        { question: "Unit-Tests sollen...", options: ["Integration testen", "Nur UI testen", "Kleine Einheiten isoliert testen", "Manuell sein"], correctIndex: 2 },
+        { question: "CI bedeutet...", options: ["Continuous Integration", "Code Inspection", "Cloud Instance", "Container Image"], correctIndex: 0 }
+      ]
+    },
+    {
+      type: "matching",
+      title: "Entwurfsmuster",
+      pairs: [
+        { left: "Factory", right: "Erzeugt Objekte über Schnittstellen" },
+        { left: "Decorator", right: "Fügt Verhalten zur Laufzeit hinzu" },
+        { left: "Strategy", right: "Austauschbare Algorithmen" },
+        { left: "Adapter", right: "Schnittstellen anpassen" }
+      ]
+    },
+    {
+      type: "code",
+      title: "Kleine Code-Katas",
+      challenges: [
+        {
+          title: "Klammern balanciert?",
+          description: "Prüfe ob (), [], {} korrekt geschachtelt sind.",
+          initialCode: "function isBalanced(s){\n  // TODO\n}\nconsole.log(isBalanced('([]{})'));",
+          solution: "function isBalanced(s){\n  const map={')':'(',']':'[','}':'{'};\n  const st=[];\n  for(const ch of s){\n    if('([{'.includes(ch)) st.push(ch);\n    else if(')]}'.includes(ch)){\n      if(st.pop()!==map[ch]) return false;\n    }\n  }\n  return st.length===0;\n}",
+          tests: [
+            { input: "([]{})", expected: "true" },
+            { input: "([)]", expected: "false" }
+          ]
+        },
+        {
+          title: "Stack implementieren",
+          description: "Implementiere push, pop und peek.",
+          initialCode: "class Stack{\n  constructor(){ this._d=[] }\n  // TODO: push(x), pop(), peek()\n}",
+          solution: "class Stack{\n  constructor(){ this._d=[] }\n  push(x){ this._d.push(x) }\n  pop(){ return this._d.pop() }\n  peek(){ return this._d[this._d.length-1] }\n}",
+          tests: [
+            { input: "push/pop", expected: "OK" }
+          ]
+        }
+      ]
+    },
+    {
+      type: "dragdrop",
+      title: "UML-Grundlagen",
+      games: [
+        {
+          title: "Elemente zuordnen",
+          description: "Ordne UML-Elemente Kategorien zu.",
+          categories: ["Struktur", "Beziehung", "Diagramm"],
+          items: [
+            { id: "u1", content: "Klasse", category: "Struktur" },
+            { id: "u2", content: "Interface", category: "Struktur" },
+            { id: "u3", content: "Aggregation", category: "Beziehung" },
+            { id: "u4", content: "Komposition", category: "Beziehung" },
+            { id: "u5", content: "Sequenzdiagramm", category: "Diagramm" }
+          ]
+        }
+      ]
+    }
   ]
 };
 

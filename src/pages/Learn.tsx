@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { categories } from "@/data/categories";
-import { getModulesForCategory } from "@/data/learnContent";
+import { getModulesForCategory } from "@/data/learn";
 import type { LearnModule } from "@/types/learn";
 import { Flashcards } from "@/components/learn/Flashcards";
 import { Quiz } from "@/components/learn/Quiz";

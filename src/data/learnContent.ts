@@ -803,21 +803,6 @@ export const learnContent: Record<string, LearnModule[]> = {
       ]
     },
     {
-      type: "code",
-      title: "User Story Schreiben",
-      challenges: [
-        {
-          title: "User Story Template",
-          description: "Schreibe eine vollständige User Story",
-          initialCode: "// Als [Rolle]\n// möchte ich [Funktion]\n// damit [Nutzen]\n\n// Beispiel für Login-Feature:",
-          solution: "Als registrierter Nutzer\nmöchte ich mich mit Email und Passwort anmelden\ndamit ich auf meine persönlichen Daten zugreifen kann",
-          tests: [
-            { input: "User Story Format", expected: "Als.*möchte.*damit" }
-          ]
-        }
-      ]
-    },
-    {
       type: "dragdrop",
       title: "Sprint-Phasen",
       games: [
