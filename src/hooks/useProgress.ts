@@ -63,6 +63,7 @@ const getCookie = (name: string): string | null => {
 
 export const useProgress = (categoryId: string, methodType: string, moduleIndex: number) => {
   const [progressData, setProgressData] = useState<ProgressData>({});
+  const [loaded, setLoaded] = useState(false);
   const moduleKey = moduleIndex.toString();
 
   // Load progress from cookie on mount
@@ -77,6 +78,7 @@ export const useProgress = (categoryId: string, methodType: string, moduleIndex:
         setProgressData({});
       }
     }
+    setLoaded(true);
   }, []);
 
   // Save progress to cookie whenever data changes
@@ -210,6 +212,7 @@ export const useProgress = (categoryId: string, methodType: string, moduleIndex:
 
   return {
     progressData: getModuleProgress(),
+    loaded,
     saveFlashcardProgress,
     saveQuizProgress,
     saveMatchingProgress,
