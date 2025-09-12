@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import type { Flashcard } from "@/types/learn";
 
@@ -11,17 +11,83 @@ export const Flashcards = ({ cards }: FlashcardsProps) => {
   const [flipped, setFlipped] = useState(false);
   const [knownCards, setKnownCards] = useState<Set<number>>(new Set());
   const [unknownCards, setUnknownCards] = useState<Set<number>>(new Set());
+  const [history, setHistory] = useState<number[]>([]);
+  const [historyPtr, setHistoryPtr] = useState<number>(-1);
+  const [shownThisRound, setShownThisRound] = useState<Set<number>>(new Set());
+
+  // initialize with a random card on mount
+  useEffect(() => {
+    if (cards.length === 0) return;
+    const start = Math.floor(Math.random() * cards.length);
+    setIndex(start);
+    setHistory([start]);
+    setHistoryPtr(0);
+  // only on mount / when cards ref changes length
+  }, [cards.length]);
 
   const current = cards[index];
 
+  const pickNextIndex = (exclude?: number) => {
+    const allIndices = cards.map((_, idx) => idx);
+    const neutral = allIndices.filter((i) => !knownCards.has(i) && !unknownCards.has(i));
+    const difficult = Array.from(unknownCards);
+
+    // Reset round if all current neutral cards have been shown in this round
+    const roundShown = new Set(shownThisRound);
+    const allNeutralShown = neutral.length > 0 && neutral.every((i) => roundShown.has(i));
+    if (allNeutralShown) {
+      roundShown.clear();
+    }
+
+    // Build weighted pool: neutrals not shown this round (1x), difficult (3x)
+    const pool: number[] = [];
+    for (const i of neutral) {
+      if (!roundShown.has(i)) pool.push(i);
+    }
+    for (const i of difficult) {
+      pool.push(i, i, i);
+    }
+
+    let candidates = pool.length > 0 ? pool : (difficult.length > 0 ? difficult : neutral);
+
+    if (exclude !== undefined && candidates.length > 1) {
+      candidates = candidates.filter((i) => i !== exclude);
+    }
+    if (!candidates || candidates.length === 0) {
+      setShownThisRound(roundShown);
+      return exclude ?? 0;
+    }
+
+    const nextIdx = candidates[Math.floor(Math.random() * candidates.length)];
+
+    // Track neutrals shown this round so they don't repeat; difficult may repeat
+    if (!knownCards.has(nextIdx) && !unknownCards.has(nextIdx)) {
+      roundShown.add(nextIdx);
+    }
+    setShownThisRound(roundShown);
+
+    return nextIdx;
+  };
+
   const next = () => {
     setFlipped(false);
-    setIndex((i) => (i + 1 < cards.length ? i + 1 : 0));
+    const nextIdx = pickNextIndex(index);
+    setIndex(nextIdx);
+    setHistory((h) => {
+      const cut = historyPtr >= 0 && historyPtr < h.length ? h.slice(0, historyPtr + 1) : h;
+      return [...cut, nextIdx];
+    });
+    setHistoryPtr((p) => p + 1);
   };
 
   const prev = () => {
     setFlipped(false);
-    setIndex((i) => (i - 1 >= 0 ? i - 1 : cards.length - 1));
+    setHistoryPtr((p) => {
+      const newPtr = Math.max(0, p - 1);
+      const prevIdx = history[newPtr] ?? index;
+      setIndex(prevIdx);
+      return newPtr;
+    });
   };
 
   const markAsKnown = () => {
@@ -53,7 +119,11 @@ export const Flashcards = ({ cards }: FlashcardsProps) => {
   const resetProgress = () => {
     setKnownCards(new Set());
     setUnknownCards(new Set());
-    setIndex(0);
+    setShownThisRound(new Set());
+    const start = Math.floor(Math.random() * cards.length);
+    setIndex(start);
+    setHistory([start]);
+    setHistoryPtr(0);
     setFlipped(false);
   };
 
@@ -62,7 +132,7 @@ export const Flashcards = ({ cards }: FlashcardsProps) => {
   return (
     <div className="space-y-6">
       <div
-        className={`relative h-56 md:h-64 rounded-2xl border shadow-elegant overflow-hidden select-none cursor-pointer perspective ${
+        className={`relative h-56 md:h-64 rounded-2xl border shadow-elegant overflow-hidden select-none cursor-pointer [perspective:1200px] ${
           currentCardStatus === 'known' ? 'border-success bg-success/5' : 
           currentCardStatus === 'unknown' ? 'border-destructive bg-destructive/5' : 
           'border-border bg-card'
@@ -71,17 +141,17 @@ export const Flashcards = ({ cards }: FlashcardsProps) => {
         aria-label="Karte umdrehen"
       >
         <div
-          className={`absolute inset-0 grid place-items-center p-8 text-center transition-transform duration-500 [transform-style:preserve-3d] ${
+          className={`absolute inset-0 grid place-items-center p-8 text-center transition-transform duration-500 transform-gpu will-change-transform [transform-style:preserve-3d] ${
             flipped ? "[transform:rotateY(180deg)]" : ""
           }`}
         >
-          <div className="absolute inset-0 grid place-items-center p-8 [backface-visibility:hidden] bg-gradient-to-br from-card to-card/80">
+          <div className="absolute inset-0 grid place-items-center p-8 [backface-visibility:hidden] [-webkit-backface-visibility:hidden] [transform:translateZ(0)] bg-gradient-to-br from-card to-card/80">
             <div>
               <p className="text-xl md:text-2xl font-semibold text-foreground leading-relaxed mb-4">{current.front}</p>
               <p className="text-sm text-muted-foreground">Tippe zum Umdrehen</p>
             </div>
           </div>
-          <div className="absolute inset-0 grid place-items-center p-8 [transform:rotateY(180deg)] [backface-visibility:hidden] bg-gradient-to-br from-primary/5 to-accent/5">
+          <div className="absolute inset-0 grid place-items-center p-8 [transform:rotateY(180deg)] [backface-visibility:hidden] [-webkit-backface-visibility:hidden] [transform:translateZ(0)] bg-gradient-to-br from-primary/5 to-accent/5">
             <p className="text-lg md:text-xl text-foreground leading-relaxed">{current.back}</p>
           </div>
         </div>
