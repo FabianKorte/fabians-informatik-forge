@@ -172,7 +172,7 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
 
       {/* Card */}
       <div
-        className={`relative h-56 md:h-64 rounded-2xl border shadow-elegant overflow-hidden select-none cursor-pointer flip-3d ${
+        className={`relative h-[55vh] sm:h-[60vh] md:h-64 lg:h-72 rounded-2xl border shadow-elegant overflow-hidden select-none cursor-pointer flip-3d ${
           currentCardStatus === "known"
             ? "border-success bg-success/5"
             : currentCardStatus === "unknown"
@@ -186,18 +186,18 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
         {/* Inner flipper */}
         <div className={`flip-3d-inner ${flipped ? "is-flipped" : ""}`}>
           {/* Front face */}
-          <div className="flip-face bg-gradient-to-br from-card to-card/80">
-            <div className="p-8 text-center">
-              <p className="text-xl md:text-2xl font-semibold text-foreground leading-relaxed mb-4">
+          <div className="flip-face bg-gradient-to-br from-card to-card/80 overflow-y-auto overscroll-contain touch-pan-y">
+            <div className="p-4 md:p-8 text-center">
+              <p className="text-base sm:text-lg md:text-2xl font-semibold text-foreground leading-snug md:leading-relaxed break-words mb-4">
                 {current.front}
               </p>
               <p className="text-sm text-muted-foreground">Tippe zum Umdrehen</p>
             </div>
           </div>
           {/* Back face */}
-          <div className="flip-face flip-face-back bg-gradient-to-br from-primary/5 to-accent/5">
-            <div className="p-8 text-center">
-              <p className="text-lg md:text-xl text-foreground leading-relaxed">
+          <div className="flip-face flip-face-back bg-gradient-to-br from-primary/5 to-accent/5 overflow-y-auto overscroll-contain touch-pan-y">
+            <div className="p-4 md:p-8 text-center">
+              <p className="text-sm sm:text-base md:text-xl text-foreground leading-snug md:leading-relaxed break-words">
                 {current.back}
               </p>
             </div>
