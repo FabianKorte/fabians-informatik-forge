@@ -20,19 +20,19 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
   const [shownThisRound, setShownThisRound] = useState<Set<number>>(new Set());
 
   // Progress tracking
-  const { progressData, saveFlashcardProgress } = useProgress(categoryId, "flashcards", moduleIndex);
+  const { progressData, loaded, saveFlashcardProgress } = useProgress(categoryId, "flashcards", moduleIndex);
 
   // Initialize on cards load with a random start + load saved progress
   useEffect(() => {
-    if (!cards || cards.length === 0) return;
-    
-    // Load saved progress if available
-    const savedProgress = progressData.flashcards;
-    if (savedProgress) {
-      setKnownCards(new Set(savedProgress.knownCards || []));
-      setUnknownCards(new Set(savedProgress.unknownCards || []));
-      setIndex(savedProgress.lastIndex || 0);
-      setHistory([savedProgress.lastIndex || 0]);
+    if (!loaded || !cards || cards.length === 0) return;
+
+    const saved = progressData.flashcards;
+    if (saved) {
+      const lastIdx = Math.min(Math.max(saved.lastIndex ?? 0, 0), cards.length - 1);
+      setKnownCards(new Set(saved.knownCards ?? []));
+      setUnknownCards(new Set(saved.unknownCards ?? []));
+      setIndex(lastIdx);
+      setHistory([lastIdx]);
       setHistoryPtr(0);
     } else {
       // Fresh start with random card
@@ -41,18 +41,17 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
       setHistory([start]);
       setHistoryPtr(0);
     }
-    
+
     setFlipped(false);
     setShownThisRound(new Set());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cards.length, progressData]);
+  }, [cards.length, loaded]);
 
   // Auto-save progress whenever cards change
   useEffect(() => {
-    if (cards && cards.length > 0) {
-      saveFlashcardProgress(knownCards, unknownCards, index);
-    }
-  }, [knownCards, unknownCards, index, cards, saveFlashcardProgress]);
+    if (!loaded || !cards || cards.length === 0) return;
+    saveFlashcardProgress(knownCards, unknownCards, index);
+  }, [knownCards, unknownCards, index, loaded]);
 
   if (!cards || cards.length === 0) {
     return (
