@@ -68,33 +68,30 @@ export const learnContent: Record<string, LearnModule[]> = {
     },
     {
       type: "dragdrop",
-      title: "Code-Struktur sortieren",
+      title: "Algorithmus-Strukturen",
       games: [
         {
-          title: "HTML-Elemente ordnen",
-          description: "Ordne die HTML-Elemente in die richtige Hierarchie",
+          title: "Sortier-Algorithmus Schritte",
+          description: "Bringe die Bubble-Sort Schritte in die richtige Reihenfolge",
           items: [
-            { id: "1", content: "<html>", category: "Wurzel" },
-            { id: "2", content: "<head>", category: "Kopf" },
-            { id: "3", content: "<title>", category: "Kopf" },
-            { id: "4", content: "<body>", category: "Körper" },
-            { id: "5", content: "<div>", category: "Körper" },
-            { id: "6", content: "<p>", category: "Körper" }
+            { id: "1", content: "Array durchlaufen", category: "Schritt 1" },
+            { id: "2", content: "Benachbarte Elemente vergleichen", category: "Schritt 2" },
+            { id: "3", content: "Tauschen falls nötig", category: "Schritt 3" },
+            { id: "4", content: "Wiederholen bis sortiert", category: "Schritt 4" }
           ],
-          categories: ["Wurzel", "Kopf", "Körper"]
+          categories: ["Schritt 1", "Schritt 2", "Schritt 3", "Schritt 4"]
         },
         {
-          title: "Datentypen klassifizieren",
-          description: "Ordne die JavaScript-Werte den richtigen Datentypen zu",
+          title: "Datenstrukturen zuordnen",
+          description: "Ordne die Operationen den richtigen Datenstrukturen zu",
           items: [
-            { id: "1", content: "42", category: "Number" },
-            { id: "2", content: "'Hello'", category: "String" },
-            { id: "3", content: "true", category: "Boolean" },
-            { id: "4", content: "null", category: "Object" },
-            { id: "5", content: "[1,2,3]", category: "Object" },
-            { id: "6", content: "undefined", category: "Undefined" }
+            { id: "1", content: "push/pop", category: "Stack" },
+            { id: "2", content: "enqueue/dequeue", category: "Queue" },
+            { id: "3", content: "insert/search/delete", category: "Binary Tree" },
+            { id: "4", content: "get/set by key", category: "Hash Map" },
+            { id: "5", content: "append/prepend", category: "Linked List" }
           ],
-          categories: ["Number", "String", "Boolean", "Object", "Undefined"]
+          categories: ["Stack", "Queue", "Binary Tree", "Hash Map", "Linked List"]
         }
       ]
     },
@@ -112,17 +109,6 @@ export const learnContent: Record<string, LearnModule[]> = {
             { id: "4", content: "Linear Search", match: "O(n)" },
             { id: "5", content: "Hash Lookup", match: "O(1)" },
             { id: "6", content: "Merge Sort", match: "O(n log n)" }
-          ]
-        },
-        {
-          title: "Design Pattern Memory",
-          description: "Verbinde Design Patterns mit ihren Beschreibungen",
-          pairs: [
-            { id: "1", content: "Singleton", match: "Nur eine Instanz" },
-            { id: "2", content: "Observer", match: "Event-Listener Pattern" },
-            { id: "3", content: "Factory", match: "Objekt-Erstellung abstrahiert" },
-            { id: "4", content: "Decorator", match: "Verhalten zur Laufzeit erweitern" },
-            { id: "5", content: "Adapter", match: "Inkompatible Interfaces verbinden" }
           ]
         }
       ]
@@ -156,19 +142,7 @@ export const learnContent: Record<string, LearnModule[]> = {
           choices: [
             { text: "Sofort umschreiben ohne Rücksprache", consequence: "Kollege fühlt sich übergangen, Teamkonflikt entsteht", isCorrect: false },
             { text: "Performance-Problem ansprechen und gemeinsam Lösung finden", consequence: "Konstruktive Zusammenarbeit, besserer Code, Lernerfahrung für alle", isCorrect: true },
-            { text: "Ignorieren, da es 'noch funktioniert'", consequence: "Problem eskaliert später, schwerer zu lösen", isCorrect: false },
-            { text: "Nur im privaten Chat kritisieren", consequence: "Keine Verbesserung, unprofessionelle Kommunikation", isCorrect: false }
-          ]
-        },
-        {
-          title: "Legacy Code Integration",
-          description: "Du musst neue Features in 10 Jahre alten Code integrieren.",
-          scenario: "Der Legacy Code hat keine Tests, unklare Struktur und veraltete Patterns. Deadline ist in 2 Wochen.",
-          choices: [
-            { text: "Alles neu schreiben", consequence: "Zu riskant, Deadline nicht einhaltbar", isCorrect: false },
-            { text: "Minimal invasive Änderungen mit Tests um neuen Code", consequence: "Sicher, testbar, schrittweise Modernisierung möglich", isCorrect: true },
-            { text: "Direkt im Legacy Code ändern", consequence: "Hohe Fehlerwahrscheinlichkeit, schwer zu debuggen", isCorrect: false },
-            { text: "Deadline verschieben verlangen", consequence: "Business Impact, möglicherweise nicht durchsetzbar", isCorrect: false }
+            { text: "Ignorieren, da es 'noch funktioniert'", consequence: "Problem eskaliert später, schwerer zu lösen", isCorrect: false }
           ]
         }
       ]
@@ -226,16 +200,6 @@ export const learnContent: Record<string, LearnModule[]> = {
             { input: "Deutschland Filter", expected: "WHERE country = 'Germany'" },
             { input: "Alle Spalten", expected: "SELECT *" }
           ]
-        },
-        {
-          title: "JOIN-Abfrage",
-          description: "Verbinde Kunden mit ihren Bestellungen",
-          initialCode: "SELECT c.name, o.order_date\nFROM customers c\n-- Füge JOIN hinzu",
-          solution: "SELECT c.name, o.order_date\nFROM customers c\nJOIN orders o ON c.id = o.customer_id;",
-          tests: [
-            { input: "JOIN syntax", expected: "JOIN orders o ON c.id = o.customer_id" },
-            { input: "Spaltenauswahl", expected: "c.name, o.order_date" }
-          ]
         }
       ]
     },
@@ -250,10 +214,9 @@ export const learnContent: Record<string, LearnModule[]> = {
             { id: "1", content: "Tabelle mit wiederholenden Gruppen", category: "Nicht normalisiert" },
             { id: "2", content: "Atomare Werte, keine Wiederholungen", category: "1. Normalform" },
             { id: "3", content: "Vollständige funktionale Abhängigkeit", category: "2. Normalform" },
-            { id: "4", content: "Keine transitiven Abhängigkeiten", category: "3. Normalform" },
-            { id: "5", content: "Multivalued Dependencies entfernt", category: "4. Normalform" }
+            { id: "4", content: "Keine transitiven Abhängigkeiten", category: "3. Normalform" }
           ],
-          categories: ["Nicht normalisiert", "1. Normalform", "2. Normalform", "3. Normalform", "4. Normalform"]
+          categories: ["Nicht normalisiert", "1. Normalform", "2. Normalform", "3. Normalform"]
         }
       ]
     },
@@ -269,26 +232,7 @@ export const learnContent: Record<string, LearnModule[]> = {
             { id: "2", content: "SUM()", match: "Summiert Werte" },
             { id: "3", content: "AVG()", match: "Durchschnitt berechnen" },
             { id: "4", content: "MAX()", match: "Größter Wert" },
-            { id: "5", content: "MIN()", match: "Kleinster Wert" },
-            { id: "6", content: "GROUP_CONCAT()", match: "Werte verketten" }
-          ]
-        }
-      ]
-    },
-    {
-      type: "timeline",
-      title: "Datenbank-Evolution",
-      timelines: [
-        {
-          title: "Geschichte der Datenbanken",
-          description: "Von hierarchischen DBs zu modernen NoSQL-Systemen",
-          events: [
-            { year: "1960er", event: "Hierarchische DBs", description: "IMS von IBM - Baumstruktur" },
-            { year: "1970", event: "Relationales Modell", description: "Edgar F. Codd definiert relationale Algebra" },
-            { year: "1979", event: "Oracle V2", description: "Erste kommerzielle SQL-Datenbank" },
-            { year: "1982", event: "IBM SQL/DS", description: "IBMs erste SQL-Implementation" },
-            { year: "2009", event: "NoSQL Boom", description: "MongoDB, CouchDB werden populär" },
-            { year: "2012", event: "NewSQL", description: "Kombination aus SQL und NoSQL-Skalierung" }
+            { id: "5", content: "MIN()", match: "Kleinster Wert" }
           ]
         }
       ]
@@ -302,10 +246,8 @@ export const learnContent: Record<string, LearnModule[]> = {
           description: "Eine wichtige Abfrage läuft extrem langsam",
           scenario: "Die tägliche Reporting-Abfrage braucht 45 Minuten statt der üblichen 2 Minuten. Kunden beschweren sich über langsame Dashboards.",
           choices: [
-            { text: "Mehr RAM kaufen", consequence: "Kurzfristig teuer, löst möglicherweise nicht das Grundproblem", isCorrect: false },
             { text: "Query analysieren und Indizes optimieren", consequence: "Kosteneffektiv, nachhaltig, behebt oft das eigentliche Problem", isCorrect: true },
-            { text: "Auf NoSQL umsteigen", consequence: "Massive Umstellung, unsicher ob es hilft", isCorrect: false },
-            { text: "Weniger Daten abfragen", consequence: "Funktionalität eingeschränkt, Nutzer unzufrieden", isCorrect: false }
+            { text: "Auf NoSQL umsteigen", consequence: "Massive Umstellung, unsicher ob es hilft", isCorrect: false }
           ]
         }
       ]
@@ -321,9 +263,7 @@ export const learnContent: Record<string, LearnModule[]> = {
         { front: "Availability", back: "Verfügbarkeit – Systeme sind nutzbar." },
         { front: "2FA", back: "Zwei Faktoren: Wissen, Besitz, Inhärenz." },
         { front: "Zero Trust", back: "Niemals vertrauen, immer verifizieren." },
-        { front: "Sandboxing", back: "Isolierte Ausführungsumgebung für unsichere Programme." },
-        { front: "Penetration Test", back: "Autorisierter Angriff zur Schwachstellenfindung." },
-        { front: "Social Engineering", back: "Manipulation von Personen zur Informationsgewinnung." }
+        { front: "Sandboxing", back: "Isolierte Ausführungsumgebung für unsichere Programme." }
       ]
     },
     {
@@ -332,8 +272,7 @@ export const learnContent: Record<string, LearnModule[]> = {
       questions: [
         { question: "Was ist ein DDoS-Angriff?", options: ["Daten stehlen", "System überlasten", "Passwort knacken", "Code injizieren"], correctIndex: 1 },
         { question: "Welches ist das stärkste Passwort?", options: ["password123", "P@ssw0rd!", "Tr0ub4dor&3", "correcthorsebatterystaple"], correctIndex: 3, explanation: "Länge schlägt Komplexität bei ausreichender Entropie" },
-        { question: "Was macht eine Firewall?", options: ["Viren scannen", "Netzverkehr filtern", "Daten verschlüsseln", "Backups erstellen"], correctIndex: 1 },
-        { question: "SQL-Injection verhindert man durch...", options: ["Eingabe validieren", "Prepared Statements", "Beide", "Firewall"], correctIndex: 2 }
+        { question: "Was macht eine Firewall?", options: ["Viren scannen", "Netzverkehr filtern", "Daten verschlüsseln", "Backups erstellen"], correctIndex: 1 }
       ]
     },
     {
@@ -361,35 +300,25 @@ export const learnContent: Record<string, LearnModule[]> = {
             { input: "test@example.com", expected: "true" },
             { input: "invalid-email", expected: "false" }
           ]
-        },
-        {
-          title: "Password Hashing",
-          description: "Hash ein Passwort sicher mit bcrypt",
-          initialCode: "const bcrypt = require('bcrypt');\n\nfunction hashPassword(password) {\n  // Hash mit Salt\n}",
-          solution: "const bcrypt = require('bcrypt');\n\nfunction hashPassword(password) {\n  return bcrypt.hashSync(password, 12);\n}",
-          tests: [
-            { input: "mypassword", expected: "hashed_string" },
-            { input: "123456", expected: "hashed_string" }
-          ]
         }
       ]
     },
     {
       type: "dragdrop",
-      title: "Bedrohungsklassifikation",
+      title: "Sicherheits-Kategorisierung",
       games: [
         {
-          title: "Angriffsvektoren",
-          description: "Ordne die Angriffe den richtigen Kategorien zu",
+          title: "Cyber-Angriffe klassifizieren",
+          description: "Ordne die Angriffe nach Schweregrad und Typ",
           items: [
-            { id: "1", content: "Phishing E-Mail", category: "Social Engineering" },
+            { id: "1", content: "Phishing", category: "Social Engineering" },
             { id: "2", content: "SQL Injection", category: "Code Injection" },
-            { id: "3", content: "Buffer Overflow", category: "Memory Corruption" },
-            { id: "4", content: "DDoS", category: "Denial of Service" },
-            { id: "5", content: "Pretexting", category: "Social Engineering" },
-            { id: "6", content: "XSS", category: "Code Injection" }
+            { id: "3", content: "Ransomware", category: "Malware" },
+            { id: "4", content: "DDoS", category: "Verfügbarkeitsangriff" },
+            { id: "5", content: "Man-in-the-Middle", category: "Netzwerk-Angriff" },
+            { id: "6", content: "Brute Force", category: "Passwort-Angriff" }
           ],
-          categories: ["Social Engineering", "Code Injection", "Memory Corruption", "Denial of Service"]
+          categories: ["Social Engineering", "Code Injection", "Malware", "Verfügbarkeitsangriff", "Netzwerk-Angriff", "Passwort-Angriff"]
         }
       ]
     },
@@ -411,24 +340,6 @@ export const learnContent: Record<string, LearnModule[]> = {
       ]
     },
     {
-      type: "timeline",
-      title: "Geschichte der Cybersecurity",
-      timelines: [
-        {
-          title: "Meilensteine der IT-Sicherheit",
-          description: "Wichtige Ereignisse und Entwicklungen",
-          events: [
-            { year: "1971", event: "Creeper Worm", description: "Erster Computer-Wurm auf ARPANET" },
-            { year: "1988", event: "Morris Worm", description: "Erster Internet-Wurm, legte 10% des Internets lahm" },
-            { year: "1991", event: "Pretty Good Privacy (PGP)", description: "Verschlüsselung für die Masse verfügbar" },
-            { year: "2010", event: "Stuxnet", description: "Erster Cyberwaffen-Angriff auf kritische Infrastruktur" },
-            { year: "2013", event: "Snowden Leaks", description: "Aufdeckung der NSA-Überwachung" },
-            { year: "2017", event: "WannaCry", description: "Größter Ransomware-Angriff der Geschichte" }
-          ]
-        }
-      ]
-    },
-    {
       type: "scenario",
       title: "Incident Response",
       scenarios: [
@@ -437,10 +348,8 @@ export const learnContent: Record<string, LearnModule[]> = {
           description: "Ihr Unternehmen wurde mit Ransomware infiziert",
           scenario: "Montag morgen: Mehrere Mitarbeiter können nicht auf ihre Dateien zugreifen. Auf den Bildschirmen erscheint eine Lösegeldforderung über 50.000€ in Bitcoin.",
           choices: [
-            { text: "Sofort Lösegeld zahlen", consequence: "Keine Garantie für Datenwiederherstellung, ermutigt weitere Angriffe", isCorrect: false },
             { text: "System isolieren, Incident Response Team aktivieren", consequence: "Schaden begrenzen, professionelle Behandlung, Forensik möglich", isCorrect: true },
-            { text: "Alles neu installieren", consequence: "Forensische Spuren verloren, Ursache unklar", isCorrect: false },
-            { text: "Ignorieren und weiterarbeiten", consequence: "Malware kann sich weiter ausbreiten, Datenverlust", isCorrect: false }
+            { text: "Sofort Lösegeld zahlen", consequence: "Keine Garantie für Datenwiederherstellung, ermutigt weitere Angriffe", isCorrect: false }
           ]
         }
       ]
@@ -457,8 +366,7 @@ export const learnContent: Record<string, LearnModule[]> = {
         { front: "Schicht 4", back: "Transport – TCP/UDP" },
         { front: "Schicht 5", back: "Session – Verbindungsverwaltung" },
         { front: "Schicht 6", back: "Presentation – Verschlüsselung, Kompression" },
-        { front: "Schicht 7", back: "Application – HTTP, FTP, SMTP" },
-        { front: "VLAN", back: "Virtual LAN – Logische Netzwerktrennung" }
+        { front: "Schicht 7", back: "Application – HTTP, FTP, SMTP" }
       ]
     },
     {
@@ -468,9 +376,7 @@ export const learnContent: Record<string, LearnModule[]> = {
         { question: "Was macht ein Router?", options: ["Kollisionsdomänen trennen", "Netze verbinden", "Signale verstärken", "VLANs taggen"], correctIndex: 1 },
         { question: "Privates IPv4-Netz?", options: ["8.8.8.8", "10.0.0.0/8", "1.1.1.1", "172.32.0.0/12"], correctIndex: 1, explanation: "172.16.0.0/12 ist privat – 172.32 nicht." },
         { question: "ARP löst...", options: ["MAC→IP", "IP→MAC", "DNS→IP", "IP→DNS"], correctIndex: 1 },
-        { question: "Ping nutzt...", options: ["TCP", "UDP", "ICMP", "ARP"], correctIndex: 2 },
-        { question: "Subnetz /24 hat wie viele Hosts?", options: ["254", "256", "255", "253"], correctIndex: 0, explanation: "256 - 2 (Netz- und Broadcast-Adresse) = 254" },
-        { question: "Welches Protokoll ist verbindungslos?", options: ["TCP", "UDP", "HTTP", "FTP"], correctIndex: 1 }
+        { question: "Ping nutzt...", options: ["TCP", "UDP", "ICMP", "ARP"], correctIndex: 2 }
       ]
     },
     {
@@ -493,19 +399,9 @@ export const learnContent: Record<string, LearnModule[]> = {
           title: "IP-Konfiguration",
           description: "Konfiguriere eine statische IP-Adresse unter Linux",
           initialCode: "# /etc/network/interfaces\nauto eth0\niface eth0 inet static\n# Füge IP-Konfiguration hinzu",
-          solution: "# /etc/network/interfaces\nauto eth0\niface eth0 inet static\naddress 192.168.1.100\nnetmask 255.255.255.0\ngateway 192.168.1.1\ndns-nameservers 8.8.8.8",
+          solution: "# /etc/network/interfaces\nauto eth0\niface eth0 inet static\naddress 192.168.1.100\nnetmask 255.255.255.0\ngateway 192.168.1.1",
           tests: [
             { input: "IP address", expected: "192.168.1.100" },
-            { input: "Gateway", expected: "192.168.1.1" }
-          ]
-        },
-        {
-          title: "Routing-Tabelle",
-          description: "Füge eine statische Route hinzu",
-          initialCode: "# Route zu 10.0.0.0/8 über Gateway 192.168.1.1\nip route add ",
-          solution: "ip route add 10.0.0.0/8 via 192.168.1.1",
-          tests: [
-            { input: "Zielnetz", expected: "10.0.0.0/8" },
             { input: "Gateway", expected: "192.168.1.1" }
           ]
         }
@@ -549,24 +445,6 @@ export const learnContent: Record<string, LearnModule[]> = {
       ]
     },
     {
-      type: "timeline",
-      title: "Netzwerk-Evolution",
-      timelines: [
-        {
-          title: "Geschichte der Netzwerktechnik",
-          description: "Von ARPANET zum modernen Internet",
-          events: [
-            { year: "1969", event: "ARPANET", description: "Erster Knoten zwischen UCLA und Stanford" },
-            { year: "1973", event: "TCP/IP", description: "Vint Cerf und Bob Kahn entwickeln TCP/IP" },
-            { year: "1983", event: "DNS", description: "Domain Name System eingeführt" },
-            { year: "1990", event: "ARPANET Ende", description: "ARPANET offiziell abgeschaltet, Internet übernimmt" },
-            { year: "1995", event: "Commercialization", description: "Internet wird kommerziell nutzbar" },
-            { year: "2011", event: "IPv4 Exhaustion", description: "IANA IPv4-Adressen aufgebraucht" }
-          ]
-        }
-      ]
-    },
-    {
       type: "scenario",
       title: "Netzwerk-Troubleshooting",
       scenarios: [
@@ -575,10 +453,8 @@ export const learnContent: Record<string, LearnModule[]> = {
           description: "Nutzer können plötzlich nicht mehr ins Internet",
           scenario: "Mehrere Abteilungen melden, dass sie keine Webseiten mehr erreichen können. E-Mail funktioniert noch, interne Server sind erreichbar.",
           choices: [
-            { text: "Alle Computer neu starten", consequence: "Zeitverschwendung, Problem bleibt bestehen", isCorrect: false },
-            { text: "ISP kontaktieren", consequence: "Möglicherweise verfrüht, interne Ursache nicht ausgeschlossen", isCorrect: false },
             { text: "Gateway/Router prüfen und DNS testen", consequence: "Systematische Analyse, findet wahrscheinlich die Ursache", isCorrect: true },
-            { text: "Firewall abschalten", consequence: "Sicherheitsrisiko, löst möglicherweise nicht das Problem", isCorrect: false }
+            { text: "Alle Computer neu starten", consequence: "Zeitverschwendung, Problem bleibt bestehen", isCorrect: false }
           ]
         }
       ]
@@ -594,9 +470,7 @@ export const learnContent: Record<string, LearnModule[]> = {
         { front: "apt/yum", back: "Paketverwaltung (Debian/RedHat)." },
         { front: "journalctl", back: "System-Logs anzeigen." },
         { front: "crontab", back: "Zeitgesteuerte Aufgaben planen." },
-        { front: "SSH", back: "Sichere Remote-Shell-Verbindung." },
-        { front: "sudo", back: "Temporäre Root-Rechte für Befehle." },
-        { front: "systemctl", back: "systemd-Services verwalten." }
+        { front: "SSH", back: "Sichere Remote-Shell-Verbindung." }
       ]
     },
     {
@@ -606,9 +480,7 @@ export const learnContent: Record<string, LearnModule[]> = {
         { question: "Verzeichnis wechseln?", options: ["ls", "cd", "cp", "mv"], correctIndex: 1 },
         { question: "Dateiinhalt anzeigen?", options: ["cat", "touch", "mkdir", "pwd"], correctIndex: 0 },
         { question: "Datei verschieben?", options: ["mv", "rm", "tar", "grep"], correctIndex: 0 },
-        { question: "Datei suchen?", options: ["find", "ps", "kill", "echo"], correctIndex: 0 },
-        { question: "Welcher Befehl zeigt Festplattenspeicher?", options: ["df", "du", "free", "top"], correctIndex: 0 },
-        { question: "Prozesse anzeigen?", options: ["ls", "ps", "cd", "pwd"], correctIndex: 1 }
+        { question: "Datei suchen?", options: ["find", "ps", "kill", "echo"], correctIndex: 0 }
       ]
     },
     {
@@ -635,16 +507,6 @@ export const learnContent: Record<string, LearnModule[]> = {
           tests: [
             { input: "rsync command", expected: "rsync -av" },
             { input: "timestamp", expected: "$(date)" }
-          ]
-        },
-        {
-          title: "Service-Check",
-          description: "Prüfe ob ein Service läuft",
-          initialCode: "#!/bin/bash\nSERVICE=\"apache2\"\n# Prüfe Service-Status",
-          solution: "#!/bin/bash\nSERVICE=\"apache2\"\nif systemctl is-active --quiet $SERVICE; then\n  echo \"$SERVICE is running\"\nelse\n  echo \"$SERVICE is not running\"\nfi",
-          tests: [
-            { input: "systemctl check", expected: "systemctl is-active" },
-            { input: "conditional", expected: "if" }
           ]
         }
       ]
@@ -686,24 +548,6 @@ export const learnContent: Record<string, LearnModule[]> = {
       ]
     },
     {
-      type: "timeline",
-      title: "Linux-Geschichte",
-      timelines: [
-        {
-          title: "Evolution von Linux",
-          description: "Meilensteine in der Linux-Entwicklung",
-          events: [
-            { year: "1991", event: "Linux 0.01", description: "Linus Torvalds veröffentlicht ersten Kernel" },
-            { year: "1993", event: "Slackware", description: "Eine der ersten Linux-Distributionen" },
-            { year: "1993", event: "Debian", description: "Community-getriebene Distribution gegründet" },
-            { year: "2004", event: "Ubuntu", description: "Benutzerfreundliche Desktop-Distribution" },
-            { year: "2011", event: "systemd", description: "Modernes Init-System eingeführt" },
-            { year: "2016", event: "Windows Subsystem for Linux", description: "Linux läuft nativ unter Windows" }
-          ]
-        }
-      ]
-    },
-    {
       type: "scenario",
       title: "System-Wartung",
       scenarios: [
@@ -712,10 +556,8 @@ export const learnContent: Record<string, LearnModule[]> = {
           description: "Der Production-Server reagiert sehr langsam",
           scenario: "Load Average ist bei 8.5 auf einem 4-Core System. Nutzer können sich nicht einloggen. Wie gehst du vor?",
           choices: [
-            { text: "Server sofort neu starten", consequence: "Service-Unterbrechung, Ursache bleibt unbekannt", isCorrect: false },
             { text: "top/htop verwenden um Prozesse zu analysieren", consequence: "Identifiziert Problemverursacher, gezielte Lösung möglich", isCorrect: true },
-            { text: "Alle Benutzer kicken", consequence: "Temporäre Entlastung aber unprofessionell", isCorrect: false },
-            { text: "Warten bis es besser wird", consequence: "Problem eskaliert, SLA-Verletzung", isCorrect: false }
+            { text: "Server sofort neu starten", consequence: "Service-Unterbrechung, Ursache bleibt unbekannt", isCorrect: false }
           ]
         }
       ]
@@ -731,9 +573,7 @@ export const learnContent: Record<string, LearnModule[]> = {
         { front: "React", back: "Komponentenbasierte UI-Bibliothek." },
         { front: "REST", back: "Architekturstil für APIs." },
         { front: "GraphQL", back: "Flexible Query-Sprache für APIs." },
-        { front: "WebSocket", back: "Bidirektionale Real-time Kommunikation." },
-        { front: "SPA", back: "Single Page Application – Client-seitiges Routing." },
-        { front: "SSR", back: "Server-Side Rendering für bessere SEO." }
+        { front: "WebSocket", back: "Bidirektionale Real-time Kommunikation." }
       ]
     },
     {
@@ -742,8 +582,7 @@ export const learnContent: Record<string, LearnModule[]> = {
       questions: [
         { question: "Was ist Virtual DOM?", options: ["Browser-Feature", "React-Optimierung", "CSS-Framework", "HTML5-Standard"], correctIndex: 1 },
         { question: "CSS Grid ist für...", options: ["Animationen", "2D-Layout", "Responsive Design", "Typographie"], correctIndex: 1 },
-        { question: "JavaScript ist...", options: ["Statisch typisiert", "Compiled", "Interpretiert", "Nur frontend"], correctIndex: 2 },
-        { question: "Was macht 'async/await'?", options: ["Synchroner Code", "Asynchrone Programmierung vereinfachen", "Performance steigern", "Memory Management"], correctIndex: 1 }
+        { question: "JavaScript ist...", options: ["Statisch typisiert", "Compiled", "Interpretiert", "Nur frontend"], correctIndex: 2 }
       ]
     },
     {
@@ -771,35 +610,26 @@ export const learnContent: Record<string, LearnModule[]> = {
             { input: "JSX syntax", expected: "<button>" },
             { input: "Props", expected: "{ children, onClick }" }
           ]
-        },
-        {
-          title: "API Fetch",
-          description: "Lade Daten von einer API",
-          initialCode: "async function fetchUsers() {\n  // Implementiere API-Call\n}",
-          solution: "async function fetchUsers() {\n  try {\n    const response = await fetch('/api/users');\n    const users = await response.json();\n    return users;\n  } catch (error) {\n    console.error('Error:', error);\n  }\n}",
-          tests: [
-            { input: "fetch API", expected: "await fetch" },
-            { input: "error handling", expected: "try" }
-          ]
         }
       ]
     },
     {
       type: "dragdrop",
-      title: "Frontend vs Backend",
+      title: "Web-Entwicklung Strukturen",
       games: [
         {
-          title: "Technologien zuordnen",
-          description: "Ordne die Technologien Frontend oder Backend zu",
+          title: "HTML-Dokument aufbauen",
+          description: "Ordne die HTML-Elemente in die richtige Hierarchie",
           items: [
-            { id: "1", content: "React", category: "Frontend" },
-            { id: "2", content: "Node.js", category: "Backend" },
-            { id: "3", content: "CSS", category: "Frontend" },
-            { id: "4", content: "MongoDB", category: "Backend" },
-            { id: "5", content: "Vue.js", category: "Frontend" },
-            { id: "6", content: "Express.js", category: "Backend" }
+            { id: "1", content: "<html>", category: "Wurzel" },
+            { id: "2", content: "<head>", category: "Kopf" },
+            { id: "3", content: "<title>", category: "Kopf" },
+            { id: "4", content: "<body>", category: "Körper" },
+            { id: "5", content: "<header>", category: "Körper" },
+            { id: "6", content: "<main>", category: "Körper" },
+            { id: "7", content: "<footer>", category: "Körper" }
           ],
-          categories: ["Frontend", "Backend"]
+          categories: ["Wurzel", "Kopf", "Körper"]
         }
       ]
     },
@@ -821,24 +651,6 @@ export const learnContent: Record<string, LearnModule[]> = {
       ]
     },
     {
-      type: "timeline",
-      title: "Web-Evolution",
-      timelines: [
-        {
-          title: "Geschichte des World Wide Web",
-          description: "Entwicklung der Web-Technologien",
-          events: [
-            { year: "1991", event: "World Wide Web", description: "Tim Berners-Lee macht das Web öffentlich" },
-            { year: "1995", event: "JavaScript", description: "Netscape führt JavaScript ein" },
-            { year: "1996", event: "CSS", description: "Cascading Style Sheets standardisiert" },
-            { year: "2005", event: "AJAX", description: "Asynchrone Web-Anwendungen entstehen" },
-            { year: "2013", event: "React", description: "Facebook veröffentlicht React" },
-            { year: "2015", event: "ES6", description: "Moderne JavaScript-Features" }
-          ]
-        }
-      ]
-    },
-    {
       type: "scenario",
       title: "Performance-Probleme",
       scenarios: [
@@ -847,10 +659,8 @@ export const learnContent: Record<string, LearnModule[]> = {
           description: "Die Website lädt sehr langsam",
           scenario: "Nutzer beschweren sich über Ladezeiten von 8+ Sekunden. Google PageSpeed gibt schlechte Bewertungen. Wie optimierst du?",
           choices: [
-            { text: "Mehr Server kaufen", consequence: "Teuer, behebt möglicherweise nicht das Grundproblem", isCorrect: false },
             { text: "Bilder komprimieren und lazy loading implementieren", consequence: "Direkte Performance-Verbesserung, kosteneffektiv", isCorrect: true },
-            { text: "Cache komplett deaktivieren", consequence: "Verschlechtert Performance erheblich", isCorrect: false },
-            { text: "Alle Animationen entfernen", consequence: "UX leidet, löst nicht das Hauptproblem", isCorrect: false }
+            { text: "Mehr Server kaufen", consequence: "Teuer, behebt möglicherweise nicht das Grundproblem", isCorrect: false }
           ]
         }
       ]
@@ -866,9 +676,7 @@ export const learnContent: Record<string, LearnModule[]> = {
         { front: "SSD", back: "Schneller, nichtflüchtiger Speicher." },
         { front: "GPU", back: "Grafikprozessor für parallele Aufgaben." },
         { front: "Motherboard", back: "Hauptplatine verbindet alle Komponenten." },
-        { front: "Cache", back: "Schneller Zwischenspeicher zwischen CPU und RAM." },
-        { front: "USB", back: "Universal Serial Bus für Peripherie-Geräte." },
-        { front: "BIOS/UEFI", back: "Firmware für Hardware-Initialisierung." }
+        { front: "Cache", back: "Schneller Zwischenspeicher zwischen CPU und RAM." }
       ]
     },
     {
@@ -878,9 +686,7 @@ export const learnContent: Record<string, LearnModule[]> = {
         { question: "Binär von 10?", options: ["1010", "1001", "1111", "1100"], correctIndex: 0 },
         { question: "Hex von 15?", options: ["F", "E", "D", "C"], correctIndex: 0 },
         { question: "1 Byte = ?", options: ["4 Bit", "8 Bit", "16 Bit", "32 Bit"], correctIndex: 1 },
-        { question: "KB zu Byte (dezimal)?", options: ["100", "512", "1000", "1024"], correctIndex: 2 },
-        { question: "Was ist ASCII?", options: ["Prozessor", "Zeichenkodierung", "Speichertyp", "Netzwerkprotokoll"], correctIndex: 1 },
-        { question: "Wie viele Bits hat IPv4?", options: ["64", "128", "32", "16"], correctIndex: 2 }
+        { question: "KB zu Byte (dezimal)?", options: ["100", "512", "1000", "1024"], correctIndex: 2 }
       ]
     },
     {
@@ -907,16 +713,6 @@ export const learnContent: Record<string, LearnModule[]> = {
           tests: [
             { input: "1010", expected: "10" },
             { input: "1111", expected: "15" }
-          ]
-        },
-        {
-          title: "Hex zu RGB",
-          description: "Konvertiere Hex-Farbe zu RGB",
-          initialCode: "function hexToRgb(hex) {\n  // #FF5733 -> {r: 255, g: 87, b: 51}\n}",
-          solution: "function hexToRgb(hex) {\n  const r = parseInt(hex.slice(1, 3), 16);\n  const g = parseInt(hex.slice(3, 5), 16);\n  const b = parseInt(hex.slice(5, 7), 16);\n  return {r, g, b};\n}",
-          tests: [
-            { input: "#FF0000", expected: "{r:255,g:0,b:0}" },
-            { input: "#00FF00", expected: "{r:0,g:255,b:0}" }
           ]
         }
       ]
@@ -958,24 +754,6 @@ export const learnContent: Record<string, LearnModule[]> = {
       ]
     },
     {
-      type: "timeline",
-      title: "Computer-Geschichte",
-      timelines: [
-        {
-          title: "Meilensteine der Computertechnik",
-          description: "Wichtige Entwicklungen in der IT-Geschichte",
-          events: [
-            { year: "1946", event: "ENIAC", description: "Erster elektronischer Universalcomputer" },
-            { year: "1971", event: "Intel 4004", description: "Erster kommerzieller Mikroprozessor" },
-            { year: "1981", event: "IBM PC", description: "Personal Computer für den Massenmarkt" },
-            { year: "1991", event: "World Wide Web", description: "Internet wird öffentlich verfügbar" },
-            { year: "2007", event: "iPhone", description: "Smartphone-Revolution beginnt" },
-            { year: "2016", event: "AlphaGo", description: "KI schlägt menschlichen Go-Meister" }
-          ]
-        }
-      ]
-    },
-    {
       type: "scenario",
       title: "Hardware-Probleme",
       scenarios: [
@@ -984,10 +762,8 @@ export const learnContent: Record<string, LearnModule[]> = {
           description: "Der Rechner zeigt keine Lebenszeichen",
           scenario: "Beim Drücken des Power-Buttons passiert nichts. Keine LEDs, keine Lüfter, kein Bildschirm. Was überprüfst du zuerst?",
           choices: [
-            { text: "Sofort Motherboard tauschen", consequence: "Teuer und möglicherweise unnötig", isCorrect: false },
             { text: "Stromversorgung und Verkabelung prüfen", consequence: "Logischer erster Schritt, günstig zu prüfen", isCorrect: true },
-            { text: "RAM-Module neu einsetzen", consequence: "Würde bei komplettem Stromausfall nicht helfen", isCorrect: false },
-            { text: "BIOS zurücksetzen", consequence: "Ohne Strom nicht möglich", isCorrect: false }
+            { text: "Sofort Motherboard tauschen", consequence: "Teuer und möglicherweise unnötig", isCorrect: false }
           ]
         }
       ]
@@ -1003,9 +779,7 @@ export const learnContent: Record<string, LearnModule[]> = {
         { front: "Backlog", back: "Priorisierte Aufgabenliste." },
         { front: "Velocity", back: "Durchsatz pro Sprint." },
         { front: "Definition of Done", back: "Klare Kriterien für fertige Arbeit." },
-        { front: "Burndown Chart", back: "Visualisierung des Sprint-Fortschritts." },
-        { front: "User Story", back: "Anforderung aus Nutzersicht." },
-        { front: "Epic", back: "Große User Story, in kleinere aufgeteilt." }
+        { front: "User Story", back: "Anforderung aus Nutzersicht." }
       ]
     },
     {
@@ -1015,9 +789,7 @@ export const learnContent: Record<string, LearnModule[]> = {
         { question: "Wer priorisiert das Product Backlog?", options: ["Scrum Master", "Product Owner", "Developer", "Stakeholder"], correctIndex: 1 },
         { question: "Sprint-Dauer?", options: ["1–4 Wochen", "1 Tag", "6 Monate", "Beliebig"], correctIndex: 0 },
         { question: "Daily Standup Dauer?", options: ["15 Min", "60 Min", "30 Min", "5 Min"], correctIndex: 0 },
-        { question: "Artefakt?", options: ["Retrospektive", "Sprint Review", "Increment", "Daily"], correctIndex: 2 },
-        { question: "Was ist ein Sprint?", options: ["Planungsmeeting", "Zeitbox für Entwicklung", "Code Review", "Deployment"], correctIndex: 1 },
-        { question: "Hauptziel der Retrospektive?", options: ["Features planen", "Code reviewen", "Prozess verbessern", "Bugs fixen"], correctIndex: 2 }
+        { question: "Artefakt?", options: ["Retrospektive", "Sprint Review", "Increment", "Daily"], correctIndex: 2 }
       ]
     },
     {
@@ -1027,9 +799,7 @@ export const learnContent: Record<string, LearnModule[]> = {
         { left: "Product Owner", right: "Definiert WAS gebaut wird" },
         { left: "Scrum Master", right: "Facilitiert den Prozess" },
         { left: "Development Team", right: "Baut das Produkt" },
-        { left: "Stakeholder", right: "Haben Interesse am Produkt" },
-        { left: "User", right: "Nutzen das Endprodukt" },
-        { left: "Management", right: "Unterstützt das Team" }
+        { left: "Stakeholder", right: "Haben Interesse am Produkt" }
       ]
     },
     {
@@ -1040,10 +810,9 @@ export const learnContent: Record<string, LearnModule[]> = {
           title: "User Story Template",
           description: "Schreibe eine vollständige User Story",
           initialCode: "// Als [Rolle]\n// möchte ich [Funktion]\n// damit [Nutzen]\n\n// Beispiel für Login-Feature:",
-          solution: "Als registrierter Nutzer\nmöchte ich mich mit Email und Passwort anmelden\ndamit ich auf meine persönlichen Daten zugreifen kann\n\nAkzeptanzkriterien:\n- Email-Validierung\n- Passwort mindestens 8 Zeichen\n- Fehlermeldung bei falschen Daten",
+          solution: "Als registrierter Nutzer\nmöchte ich mich mit Email und Passwort anmelden\ndamit ich auf meine persönlichen Daten zugreifen kann",
           tests: [
-            { input: "User Story Format", expected: "Als.*möchte.*damit" },
-            { input: "Akzeptanzkriterien", expected: "Akzeptanzkriterien" }
+            { input: "User Story Format", expected: "Als.*möchte.*damit" }
           ]
         }
       ]
@@ -1059,10 +828,9 @@ export const learnContent: Record<string, LearnModule[]> = {
             { id: "1", content: "Sprint Planning", category: "Sprint Start" },
             { id: "2", content: "Daily Scrum", category: "Sprint Mitte" },
             { id: "3", content: "Sprint Review", category: "Sprint Ende" },
-            { id: "4", content: "Sprint Retrospective", category: "Sprint Ende" },
-            { id: "5", content: "Product Backlog Refinement", category: "Kontinuierlich" }
+            { id: "4", content: "Sprint Retrospective", category: "Sprint Ende" }
           ],
-          categories: ["Sprint Start", "Sprint Mitte", "Sprint Ende", "Kontinuierlich"]
+          categories: ["Sprint Start", "Sprint Mitte", "Sprint Ende"]
         }
       ]
     },
@@ -1077,26 +845,7 @@ export const learnContent: Record<string, LearnModule[]> = {
             { id: "1", content: "Scrum", match: "Sprints und Rollen" },
             { id: "2", content: "Kanban", match: "Kontinuierlicher Fluss" },
             { id: "3", content: "XP", match: "Extreme Programming" },
-            { id: "4", content: "SAFe", match: "Scaled Agile Framework" },
-            { id: "5", content: "Lean", match: "Waste Elimination" }
-          ]
-        }
-      ]
-    },
-    {
-      type: "timeline",
-      title: "Agile Geschichte",
-      timelines: [
-        {
-          title: "Evolution des Projektmanagements",
-          description: "Von Wasserfall zu Agile Methoden",
-          events: [
-            { year: "1970er", event: "Wasserfall-Modell", description: "Sequentielle Phasen in der Softwareentwicklung" },
-            { year: "1986", event: "Scrum Ursprung", description: "Takeuchi und Nonaka beschreiben Scrum-Ansatz" },
-            { year: "1995", event: "Scrum für Software", description: "Ken Schwaber wendet Scrum auf Softwareentwicklung an" },
-            { year: "2001", event: "Agiles Manifest", description: "17 Softwareentwickler definieren agile Werte" },
-            { year: "2009", event: "Kanban für Software", description: "David Anderson adaptiert Kanban für IT" },
-            { year: "2011", event: "SAFe", description: "Scaled Agile Framework für große Organisationen" }
+            { id: "4", content: "SAFe", match: "Scaled Agile Framework" }
           ]
         }
       ]
@@ -1110,10 +859,8 @@ export const learnContent: Record<string, LearnModule[]> = {
           description: "Das Sprint-Ziel ist nicht erreichbar",
           scenario: "Tag 8 von 10 im Sprint. 70% der Story Points sind noch offen. Wichtiger Stakeholder möchte neue Features. Wie reagierst du?",
           choices: [
-            { text: "Sprint verlängern", consequence: "Bricht Scrum-Prinzip der festen Timeboxes", isCorrect: false },
             { text: "Scope reduzieren und Stakeholder informieren", consequence: "Transparent, erhält Sprint-Ziel, ermöglicht Lernen", isCorrect: true },
-            { text: "Überstunden anordnen", consequence: "Burnout-Risiko, keine nachhaltige Lösung", isCorrect: false },
-            { text: "Neue Features sofort einbauen", consequence: "Scope Creep, Sprint-Ziel wird verwässert", isCorrect: false }
+            { text: "Sprint verlängern", consequence: "Bricht Scrum-Prinzip der festen Timeboxes", isCorrect: false }
           ]
         }
       ]
@@ -1194,8 +941,8 @@ export const learnContent: Record<string, LearnModule[]> = {
           description: "Zwei Kollegen streiten über die Projektrichtung",
           scenario: "Anna und Ben diskutieren lautstark über die beste Lösung. Andere Teammitglieder werden unruhig. Wie moderierst du?",
           choices: [
-            { text: "Beiden das Wort entziehen", consequence: "Autoritär, löst Grundkonflikt nicht", isCorrect: false },
             { text: "Strukturiert beide Standpunkte sammeln", consequence: "Professionell, fokussiert auf Sachebene", isCorrect: true },
+            { text: "Beiden das Wort entziehen", consequence: "Autoritär, löst Grundkonflikt nicht", isCorrect: false },
             { text: "Meeting beenden", consequence: "Flucht vor dem Problem", isCorrect: false }
           ]
         }
@@ -1221,6 +968,68 @@ export const learnContent: Record<string, LearnModule[]> = {
         { question: "Rechtsgrundlage für Newsletter?", options: ["Berechtigtes Interesse", "Einwilligung", "Vertrag", "Gesetzliche Pflicht"], correctIndex: 1 },
         { question: "Speicherdauer?", options: ["Beliebig", "Bis Zweck erreicht", "Für immer", "1 Jahr"], correctIndex: 1 },
         { question: "Privacy by Default heißt...", options: ["Alles freigeben", "Sichere Voreinstellungen", "Opt-out", "Keine Cookies"], correctIndex: 1 }
+      ]
+    },
+    {
+      type: "matching",
+      title: "Rechtsbegriffe zuordnen",
+      pairs: [
+        { left: "Art. 6 DSGVO", right: "Rechtsgrundlagen" },
+        { left: "Art. 17 DSGVO", right: "Recht auf Löschung" },
+        { left: "Art. 15 DSGVO", right: "Auskunftsrecht" },
+        { left: "Art. 25 DSGVO", right: "Privacy by Design" }
+      ]
+    },
+    {
+      type: "dragdrop",
+      title: "Datenschutz-Kategorien",
+      games: [
+        {
+          title: "Datenarten klassifizieren",
+          description: "Ordne die Daten nach Schutzbedürftigkeit",
+          items: [
+            { id: "1", content: "Gesundheitsdaten", category: "Besondere Kategorien" },
+            { id: "2", content: "E-Mail-Adresse", category: "Personenbezogene Daten" },
+            { id: "3", content: "Politische Meinung", category: "Besondere Kategorien" },
+            { id: "4", content: "IP-Adresse", category: "Personenbezogene Daten" },
+            { id: "5", content: "Biometrische Daten", category: "Besondere Kategorien" },
+            { id: "6", content: "Telefonnummer", category: "Personenbezogene Daten" }
+          ],
+          categories: ["Besondere Kategorien", "Personenbezogene Daten"]
+        }
+      ]
+    },
+    {
+      type: "memory",
+      title: "DSGVO Memory",
+      games: [
+        {
+          title: "Rechtliche Grundlagen",
+          description: "Verbinde DSGVO-Artikel mit ihrem Inhalt",
+          pairs: [
+            { id: "1", content: "Art. 6", match: "Rechtsgrundlagen" },
+            { id: "2", content: "Art. 17", match: "Recht auf Löschung" },
+            { id: "3", content: "Art. 15", match: "Auskunftsrecht" },
+            { id: "4", content: "Art. 25", match: "Privacy by Design" },
+            { id: "5", content: "Art. 28", match: "Auftragsverarbeitung" }
+          ]
+        }
+      ]
+    },
+    {
+      type: "scenario",
+      title: "Datenschutz-Vorfälle",
+      scenarios: [
+        {
+          title: "Datenpanne entdeckt",
+          description: "Ein Mitarbeiter hat versehentlich Kundendaten öffentlich gemacht",
+          scenario: "Eine Excel-Datei mit 500 Kundenadressen wurde auf der öffentlichen Website hochgeladen. Ein Kunde meldet dies nach 2 Tagen.",
+          choices: [
+            { text: "Sofort Aufsichtsbehörde informieren (72h) und Betroffene benachrichtigen", consequence: "Erfüllt DSGVO-Pflichten, minimiert Schäden", isCorrect: true },
+            { text: "Erstmal intern klären", consequence: "Zu spät für Meldepflicht, Bußgeld droht", isCorrect: false },
+            { text: "Datei löschen und hoffen dass es niemand bemerkt", consequence: "Rechtlich problematisch, Vertrauen zerstört", isCorrect: false }
+          ]
+        }
       ]
     }
   ],
@@ -1274,6 +1083,41 @@ export const learnContent: Record<string, LearnModule[]> = {
       ]
     },
     {
+      type: "dragdrop",
+      title: "Mobile App Architektur",
+      games: [
+        {
+          title: "App-Komponenten zuordnen",
+          description: "Ordne die Komponenten den richtigen Bereichen zu",
+          items: [
+            { id: "1", content: "Navigation", category: "UI Layer" },
+            { id: "2", content: "Database", category: "Data Layer" },
+            { id: "3", content: "API Client", category: "Network Layer" },
+            { id: "4", content: "Business Logic", category: "Logic Layer" },
+            { id: "5", content: "Components", category: "UI Layer" },
+            { id: "6", content: "State Management", category: "Logic Layer" }
+          ],
+          categories: ["UI Layer", "Logic Layer", "Network Layer", "Data Layer"]
+        }
+      ]
+    },
+    {
+      type: "memory",
+      title: "Mobile Concepts",
+      games: [
+        {
+          title: "App Lifecycle",
+          description: "Verbinde App-States mit ihren Bedeutungen",
+          pairs: [
+            { id: "1", content: "Active", match: "App läuft im Vordergrund" },
+            { id: "2", content: "Background", match: "App läuft im Hintergrund" },
+            { id: "3", content: "Suspended", match: "App angehalten, im Speicher" },
+            { id: "4", content: "Terminated", match: "App beendet" }
+          ]
+        }
+      ]
+    },
+    {
       type: "scenario",
       title: "App-Performance",
       scenarios: [
@@ -1301,6 +1145,15 @@ export const learnContent: Record<string, LearnModule[]> = {
       ]
     },
     {
+      type: "quiz",
+      title: "Lernstrategien",
+      questions: [
+        { question: "Effektivste Lernmethode?", options: ["Passiv lesen", "Aktives Wiederholen", "Markieren", "Zusammenfassen"], correctIndex: 1 },
+        { question: "Beste Lernzeit?", options: ["Nachts", "Individuell unterschiedlich", "Immer morgens", "Nachmittags"], correctIndex: 1 },
+        { question: "Pausen sind wichtig weil...", options: ["Man müde wird", "Gehirn konsolidiert", "Es Spaß macht", "Andere es auch machen"], correctIndex: 1 }
+      ]
+    },
+    {
       type: "matching",
       title: "Phasen zuordnen",
       pairs: [
@@ -1308,6 +1161,57 @@ export const learnContent: Record<string, LearnModule[]> = {
         { left: "Durchführung", right: "Aufgaben bearbeiten" },
         { left: "Überprüfung", right: "Ergebnisse kontrollieren" },
         { left: "Reflexion", right: "Verbesserungen ableiten" }
+      ]
+    },
+    {
+      type: "dragdrop",
+      title: "Lernphasen organisieren",
+      games: [
+        {
+          title: "Prüfungsvorbereitung strukturieren",
+          description: "Ordne die Aktivitäten den Vorbereitungsphasen zu",
+          items: [
+            { id: "1", content: "Stoffsammlung", category: "Planung" },
+            { id: "2", content: "Karteikarten erstellen", category: "Erstellung" },
+            { id: "3", content: "Mock-Test durchführen", category: "Übung" },
+            { id: "4", content: "Schwächen identifizieren", category: "Analyse" },
+            { id: "5", content: "Zeitplan erstellen", category: "Planung" },
+            { id: "6", content: "Wiederholung", category: "Festigung" }
+          ],
+          categories: ["Planung", "Erstellung", "Übung", "Analyse", "Festigung"]
+        }
+      ]
+    },
+    {
+      type: "memory",
+      title: "Lernmethoden Memory",
+      games: [
+        {
+          title: "Lerntechniken",
+          description: "Verbinde Methoden mit ihren Vorteilen",
+          pairs: [
+            { id: "1", content: "Karteikarten", match: "Aktives Abrufen" },
+            { id: "2", content: "Mind Maps", match: "Visuelle Verknüpfung" },
+            { id: "3", content: "Pomodoro", match: "Zeitmanagement" },
+            { id: "4", content: "Spaced Repetition", match: "Langzeitgedächtnis" }
+          ]
+        }
+      ]
+    },
+    {
+      type: "scenario",
+      title: "Prüfungsangst meistern",
+      scenarios: [
+        {
+          title: "Blackout in der Prüfung",
+          description: "Du sitzt vor der Aufgabe und weißt nicht weiter",
+          scenario: "In der wichtigen Abschlussprüfung hast du einen kompletten Blackout bei einer 20-Punkte-Aufgabe. Zeit läuft weg.",
+          choices: [
+            { text: "Zur nächsten Aufgabe wechseln und später zurückkommen", consequence: "Entspannt dich, andere Aufgaben können Erinnerung triggern", isCorrect: true },
+            { text: "Krampfhaft weitergrübeln", consequence: "Verstärkt Stress und Blackout, verschwendet Zeit", isCorrect: false },
+            { text: "Aufgeben und früher gehen", consequence: "Verschenkt Punkte und Chancen", isCorrect: false }
+          ]
+        }
       ]
     }
   ]
