@@ -12,6 +12,7 @@ export const CodeChallengeComponent = ({ challenges }: CodeChallengeProps) => {
   const [userCode, setUserCode] = useState(challenges[0]?.initialCode || "");
   const [showSolution, setShowSolution] = useState(false);
   const [testResults, setTestResults] = useState<boolean[]>([]);
+  const [showHint, setShowHint] = useState(false);
 
   const current = challenges[currentIndex];
 
@@ -67,7 +68,15 @@ export const CodeChallengeComponent = ({ challenges }: CodeChallengeProps) => {
               <Button onClick={() => setShowSolution(!showSolution)} variant="outline" size="sm">
                 {showSolution ? "Lösung verstecken" : "Lösung anzeigen"}
               </Button>
+              <Button onClick={() => setShowHint((h) => !h)} variant="outline" size="sm">
+                {showHint ? "Erklärung verbergen" : "Erklärung anzeigen"}
+              </Button>
             </div>
+            {showHint && (
+              <div className="p-3 rounded-lg bg-secondary/60 border border-border/50 text-sm text-muted-foreground">
+                <strong>Erklärung:</strong> {current.description}
+              </div>
+            )}
           </div>
           
           <div className="space-y-4">

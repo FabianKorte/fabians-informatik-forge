@@ -225,6 +225,8 @@ All colors MUST be HSL.
     background-clip: text;
   }
 
+  /* Flip helpers moved below */
+
   /* Interactive elements */
   .interactive-card {
     @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-xl;
@@ -233,4 +235,16 @@ All colors MUST be HSL.
   .floating-action {
     @apply transform transition-all duration-200 hover:scale-105 active:scale-95;
   }
+
+  /* 3D Flip helpers for Flashcards - cross-browser */
+  .flip-3d { perspective: 1200px; }
+  .flip-3d-inner { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform 0.5s; will-change: transform; }
+  .flip-3d-inner.is-flipped { transform: rotateY(180deg); }
+  .flip-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; transform: translateZ(0); display: grid; place-items: center; }
+  .flip-face-back { transform: rotateY(180deg) translateZ(0); }
+
+  /* Extra safety to avoid mirrored text on faces */
+  .flashcard-3d .front, .flashcard-3d .back { backface-visibility: hidden; -webkit-backface-visibility: hidden; transform: translateZ(0); }
+  .flashcard-3d .back { transform: rotateY(180deg); }
 }
+

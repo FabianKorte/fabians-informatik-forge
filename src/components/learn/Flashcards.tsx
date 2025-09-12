@@ -7,6 +7,7 @@ interface FlashcardsProps {
 }
 
 export const Flashcards = ({ cards }: FlashcardsProps) => {
+  // Learning state
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [knownCards, setKnownCards] = useState<Set<number>>(new Set());
@@ -15,16 +16,16 @@ export const Flashcards = ({ cards }: FlashcardsProps) => {
   const [historyPtr, setHistoryPtr] = useState<number>(-1);
   const [shownThisRound, setShownThisRound] = useState<Set<number>>(new Set());
 
-  // Initialize with a random card when cards arrive
+  // Initialize on cards load with a random start
   useEffect(() => {
     if (!cards || cards.length === 0) return;
     const start = Math.floor(Math.random() * cards.length);
     setIndex(start);
-    setHistory([start]);
-    setHistoryPtr(0);
     setFlipped(false);
     setKnownCards(new Set());
     setUnknownCards(new Set());
+    setHistory([start]);
+    setHistoryPtr(0);
     setShownThisRound(new Set());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cards.length]);
@@ -37,22 +38,21 @@ export const Flashcards = ({ cards }: FlashcardsProps) => {
     );
   }
 
+  const current = cards[index];
+
   const pickNextIndex = (exclude?: number) => {
     const total = cards.length;
     if (total <= 1) return 0;
-
     const all = Array.from({ length: total }, (_, i) => i);
     const neutral = all.filter((i) => !knownCards.has(i) && !unknownCards.has(i));
     const difficult = Array.from(unknownCards);
 
-    // Round tracking (avoid repeating neutral cards until all seen once)
+    // Avoid repeating neutral cards in the same round
     let roundShown = new Set(shownThisRound);
     const allNeutralShown = neutral.length > 0 && neutral.every((i) => roundShown.has(i));
-    if (allNeutralShown) {
-      roundShown = new Set<number>();
-    }
+    if (allNeutralShown) roundShown = new Set<number>();
 
-    // Weighted pool: neutrals not yet shown this round (1x), difficult (3x)
+    // Weighted pool: neutrals not shown this round (1x), difficult (3x)
     const pool: number[] = [];
     for (const i of neutral) if (!roundShown.has(i)) pool.push(i);
     for (const i of difficult) pool.push(i, i, i);
@@ -63,13 +63,11 @@ export const Flashcards = ({ cards }: FlashcardsProps) => {
     }
 
     const nextIdx = candidates[Math.floor(Math.random() * candidates.length)];
-
     // Track neutrals shown this round
     if (!knownCards.has(nextIdx) && !unknownCards.has(nextIdx)) {
       roundShown.add(nextIdx);
     }
     setShownThisRound(roundShown);
-
     return nextIdx;
   };
 
@@ -129,7 +127,6 @@ export const Flashcards = ({ cards }: FlashcardsProps) => {
     setFlipped(false);
   };
 
-  const current = cards[index];
   const currentCardStatus: "known" | "unknown" | "neutral" = knownCards.has(index)
     ? "known"
     : unknownCards.has(index)
@@ -138,8 +135,9 @@ export const Flashcards = ({ cards }: FlashcardsProps) => {
 
   return (
     <div className="space-y-6">
+      {/* Card */}
       <div
-        className={`relative h-56 md:h-64 rounded-2xl border shadow-elegant overflow-hidden select-none cursor-pointer [perspective:1200px] ${
+        className={`relative h-56 md:h-64 rounded-2xl border shadow-elegant overflow-hidden select-none cursor-pointer flip-3d ${
           currentCardStatus === "known"
             ? "border-success bg-success/5"
             : currentCardStatus === "unknown"
@@ -148,29 +146,26 @@ export const Flashcards = ({ cards }: FlashcardsProps) => {
         }`}
         onClick={() => setFlipped((f) => !f)}
         aria-label="Karte umdrehen"
+        role="button"
       >
-        <div
-          className={`${
-            flipped ? "[transform:rotateY(180deg)]" : ""
-          } absolute inset-0 grid place-items-center p-8 text-center transform-gpu will-change-transform transition-transform duration-500 [transform-style:preserve-3d] [transform:translateZ(0)]`}
-        >
-          {/* Front */}
-          <div className="absolute inset-0 grid place-items-center p-8 [backface-visibility:hidden] [-webkit-backface-visibility:hidden] [transform:translateZ(1px)] bg-gradient-to-br from-card to-card/80">
-            <div className="will-change-transform">
-              <p className="text-xl md:text-2xl font-semibold text-foreground leading-relaxed mb-4 [backface-visibility:hidden] [-webkit-backface-visibility:hidden]">
+        {/* Inner flipper */}
+        <div className={`flip-3d-inner ${flipped ? "is-flipped" : ""}`}>
+          {/* Front face */}
+          <div className="flip-face bg-gradient-to-br from-card to-card/80">
+            <div className="p-8 text-center">
+              <p className="text-xl md:text-2xl font-semibold text-foreground leading-relaxed mb-4">
                 {current.front}
               </p>
-              <p className="text-sm text-muted-foreground [backface-visibility:hidden] [-webkit-backface-visibility:hidden]">
-                Tippe zum Umdrehen
-              </p>
+              <p className="text-sm text-muted-foreground">Tippe zum Umdrehen</p>
             </div>
           </div>
-
-          {/* Back */}
-          <div className="absolute inset-0 grid place-items-center p-8 [transform:rotateY(180deg)_translateZ(1px)] [backface-visibility:hidden] [-webkit-backface-visibility:hidden] bg-gradient-to-br from-primary/5 to-accent/5">
-            <p className="text-lg md:text-xl text-foreground leading-relaxed [backface-visibility:hidden] [-webkit-backface-visibility:hidden]">
-              {current.back}
-            </p>
+          {/* Back face */}
+          <div className="flip-face flip-face-back bg-gradient-to-br from-primary/5 to-accent/5">
+            <div className="p-8 text-center">
+              <p className="text-lg md:text-xl text-foreground leading-relaxed">
+                {current.back}
+              </p>
+            </div>
           </div>
         </div>
 
@@ -208,6 +203,7 @@ export const Flashcards = ({ cards }: FlashcardsProps) => {
         </div>
       )}
 
+      {/* Footer controls */}
       <div className="flex items-center justify-between">
         <Button variant="outline" onClick={prev} aria-label="Vorherige Karte" size="sm">
           ← Zurück

@@ -12,6 +12,7 @@ export const DragDropGameComponent = ({ games }: DragDropGameProps) => {
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
   const [assignments, setAssignments] = useState<Record<string, string>>({});
   const [feedback, setFeedback] = useState<string>("");
+  const [showSolutions, setShowSolutions] = useState(false);
 
   const current = games[currentIndex];
 
@@ -114,11 +115,28 @@ export const DragDropGameComponent = ({ games }: DragDropGameProps) => {
             <Button onClick={reset} variant="outline">
               Zurücksetzen
             </Button>
+            <Button onClick={() => setShowSolutions((s) => !s)} variant="outline">
+              Lösungen {showSolutions ? "verbergen" : "zeigen"}
+            </Button>
           </div>
           {feedback && (
             <p className="text-sm font-medium text-primary">{feedback}</p>
           )}
         </div>
+
+        {showSolutions && (
+          <div className="mt-4 p-4 rounded-lg bg-secondary/50 border border-border/50">
+            <h5 className="font-medium text-foreground mb-2">Erklärungen</h5>
+            <ul className="text-sm text-muted-foreground space-y-1">
+              {current.items.map((item) => (
+                <li key={item.id}>
+                  {item.content} 
+                  <span className="text-foreground"> → {item.category}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
 
       <div className="flex items-center justify-between">

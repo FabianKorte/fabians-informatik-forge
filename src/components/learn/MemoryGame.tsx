@@ -20,6 +20,7 @@ export const MemoryGameComponent = ({ games }: MemoryGameProps) => {
   const [flippedCards, setFlippedCards] = useState<string[]>([]);
   const [moves, setMoves] = useState(0);
   const [gameComplete, setGameComplete] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
 
   const current = games[currentIndex];
 
@@ -159,11 +160,26 @@ export const MemoryGameComponent = ({ games }: MemoryGameProps) => {
           ))}
         </div>
 
-        <div className="flex justify-center mt-6">
+        <div className="flex justify-center mt-6 gap-2">
           <Button onClick={initializeGame} variant="outline">
             Neues Spiel
           </Button>
+          <Button onClick={() => setShowHelp((h) => !h)} variant="outline">
+            Lernhilfe {showHelp ? "verbergen" : "anzeigen"}
+          </Button>
         </div>
+        {showHelp && (
+          <div className="mt-4 p-4 rounded-lg bg-secondary/50 border border-border/50">
+            <h4 className="font-medium text-foreground mb-2">Erklärungen</h4>
+            <ul className="text-sm text-muted-foreground space-y-1">
+              {current.pairs.map((p) => (
+                <li key={p.id}>
+                  <span className="text-foreground font-semibold">{p.content}</span> ↔ {p.match}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
 
       <div className="flex items-center justify-between">

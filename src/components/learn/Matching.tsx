@@ -135,6 +135,19 @@ export const Matching = ({ pairs }: MatchingProps) => {
           </Button>
         )}
       </div>
+
+      {showResults && (
+        <div className="mt-4 p-4 rounded-lg bg-secondary/50 border border-border/50">
+          <h4 className="font-medium text-foreground mb-2">Erklärungen</h4>
+          <ul className="text-sm text-muted-foreground space-y-1">
+            {pairs.map((p) => (
+              <li key={p.left}>
+                <span className="font-semibold text-foreground">{p.left}:</span> {p.right}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
   );
 };
