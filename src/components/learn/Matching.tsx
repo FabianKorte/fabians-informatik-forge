@@ -147,7 +147,7 @@ export const Matching = ({ pairs }: MatchingProps) => {
             ))}
           </ul>
         </div>
-      ))}
+      )}
     </div>
   );
 };
