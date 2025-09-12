@@ -6,14 +6,18 @@ export const learnContent: Record<string, LearnModule[]> = {
       type: "flashcards",
       title: "Grundbegriffe der Programmierung",
       cards: [
-        { front: "Algorithmus", back: "Endliche, eindeutige Schrittfolge zur Lösung eines Problems. Ein Algorithmus muss terminieren (endlich sein), deterministisch (eindeutig) und effektiv (ausführbar) sein. Beispiel: Sortieralgorithmen wie Quicksort." },
-        { front: "Variable", back: "Benannter Speicherplatz für veränderliche Werte. Variablen haben einen Namen, Typ und Wert. Sie ermöglichen es, Daten zu speichern und zu manipulieren. In verschiedenen Sprachen unterschiedlich deklariert (var, let, const in JS)." },
-        { front: "Funktion", back: "Wiederverwendbarer Codeblock mit optionalen Eingaben (Parameter) und Rückgabewert. Funktionen kapseln Logik, fördern Code-Wiederverwendung und erleichtern Testing. Können rekursiv, anonym oder als Higher-Order-Functions implementiert werden." },
-        { front: "Big-O: O(n)", back: "Lineare Zeitkomplexität - Laufzeit wächst proportional zur Eingabegröße. Bei doppelter Eingabe verdoppelt sich auch die Laufzeit. Beispiele: Lineare Suche, einfaches Array durchlaufen. Besser als O(n²), schlechter als O(log n)." },
-        { front: "Rekursion", back: "Programmiertechnik, bei der eine Funktion sich selbst mit kleineren Probleminstanzen aufruft. Benötigt eine Abbruchbedingung (Base Case). Elegant für Probleme wie Fakultät, Fibonacci, Baumtraversierung. Kann Stack Overflow verursachen." },
-        { front: "Stack", back: "LIFO-Datenstruktur (Last In, First Out). Das zuletzt hinzugefügte Element wird zuerst entfernt. Operationen: push (hinzufügen), pop (entfernen), peek (anschauen). Verwendet für Funktionsaufrufe, Undo-Mechanismen, Klammerprüfung." },
-        { front: "Queue", back: "FIFO-Datenstruktur (First In, First Out). Das erste hinzugefügte Element wird zuerst entfernt. Operationen: enqueue (hinzufügen), dequeue (entfernen). Verwendet für Task-Scheduling, Breadth-First-Search, Print-Queues." },
-        { front: "Hash-Table", back: "Datenstruktur für schnellen Zugriff über Schlüssel-Wert-Paare mit O(1) durchschnittlicher Komplexität. Verwendet Hash-Funktionen zur Berechnung von Array-Indizes. Kollisionen werden durch Chaining oder Open Addressing behandelt." }
+        { front: "Algorithmus", back: "Endliche, eindeutige Schrittfolge zur Lösung eines Problems. Ein Algorithmus muss terminieren (endlich sein), deterministisch (eindeutig) und effektiv (ausführbar) sein. Beispiel: Sortieralgorithmen wie Quicksort. Wichtige Eigenschaften: Terminierung (hört auf), Determiniertheit (bei gleicher Eingabe gleiche Ausgabe), Determinismus (nächster Schritt eindeutig), Finitheit (endlich beschreibbar)." },
+        { front: "Variable", back: "Benannter Speicherplatz für veränderliche Werte. Variablen haben einen Namen, Typ und Wert. Sie ermöglichen es, Daten zu speichern und zu manipulieren. In verschiedenen Sprachen unterschiedlich deklariert (var, let, const in JS). Unterscheidung: lokale vs. globale Variablen, statische vs. dynamische Typisierung." },
+        { front: "Funktion", back: "Wiederverwendbarer Codeblock mit optionalen Eingaben (Parameter) und Rückgabewert. Funktionen kapseln Logik, fördern Code-Wiederverwendung und erleichtern Testing. Können rekursiv, anonym oder als Higher-Order-Functions implementiert werden. Vorteile: Modularität, Testbarkeit, Wartbarkeit, Wiederverwendbarkeit." },
+        { front: "Big-O: O(n)", back: "Lineare Zeitkomplexität - Laufzeit wächst proportional zur Eingabegröße. Bei doppelter Eingabe verdoppelt sich auch die Laufzeit. Beispiele: Lineare Suche, einfaches Array durchlaufen. Besser als O(n²), schlechter als O(log n). Andere: O(1) konstant, O(log n) logarithmisch, O(n²) quadratisch." },
+        { front: "Rekursion", back: "Programmiertechnik, bei der eine Funktion sich selbst mit kleineren Probleminstanzen aufruft. Benötigt eine Abbruchbedingung (Base Case). Elegant für Probleme wie Fakultät, Fibonacci, Baumtraversierung. Kann Stack Overflow verursachen. Alternative: Iteration mit Schleifen oft effizienter." },
+        { front: "Stack", back: "LIFO-Datenstruktur (Last In, First Out). Das zuletzt hinzugefügte Element wird zuerst entfernt. Operationen: push (hinzufügen), pop (entfernen), peek (anschauen). Verwendet für Funktionsaufrufe, Undo-Mechanismen, Klammerprüfung. Call Stack speichert Funktionsaufrufe und lokale Variablen." },
+        { front: "Queue", back: "FIFO-Datenstruktur (First In, First Out). Das erste hinzugefügte Element wird zuerst entfernt. Operationen: enqueue (hinzufügen), dequeue (entfernen). Verwendet für Task-Scheduling, Breadth-First-Search, Print-Queues. Varianten: Priority Queue, Circular Queue, Double-ended Queue (Deque)." },
+        { front: "Hash-Table", back: "Datenstruktur für schnellen Zugriff über Schlüssel-Wert-Paare mit O(1) durchschnittlicher Komplexität. Verwendet Hash-Funktionen zur Berechnung von Array-Indizes. Kollisionen werden durch Chaining oder Open Addressing behandelt. Load Factor sollte < 0.75 bleiben für optimale Performance." },
+        { front: "Polymorphismus", back: "Fähigkeit von Objekten verschiedener Klassen, auf dieselbe Nachricht unterschiedlich zu reagieren. Ad-hoc-Polymorphismus (Überladung), parametrischer Polymorphismus (Generics), Subtyp-Polymorphismus (Vererbung). Ermöglicht flexible und erweiterbare Code-Strukturen." },
+        { front: "Kapselung", back: "Verbergung von Implementierungsdetails hinter einer definierten Schnittstelle. Information Hiding Prinzip - Zugriff nur über öffentliche Methoden. Schützt Datenintegrität und ermöglicht Änderungen der internen Implementierung ohne Auswirkungen auf den Client-Code." },
+        { front: "Vererbung", back: "Mechanismus zur Erstellung neuer Klassen basierend auf bestehenden Klassen. Unterklassen erben Eigenschaften und Methoden der Oberklasse. Ermöglicht Code-Wiederverwendung und Is-A-Beziehungen. Kann zu Complex Inheritance Hierarchies führen - Composition over Inheritance bevorzugen." },
+        { front: "Design Pattern", back: "Bewährte Lösungsmuster für wiederkehrende Entwurfsprobleme. Creational (Singleton, Factory), Structural (Adapter, Decorator), Behavioral (Observer, Strategy). Fördern Best Practices, Kommunikation zwischen Entwicklern und Wartbarkeit." }
       ]
     },
     {
@@ -24,31 +28,61 @@ export const learnContent: Record<string, LearnModule[]> = {
           question: "Was macht 'const' in JavaScript?", 
           options: ["Variable ist neu zuweisbar", "Konstante, Referenz nicht neu zuweisbar", "Nur in Klassen nutzbar", "Nur global verfügbar"], 
           correctIndex: 1, 
-          explanation: "const verhindert die Neuzuweisung der Referenz, aber Objektinhalte können verändert werden. Beispiel: const arr = []; arr.push(1); // erlaubt, aber arr = [] // Fehler" 
+          explanation: "const verhindert die Neuzuweisung der Referenz, aber Objektinhalte können verändert werden. Beispiel: const arr = []; arr.push(1); // erlaubt, aber arr = [] // Fehler. const schützt vor versehentlicher Neuzuweisung und macht Code vorhersagbarer." 
         },
         { 
           question: "Was ist 'typeof null' in JavaScript?", 
           options: ["null", "object", "undefined", "string"], 
           correctIndex: 1, 
-          explanation: "Dies ist ein historischer Bug in JavaScript seit der ersten Version. null sollte eigentlich 'null' zurückgeben, aber aus Kompatibilitätsgründen wurde es nie geändert." 
+          explanation: "Dies ist ein historischer Bug in JavaScript seit der ersten Version. null sollte eigentlich 'null' zurückgeben, aber aus Kompatibilitätsgründen wurde es nie geändert. Um auf null zu prüfen: value === null verwenden, nicht typeof." 
         },
         { 
           question: "Was fügt TypeScript zu JavaScript hinzu?", 
           options: ["Runtime-Performance-Verbesserungen", "Statische Typisierung", "Neue Browser-APIs", "CSS-Features"], 
           correctIndex: 1, 
-          explanation: "TypeScript erweitert JavaScript um ein optionales statisches Typsystem. Dies ermöglicht Fehlerdetection zur Compile-Zeit, bessere IDE-Unterstützung und selbst-dokumentierenden Code." 
+          explanation: "TypeScript erweitert JavaScript um ein optionales statisches Typsystem. Dies ermöglicht Fehlerdetection zur Compile-Zeit, bessere IDE-Unterstützung und selbst-dokumentierenden Code. TypeScript wird zu JavaScript transpiliert." 
         },
         { 
           question: "Welche Schleife iteriert über Werte (nicht Indizes) eines Arrays?", 
           options: ["for...in", "for...of", "while", "do...while"], 
           correctIndex: 1, 
-          explanation: "for...of iteriert über die Werte: for(const value of array). for...in iteriert über die Schlüssel/Indizes. for...of funktioniert mit allen Iterables." 
+          explanation: "for...of iteriert über die Werte: for(const value of array). for...in iteriert über die Schlüssel/Indizes. for...of funktioniert mit allen Iterables (Arrays, Sets, Maps, Strings). Moderne Alternative zu forEach." 
         },
         { 
           question: "Was ist Hoisting in JavaScript?", 
           options: ["Variablendeklarationen werden nach oben gezogen", "Performance-Optimierung", "Browser-Feature", "CSS-Eigenschaft"], 
           correctIndex: 0, 
-          explanation: "Hoisting bedeutet, dass var-Deklarationen und function-Deklarationen an den Anfang ihres Scopes gezogen werden. var wird mit 'undefined' initialisiert, let/const verbleiben in der 'Temporal Dead Zone'." 
+          explanation: "Hoisting bedeutet, dass var-Deklarationen und function-Deklarationen an den Anfang ihres Scopes gezogen werden. var wird mit 'undefined' initialisiert, let/const verbleiben in der 'Temporal Dead Zone'. Function declarations sind komplett gehoisted." 
+        },
+        { 
+          question: "Was ist der Unterschied zwischen '==' und '===' in JavaScript?", 
+          options: ["Kein Unterschied", "=== prüft Typ und Wert, == nur Wert", "== ist neuer", "=== ist langsamer"], 
+          correctIndex: 1, 
+          explanation: "=== (strict equality) prüft Typ und Wert ohne Typkonvertierung. == (loose equality) führt Typkonvertierung durch. '5' == 5 ist true, '5' === 5 ist false. Immer === verwenden für vorhersagbares Verhalten." 
+        },
+        { 
+          question: "Was passiert bei 'this' in Arrow Functions?", 
+          options: ["this wird neu gebunden", "this bleibt vom umgebenden Scope", "this ist undefined", "this bezieht sich auf window"], 
+          correctIndex: 1, 
+          explanation: "Arrow Functions haben kein eigenes 'this' - sie übernehmen 'this' vom umgebenden lexikalischen Scope. Reguläre Functions haben ihr eigenes 'this' je nach Aufrufkontext. Deshalb sind Arrow Functions ideal für Callbacks." 
+        },
+        { 
+          question: "Was ist Closure in JavaScript?", 
+          options: ["Eine geschlossene Funktion", "Zugriff auf äußere Variablen nach Funktionsende", "Ein Designpattern", "Eine Schleifenart"], 
+          correctIndex: 1, 
+          explanation: "Closure ermöglicht inneren Funktionen den Zugriff auf Variablen ihrer äußeren Funktion, auch nachdem die äußere Funktion beendet wurde. Ermöglicht Private Variables und Module Pattern. Grundlage für viele JS-Features." 
+        },
+        { 
+          question: "Was macht 'use strict' in JavaScript?", 
+          options: ["Macht Code schneller", "Aktiviert strikten Modus mit mehr Fehlerchecks", "Neue ES6 Features", "TypeScript Modus"], 
+          correctIndex: 1, 
+          explanation: "'use strict' aktiviert den strikten Modus: Verhindert undefinierte Variablen, verbietet Duplikate in Objekten/Parametern, macht this in Funktionen undefined statt window. Hilft bei Fehlerprävention und Code-Qualität." 
+        },
+        { 
+          question: "Was ist Event Bubbling?", 
+          options: ["Events werden gelöscht", "Events propagieren vom Kind zum Eltern-Element", "Event-Performance", "CSS-Animation"], 
+          correctIndex: 1, 
+          explanation: "Event Bubbling: Events starten am Ziel-Element und 'blubbern' nach oben durch die DOM-Hierarchie bis zum window. Event Capturing läuft umgekehrt. Mit stopPropagation() unterbrechbar. Basis für Event Delegation." 
         }
       ]
     },
@@ -85,6 +119,43 @@ export const learnContent: Record<string, LearnModule[]> = {
             { input: "0", expected: "0" },
             { input: "5", expected: "5" }
           ]
+        },
+        {
+          title: "Array Reduce - Summe",
+          description: "Berechne die Summe aller Zahlen im Array mit der reduce()-Methode.",
+          initialCode: "const numbers = [1, 2, 3, 4, 5];\n// Berechne die Summe\nconst sum = ",
+          solution: "const numbers = [1, 2, 3, 4, 5];\nconst sum = numbers.reduce((acc, curr) => acc + curr, 0);",
+          tests: [
+            { input: "[1,2,3,4,5]", expected: "15" },
+            { input: "[]", expected: "0" }
+          ]
+        },
+        {
+          title: "Objekt Destructuring",
+          description: "Extrahiere name und age aus dem user-Objekt mit Destructuring.",
+          initialCode: "const user = { name: 'Max', age: 30, city: 'Berlin' };\n// Destructuring hier\n",
+          solution: "const user = { name: 'Max', age: 30, city: 'Berlin' };\nconst { name, age } = user;",
+          tests: [
+            { input: "{ name: 'Anna', age: 25 }", expected: "name='Anna', age=25" }
+          ]
+        },
+        {
+          title: "Promise mit async/await",
+          description: "Implementiere eine async Funktion die ein Promise auflöst.",
+          initialCode: "// Erstelle eine async Funktion fetchData\n// die nach 1s 'Daten geladen' zurückgibt\n",
+          solution: "async function fetchData() {\n  await new Promise(resolve => setTimeout(resolve, 1000));\n  return 'Daten geladen';\n}",
+          tests: [
+            { input: "await fetchData()", expected: "'Daten geladen'" }
+          ]
+        },
+        {
+          title: "Class mit Constructor",
+          description: "Erstelle eine Person-Klasse mit Constructor und einer greet()-Methode.",
+          initialCode: "class Person {\n  // Constructor implementieren\n  // greet() Methode implementieren\n}",
+          solution: "class Person {\n  constructor(name, age) {\n    this.name = name;\n    this.age = age;\n  }\n  \n  greet() {\n    return `Hallo, ich bin ${this.name} und ${this.age} Jahre alt.`;\n  }\n}",
+          tests: [
+            { input: "new Person('Max', 25).greet()", expected: "'Hallo, ich bin Max und 25 Jahre alt.'" }
+          ]
         }
       ]
     }
@@ -94,37 +165,71 @@ export const learnContent: Record<string, LearnModule[]> = {
       type: "flashcards",
       title: "SQL & Normalformen",
       cards: [
-        { front: "Primärschlüssel", back: "Eindeutige Identifikation einer Tabellenzeile. Kann nicht NULL sein und muss in jeder Zeile eindeutig sein. Kann aus einem oder mehreren Attributen bestehen." },
-        { front: "Fremdschlüssel", back: "Verweist auf den Primärschlüssel einer anderen Tabelle und stellt referenzielle Integrität sicher. Kann NULL sein. Ermöglicht Verknüpfungen zwischen Tabellen." },
-        { front: "1. Normalform (1NF)", back: "Alle Attributwerte sind atomar (unteilbar) und es gibt keine wiederholenden Gruppen. Jede Zelle enthält nur einen Wert." },
-        { front: "2. Normalform (2NF)", back: "Erfüllt 1NF und alle Nicht-Schlüssel-Attribute sind vollständig funktional abhängig vom Primärschlüssel." },
-        { front: "3. Normalform (3NF)", back: "Erfüllt 2NF und keine transitiven Abhängigkeiten zwischen Nicht-Schlüssel-Attributen." },
-        { front: "Index", back: "Datenstruktur zur Beschleunigung von Abfragen auf Spalten. Verbessert SELECT-Performance, verlangsamt aber INSERT/UPDATE/DELETE." },
-        { front: "ACID", back: "Atomicity (Unteilbarkeit), Consistency (Konsistenz), Isolation (Isolation), Durability (Dauerhaftigkeit). Grundlage für Datenintegrität." },
-        { front: "Transaktion", back: "Logische Arbeitseinheit aus mehreren Datenbankoperationen, die komplett oder gar nicht ausgeführt wird. COMMIT macht Änderungen dauerhaft, ROLLBACK macht sie rückgängig." }
+        { front: "Primärschlüssel", back: "Eindeutige Identifikation einer Tabellenzeile. Kann nicht NULL sein und muss in jeder Zeile eindeutig sein. Kann aus einem oder mehreren Attributen bestehen (zusammengesetzter Schlüssel). Automatische Indexerstellung für bessere Performance. Bei zusammengesetzten Schlüsseln müssen alle Teile gemeinsam eindeutig sein." },
+        { front: "Fremdschlüssel", back: "Verweist auf den Primärschlüssel einer anderen Tabelle und stellt referenzielle Integrität sicher. Kann NULL sein. Ermöglicht Verknüpfungen zwischen Tabellen. Cascade-Optionen: CASCADE (Änderungen übertragen), SET NULL, RESTRICT (verhindert Löschung)." },
+        { front: "1. Normalform (1NF)", back: "Alle Attributwerte sind atomar (unteilbar) und es gibt keine wiederholenden Gruppen. Jede Zelle enthält nur einen Wert. Beispiel: Statt 'Tel1, Tel2' zwei separate Telefonnummer-Felder. Eliminiert mehrwertige Attribute." },
+        { front: "2. Normalform (2NF)", back: "Erfüllt 1NF und alle Nicht-Schlüssel-Attribute sind vollständig funktional abhängig vom gesamten Primärschlüssel. Eliminiert partielle Abhängigkeiten. Bei zusammengesetzten Schlüsseln dürfen Attribute nicht nur von Teilschlüsseln abhängen." },
+        { front: "3. Normalform (3NF)", back: "Erfüllt 2NF und es gibt keine transitiven Abhängigkeiten. Nicht-Schlüssel-Attribute dürfen nur vom Primärschlüssel abhängen, nicht voneinander. Eliminiert indirekte Abhängigkeiten zwischen Nicht-Schlüssel-Attributen." },
+        { front: "ACID-Eigenschaften", back: "Atomicity (Unteilbarkeit): Transaktionen sind ganz oder gar nicht. Consistency (Konsistenz): DB bleibt in gültigem Zustand. Isolation (Isolation): Parallele Transaktionen beeinflussen sich nicht. Durability (Dauerhaftigkeit): Änderungen sind permanent gespeichert." },
+        { front: "SQL JOIN-Arten", back: "INNER JOIN: Nur übereinstimmende Datensätze. LEFT JOIN: Alle linken + passende rechte. RIGHT JOIN: Alle rechten + passende linke. FULL OUTER JOIN: Alle Datensätze beider Tabellen. CROSS JOIN: Kartesisches Produkt aller Kombinationen." },
+        { front: "Index", back: "Datenstruktur zur Beschleunigung von Datenbankabfragen. B-Tree (Standard), Hash, Bitmap. Vorteile: Schnellere SELECT, WHERE, ORDER BY. Nachteile: Speicherverbrauch, langsamere INSERT/UPDATE/DELETE. Automatisch auf Primärschlüssel." },
+        { front: "Transaktion", back: "Logische Arbeitseinheit von DB-Operationen. Entweder alle oder keine Operationen werden ausgeführt. BEGIN, COMMIT (Speichern), ROLLBACK (Rückgängig). Isolation Levels: READ UNCOMMITTED, READ COMMITTED, REPEATABLE READ, SERIALIZABLE." },
+        { front: "Stored Procedure", back: "Vorkompilierte SQL-Anweisungen auf dem DB-Server. Vorteile: Performance, Sicherheit, Zentralisierung. Nachteile: DB-spezifisch, schwerer zu versionieren. Parameter möglich. Ausführung mit CALL oder EXEC." },
+        { front: "Trigger", back: "Automatisch ausgeführte Prozeduren bei bestimmten DB-Ereignissen. BEFORE/AFTER INSERT/UPDATE/DELETE. Für Logging, Validierung, automatische Berechnungen. Können Kaskaden-Effekte verursachen - sparsam einsetzen." },
+        { front: "Deadlock", back: "Blockierung zwischen zwei oder mehr Transaktionen, die sich gegenseitig auf Ressourcen warten. DB-System erkennt und bricht eine Transaktion ab. Vermeidung: Einheitliche Sperrreihenfolge, kurze Transaktionen, niedrige Isolation Levels." }
       ]
     },
     {
       type: "quiz",
-      title: "SQL-Abfragen",
+      title: "SQL-Abfragen und Konzepte",
       questions: [
         { 
-          question: "Welche SQL-Klausel filtert Zeilen VOR der Gruppierung?", 
-          options: ["GROUP BY", "WHERE", "ORDER BY", "HAVING"], 
-          correctIndex: 1,
-          explanation: "WHERE filtert Zeilen vor der Gruppierung und kann keine Aggregatfunktionen verwenden. HAVING filtert nach der Gruppierung und kann Aggregatfunktionen verwenden."
+          question: "Was charakterisiert die 3. Normalform?", 
+          options: ["Atomare Werte", "Keine partiellen Abhängigkeiten", "Keine transitiven Abhängigkeiten", "Keine wiederholenden Gruppen"], 
+          correctIndex: 2,
+          explanation: "3NF eliminiert transitive Abhängigkeiten: Nicht-Schlüssel-Attribute dürfen nur vom Primärschlüssel abhängen, nicht voneinander. Beispiel: Kunde → Stadt → PLZ ist transitiv - PLZ sollte in separate Tabelle."
         },
         { 
-          question: "Was ist der Unterschied zwischen COUNT(*) und COUNT(spalte)?", 
-          options: ["Kein Unterschied", "COUNT(*) zählt alle Zeilen, COUNT(spalte) nur nicht-NULL", "COUNT(*) ist langsamer", "COUNT(spalte) ist deprecated"], 
-          correctIndex: 1,
-          explanation: "COUNT(*) zählt alle Zeilen einer Gruppe, auch die mit NULL-Werten. COUNT(spalte) zählt nur Zeilen, wo die Spalte nicht NULL ist."
-        },
-        { 
-          question: "Welcher JOIN-Typ zeigt auch Zeilen der linken Tabelle ohne Entsprechung rechts?", 
+          question: "Welcher JOIN gibt alle Datensätze der linken Tabelle zurück?", 
           options: ["INNER JOIN", "LEFT JOIN", "RIGHT JOIN", "CROSS JOIN"], 
           correctIndex: 1,
-          explanation: "LEFT JOIN behält alle Zeilen der linken Tabelle und füllt fehlende Werte der rechten Tabelle mit NULL. INNER JOIN zeigt nur passende Zeilen."
+          explanation: "LEFT JOIN (oder LEFT OUTER JOIN) gibt alle Datensätze der linken Tabelle zurück, auch wenn keine Übereinstimmung in der rechten Tabelle existiert. Fehlende rechte Werte werden als NULL dargestellt."
+        },
+        { 
+          question: "Was ist ein Deadlock?", 
+          options: ["Langsame Abfrage", "Gegenseitige Blockierung von Transaktionen", "Fehlerhafter Index", "Überlauf der Datenbank"], 
+          correctIndex: 1,
+          explanation: "Deadlock tritt auf wenn sich zwei oder mehr Transaktionen gegenseitig blockieren. Transaktion A wartet auf Ressource von B, B wartet auf Ressource von A. DB-System löst durch Abbruch einer Transaktion."
+        },
+        { 
+          question: "Welche ACID-Eigenschaft sorgt für 'Alles oder Nichts'?", 
+          options: ["Atomicity", "Consistency", "Isolation", "Durability"], 
+          correctIndex: 0,
+          explanation: "Atomicity (Atomarität) bedeutet dass Transaktionen unteilbar sind - entweder werden alle Operationen ausgeführt oder keine. Bei Fehler wird komplette Transaktion zurückgerollt."
+        },
+        { 
+          question: "Wofür wird ein Index in einer Datenbank verwendet?", 
+          options: ["Datensicherung", "Beschleunigung von Abfragen", "Normalisierung", "Transaktionskontrolle"], 
+          correctIndex: 1,
+          explanation: "Indizes beschleunigen SELECT-Abfragen, WHERE-Klauseln und ORDER BY durch optimierte Datenstrukturen (meist B-Trees). Kosten: Zusätzlicher Speicher und langsamere Schreiboperationen."
+        },
+        { 
+          question: "Was ist der Unterschied zwischen COMMIT und ROLLBACK?", 
+          options: ["Kein Unterschied", "COMMIT speichert, ROLLBACK verwirft Änderungen", "COMMIT löscht, ROLLBACK speichert", "Beide speichern Daten"], 
+          correctIndex: 1,
+          explanation: "COMMIT macht alle Änderungen einer Transaktion permanent und sichtbar für andere. ROLLBACK macht alle Änderungen rückgängig und stellt den ursprünglichen Zustand wieder her."
+        },
+        { 
+          question: "Welches Statement erstellt eine neue Tabelle?", 
+          options: ["INSERT TABLE", "CREATE TABLE", "NEW TABLE", "ADD TABLE"], 
+          correctIndex: 1,
+          explanation: "CREATE TABLE erstellt neue Tabellen mit Spaltendefinitionen, Datentypen und Constraints. Syntax: CREATE TABLE tabellenname (spalte1 typ constraints, spalte2 typ, ...)."
+        },
+        { 
+          question: "Was ist ein Stored Procedure?", 
+          options: ["Gespeicherte Abfrage", "Vorkompilierte SQL-Prozedur auf Server", "Tabellenbackup", "Index-Art"], 
+          correctIndex: 1,
+          explanation: "Stored Procedures sind vorkompilierte SQL-Anweisungsblöcke auf dem DB-Server. Vorteile: Performance, Sicherheit, Zentralisierung. Aufruf mit CALL oder EXEC. Können Parameter haben."
         }
       ]
     },
