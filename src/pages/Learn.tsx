@@ -8,6 +8,11 @@ import type { LearnModule } from "@/types/learn";
 import { Flashcards } from "@/components/learn/Flashcards";
 import { Quiz } from "@/components/learn/Quiz";
 import { Matching } from "@/components/learn/Matching";
+import { CodeChallengeComponent } from "@/components/learn/CodeChallenge";
+import { DragDropGameComponent } from "@/components/learn/DragDropGame";
+import { MemoryGameComponent } from "@/components/learn/MemoryGame";
+import { TimelineView } from "@/components/learn/TimelineView";
+import { ScenarioGame } from "@/components/learn/ScenarioGame";
 
 const LearnPage = () => {
   const { categoryId } = useParams();
@@ -64,6 +69,11 @@ const LearnPage = () => {
                     {m.type === "flashcards" && <Flashcards cards={m.cards} />}
                     {m.type === "quiz" && <Quiz questions={m.questions} />}
                     {m.type === "matching" && <Matching pairs={m.pairs} />}
+                    {m.type === "code" && <CodeChallengeComponent challenges={m.challenges} />}
+                    {m.type === "dragdrop" && <DragDropGameComponent games={m.games} />}
+                    {m.type === "memory" && <MemoryGameComponent games={m.games} />}
+                    {m.type === "timeline" && <TimelineView timelines={m.timelines} />}
+                    {m.type === "scenario" && <ScenarioGame scenarios={m.scenarios} />}
                   </article>
                 </TabsContent>
               ))}

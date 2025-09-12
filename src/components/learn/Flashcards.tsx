@@ -30,15 +30,15 @@ export const Flashcards = ({ cards }: FlashcardsProps) => {
         aria-label="Karte umdrehen"
       >
         <div
-          className={`absolute inset-0 grid place-items-center p-6 text-center transition-transform duration-500 [transform-style:preserve-3d] ${
+          className={`absolute inset-0 grid place-items-center p-8 text-center transition-transform duration-500 [transform-style:preserve-3d] ${
             flipped ? "[transform:rotateY(180deg)]" : ""
           }`}
         >
-          <div className="absolute inset-0 grid place-items-center p-6 [backface-visibility:hidden]">
-            <p className="text-xl md:text-2xl font-semibold text-foreground">{current.front}</p>
+          <div className="absolute inset-0 grid place-items-center p-8 [backface-visibility:hidden] bg-gradient-to-br from-card to-card/80">
+            <p className="text-xl md:text-2xl font-semibold text-foreground leading-relaxed">{current.front}</p>
           </div>
-          <div className="absolute inset-0 grid place-items-center p-6 [transform:rotateY(180deg)] [backface-visibility:hidden]">
-            <p className="text-lg md:text-xl text-muted-foreground">{current.back}</p>
+          <div className="absolute inset-0 grid place-items-center p-8 [transform:rotateY(180deg)] [backface-visibility:hidden] bg-gradient-to-br from-primary/5 to-accent/5">
+            <p className="text-lg md:text-xl text-foreground leading-relaxed">{current.back}</p>
           </div>
         </div>
       </div>
