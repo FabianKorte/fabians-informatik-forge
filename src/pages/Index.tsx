@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Hero } from "@/components/Hero";
 import { CategoryCard } from "@/components/CategoryCard";
 import { SearchBar } from "@/components/SearchBar";
@@ -6,7 +7,7 @@ import { categories } from "@/data/categories";
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  
+  const navigate = useNavigate();
   // Calculate total stats
   const totalQuestions = categories.reduce((sum, cat) => sum + cat.totalElements, 0);
   const answeredQuestions = categories.reduce((sum, cat) => sum + cat.completedElements, 0);
@@ -32,8 +33,7 @@ const Index = () => {
   };
 
   const handleCategoryStart = (categoryId: string) => {
-    console.log('Start learning category:', categoryId);
-    // Navigate to category learning page
+    navigate(`/learn/${categoryId}`);
   };
 
   return (
@@ -48,7 +48,7 @@ const Index = () => {
       />
 
       {/* Categories Section */}
-      <section id="categories-section" className="py-20 px-6 bg-gradient-to-b from-background to-secondary/20">
+      <section id="categories-section" className="py-20 px-6 bg-background">
         <div className="max-w-7xl mx-auto">
           {/* Section header */}
           <div className="text-center mb-12 animate-fade-up">

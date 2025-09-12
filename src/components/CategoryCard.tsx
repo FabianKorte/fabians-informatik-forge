@@ -78,28 +78,18 @@ export const CategoryCard = ({
           </div>
 
           {/* Stats */}
-          <div className="flex items-center justify-between pt-2 border-t border-border/50">
+          <div className="grid grid-cols-3 gap-4 sm:gap-6 pt-4 border-t border-border/50">
             <div className="text-center">
               <p className="text-lg font-bold text-primary">{totalElements}</p>
-              <p className="text-xs text-muted-foreground uppercase tracking-wide">
-                Lernelemente
-              </p>
+              <p className="mt-1 text-xs text-muted-foreground uppercase tracking-wide">Lernelemente</p>
             </div>
-            
-            {completedElements > 0 && (
-              <div className="text-center">
-                <p className="text-lg font-bold text-success">{completedElements}</p>
-                <p className="text-xs text-muted-foreground uppercase tracking-wide">
-                  Abgeschlossen
-                </p>
-              </div>
-            )}
-            
+            <div className="text-center">
+              <p className="text-lg font-bold text-success">{completedElements}</p>
+              <p className="mt-1 text-xs text-muted-foreground uppercase tracking-wide">Abgeschlossen</p>
+            </div>
             <div className="text-center">
               <p className="text-lg font-bold text-accent">{Math.round(progress)}%</p>
-              <p className="text-xs text-muted-foreground uppercase tracking-wide">
-                Fortschritt
-              </p>
+              <p className="mt-1 text-xs text-muted-foreground uppercase tracking-wide">Fortschritt</p>
             </div>
           </div>
         </div>

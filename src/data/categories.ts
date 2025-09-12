@@ -30,7 +30,7 @@ export const categories: Category[] = [
     title: "Programmierung",
     description: "Grundlagen der Softwareentwicklung, Algorithmen und Datenstrukturen",
     totalElements: 120,
-    completedElements: 15,
+    completedElements: 0,
     icon: Code2,
     difficulty: "Fortgeschritten",
     gradient: "from-blue-500 to-indigo-600"
@@ -40,7 +40,7 @@ export const categories: Category[] = [
     title: "Datenbanken",
     description: "SQL, Datenbankdesign, Normalisierung und Datenbankmanagement",
     totalElements: 85,
-    completedElements: 32,
+    completedElements: 0,
     icon: Database,
     difficulty: "Fortgeschritten",
     gradient: "from-emerald-500 to-teal-600"
@@ -50,7 +50,7 @@ export const categories: Category[] = [
     title: "IT-Sicherheit",
     description: "Cybersecurity, Verschlüsselung, Firewalls und Sicherheitskonzepte",
     totalElements: 95,
-    completedElements: 8,
+    completedElements: 0,
     icon: Shield,
     difficulty: "Experte",
     gradient: "from-red-500 to-rose-600"
@@ -60,7 +60,7 @@ export const categories: Category[] = [
     title: "Netzwerktechnik",
     description: "TCP/IP, Routing, Switching und Netzwerkprotokolle",
     totalElements: 110,
-    completedElements: 45,
+    completedElements: 0,
     icon: Network,
     difficulty: "Fortgeschritten",
     gradient: "from-purple-500 to-violet-600"
@@ -70,7 +70,7 @@ export const categories: Category[] = [
     title: "Systemadministration",
     description: "Server-Management, Betriebssysteme und Systemwartung",
     totalElements: 100,
-    completedElements: 22,
+    completedElements: 0,
     icon: Server,
     difficulty: "Experte",
     gradient: "from-orange-500 to-amber-600"
@@ -80,7 +80,7 @@ export const categories: Category[] = [
     title: "Mobile Entwicklung",
     description: "App-Entwicklung für iOS und Android, mobile Technologien",
     totalElements: 75,
-    completedElements: 5,
+    completedElements: 0,
     icon: Smartphone,
     difficulty: "Fortgeschritten",
     gradient: "from-pink-500 to-rose-600"
@@ -90,7 +90,7 @@ export const categories: Category[] = [
     title: "Web-Technologien",
     description: "HTML, CSS, JavaScript, Frameworks und Web-Standards",
     totalElements: 130,
-    completedElements: 67,
+    completedElements: 0,
     icon: Globe,
     difficulty: "Anfänger",
     gradient: "from-cyan-500 to-blue-600"
@@ -100,7 +100,7 @@ export const categories: Category[] = [
     title: "Projektmanagement",
     description: "Agile Methoden, Scrum, Kanban und Projektplanung",
     totalElements: 60,
-    completedElements: 18,
+    completedElements: 0,
     icon: Settings,
     difficulty: "Anfänger",
     gradient: "from-slate-500 to-gray-600"
@@ -110,7 +110,7 @@ export const categories: Category[] = [
     title: "IT-Grundlagen",
     description: "Hardware, Software, Digitaltechnik und Computer-Basics",
     totalElements: 80,
-    completedElements: 55,
+    completedElements: 0,
     icon: BookOpen,
     difficulty: "Anfänger",
     gradient: "from-green-500 to-emerald-600"
@@ -120,7 +120,7 @@ export const categories: Category[] = [
     title: "Kommunikation & Teamwork",
     description: "Soft Skills, Präsentationstechniken und Teamarbeit",
     totalElements: 45,
-    completedElements: 12,
+    completedElements: 0,
     icon: Users,
     difficulty: "Anfänger",
     gradient: "from-yellow-500 to-orange-600"
@@ -130,7 +130,7 @@ export const categories: Category[] = [
     title: "Rechtliche Grundlagen",
     description: "Datenschutz, Urheberrecht und IT-Recht",
     totalElements: 55,
-    completedElements: 25,
+    completedElements: 0,
     icon: FileText,
     difficulty: "Anfänger",
     gradient: "from-indigo-500 to-purple-600"
@@ -140,7 +140,7 @@ export const categories: Category[] = [
     title: "Prüfungsvorbereitung",
     description: "Abschlussprüfung, Prüfungsstrategien und Mock-Tests",
     totalElements: 90,
-    completedElements: 3,
+    completedElements: 0,
     icon: Brain,
     difficulty: "Experte",
     gradient: "from-teal-500 to-cyan-600"
