@@ -131,7 +131,7 @@ const Index = () => {
             Professionelle Vorbereitung auf alle IT-Prüfungen mit modernster Lerntechnologie.
           </p>
           <p className="text-sm text-muted-foreground">
-            © 2024 Fabian Korte. Alle Rechte vorbehalten.
+            © 2025 Fabian Korte. Alle Rechte vorbehalten.
           </p>
         </div>
       </footer>

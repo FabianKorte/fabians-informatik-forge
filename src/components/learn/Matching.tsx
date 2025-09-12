@@ -22,17 +22,22 @@ export const Matching = ({ pairs }: MatchingProps) => {
 
   const [selectedLeft, setSelectedLeft] = useState<string | null>(null);
   const [matches, setMatches] = useState<Record<string, string>>({});
+  const [showResults, setShowResults] = useState(false);
 
   const isMatchedLeft = (l: string) => Object.keys(matches).includes(l);
   const isMatchedRight = (r: string) => Object.values(matches).includes(r);
 
   const selectRight = (r: string) => {
     if (!selectedLeft) return;
-    const correctRight = pairs.find((p) => p.left === selectedLeft)?.right;
     const newMatches = { ...matches };
     newMatches[selectedLeft] = r;
     setMatches(newMatches);
     setSelectedLeft(null);
+    
+    // Show results when all pairs are matched
+    if (Object.keys(newMatches).length === pairs.length) {
+      setShowResults(true);
+    }
   };
 
   const solved = Object.keys(matches).length === pairs.length;
@@ -41,25 +46,52 @@ export const Matching = ({ pairs }: MatchingProps) => {
     return correct === r;
   }).length;
 
+  const isCorrectMatch = (left: string) => {
+    const userMatch = matches[left];
+    const correctMatch = pairs.find((p) => p.left === left)?.right;
+    return userMatch === correctMatch;
+  };
+
+  const reset = () => {
+    setMatches({});
+    setShowResults(false);
+    setSelectedLeft(null);
+  };
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 gap-6">
         <div className="rounded-2xl border border-border bg-card p-4">
           <h4 className="font-medium text-foreground mb-3">Begriffe</h4>
           <div className="grid gap-2">
-            {left.map((l) => (
-              <button
-                key={l}
-                onClick={() => !isMatchedLeft(l) && setSelectedLeft(l)}
-                className={cn(
-                  "text-left rounded-lg border border-border/60 bg-background px-3 py-2 transition-colors",
-                  selectedLeft === l && "border-primary text-primary",
-                  isMatchedLeft(l) && "opacity-60 cursor-default"
-                )}
-              >
-                {l}
-              </button>
-            ))}
+            {left.map((l) => {
+              const isMatched = isMatchedLeft(l);
+              const isCorrect = showResults && isCorrectMatch(l);
+              const isSelected = selectedLeft === l;
+              
+              return (
+                <button
+                  key={l}
+                  onClick={() => !isMatched && setSelectedLeft(l)}
+                  className={cn(
+                    "text-left rounded-lg border px-3 py-2 transition-colors",
+                    isSelected && "border-primary text-primary bg-primary/10",
+                    isMatched && !showResults && "border-border/60 bg-background opacity-60 cursor-default",
+                    showResults && isMatched && isCorrect && "border-success text-success bg-success/10",
+                    showResults && isMatched && !isCorrect && "border-destructive text-destructive bg-destructive/10",
+                    !isMatched && !isSelected && "border-border/60 bg-background hover:border-primary/50"
+                  )}
+                  disabled={isMatched}
+                >
+                  {l}
+                  {showResults && isMatched && (
+                    <span className="ml-2">
+                      {isCorrect ? "✓" : "✗"}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
         <div className="rounded-2xl border border-border bg-card p-4">
@@ -70,9 +102,10 @@ export const Matching = ({ pairs }: MatchingProps) => {
                 key={r}
                 onClick={() => !isMatchedRight(r) && selectRight(r)}
                 className={cn(
-                  "text-left rounded-lg border border-border/60 bg-background px-3 py-2 transition-colors",
+                  "text-left rounded-lg border border-border/60 bg-background px-3 py-2 transition-colors hover:border-primary/50",
                   isMatchedRight(r) && "opacity-60 cursor-default"
                 )}
+                disabled={isMatchedRight(r)}
               >
                 {r}
               </button>
@@ -82,12 +115,23 @@ export const Matching = ({ pairs }: MatchingProps) => {
       </div>
 
       <div className="flex items-center justify-between">
-        <p className="text-sm text-muted-foreground">
-          Korrekt: {correctCount} / {pairs.length}
-        </p>
-        {solved && (
-          <Button variant="outline" disabled>
-            Geschafft!
+        <div className="text-sm text-muted-foreground">
+          {showResults ? (
+            <div>
+              <p className="font-medium">Ergebnis: {correctCount} / {pairs.length} richtig</p>
+              {correctCount === pairs.length ? (
+                <p className="text-success">Perfekt! Alle Zuordnungen sind korrekt! 🎉</p>
+              ) : (
+                <p className="text-orange-600">Versuche es nochmal für ein besseres Ergebnis.</p>
+              )}
+            </div>
+          ) : (
+            <p>Zuordnungen: {Object.keys(matches).length} / {pairs.length}</p>
+          )}
+        </div>
+        {showResults && (
+          <Button onClick={reset} variant="outline">
+            Nochmal versuchen
           </Button>
         )}
       </div>

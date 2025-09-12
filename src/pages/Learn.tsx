@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { categories } from "@/data/categories";
 import { getModulesForCategory } from "@/data/learn";
+import { getAvailableMethodsForCategory } from "@/data/categoryMethods";
 import type { LearnModule } from "@/types/learn";
 import { Flashcards } from "@/components/learn/Flashcards";
 import { Quiz } from "@/components/learn/Quiz";
@@ -20,6 +21,7 @@ const LearnPage = () => {
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const modules: LearnModule[] = useMemo(() => getModulesForCategory(categoryId || ""), [categoryId]);
   const category = categories.find((c) => c.id === categoryId);
+  const availableMethods = useMemo(() => getAvailableMethodsForCategory(categoryId || ""), [categoryId]);
 
   const learningMethods = [
     { id: "flashcards", title: "Karteikarten", description: "Klassisches Lernen mit Frage und Antwort", icon: "🃏" },
@@ -30,7 +32,7 @@ const LearnPage = () => {
     { id: "memory", title: "Memory-Spiel", description: "Finde passende Kartenpaare", icon: "🧠" },
     { id: "timeline", title: "Timeline", description: "Lerne chronologische Abläufe", icon: "📅" },
     { id: "scenario", title: "Szenario-Training", description: "Realitätsnahe Situationen meistern", icon: "🎯" }
-  ];
+  ].filter(method => availableMethods.includes(method.id));
 
   if (!categoryId || !category) {
     return (
@@ -73,7 +75,7 @@ const LearnPage = () => {
                   return (
                     <Card 
                       key={method.id} 
-                      className={`cursor-pointer transition-all hover:scale-105 hover:shadow-lg ${!hasContent ? 'opacity-50' : ''}`}
+                      className="cursor-pointer transition-all hover:scale-105 hover:shadow-lg"
                       onClick={() => hasContent && setSelectedMethod(method.id)}
                     >
                       <CardHeader className="text-center">
@@ -85,7 +87,7 @@ const LearnPage = () => {
                         {hasContent ? (
                           <Button variant="outline" size="sm">Starten</Button>
                         ) : (
-                          <p className="text-sm text-muted-foreground">Bald verfügbar</p>
+                          <p className="text-sm text-muted-foreground">Wird erstellt...</p>
                         )}
                       </CardContent>
                     </Card>
@@ -107,7 +109,8 @@ const LearnPage = () => {
               
               {modules.length === 0 ? (
                 <div className="rounded-2xl border border-border bg-card p-8 text-center">
-                  <p className="text-muted-foreground">Für diese Kategorie werden die Lerninhalte gerade erstellt.</p>
+                  <p className="text-muted-foreground mb-2">Für diese Kategorie werden die Lerninhalte gerade erstellt.</p>
+                  <p className="text-sm text-muted-foreground">Schau bald wieder vorbei für neue Inhalte!</p>
                 </div>
               ) : (
                 <Tabs defaultValue={"m-0"} className="w-full">
