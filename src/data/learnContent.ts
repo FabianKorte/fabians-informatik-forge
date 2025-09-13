@@ -22,7 +22,7 @@ export const learnContent: Record<string, LearnModule[]> = {
     },
     {
       type: "quiz",
-      title: "IHK-Prüfungsfragen Programmierung",
+      title: "IHK-Prüfungsfragen Programmierung - Grundlagen",
       questions: [
         {
           question: "Welche Zeitkomplexität hat die binäre Suche in einem sortierten Array mit n Elementen?",
@@ -71,6 +71,150 @@ export const learnContent: Record<string, LearnModule[]> = {
           options: ["Eine Endlosschleife", "Warten zweier Prozesse aufeinander", "Ein Speicherleck", "Ein Compilerfehler"],
           correctIndex: 1,
           explanation: "**Deadlock:** Zwei oder mehr Prozesse blockieren sich gegenseitig, weil jeder auf Ressourcen wartet, die der andere hält. **IHK-Beispiel:** Prozess A sperrt Ressource 1 und wartet auf Ressource 2, Prozess B sperrt Ressource 2 und wartet auf Ressource 1. **Vermeidung:** Einheitliche Sperreihenfolge, Timeouts, Deadlock-Detection-Algorithmen. **Bedingungen:** Mutual Exclusion, Hold and Wait, No Preemption, Circular Wait."
+        },
+        {
+          question: "Was ist die Hauptaufgabe eines Compilers?",
+          options: ["Programme ausführen", "Quellcode in Maschinencode übersetzen", "Fehler zur Laufzeit finden", "Variablen verwalten"],
+          correctIndex: 1,
+          explanation: "**Compiler** übersetzt Quellcode (Hochsprache) in Maschinencode oder Bytecode. **Phasen:** 1. Lexikalische Analyse (Token), 2. Syntaxanalyse (Parse Tree), 3. Semantische Analyse (Typprüfung), 4. Optimierung, 5. Code-Generierung. **IHK-Unterschied:** Compiler vs. Interpreter - Compiler übersetzt vollständig vor Ausführung, Interpreter führt zeilenweise aus."
+        },
+        {
+          question: "Was charakterisiert funktionale Programmierung?",
+          options: ["Objekte und Klassen", "Unveränderliche Daten und pure Funktionen", "Goto-Statements", "Globale Variablen"],
+          correctIndex: 1,
+          explanation: "**Funktionale Programmierung:** 1. **Immutability** (unveränderliche Daten), 2. **Pure Functions** (keine Seiteneffekte), 3. **Higher-Order Functions** (Funktionen als Parameter), 4. **Recursion** statt Schleifen. **IHK-Beispiele:** JavaScript map/filter/reduce, Haskell, Lisp. **Vorteile:** Parallelisierbar, testbar, weniger Bugs durch Seiteneffekte."
+        }
+      ]
+    },
+    {
+      type: "quiz", 
+      title: "IHK-Prüfungsfragen Programmierung - Fortgeschritten",
+      questions: [
+        {
+          question: "Was ist der Unterschied zwischen Stack und Heap im Speichermanagement?",
+          options: ["Stack ist langsamer als Heap", "Stack für lokale Variablen, Heap für dynamische Allokation", "Heap ist sicherer als Stack", "Kein Unterschied"],
+          correctIndex: 1,
+          explanation: "**Stack:** Automatische Speicherverwaltung, LIFO-Prinzip, lokale Variablen, Funktionsparameter, schnell aber begrenzt. **Heap:** Dynamische Allokation (malloc/new), manuelles Memory-Management nötig, fragmentierungsanfällig, größer aber langsamer. **IHK-Prüfung:** Stack Overflow bei zu tiefer Rekursion, Memory Leaks im Heap durch vergessenes free()/delete."
+        },
+        {
+          question: "Welches SOLID-Prinzip verletzt diese Klasse: class User { save() { /* DB */ } sendEmail() { /* Email */ } }?",
+          options: ["Single Responsibility", "Open/Closed", "Liskov Substitution", "Dependency Inversion"],
+          correctIndex: 0,
+          explanation: "**Single Responsibility Principle (SRP)** verletzt: Eine Klasse sollte nur einen Grund zur Änderung haben. User-Klasse macht 2 Dinge: Datenoperationen UND E-Mail-Versand. **Lösung:** UserRepository für DB-Operationen, EmailService für E-Mail-Versand separieren. **IHK-Tipp:** 'Ein Zweck, eine Klasse' - hohe Kohäsion, lose Kopplung."
+        },
+        {
+          question: "Was beschreibt das Observer Pattern?",
+          options: ["Objekte überwachen sich gegenseitig", "Ein Objekt benachrichtigt mehrere Beobachter über Änderungen", "Objekte werden in einer Liste verwaltet", "Debugging-Pattern für Entwickler"],
+          correctIndex: 1,
+          explanation: "**Observer Pattern:** Subject (Observable) benachrichtigt automatisch alle registrierten Observer über Statusänderungen. **IHK-Anwendung:** MVC (Model benachrichtigt Views), Event-Handler, Newsletter-System. **Implementierung:** Subject.addObserver(observer), Subject.notifyObservers(). **Vorteil:** Lose Kopplung zwischen Subject und Observer."
+        },
+        {
+          question: "Was ist ein Interface in der objektorientierten Programmierung?",
+          options: ["Eine konkrete Klasse", "Ein Vertrag ohne Implementierung", "Eine abstrakte Klasse mit Code", "Ein Datentyp"],
+          correctIndex: 1,
+          explanation: "**Interface** definiert einen Vertrag (Methodensignaturen) ohne Implementierung. **IHK-Zweck:** Polymorph programming, Dependency Injection, Multiple Inheritance (in Java/C#). **Beispiel:** interface Drawable { void draw(); } - Klassen Circle, Square implementieren es unterschiedlich. **Vorteil:** Testbare, austauschbare Komponenten."
+        },
+        {
+          question: "Welche Aussage über Git Branches ist korrekt?",
+          options: ["Branches verlangsamen Git", "Branches ermöglichen parallele Entwicklung", "Branches sind nur für große Teams", "Branches können nicht gemerged werden"],
+          correctIndex: 1,
+          explanation: "**Git Branches** ermöglichen parallele Entwicklung verschiedener Features ohne Konflikte. **IHK-Workflow:** main/master (stabil), develop (Integration), feature/xyz (neue Features), hotfix/bug (Bugfixes). **Commands:** git branch, git checkout, git merge, git rebase. **Best Practice:** Feature Branches, Pull Requests, Code Reviews vor Merge."
+        },
+        {
+          question: "Was bedeutet 'Dependency Injection'?",
+          options: ["Abhängigkeiten hart codieren", "Abhängigkeiten von außen übergeben", "Abhängigkeiten löschen", "Abhängigkeiten kopieren"],
+          correctIndex: 1,
+          explanation: "**Dependency Injection (DI):** Abhängigkeiten werden von außen übergeben statt intern erstellt. **Arten:** Constructor Injection (bevorzugt), Setter Injection, Interface Injection. **IHK-Vorteile:** Testbarkeit (Mock-Objekte), Flexibilität, SOLID-Prinzipien. **Beispiel:** class User(database: IDatabase) statt class User { db = new MySQL() }."
+        },
+        {
+          question: "Was ist der Unterschied zwischen synchroner und asynchroner Programmierung?",
+          options: ["Synchron ist schneller", "Asynchron blockiert nicht bei langwierigen Operationen", "Synchron ist komplexer", "Kein Unterschied"],
+          correctIndex: 1,
+          explanation: "**Synchron:** Sequenzielle Abarbeitung, jeder Schritt wartet auf vorherigen (blockierend). **Asynchron:** Non-blocking, parallele Ausführung möglich. **IHK-Beispiele:** AJAX-Requests, File I/O, Datenbankzugriffe. **JavaScript:** Promises, async/await, Callbacks. **Vorteil Async:** UI bleibt responsiv, bessere Ressourcennutzung."
+        },
+        {
+          question: "Was beschreibt 'Test-Driven Development' (TDD)?",
+          options: ["Tests nach dem Code schreiben", "Tests vor dem Code schreiben", "Keine Tests schreiben", "Tests während dem Coden"],
+          correctIndex: 1,
+          explanation: "**TDD-Zyklus:** 1. **Red** - Test schreiben (schlägt fehl), 2. **Green** - Minimal nötigen Code schreiben (Test erfolgreich), 3. **Refactor** - Code verbessern. **IHK-Vorteile:** Bessere Code-Qualität, Dokumentation durch Tests, weniger Bugs, mutiger Refactoring. **Testarten:** Unit Tests, Integration Tests, End-to-End Tests."
+        },
+        {
+          question: "Was ist ein Race Condition in der Multithread-Programmierung?",
+          options: ["Threads laufen zu schnell", "Threads konkurieren um dieselbe Ressource", "Threads stoppen sich", "Threads verwenden verschiedene CPUs"],
+          correctIndex: 1,
+          explanation: "**Race Condition:** Mehrere Threads greifen gleichzeitig auf geteilte Ressource zu, Ergebnis abhängig von Timing. **IHK-Beispiel:** counter++ ist nicht atomar - kann zu falschen Werten führen. **Lösung:** Synchronisation mit Mutex, Semaphore, Lock, synchronized. **Symptome:** Unvorhersagbare Ergebnisse, schwer reproduzierbare Bugs."
+        },
+        {
+          question: "Was charakterisiert Clean Code?",
+          options: ["Viele Kommentare", "Lesbar, verständlich, wartbar", "Möglichst kurz", "Möglichst schnell"],
+          correctIndex: 1,
+          explanation: "**Clean Code Prinzipien:** 1. **Aussagekräftige Namen**, 2. **Kleine Funktionen** (eine Aufgabe), 3. **Selbstdokumentierender Code**, 4. **Keine Duplikation** (DRY), 5. **Testbare Struktur**. **IHK-Regel:** Code wird öfter gelesen als geschrieben - Klarheit vor Cleverness. **Refactoring:** Code-Struktur verbessern ohne Funktionalität zu ändern."
+        }
+      ]
+    },
+    {
+      type: "quiz",
+      title: "IHK-Prüfungsfragen Programmierung - Datenstrukturen & Algorithmen",
+      questions: [
+        {
+          question: "Welche Eigenschaften hat eine Hashtabelle?",
+          options: ["Immer sortierte Reihenfolge", "Durchschnittlich O(1) Zugriff, keine Reihenfolge garantiert", "O(log n) Zugriff", "Nur für Strings geeignet"],
+          correctIndex: 1,
+          explanation: "**Hashtabelle:** Durchschnittlich O(1) für Insert/Delete/Lookup, keine Sortierung. **Hash-Funktion** mappt Schlüssel auf Array-Index. **Kollisionen:** Chaining (verkettete Listen) oder Open Addressing (Probing). **IHK-Anwendung:** Caches, Dictionaries, Sets. **Worst Case:** O(n) bei vielen Kollisionen."
+        },
+        {
+          question: "Was ist ein binärer Suchbaum (BST)?",
+          options: ["Jeder Knoten hat maximal 2 Kinder", "Linkes Kind < Wurzel < rechtes Kind, balanciert", "Alle Blätter auf gleicher Ebene", "Nur für Zahlen verwendbar"],
+          correctIndex: 1,
+          explanation: "**BST-Eigenschaft:** Für jeden Knoten gilt: linkes Teilbaum < Knoten < rechtes Teilbaum. **Operationen:** Search/Insert/Delete durchschnittlich O(log n). **Problem:** Kann zu Liste degenerieren (O(n)). **Lösung:** Selbstbalancierende Bäume (AVL, Red-Black). **IHK-Traversierung:** Inorder (sortierte Ausgabe), Preorder, Postorder."
+        },
+        {
+          question: "Welcher Sortieralgorithmus ist 'stabil'?",
+          options: ["Quicksort", "Mergesort", "Heapsort", "Selection Sort"],
+          correctIndex: 1,
+          explanation: "**Stabil:** Gleiche Elemente behalten ihre relative Reihenfolge. **Mergesort** ist stabil und hat garantiert O(n log n). **Instabile Algorithmen:** Quicksort, Heapsort. **IHK-Beispiel:** Studenten nach Note sortieren, gleiche Noten nach Namen - Stabilität erhält Zweitkriterium. **Divide & Conquer:** Teile, sortiere, füge zusammen."
+        },
+        {
+          question: "Was beschreibt die Landau-Notation (Big-O)?",
+          options: ["Exakte Laufzeit in Sekunden", "Obere Schranke des Wachstums", "Speicherverbrauch in Bytes", "Anzahl Code-Zeilen"],
+          correctIndex: 1,
+          explanation: "**Big-O:** Asymptotische obere Schranke für Laufzeit-/Speicherkomplexität. **Vernachlässigt:** Konstanten, niedrigere Terme. **Beispiel:** 3n² + 2n + 1 = O(n²). **IHK-Hierarchie:** O(1) < O(log n) < O(n) < O(n log n) < O(n²) < O(2ⁿ). **Zweck:** Algorithmen-Vergleich, Skalierbarkeit bewerten."
+        },
+        {
+          question: "Wann verwendet man eine Queue (Warteschlange)?",
+          options: ["LIFO-Verhalten gewünscht", "FIFO-Verhalten gewünscht", "Zufälliger Zugriff nötig", "Sortierte Daten erforderlich"],
+          correctIndex: 1,
+          explanation: "**Queue (FIFO):** First In, First Out - erstes Element wird zuerst entfernt. **Operationen:** enqueue (hinten hinzufügen), dequeue (vorne entfernen). **IHK-Anwendungen:** Prozess-Scheduling, Breadth-First Search, Print-Spooling, Buffer-Management. **Implementierung:** Array mit head/tail Pointern oder verkettete Liste."
+        },
+        {
+          question: "Was ist der Unterschied zwischen Array und verketteter Liste?",
+          options: ["Arrays sind immer langsamer", "Arrays haben O(1) Random Access, Listen O(1) Insert/Delete", "Listen sind immer besser", "Kein Unterschied"],
+          correctIndex: 1,
+          explanation: "**Array:** Kontinuierlicher Speicher, O(1) Random Access, O(n) Insert/Delete am Anfang. **Verkettete Liste:** Nicht-kontinuierlich, O(n) Search, O(1) Insert/Delete am bekannten Knoten. **IHK-Wahl:** Array für viele Zugriffe, Liste für viele Änderungen. **Cache-Lokalität:** Arrays besser für moderne CPUs."
+        },
+        {
+          question: "Was macht der Dijkstra-Algorithmus?",
+          options: ["Sortiert Arrays", "Findet kürzeste Pfade in Graphen", "Balanciert Bäume", "Komprimiert Daten"],
+          correctIndex: 1,
+          explanation: "**Dijkstra:** Findet kürzeste Pfade von einem Startknoten zu allen anderen in gewichteten Graphen (keine negativen Kanten). **Komplexität:** O((V + E) log V) mit Priority Queue. **IHK-Anwendung:** GPS-Navigation, Netzwerk-Routing, Spieltheorie. **Greedy-Ansatz:** Wählt immer nächsten Knoten mit geringster Distanz."
+        },
+        {
+          question: "Was charakterisiert einen Graphen?",
+          options: ["Nur Bäume möglich", "Knoten (Vertices) und Kanten (Edges)", "Immer azyklisch", "Maximal 10 Knoten"],
+          correctIndex: 1,
+          explanation: "**Graph G = (V, E):** V = Knoten-Menge, E = Kanten-Menge. **Typen:** Gerichtet/Ungerichtet, Gewichtet/Ungewichtet, Zyklisch/Azyklisch. **Darstellung:** Adjazenzmatrix (Space O(V²)), Adjazenzliste (Space O(V + E)). **IHK-Algorithmen:** DFS, BFS, Dijkstra, Kruskal (MST), Topologische Sortierung."
+        },
+        {
+          question: "Welche Eigenschaft hat ein Heap?",
+          options: ["Binärer Baum mit Heap-Eigenschaft", "Sortierte Reihenfolge", "Balancierte Höhe", "Nur positive Zahlen"],
+          correctIndex: 0,
+          explanation: "**Heap-Eigenschaft:** Parent ≥ Children (Max-Heap) oder Parent ≤ Children (Min-Heap). **Vollständiger binärer Baum:** Alle Ebenen voll außer letzter (linksbündig). **Operationen:** Insert/Delete O(log n), getMax/Min O(1). **IHK-Anwendung:** Priority Queue, Heapsort, Dijkstra-Algorithmus. **Array-Implementierung:** Parent at i/2, Children at 2i, 2i+1."
+        },
+        {
+          question: "Was ist Dynamic Programming?",
+          options: ["Programmierung zur Laufzeit", "Optimierungstechnik mit Subproblem-Wiederverwendung", "Objektorientierte Programmierung", "Web-Entwicklung"],
+          correctIndex: 1,
+          explanation: "**Dynamic Programming:** Löst komplexe Probleme durch Aufteilen in Teilprobleme, speichert Zwischenergebnisse (Memoization). **Voraussetzung:** Optimal Substructure + Overlapping Subproblems. **IHK-Beispiele:** Fibonacci (O(n) statt O(2ⁿ)), Knapsack Problem, Longest Common Subsequence. **Bottom-Up vs. Top-Down Ansatz.**"
         }
       ]
     },
