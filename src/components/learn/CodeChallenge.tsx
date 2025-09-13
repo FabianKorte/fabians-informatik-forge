@@ -58,7 +58,7 @@ export const CodeChallengeComponent = ({ challenges }: CodeChallengeProps) => {
             <textarea
               value={userCode}
               onChange={(e) => setUserCode(e.target.value)}
-              className="w-full h-48 p-4 rounded-lg border border-border bg-background text-foreground font-mono text-sm resize-none focus:ring-2 focus:ring-primary focus:border-primary"
+              className="w-full h-40 sm:h-48 p-4 rounded-lg border border-border bg-background text-foreground font-mono text-sm resize-none focus:ring-2 focus:ring-primary focus:border-primary"
               placeholder="Schreibe deinen Code hier..."
             />
             <div className="flex gap-2">

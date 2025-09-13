@@ -138,7 +138,7 @@ export const MemoryGameComponent = ({ games }: MemoryGameProps) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-4 md:grid-cols-6 gap-3">
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
           {cards.map(card => (
             <div
               key={card.id}

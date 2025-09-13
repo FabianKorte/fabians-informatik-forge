@@ -68,13 +68,13 @@ export const Quiz = ({ questions }: QuizProps) => {
                 key={i}
                 onClick={() => handleSelect(i)}
                 variant={state === "secondary" ? "outline" : "default"}
-                className={
+                className={`h-auto text-left justify-start whitespace-normal break-words py-3 ${
                   state === "success"
                     ? "border-success text-success bg-success/10 hover:bg-success/20"
                     : state === "destructive"
                     ? "border-destructive text-destructive bg-destructive/10 hover:bg-destructive/20"
                     : ""
-                }
+                }`}
                 disabled={isAnswered}
               >
                 {opt}

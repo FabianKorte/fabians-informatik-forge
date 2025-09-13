@@ -60,7 +60,7 @@ export const Matching = ({ pairs }: MatchingProps) => {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="rounded-2xl border border-border bg-card p-4">
           <h4 className="font-medium text-foreground mb-3">Begriffe</h4>
           <div className="grid gap-2">
