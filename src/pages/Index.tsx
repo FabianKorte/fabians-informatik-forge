@@ -4,13 +4,42 @@ import { Hero } from "@/components/Hero";
 import { CategoryCard } from "@/components/CategoryCard";
 import { SearchBar } from "@/components/SearchBar";
 import { categories } from "@/data/categories";
+import { getModulesForCategory } from "@/data/learn";
+import type { LearnModule } from "@/types/learn";
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
-  // Calculate total stats
-  const totalQuestions = categories.reduce((sum, cat) => sum + cat.totalElements, 0);
-  const answeredQuestions = categories.reduce((sum, cat) => sum + cat.completedElements, 0);
+  // Dynamic counts from learn content
+  const countElements = (modules: LearnModule[]) => modules.reduce((sum, m) => {
+    switch (m.type) {
+      case "flashcards":
+        return sum + m.cards.length;
+      case "quiz":
+        return sum + m.questions.length;
+      case "matching":
+        return sum + m.pairs.length;
+      case "code":
+        return sum + m.challenges.length;
+      case "dragdrop":
+        return sum + m.games.reduce((a, g) => a + g.items.length, 0);
+      case "memory":
+        return sum + m.games.reduce((a, g) => a + g.pairs.length, 0);
+      case "timeline":
+        return sum + m.timelines.reduce((a, t) => a + t.events.length, 0);
+      case "scenario":
+        return sum + m.scenarios.length;
+      default:
+        return sum;
+    }
+  }, 0);
+
+  const dynamicTotalsByCategory: Record<string, number> = Object.fromEntries(
+    categories.map((cat) => [cat.id, countElements(getModulesForCategory(cat.id))])
+  );
+
+  const totalQuestions = Object.values(dynamicTotalsByCategory).reduce((a, b) => a + b, 0);
+  const answeredQuestions = categories.reduce((sum, cat) => sum + (cat.completedElements || 0), 0);
   const correctAnswers = Math.floor(answeredQuestions * 0.78); // 78% accuracy simulation
 
   // Filter categories based on search
@@ -85,7 +114,7 @@ const Index = () => {
               <p className="text-sm text-muted-foreground uppercase tracking-wide">Bearbeitet</p>
             </div>
             <div className="text-center p-6 card-gradient rounded-2xl border border-border/50 shadow-md">
-              <p className="text-3xl font-bold text-warning mb-2">{Math.round((answeredQuestions / totalQuestions) * 100)}%</p>
+              <p className="text-3xl font-bold text-warning mb-2">{totalQuestions > 0 ? Math.round((answeredQuestions / totalQuestions) * 100) : 0}%</p>
               <p className="text-sm text-muted-foreground uppercase tracking-wide">Fortschritt</p>
             </div>
           </div>
@@ -98,7 +127,7 @@ const Index = () => {
                   <CategoryCard
                     title={category.title}
                     description={category.description}
-                    totalElements={category.totalElements}
+                    totalElements={dynamicTotalsByCategory[category.id]}
                     completedElements={category.completedElements}
                     icon={category.icon}
                     difficulty={category.difficulty}
