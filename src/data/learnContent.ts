@@ -427,12 +427,355 @@ export const learnContent: Record<string, LearnModule[]> = {
       title: "IT-Sicherheit Grundlagen - IHK Prüfungswissen", 
       cards: [
         { front: "CIA-Trias der Informationssicherheit", back: "**Confidentiality (Vertraulichkeit):** Schutz vor unbefugtem Zugriff durch Verschlüsselung, Zugriffskontrollen, Authentifizierung. **Integrity (Integrität):** Schutz vor unerlaubter Veränderung durch Hash-Werte, digitale Signaturen, Checksummen. **Availability (Verfügbarkeit):** System ist nutzbar wenn benötigt - durch Redundanz, Backups, DDoS-Schutz. **IHK-Bedeutung:** Grundlage aller Sicherheitsmaßnahmen, rechtliche Compliance (DSGVO), Geschäftskontinuität. **Praxisbeispiel:** Online-Banking muss alle drei Aspekte gleichzeitig gewährleisten." },
-        { front: "Authentifizierung vs. Autorisierung", back: "**Authentifizierung:** 'Wer sind Sie?' - Identitätsverifikation durch Faktoren: Wissen (Passwort), Besitz (Token/Karte), Sein (Biometrie). **Multi-Faktor-Authentifizierung (MFA):** Kombination mehrerer Faktoren für höhere Sicherheit. **Autorisierung:** 'Was dürfen Sie?' - Festlegung von Zugriffsrechten nach erfolgreicher Authentifizierung. **IHK-Modelle:** Role-Based Access Control (RBAC), Discretionary Access Control (DAC), Mandatory Access Control (MAC). **Beispiel:** Login mit Passwort + SMS-Code (Auth), dann Zugriff auf bestimmte Dateien (Authz)." }
-        // Weitere Karten...
+        { front: "Authentifizierung vs. Autorisierung", back: "**Authentifizierung:** 'Wer sind Sie?' - Identitätsverifikation durch Faktoren: Wissen (Passwort), Besitz (Token/Karte), Sein (Biometrie). **Multi-Faktor-Authentifizierung (MFA):** Kombination mehrerer Faktoren für höhere Sicherheit. **Autorisierung:** 'Was dürfen Sie?' - Festlegung von Zugriffsrechten nach erfolgreicher Authentifizierung. **IHK-Modelle:** Role-Based Access Control (RBAC), Discretionary Access Control (DAC), Mandatory Access Control (MAC). **Beispiel:** Login mit Passwort + SMS-Code (Auth), dann Zugriff auf bestimmte Dateien (Authz)." },
+        { front: "Firewall-Typen und -Funktionen", back: "**Paketfilter:** Prüft Pakete anhand IP, Port, Protokoll - schnell aber oberflächlich. **Stateful Inspection:** Überwacht Verbindungsstatus, bessere Sicherheit. **Application Layer Firewall:** Deep Packet Inspection, anwendungsspezifische Regeln. **Next-Generation Firewall (NGFW):** IPS, Malware-Schutz, URL-Filterung integriert. **IHK-Konfiguration:** DMZ für öffentliche Server, interne Netzwerksegmentierung. **Praxisregeln:** Default Deny, Least Privilege Principle." },
+        { front: "Malware-Kategorien", back: "**Virus:** Benötigt Wirtsdatei, repliziert sich durch Benutzerinteraktion. **Wurm:** Selbstständige Verbreitung über Netzwerke, benötigt keine Wirtsdatei. **Trojaner:** Tarnt sich als nützliches Programm, öffnet Hintertüren. **Ransomware:** Verschlüsselt Daten, fordert Lösegeld. **Spyware:** Sammelt heimlich Daten. **Adware:** Zeigt unerwünschte Werbung. **IHK-Schutzmaßnahmen:** Antivirus, Behavior Analysis, Sandboxing, Endpoint Detection Response (EDR)." },
+        { front: "Phishing und Social Engineering", back: "**Phishing:** Täuschung via E-Mail/Website zur Datenentwendung. **Spear Phishing:** Zielgerichtete Angriffe auf bestimmte Personen/Unternehmen. **Whaling:** Angriffe auf Führungskräfte. **Social Engineering Techniken:** Autoritätsprinzip, Dringlichkeit, Neugier ausnutzen. **IHK-Gegenmaßnahmen:** Security Awareness Training, E-Mail-Filtering, Multi-Faktor-Authentifizierung, Verifizierungsprozesse. **Red Flags:** Rechtschreibfehler, ungewöhnliche Absender, Dringlichkeit." },
+        { front: "Kryptographie-Grundlagen", back: "**Symmetrische Verschlüsselung:** Ein Schlüssel für Ver- und Entschlüsselung (AES). Schnell, aber Schlüsselaustausch problematisch. **Asymmetrische Verschlüsselung:** Schlüsselpaar (Public/Private Key, RSA). Sicher für Schlüsselaustausch, aber langsam. **Hybrid-Verfahren:** Asymmetrisch für Schlüsselaustausch, symmetrisch für Daten. **Hash-Funktionen:** Einweg-Funktion für Integritätsprüfung (SHA-256). **IHK-Anwendungen:** HTTPS, digitale Signaturen, Passwort-Hashing." },
+        { front: "Backup-Strategien", back: "**3-2-1-Regel:** 3 Kopien der Daten, 2 verschiedene Medien, 1 offsite. **Backup-Arten:** Vollbackup (komplett), inkrementell (nur Änderungen seit letztem Backup), differenziell (Änderungen seit letztem Vollbackup). **IHK-Planung:** Recovery Time Objective (RTO), Recovery Point Objective (RPO). **Tests:** Regelmäßige Restore-Tests essentiell. **Ransomware-Schutz:** Air-gapped Backups, Immutable Storage, separate Netzwerke." },
+        { front: "Zero-Day-Exploits", back: "**Definition:** Angriff auf bisher unbekannte Schwachstelle, bevor Patch verfügbar ist. **Lebenszyklus:** Vulnerability Discovery → Exploit Development → Attack → Detection → Patch → Deployment. **IHK-Schutzmaßnahmen:** Behavior-Based Detection, Application Whitelisting, Sandbox-Umgebungen, Intrusion Prevention Systems (IPS). **Herausforderung:** Keine Signaturen verfügbar, daher heuristische Methoden nötig. **Bug Bounty:** Belohnung für verantwortliche Disclosure." },
+        { front: "SIEM und Log-Management", back: "**Security Information and Event Management:** Zentrale Sammlung und Korrelation von Security Events. **Funktionen:** Real-time Monitoring, Incident Response, Compliance Reporting, Threat Intelligence Integration. **Log-Quellen:** Firewalls, IDS/IPS, Server, Anwendungen, Endgeräte. **IHK-Herausforderungen:** Big Data, False Positives reduzieren, SOC-Integration. **SOAR:** Security Orchestration, Automation and Response für automatisierte Reaktionen." },
+        { front: "Penetrationstesting", back: "**Definition:** Autorisierte simulierte Angriffe zur Schwachstellenidentifikation. **Phasen:** Reconnaissance → Scanning → Gaining Access → Maintaining Access → Analysis/Reporting. **Arten:** Black Box (keine Vorkenntnisse), White Box (vollständige Informationen), Gray Box (teilweise Kenntnisse). **IHK-Standards:** OWASP Testing Guide, PTES, NIST SP 800-115. **Red Team vs. Blue Team:** Angreifer vs. Verteidiger Simulation. **Bug Bounty Programme:** Kontinuierliche Community-basierte Tests." },
+        { front: "Incident Response", back: "**NIST-Phasen:** Preparation → Detection/Analysis → Containment/Eradication/Recovery → Post-Incident Activity. **IHK-Team:** CSIRT (Computer Security Incident Response Team) mit definierten Rollen. **Preparation:** Playbooks, Tools, Kommunikationswege, rechtliche Aspekte. **Detection:** SIEM-Alerts, User Reports, Threat Hunting. **Containment:** Isolation ohne Beweiszerstörung. **Forensik:** Chain of Custody, Imaging, Timeline-Rekonstruktion. **Lessons Learned:** Process Improvement nach jedem Incident." }
+      ]
+    },
+    {
+      type: "quiz",
+      title: "IT-Sicherheit Vertiefung - IHK Prüfung",
+      questions: [
+        {
+          question: "Welche Verschlüsselungsmethode eignet sich am besten für die sichere Übertragung großer Datenmengen?",
+          options: ["Nur asymmetrische Verschlüsselung", "Nur symmetrische Verschlüsselung", "Hybrid-Verfahren", "Hash-Funktionen"],
+          correctIndex: 2,
+          explanation: "Hybrid-Verfahren kombinieren die Vorteile beider Methoden: Asymmetrische Verschlüsselung für sicheren Schlüsselaustausch, symmetrische für schnelle Datenübertragung."
+        },
+        {
+          question: "Was ist der Hauptunterschied zwischen einem Virus und einem Wurm?",
+          options: ["Viren sind gefährlicher", "Würmer benötigen keine Wirtsdatei", "Viren verbreiten sich schneller", "Würmer sind älter"],
+          correctIndex: 1,
+          explanation: "Würmer können sich selbstständig über Netzwerke verbreiten, während Viren eine Wirtsdatei benötigen und sich durch Benutzerinteraktion verbreiten."
+        },
+        {
+          question: "Welcher Firewall-Typ bietet die beste Anwendungssicherheit?",
+          options: ["Paketfilter", "Stateful Inspection", "Application Layer Firewall", "NAT-Firewall"],
+          correctIndex: 2,
+          explanation: "Application Layer Firewalls (Layer 7) können den Anwendungsinhalt inspizieren und anwendungsspezifische Angriffe erkennen."
+        },
+        {
+          question: "Was beschreibt die 3-2-1-Backup-Regel?",
+          options: ["3 Tage, 2 Wochen, 1 Monat Aufbewahrung", "3 Kopien, 2 Medien, 1 offsite", "3 Server, 2 Standorte, 1 Cloud", "3 Admins, 2 Prozesse, 1 Dokumentation"],
+          correctIndex: 1,
+          explanation: "Die 3-2-1-Regel besagt: 3 Kopien der Daten, auf 2 verschiedenen Medientypen, mit 1 Kopie an einem externen Standort."
+        },
+        {
+          question: "Welche Authentifizierungsfaktoren gibt es in der Multi-Faktor-Authentifizierung?",
+          options: ["Nur Passwörter", "Wissen, Besitz, Biometrie", "Nur Hardware-Token", "Nur biometrische Daten"],
+          correctIndex: 1,
+          explanation: "MFA nutzt verschiedene Faktoren: Wissen (Passwort), Besitz (Token/Karte) und biometrische Eigenschaften (Fingerabdruck)."
+        },
+        {
+          question: "Was ist ein Zero-Day-Exploit?",
+          options: ["Ein sehr schneller Angriff", "Angriff auf unbekannte Schwachstelle", "Angriff ohne Internetverbindung", "Angriff am ersten Tag"],
+          correctIndex: 1,
+          explanation: "Zero-Day-Exploits nutzen Schwachstellen aus, die noch nicht öffentlich bekannt sind und für die noch kein Patch verfügbar ist."
+        },
+        {
+          question: "Welcher Port wird standardmäßig für HTTPS verwendet?",
+          options: ["80", "443", "8080", "22"],
+          correctIndex: 1,
+          explanation: "HTTPS (HTTP Secure) verwendet standardmäßig Port 443 für SSL/TLS-verschlüsselte Verbindungen."
+        },
+        {
+          question: "Was ist der Hauptzweck von SIEM-Systemen?",
+          options: ["Antivirus-Schutz", "Zentrale Sicherheitsereignis-Korrelation", "Firewall-Management", "Passwort-Verwaltung"],
+          correctIndex: 1,
+          explanation: "SIEM (Security Information and Event Management) sammelt und korreliert Sicherheitsereignisse aus verschiedenen Quellen für zentrale Überwachung."
+        }
+      ]
+    },
+    {
+      type: "matching",
+      title: "Sicherheitskonzepte zuordnen",
+      pairs: [
+        { left: "Vertraulichkeit", right: "Schutz vor unbefugtem Zugriff auf Informationen" },
+        { left: "Integrität", right: "Schutz vor unerlaubter Veränderung von Daten" },
+        { left: "Verfügbarkeit", right: "System ist nutzbar wenn benötigt" },
+        { left: "Authentifizierung", right: "Verifikation der Identität eines Benutzers" },
+        { left: "Autorisierung", right: "Festlegung von Zugriffsrechten" },
+        { left: "Non-Repudiation", right: "Nicht-Abstreitbarkeit von Aktionen" },
+        { left: "Accountability", right: "Nachverfolgbarkeit von Aktionen" },
+        { left: "Privacy", right: "Schutz persönlicher Informationen" }
+      ]
+    },
+    {
+      type: "code",
+      title: "Sichere Programmierung - IHK Praxis",
+      challenges: [
+        {
+          title: "SQL-Injection Prevention",
+          description: "Implementiere eine sichere Datenbankabfrage mit Prepared Statements",
+          initialCode: `// UNSICHER - SQL Injection möglich
+const getUserData = (userId) => {
+  const query = "SELECT * FROM users WHERE id = " + userId;
+  return db.query(query);
+};
+
+// Implementiere sichere Version:
+const secureGetUserData = (userId) => {
+  // Dein Code hier
+};`,
+          solution: `const secureGetUserData = (userId) => {
+  // Input Validation
+  if (!userId || isNaN(userId)) {
+    throw new Error('Invalid user ID');
+  }
+  
+  // Prepared Statement mit Parametern
+  const query = "SELECT id, username, email FROM users WHERE id = ?";
+  return db.prepare(query).get(parseInt(userId));
+};
+
+// Alternative mit ORM (z.B. Sequelize)
+const secureGetUserDataORM = async (userId) => {
+  return await User.findByPk(userId, {
+    attributes: ['id', 'username', 'email'] // Nur benötigte Felder
+  });
+};`,
+          tests: [
+            { input: "secureGetUserData(1)", expected: "Parametrisierte Abfrage ohne Injection-Risiko" },
+            { input: "secureGetUserData('1; DROP TABLE users--')", expected: "Sichere Behandlung von Injection-Versuchen" }
+          ]
+        },
+        {
+          title: "XSS-Schutz implementieren",
+          description: "Erstelle Funktionen zum Schutz vor Cross-Site-Scripting",
+          initialCode: `// UNSICHER - XSS möglich
+const displayUserComment = (comment) => {
+  document.getElementById('comment').innerHTML = comment;
+};
+
+// Implementiere XSS-sichere Version:
+const safeDisplayUserComment = (comment) => {
+  // Dein Code hier
+};`,
+          solution: `// HTML Escaping Funktion
+const escapeHtml = (text) => {
+  const htmlEscapes = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#x27;',
+    '/': '&#x2F;'
+  };
+  return String(text).replace(/[&<>"'/]/g, match => htmlEscapes[match]);
+};
+
+// Sichere Anzeige von Benutzerkommentaren
+const safeDisplayUserComment = (comment) => {
+  // Input Validation
+  if (typeof comment !== 'string') {
+    comment = String(comment);
+  }
+  
+  // HTML Escaping
+  const escapedComment = escapeHtml(comment);
+  
+  // Sichere DOM-Manipulation
+  const commentElement = document.getElementById('comment');
+  commentElement.textContent = comment; // textContent ist XSS-sicher
+  
+  // Oder mit innerHTML und escaped content:
+  // commentElement.innerHTML = escapedComment;
+};
+
+// Content Security Policy Header setzen (Server-seitig)
+const setCSPHeader = (res) => {
+  res.setHeader('Content-Security-Policy', 
+    "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'");
+};`,
+          tests: [
+            { input: "safeDisplayUserComment('<script>alert(\"XSS\")</script>')", expected: "Kein JavaScript-Code wird ausgeführt" },
+            { input: "safeDisplayUserComment('Normaler Text')", expected: "Text wird korrekt angezeigt" }
+          ]
+        },
+        {
+          title: "Sichere Passwort-Handhabung",
+          description: "Implementiere sichere Passwort-Hashing und -Verifikation",
+          initialCode: `// UNSICHER - Klartext-Passwörter
+const storePassword = (password) => {
+  return db.query("INSERT INTO users SET password = ?", [password]);
+};
+
+// Implementiere sichere Passwort-Handhabung:
+const securePasswordHandling = {
+  // Dein Code hier
+};`,
+          solution: `const bcrypt = require('bcrypt');
+const crypto = require('crypto');
+
+const securePasswordHandling = {
+  // Passwort-Stärke prüfen
+  validatePassword: (password) => {
+    const minLength = 8;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumbers = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    
+    return {
+      isValid: password.length >= minLength && hasUpperCase && 
+               hasLowerCase && hasNumbers && hasSpecialChar,
+      errors: {
+        tooShort: password.length < minLength,
+        noUpperCase: !hasUpperCase,
+        noLowerCase: !hasLowerCase,
+        noNumbers: !hasNumbers,
+        noSpecialChar: !hasSpecialChar
+      }
+    };
+  },
+  
+  // Passwort hashen
+  hashPassword: async (password) => {
+    const saltRounds = 12; // Höherer Wert = sicherer aber langsamer
+    return await bcrypt.hash(password, saltRounds);
+  },
+  
+  // Passwort verifizieren
+  verifyPassword: async (password, hashedPassword) => {
+    return await bcrypt.compare(password, hashedPassword);
+  },
+  
+  // Sichere Passwort-Speicherung
+  storePassword: async (userId, password) => {
+    const validation = this.validatePassword(password);
+    if (!validation.isValid) {
+      throw new Error('Password does not meet security requirements');
+    }
+    
+    const hashedPassword = await this.hashPassword(password);
+    return db.query("UPDATE users SET password_hash = ?, salt = ? WHERE id = ?", 
+                   [hashedPassword, crypto.randomBytes(16).toString('hex'), userId]);
+  }
+};`,
+          tests: [
+            { input: "hashPassword('Test123!')", expected: "Bcrypt-Hash mit Salt generiert" },
+            { input: "validatePassword('weak')", expected: "Passwort-Validierung schlägt fehl" }
+          ]
+        }
+      ]
+    },
+    {
+      type: "dragdrop",
+      title: "IT-Sicherheit Kategorisierung",
+      games: [
+        {
+          title: "Bedrohungen nach Kategorien sortieren",
+          description: "Ordne die verschiedenen IT-Sicherheitsbedrohungen den richtigen Kategorien zu",
+          items: [
+            { id: "malware1", content: "Virus", category: "Malware" },
+            { id: "malware2", content: "Trojaner", category: "Malware" },
+            { id: "malware3", content: "Ransomware", category: "Malware" },
+            { id: "social1", content: "Phishing", category: "Social Engineering" },
+            { id: "social2", content: "Pretexting", category: "Social Engineering" },
+            { id: "social3", content: "Baiting", category: "Social Engineering" },
+            { id: "network1", content: "Man-in-the-Middle", category: "Netzwerk-Angriffe" },
+            { id: "network2", content: "DDoS", category: "Netzwerk-Angriffe" },
+            { id: "network3", content: "DNS Spoofing", category: "Netzwerk-Angriffe" }
+          ],
+          categories: ["Malware", "Social Engineering", "Netzwerk-Angriffe"]
+        },
+        {
+          title: "Sicherheitsmaßnahmen zuordnen",
+          description: "Kategorisiere die Sicherheitsmaßnahmen nach ihrem Typ",
+          items: [
+            { id: "tech1", content: "Firewall", category: "Technische Maßnahmen" },
+            { id: "tech2", content: "Antivirus", category: "Technische Maßnahmen" },
+            { id: "tech3", content: "Verschlüsselung", category: "Technische Maßnahmen" },
+            { id: "org1", content: "Security Awareness Training", category: "Organisatorische Maßnahmen" },
+            { id: "org2", content: "Sicherheitsrichtlinien", category: "Organisatorische Maßnahmen" },
+            { id: "org3", content: "Incident Response Plan", category: "Organisatorische Maßnahmen" },
+            { id: "phys1", content: "Zugangskontrollen", category: "Physische Maßnahmen" },
+            { id: "phys2", content: "Überwachungskameras", category: "Physische Maßnahmen" },
+            { id: "phys3", content: "Serverraum-Sicherheit", category: "Physische Maßnahmen" }
+          ],
+          categories: ["Technische Maßnahmen", "Organisatorische Maßnahmen", "Physische Maßnahmen"]
+        }
       ]
     }
-    // Weitere Module...
-  ]
+  ],
 
-  // Alle anderen Kategorien werden ähnlich erweitert...
+  "betriebssysteme": [
+    {
+      type: "flashcards",
+      title: "Betriebssysteme Grundlagen - IHK Praxis",
+      cards: [
+        { front: "Was ist ein Betriebssystem?", back: "**Definition:** Systemsoftware, die Hardware-Ressourcen verwaltet und Schnittstelle zwischen Hardware und Anwendungssoftware bildet. **IHK-Kernfunktionen:** Prozessverwaltung, Speicherverwaltung, Dateisystemverwaltung, Ein-/Ausgabeverwaltung, Benutzerverwaltung. **Beispiele:** Windows, Linux, macOS, Unix. **Bedeutung:** Ermöglicht Multitasking, Ressourcen-Sharing, Sicherheit und Benutzerfreundlichkeit." },
+        { front: "Prozess vs. Thread", back: "**Prozess:** Eigenständiges Programm mit eigenem Speicherbereich, vollständige Isolation, aufwendiger Kontext-Switch. **Thread:** Leichtgewichtiger Ausführungsstrang innerhalb eines Prozesses, teilt Speicher mit anderen Threads des Prozesses, schneller Kontext-Switch. **IHK-Vorteile Threads:** Bessere Parallelisierung, effizienter Ressourcenverbrauch, schnellere Kommunikation. **Synchronisation:** Mutex, Semaphore, Critical Sections notwendig." },
+        { front: "Virtueller Speicher", back: "**Konzept:** Illusion eines größeren Arbeitsspeichers durch Auslagerung auf Festplatte. **Paging:** Speicher in gleichgroße Seiten unterteilt, Pages werden bei Bedarf geladen. **Swapping:** Komplette Prozesse werden ausgelagert. **IHK-Vorteile:** Mehr Programme gleichzeitig, Speicherschutz zwischen Prozessen, Speicherfragmentierung reduziert. **Page Fault:** Zugriff auf nicht geladene Seite löst Interrupt aus." },
+        { front: "Dateisysteme im Vergleich", back: "**NTFS (Windows):** Journaling, Zugriffsrechte, Verschlüsselung, große Dateien. **ext4 (Linux):** Journaling, Extents, Online-Defragmentierung. **FAT32:** Einfach, kompatibel, aber 4GB-Dateilimit. **APFS (macOS):** Copy-on-Write, Snapshots, Verschlüsselung. **IHK-Auswahlkriterien:** Betriebssystem, Dateigröße, Performance-Anforderungen, Sicherheit. **Cluster:** Kleinste Speichereinheit des Dateisystems." },
+        { front: "Scheduling-Algorithmen", back: "**FCFS (First Come First Served):** Einfach, aber keine Optimierung. **SJF (Shortest Job First):** Minimiert durchschnittliche Wartezeit. **Round Robin:** Zeitscheiben für faire Verteilung, gut für interaktive Systeme. **Priority Scheduling:** Wichtige Prozesse zuerst, Gefahr von Starvation. **IHK-Multitasking:** Preemptive (unterbrechbar) vs. Cooperative (freiwillige Abgabe). **Context Switch:** Wechsel zwischen Prozessen kostet Zeit." },
+        { front: "Deadlock-Behandlung", back: "**Definition:** Zwei oder mehr Prozesse blockieren sich gegenseitig beim Warten auf Ressourcen. **Bedingungen:** Mutual Exclusion, Hold and Wait, No Preemption, Circular Wait. **IHK-Strategien:** Prevention (Bedingungen verhindern), Avoidance (sichere Zustände), Detection (erkennen und auflösen), Recovery (Prozess beenden/Ressourcen entziehen). **Banker's Algorithm:** Klassisches Verfahren zur Deadlock-Vermeidung." },
+        { front: "Boot-Prozess im Detail", back: "**BIOS/UEFI:** Hardware-Initialisierung, POST (Power-On Self Test). **Bootloader:** GRUB (Linux), Windows Boot Manager lädt Kernel. **Kernel-Initialisierung:** Hardware-Erkennung, Treiber laden, Grunddienste starten. **Init-Prozess:** Erstes User-Space-Programm, startet Systemdienste. **IHK-Sicherheit:** Secure Boot, TPM-Integration, Boot-Reihenfolge. **Dual Boot:** Mehrere Betriebssysteme auf einem System." },
+        { front: "Linux-Dateiberechtigungen", back: "**Format:** drwxrwxrwx (Typ + Owner + Group + Others). **Rechte:** r=4 (read), w=2 (write), x=1 (execute). **Beispiele:** 755 = rwxr-xr-x, 644 = rw-r--r--. **IHK-Befehle:** chmod (ändern), chown (Besitzer), chgrp (Gruppe). **Spezial-Bits:** SUID, SGID, Sticky Bit. **umask:** Standard-Berechtigungen für neue Dateien." },
+        { front: "Windows Registry", back: "**Zweck:** Zentrale Konfigurationsdatenbank für Windows und Anwendungen. **Hauptschlüssel:** HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE, HKEY_CLASSES_ROOT. **Datentypen:** REG_SZ (String), REG_DWORD (32-Bit), REG_BINARY. **IHK-Tools:** regedit (grafisch), reg (Kommandozeile). **Sicherung:** Backup vor Änderungen essentiell. **Probleme:** Registry-Bloat, Korruption bei unsachgemäßer Bearbeitung." },
+        { front: "Systemüberwachung und Performance", back: "**Windows:** Task Manager, Performance Monitor, Resource Monitor. **Linux:** top, htop, ps, iotop, netstat. **IHK-Metriken:** CPU-Auslastung, RAM-Verbrauch, Disk I/O, Netzwerk-Traffic. **Bottleneck-Analyse:** Schwachstellen im System identifizieren. **Logfiles:** Ereignisanzeige (Windows), /var/log (Linux). **Automatisierung:** Scripts für regelmäßige Überwachung." }
+      ]
+    },
+    {
+      type: "quiz",
+      title: "Betriebssysteme Vertiefung",
+      questions: [
+        {
+          question: "Was ist der Hauptunterschied zwischen einem Prozess und einem Thread?",
+          options: ["Threads sind schneller", "Prozesse haben eigenen Speicherbereich", "Threads können nicht kommunizieren", "Prozesse sind leichtgewichtiger"],
+          correctIndex: 1,
+          explanation: "Prozesse haben ihren eigenen isolierten Speicherbereich, während Threads den Speicher innerhalb eines Prozesses teilen."
+        },
+        {
+          question: "Welche Deadlock-Bedingung kann durch Timeouts verhindert werden?",
+          options: ["Mutual Exclusion", "Hold and Wait", "No Preemption", "Circular Wait"],
+          correctIndex: 1,
+          explanation: "Hold and Wait kann durch Timeouts verhindert werden - Prozesse geben Ressourcen nach bestimmter Zeit wieder frei."
+        },
+        {
+          question: "Was bedeutet die Linux-Berechtigung 755?",
+          options: ["rwxr-xr-x", "rw-rw-rw-", "rwxrwxrwx", "r--r--r--"],
+          correctIndex: 0,
+          explanation: "755 bedeutet: Owner hat rwx (7), Group hat r-x (5), Others haben r-x (5)."
+        },
+        {
+          question: "Welcher Scheduling-Algorithmus ist am besten für interaktive Systeme?",
+          options: ["FCFS", "SJF", "Round Robin", "Priority Scheduling"],
+          correctIndex: 2,
+          explanation: "Round Robin mit Zeitscheiben gewährleistet faire Verteilung und schnelle Reaktionszeiten für interaktive Anwendungen."
+        },
+        {
+          question: "Was passiert bei einem Page Fault?",
+          options: ["System stürzt ab", "Speicherseite wird von Festplatte geladen", "Prozess wird beendet", "CPU wird neugestartet"],
+          correctIndex: 1,
+          explanation: "Ein Page Fault tritt auf, wenn auf eine nicht im RAM befindliche Speicherseite zugegriffen wird. Das OS lädt die Seite von der Festplatte."
+        }
+      ]
+    }
+  ],
+
+  "netzwerke": [
+    {
+      type: "flashcards",
+      title: "Netzwerk-Grundlagen - IHK Prüfungswissen",
+      cards: [
+        { front: "OSI-Modell Layer im Detail", back: "**Layer 1 - Physical:** Bits übertragen, Kabel, Hubs. **Layer 2 - Data Link:** Frames, MAC-Adressen, Switches, Ethernet. **Layer 3 - Network:** Routing, IP-Adressen, Router. **Layer 4 - Transport:** TCP/UDP, End-to-End Kommunikation. **Layer 5 - Session:** Sitzungsmanagement, NetBIOS. **Layer 6 - Presentation:** Verschlüsselung, Komprimierung. **Layer 7 - Application:** HTTP, FTP, SMTP. **IHK-Bedeutung:** Systematische Fehlersuche, Protokoll-Zuordnung." },
+        { front: "TCP vs. UDP im Detail", back: "**TCP (Transmission Control Protocol):** Verbindungsorientiert, zuverlässig, Reihenfolge garantiert, Fehlererkennung/korrektur, Überlastkontrolle. **Verwendung:** HTTP/HTTPS, FTP, SMTP, SSH. **UDP (User Datagram Protocol):** Verbindungslos, unzuverlässig, schnell, geringer Overhead. **Verwendung:** DNS, DHCP, Streaming, Gaming. **IHK-Entscheidung:** Zuverlässigkeit vs. Geschwindigkeit. **Header-Größe:** TCP 20+ Bytes, UDP 8 Bytes." },
+        { front: "IPv4 Subnetting beherrschen", back: "**CIDR-Notation:** /24 = 255.255.255.0, /16 = 255.255.0.0. **Subnetz berechnen:** Netzwerk-ID, Broadcast-Adresse, verwendbare IPs. **Beispiel:** 192.168.1.0/26 → 64 IPs, 62 verwendbar. **VLSM (Variable Length Subnet Masking):** Effiziente IP-Nutzung. **IHK-Praxis:** Netzwerk-Design, IP-Verteilung planen. **Private Bereiche:** 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16." },
+        { front: "DHCP-Prozess DORA", back: "**Discover:** Client sendet Broadcast-Anfrage nach DHCP-Server. **Offer:** Server antwortet mit IP-Angebot. **Request:** Client akzeptiert Angebot und fordert IP an. **Acknowledge:** Server bestätigt und weist IP zu. **IHK-Konfiguration:** Lease-Zeit, Reservierungen, Optionen (DNS, Gateway). **Relay Agent:** DHCP über Subnetz-Grenzen hinweg. **Problembehebung:** ipconfig /release, /renew (Windows), dhclient (Linux)." },
+        { front: "DNS-Hierarchie und -Auflösung", back: "**Hierarchie:** Root-Server → TLD-Server (.com, .de) → Authoritative Name Server. **Auflösung:** Recursive (DNS-Server macht alles) vs. Iterative (Client fragt mehrere Server). **IHK-Records:** A (IPv4), AAAA (IPv6), MX (Mail), CNAME (Alias), NS (Name Server), PTR (Reverse). **Caching:** TTL (Time To Live) reduziert Abfragen. **Tools:** nslookup, dig, host." },
+        { front: "Switching vs. Routing", back: "**Switch (Layer 2):** MAC-Tabelle, Forwarding-Entscheidungen basierend auf MAC-Adressen, Collision-Domain pro Port, ein Broadcast-Domain. **Router (Layer 3):** Routing-Tabelle, IP-basierte Weiterleitung, Subnetz-Verbindung, separate Broadcast-Domains. **IHK-Funktionen:** Switch - VLAN, STP; Router - NAT, Firewall, QoS. **Managed Switch:** Konfigurierbar, SNMP, Port-Mirroring." },
+        { front: "VLAN-Konzepte", back: "**Zweck:** Logische Trennung in physischen Netzwerken, Sicherheit, Broadcast-Domain-Reduzierung. **Arten:** Port-based (Access), Tag-based (Trunk), Protocol-based. **IEEE 802.1Q:** VLAN-Tagging-Standard, 4-Byte-Header. **IHK-Konfiguration:** Access-Ports (ein VLAN), Trunk-Ports (mehrere VLANs). **Inter-VLAN-Routing:** Router oder Layer-3-Switch nötig. **Native VLAN:** Untagged Traffic auf Trunk." },
+        { front: "Wireless-Standards", back: "**802.11 Evolution:** a/b/g (Legacy), n (WiFi 4), ac (WiFi 5), ax (WiFi 6). **Frequenzen:** 2.4 GHz (längere Reichweite, mehr Interferenz), 5 GHz (schneller, weniger überfüllt). **IHK-Sicherheit:** WPA3 (aktuell), WPA2 (veraltet), WEP (unsicher). **MIMO:** Multiple Input Multiple Output für höhere Geschwindigkeiten. **Roaming:** Nahtloser Wechsel zwischen Access Points." },
+        { front: "Network Address Translation (NAT)", back: "**Zweck:** Private IPs in öffentliche übersetzen, IPv4-Adress-Knappheit lösen. **Typen:** Static NAT (1:1), Dynamic NAT (Pool), PAT/NAPT (Port-basiert). **IHK-Vorteile:** Sicherheit durch Verstecken interner Struktur, IP-Wiederverwendung. **Nachteile:** Peer-to-Peer Probleme, Protokoll-Einschränkungen. **Port Forwarding:** Externe Zugriffe auf interne Services." }
+      ]
+    }
+  ]
 };
