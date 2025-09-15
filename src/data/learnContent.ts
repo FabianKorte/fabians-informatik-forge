@@ -1,4 +1,13 @@
 import type { LearnModule } from "@/types/learn";
+import { webentwicklungContent } from "./learn/webentwicklung";
+import { projektmanagementContent } from "./learn/projektmanagement";
+import { qualitaetsmanagementContent } from "./learn/qualitaetsmanagement";
+import { betriebswirtschaftContent } from "./learn/betriebswirtschaft";
+import { rechtlicheGrundlagenContent } from "./learn/rechtliche-grundlagen";
+import { kommunikationContent } from "./learn/kommunikation";
+import { englischItContent } from "./learn/englisch-it";
+import { mathematikLogikContent } from "./learn/mathematik-logik";
+import { innovationTrendsContent } from "./learn/innovation-trends";
 
 export const learnContent: Record<string, LearnModule[]> = {
   programmierung: [
@@ -777,5 +786,15 @@ const securePasswordHandling = {
         { front: "Network Address Translation (NAT)", back: "**Zweck:** Private IPs in öffentliche übersetzen, IPv4-Adress-Knappheit lösen. **Typen:** Static NAT (1:1), Dynamic NAT (Pool), PAT/NAPT (Port-basiert). **IHK-Vorteile:** Sicherheit durch Verstecken interner Struktur, IP-Wiederverwendung. **Nachteile:** Peer-to-Peer Probleme, Protokoll-Einschränkungen. **Port Forwarding:** Externe Zugriffe auf interne Services." }
       ]
     }
-  ]
+  ],
+  
+  webentwicklung: webentwicklungContent,
+  projektmanagement: projektmanagementContent,
+  qualitaetsmanagement: qualitaetsmanagementContent,
+  betriebswirtschaft: betriebswirtschaftContent,
+  rechtlichegrundlagen: rechtlicheGrundlagenContent,
+  kommunikation: kommunikationContent,
+  englischit: englischItContent,
+  mathematiklogik: mathematikLogikContent,
+  innovationtrends: innovationTrendsContent
 };
