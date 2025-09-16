@@ -798,5 +798,7 @@ const securePasswordHandling = {
   englischit: englischItContent,
   mathematiklogik: mathematikLogikContent,
   innovationtrends: innovationTrendsContent,
-  wiso: wisoContent
+  wiso: wisoContent,
+  datenbanken: datenbankenModules,
+  systemadministration: systemadministrationModules
 };

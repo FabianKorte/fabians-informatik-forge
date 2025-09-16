@@ -44,6 +44,66 @@ export const betriebswirtschaftContent: LearnModule[] = [
       { 
         front: "Digitale Transformation", 
         back: "**Digitale Geschäftsmodelle:** Plattformen, Subscription, Freemium, Long Tail. **Technologie-Trends:** Cloud Computing, AI/ML, IoT, Blockchain. **Change Management:** Kulturwandel, Kompetenzaufbau, agile Organisation. **IHK-Herausforderungen:** Legacy-Systeme, Datenschutz, Cybersecurity. **Customer Experience:** Omnichannel, Personalisierung, Self-Service. **Datenanalyse:** Business Intelligence, Predictive Analytics." 
+      },
+      { 
+        front: "Was ist eine GmbH?", 
+        back: "Gesellschaft mit beschränkter Haftung - Kapitalgesellschaft mit Mindestkapital von 25.000€" 
+      },
+      { 
+        front: "Unterschied zwischen Eigen- und Fremdkapital?", 
+        back: "Eigenkapital: von Eigentümern eingebracht. Fremdkapital: von Dritten (Kredite, Anleihen)" 
+      },
+      { 
+        front: "Was zeigt eine Bilanz?", 
+        back: "Vermögen (Aktiva) und Schulden/Eigenkapital (Passiva) eines Unternehmens zu einem Stichtag" 
+      },
+      { 
+        front: "Was ist Kostenrechnung?", 
+        back: "Erfassung, Verteilung und Kontrolle aller Kosten zur Steuerung des Unternehmens" 
+      },
+      { 
+        front: "Break-Even-Point?", 
+        back: "Gewinnschwelle - Punkt wo Umsatz = Gesamtkosten (weder Gewinn noch Verlust)" 
+      },
+      { 
+        front: "Was ist Controlling?", 
+        back: "Planungs-, Steuerungs- und Kontrollsystem zur Unternehmensführung" 
+      },
+      { 
+        front: "Unterschied Fix- und variable Kosten?", 
+        back: "Fixkosten: unabhängig von Menge (Miete). Variable Kosten: mengenabhängig (Material)" 
+      },
+      { 
+        front: "Was ist Liquidität?", 
+        back: "Fähigkeit eines Unternehmens, seinen Zahlungsverpflichtungen nachzukommen" 
+      },
+      { 
+        front: "ROI-Formel?", 
+        back: "Return on Investment = (Gewinn / eingesetztes Kapital) × 100%" 
+      },
+      { 
+        front: "Was ist Supply Chain Management?", 
+        back: "Steuerung der gesamten Lieferkette von Lieferanten bis zum Endkunden" 
+      },
+      { 
+        front: "Lean Management Prinzipien?", 
+        back: "Verschwendung vermeiden, Kontinuierliche Verbesserung (Kaizen), Kundenorientierung" 
+      },
+      { 
+        front: "Was ist Digital Leadership?", 
+        back: "Führungsstil der digitalen Transformation: Agile Methoden, Remote-Teams, digitale Kommunikation" 
+      },
+      { 
+        front: "Cash Flow Definition?", 
+        back: "Geldfluss: Differenz zwischen Einzahlungen und Auszahlungen in einer Periode" 
+      },
+      { 
+        front: "Was ist Working Capital?", 
+        back: "Nettoumlaufvermögen = Umlaufvermögen minus kurzfristige Verbindlichkeiten" 
+      },
+      { 
+        front: "Stakeholder vs. Shareholder?", 
+        back: "Stakeholder: alle Interessensgruppen. Shareholder: nur Anteilseigner" 
       }
     ]
   },
@@ -122,18 +182,67 @@ export const betriebswirtschaftContent: LearnModule[] = [
     ]
   },
   {
+    type: "dragdrop",
+    title: "BWL Begriffe zuordnen",
+    games: [
+      {
+        title: "Kennzahlen den Bereichen zuordnen",
+        description: "Ordnen Sie die Kennzahlen den richtigen Unternehmensbereichen zu.",
+        items: [
+          { id: "1", content: "ROI (Return on Investment)", category: "Controlling" },
+          { id: "2", content: "Eigenkapitalquote", category: "Finanzierung" },
+          { id: "3", content: "Lagerumschlag", category: "Logistik" },
+          { id: "4", content: "Deckungsbeitrag", category: "Controlling" },
+          { id: "5", content: "Current Ratio", category: "Finanzierung" },
+          { id: "6", content: "Durchlaufzeit", category: "Logistik" },
+          { id: "7", content: "Marktanteil", category: "Marketing" },
+          { id: "8", content: "Customer Lifetime Value", category: "Marketing" }
+        ],
+        categories: ["Controlling", "Finanzierung", "Logistik", "Marketing"]
+      }
+    ]
+  },
+  {
+    type: "timeline",
+    title: "Unternehmensplanung Timeline",
+    timelines: [
+      {
+        title: "Jahresplanung eines Unternehmens",
+        description: "Typischer Ablauf der jährlichen Unternehmensplanung",
+        events: [
+          { year: "Q4 Vorjahr", event: "Strategische Planung", description: "Langfristige Ziele und Strategien festlegen" },
+          { year: "Januar", event: "Budgetplanung", description: "Detaillierte Finanz- und Ressourcenplanung" },
+          { year: "Februar", event: "Operationsplanung", description: "Umsetzungsplanung für alle Bereiche" },
+          { year: "Quartalsweise", event: "Controlling & Review", description: "Soll-Ist-Vergleich und Anpassungen" },
+          { year: "Dezember", event: "Jahresabschluss", description: "Bilanzierung und Erfolgsmessung" }
+        ]
+      }
+    ]
+  },
+  {
     type: "scenario",
     title: "BWL Praxisszenarien",
     scenarios: [
       {
         title: "Investitionsentscheidung",
-        description: "Unternehmen muss zwischen Investitionsalternativen wählen",
-        scenario: "Ein mittelständisches Unternehmen hat 500.000€ zur Verfügung und muss zwischen zwei Investitionen wählen: A) Neue Produktionslinie (ROI 12%, Amortisation 4 Jahre) oder B) Digitalisierungsprojekt (ROI 18%, Amortisation 6 Jahre). Welche Faktoren sind entscheidend?",
+        description: "Sie sind Controller und müssen eine Empfehlung für eine Investition abgeben.",
+        scenario: "Ihr Unternehmen kann zwischen zwei Maschinen wählen: Maschine A kostet 100.000€ mit jährlichem Gewinn von 25.000€. Maschine B kostet 150.000€ mit jährlichem Gewinn von 35.000€. Beide haben 5 Jahre Nutzungsdauer.",
         choices: [
-          { text: "Nur den höchsten ROI wählen", consequence: "**Zu eindimensional:** ROI allein berücksichtigt nicht Risiko, Liquidität und strategische Passung.", isCorrect: false },
-          { text: "Strategische Ausrichtung, Risiko und Liquidität bewerten", consequence: "**Ganzheitlicher Ansatz:** Berücksichtigt alle relevanten Faktoren für nachhaltige Entscheidung.", isCorrect: true },
-          { text: "Kürzeste Amortisationszeit wählen", consequence: "**Kurzsichtig:** Ignoriert langfristige Potenziale und strategische Vorteile.", isCorrect: false },
-          { text: "Investition aufschieben", consequence: "**Verpasste Chance:** Ohne triftigen Grund verschenkt das Unternehmen Wachstumspotenzial.", isCorrect: false }
+          { text: "Maschine A wählen (niedrigere Anfangsinvestition)", consequence: "ROI: 25%. Gute Wahl bei knapper Liquidität.", isCorrect: false },
+          { text: "Maschine B wählen (höhere Rendite)", consequence: "ROI: 23,3%. Trotz höherer Investition weniger rentabel.", isCorrect: false },
+          { text: "Detaillierte Kapitalwertrechnung durchführen", consequence: "Richtig! NPV-Analyse berücksichtigt Zinssatz und Zeitwert des Geldes.", isCorrect: true },
+          { text: "Keine Investition tätigen", consequence: "Verpasste Chance auf Wachstum und Modernisierung.", isCorrect: false }
+        ]
+      },
+      {
+        title: "Liquiditätskrise bewältigen",
+        description: "Als Geschäftsführer müssen Sie eine akute Liquiditätskrise lösen.",
+        scenario: "Ihr Unternehmen hat kurzfristige Verbindlichkeiten von 500.000€, aber nur 200.000€ liquide Mittel. Ein Großkunde zahlt erst in 3 Monaten.",
+        choices: [
+          { text: "Bankkredit aufnehmen", consequence: "Schnelle Lösung, aber Zinskosten und Kreditprüfung nötig.", isCorrect: true },
+          { text: "Factoring der Forderungen", consequence: "Gut! Sofortige Liquidität gegen Gebühr.", isCorrect: true },
+          { text: "Lieferanten um Zahlungsaufschub bitten", consequence: "Kann helfen, aber schadet der Reputation.", isCorrect: false },
+          { text: "Mitarbeiter entlassen", consequence: "Drastisch und schadet langfristig dem Unternehmen.", isCorrect: false }
         ]
       }
     ]

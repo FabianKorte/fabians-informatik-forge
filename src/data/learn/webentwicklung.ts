@@ -444,6 +444,15 @@ async function doBackgroundSync() {
           { id: "svelte1", content: "Svelte", match: "Compile-Time Optimization" },
           { id: "next1", content: "Next.js", match: "Server-Side Rendering" },
           { id: "gatsby1", content: "Gatsby", match: "Static Site Generation" }
+      {
+        title: "Security-Schwachstelle beheben",
+        description: "Ein Penetrationstest hat XSS-Schwachstellen in Ihrer Webanwendung gefunden.",
+        scenario: "Benutzereingaben werden ungefiltert in HTML ausgegeben. Angreifer können JavaScript-Code einschleusen.",
+        choices: [
+          { text: "Alle Eingaben HTML-encodieren", consequence: "Richtig! Verhindert Ausführung von eingeschleustem Code.", isCorrect: true },
+          { text: "Content Security Policy implementieren", consequence: "Gut! Zusätzliche Schutzschicht gegen XSS.", isCorrect: true },
+          { text: "HTTPS verwenden", consequence: "Wichtig für Sicherheit, aber löst XSS nicht direkt.", isCorrect: false },
+          { text: "Input Validation implementieren", consequence: "Richtig! Gefährliche Eingaben bereits beim Empfang filtern.", isCorrect: true }
         ]
       }
     ]
