@@ -15,6 +15,7 @@ export const categoryLearningMethods: Record<string, string[]> = {
   
   // New categories - no code challenges for non-technical subjects
   bwl: ["flashcards", "quiz", "matching", "dragdrop", "memory", "scenario"],
+  betriebswirtschaft: ["flashcards", "quiz", "matching", "dragdrop", "memory", "scenario"], 
   wiso: ["flashcards", "quiz", "matching", "dragdrop", "scenario"],
   datenschutz: ["flashcards", "quiz", "matching", "dragdrop", "memory", "scenario"],
   "fachmodul-systemintegration": ["flashcards", "quiz", "matching", "code", "dragdrop", "memory", "scenario"],

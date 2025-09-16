@@ -8,6 +8,7 @@ import { kommunikationContent } from "./learn/kommunikation";
 import { englischItContent } from "./learn/englisch-it";
 import { mathematikLogikContent } from "./learn/mathematik-logik";
 import { innovationTrendsContent } from "./learn/innovation-trends";
+import { wisoContent } from "./learn/wiso";
 
 export const learnContent: Record<string, LearnModule[]> = {
   programmierung: [
@@ -796,5 +797,6 @@ const securePasswordHandling = {
   kommunikation: kommunikationContent,
   englischit: englischItContent,
   mathematiklogik: mathematikLogikContent,
-  innovationtrends: innovationTrendsContent
+  innovationtrends: innovationTrendsContent,
+  wiso: wisoContent
 };
