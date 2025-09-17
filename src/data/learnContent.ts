@@ -2,6 +2,7 @@ import type { LearnModule } from "@/types/learn";
 import { webentwicklungContent } from "./learn/webentwicklung";
 import { projektmanagementContent } from "./learn/projektmanagement";
 import { qualitaetsmanagementContent } from "./learn/qualitaetsmanagement";
+import { pruefungsvorbereitungContent } from "./learn/pruefungsvorbereitung";
 import { betriebswirtschaftContent } from "./learn/betriebswirtschaft";
 import { rechtlicheGrundlagenContent } from "./learn/rechtliche-grundlagen";
 import { kommunikationContent } from "./learn/kommunikation";
@@ -11,6 +12,9 @@ import { innovationTrendsContent } from "./learn/innovation-trends";
 import { wisoContent } from "./learn/wiso";
 import { datenbankenModules } from "./learn/datenbanken";
 import { systemadministrationModules } from "./learn/systemadministration";
+import { mobileEntwicklungContent } from "./learn/mobile-entwicklung";
+import { grundlagenItContent } from "./learn/grundlagen-it";
+import { itSicherheitAdvancedContent } from "./learn/it-sicherheit-advanced";
 
 export const learnContent: Record<string, LearnModule[]> = {
   programmierung: [
@@ -749,6 +753,9 @@ const securePasswordHandling = {
     }
   ],
 
+  // Map webentwicklung to web-technologien and netzwerke to netzwerktechnik for consistency
+  "webentwicklung": webentwicklungContent,
+  "web-technologien": webentwicklungContent,
   "netzwerke": [
     {
       type: "flashcards",
@@ -766,17 +773,116 @@ const securePasswordHandling = {
       ]
     }
   ],
-  
-  webentwicklung: webentwicklungContent,
+  netzwerktechnik: [
+    {
+      type: "flashcards",
+      title: "Magic Number Subnetting - IHK Prüfungsmethode",
+      cards: [
+        { front: "Magic Number Methode - Grundprinzip", back: "**Magic Number = 256 - Subnetmaske-Oktett.** Beispiel: /26 → Maske 255.255.255.192 → Magic Number = 256-192 = 64. **Verwendung:** Schnelle Berechnung von Subnetz-Grenzen, Host-Bereichen und Broadcast-Adressen. **IHK-Vorteil:** Kopfrechnung statt binärer Umrechnung. **Schritte:** 1. Magic Number ermitteln, 2. Vielfache bestimmen, 3. Bereiche ableiten." },
+        { front: "Magic Number - Subnetz-Bereiche finden", back: "**Beispiel 192.168.1.0/26:** Magic Number = 64. **Subnetz-Bereiche:** 0-63, 64-127, 128-191, 192-255. **Host-IP 192.168.1.100:** Liegt in Bereich 64-127 → **Subnetz:** 192.168.1.64/26, **Broadcast:** 192.168.1.127, **Erste Host-IP:** 192.168.1.65, **Letzte Host-IP:** 192.168.1.126. **IHK-Trick:** Magic Number zeigt Sprungweite zwischen Subnetzen." },
+        { front: "VLSM mit Magic Number", back: "**Variable Length Subnet Masking:** Verschiedene Subnetz-Größen für optimale IP-Nutzung. **Planung:** Größte Subnetze zuerst. **Beispiel:** 50 Hosts brauchen /26 (62 Hosts), 25 Hosts brauchen /27 (30 Hosts). **Magic Numbers:** /26→64, /27→32, /28→16, /29→8. **Vorteil:** Minimiert IP-Verschwendung. **IHK-Aufgabe:** Oft Netzwerk-Design mit verschiedenen Abteilungsgrößen." },
+        { front: "Supernetting mit Magic Number", back: "**Route Summarization:** Mehrere kleine Netze zu einem großen zusammenfassen. **Beispiel:** 192.168.0.0/24 bis 192.168.3.0/24 → Summary: 192.168.0.0/22. **Magic Number /22:** 256-252=4 → Bereiche: 0-3, 4-7, 8-11, usw. **IHK-Bedeutung:** Routing-Tabellen verkleinern, weniger Routing-Updates. **BGP/OSPF:** Wichtig für Skalierbarkeit in großen Netzwerken." }
+      ]
+    },
+    {
+      type: "quiz", 
+      title: "Netzwerktechnik mit Magic Number",
+      questions: [
+        {
+          question: "Gegeben: IP 10.0.0.50 mit Subnetzmaske /27. Welches ist die Subnetz-Adresse?",
+          options: ["10.0.0.0", "10.0.0.32", "10.0.0.48", "10.0.0.64"],
+          correctIndex: 1,
+          explanation: "Magic Number für /27: 256-224=32. Host 50 liegt zwischen 32-63, daher Subnetz: 10.0.0.32/27"
+        },
+        {
+          question: "Mit welcher Magic Number arbeitest du bei einer /26 Subnetzmaske?",
+          options: ["32", "64", "128", "192"],
+          correctIndex: 1,
+          explanation: "/26 entspricht 255.255.255.192. Magic Number = 256-192 = 64"
+        },
+        {
+          question: "Wie viele /28 Subnetze passen in ein /24 Netzwerk?",
+          options: ["8", "16", "32", "64"],
+          correctIndex: 1,
+          explanation: "/24 = 256 IPs, /28 = 16 IPs pro Subnetz. 256÷16 = 16 Subnetze"
+        },
+        {
+          question: "Welche Broadcast-Adresse hat das Subnetz 172.16.4.96/27?",
+          options: ["172.16.4.127", "172.16.4.119", "172.16.4.111", "172.16.4.103"],
+          correctIndex: 0,
+          explanation: "Magic Number /27: 32. Subnetz 96-127, Broadcast = 127"
+        }
+      ]
+    }
+  ],
+  // Map category IDs consistently
   projektmanagement: projektmanagementContent,
   qualitaetsmanagement: qualitaetsmanagementContent,
+  pruefungsvorbereitung: pruefungsvorbereitungContent,
   betriebswirtschaft: betriebswirtschaftContent,
+  bwl: betriebswirtschaftContent, // Alias for consistency
   rechtlichegrundlagen: rechtlicheGrundlagenContent,
+  "rechtliche-grundlagen": rechtlicheGrundlagenContent, // Alias 
   kommunikation: kommunikationContent,
   englischit: englischItContent,
+  "englisch-it": englischItContent, // Alias
   mathematiklogik: mathematikLogikContent,
+  "mathematik-logik": mathematikLogikContent, // Alias
   innovationtrends: innovationTrendsContent,
+  "innovation-trends": innovationTrendsContent, // Alias
   wiso: wisoContent,
   datenbanken: datenbankenModules,
-  systemadministration: systemadministrationModules
+  systemadministration: systemadministrationModules,
+  "it-sicherheit": [
+    ...itSicherheitAdvancedContent,
+    {
+      type: "flashcards",
+      title: "IT-Sicherheit Grundlagen - IHK Prüfungswissen", 
+      cards: [
+        { front: "CIA-Triade der IT-Sicherheit", back: "**Confidentiality (Vertraulichkeit):** Schutz vor unbefugtem Zugriff auf Informationen durch Verschlüsselung, Zugriffskontrollen, Klassifizierung. **Integrity (Integrität):** Schutz vor unautorisierten Änderungen durch Checksummen, digitale Signaturen, Versionskontrolle. **Availability (Verfügbarkeit):** Sicherstellung des Zugriffs für autorisierte Nutzer durch Redundanz, Backups, Load Balancing. **IHK-Erweiterung:** Authentizität, Verbindlichkeit (Non-Repudiation), Accountability als weitere Schutzziele." },
+        { front: "Bedrohungslandschaft", back: "**Malware:** Viren (selbstreplizierend), Würmer (netzwerkbasiert), Trojaner (getarnte Schadsoftware), Ransomware (Verschlüsselung für Lösegeld). **Social Engineering:** Phishing (gefälschte E-Mails), Pretexting (erfundene Szenarien), Baiting (verlockendes Angebot). **Technische Angriffe:** DoS/DDoS, Man-in-the-Middle, SQL-Injection, XSS, Buffer Overflow. **IHK-Schutz:** Defense in Depth, Security Awareness Training, Incident Response Plan." },
+        { front: "Verschlüsselungsverfahren", back: "**Symmetrisch:** AES (Advanced Encryption Standard), gleicher Schlüssel für Ver- und Entschlüsselung, schnell für große Datenmengen. **Asymmetrisch:** RSA, ECC (Elliptic Curve), öffentlicher/privater Schlüssel, langsamer aber für Schlüsselaustausch. **Hybrid:** Kombination beider (TLS), asymmetrisch für Schlüsselaustausch, symmetrisch für Datenübertragung. **Hash-Funktionen:** SHA-256, MD5 (unsicher), für Integrität und Passwort-Speicherung. **IHK-Praxis:** End-to-End-Verschlüsselung, Perfect Forward Secrecy." }
+      ]
+    }
+  ],
+
+  // Add missing categories with proper content
+  "mobile-entwicklung": mobileEntwicklungContent,
+  "grundlagen-it": grundlagenItContent,
+
+  datenschutz: [
+    {
+      type: "flashcards",
+      title: "DSGVO & Datenschutz - IHK Praxis", 
+      cards: [
+        { front: "DSGVO Grundprinzipien Art. 5", back: "**1. Rechtmäßigkeit, Treu & Glauben:** Transparente Verarbeitung. **2. Zweckbindung:** Daten nur für festgelegte Zwecke. **3. Datenminimierung:** Nur notwendige Daten. **4. Richtigkeit:** Aktuelle, korrekte Daten. **5. Speicherbegrenzung:** Nicht länger als nötig. **6. Integrität/Vertraulichkeit:** Angemessene Sicherheit. **IHK-Relevanz:** Basis für alle Datenschutz-Maßnahmen." },
+        { front: "Rechtsgrundlagen Art. 6 DSGVO", back: "**a) Einwilligung:** Freiwillig, informiert, widerrufbar. **b) Vertrag:** Erforderlich für Vertragserfüllung. **c) Rechtliche Verpflichtung:** Steuerrecht, Aufbewahrungspflichten. **d) Lebenswichtige Interessen:** Notfälle. **e) Öffentliche Aufgabe:** Behörden. **f) Berechtigtes Interesse:** Interessenabwägung nötig. **IHK-Praxis:** Oft b), c) oder f) in Unternehmen." },
+        { front: "Betroffenenrechte", back: "**Art. 15:** Auskunftsrecht über gespeicherte Daten. **Art. 16:** Berichtigung falscher Daten. **Art. 17:** Löschung ('Recht auf Vergessenwerden'). **Art. 18:** Einschränkung der Verarbeitung. **Art. 20:** Datenübertragbarkeit (Portabilität). **Art. 21:** Widerspruch gegen Verarbeitung. **IHK-Fristen:** Meist einen Monat für Antwort, kostenlos für Betroffene." }
+      ]
+    }
+  ],
+
+  "fachmodul-systemintegration": [
+    {
+      type: "flashcards",
+      title: "Fachmodul Systemintegration - IHK Vertiefung",
+      cards: [
+        { front: "Virtualisierung-Technologien", back: "**Typ 1 Hypervisor:** Bare-Metal (VMware vSphere, Hyper-V, Xen), direkt auf Hardware. **Typ 2:** Hosted (VirtualBox, VMware Workstation), auf Betriebssystem. **Container:** Docker, LXC - OS-Level Virtualisierung. **IHK-Vorteile:** Server-Konsolidierung, bessere Hardware-Auslastung, Disaster Recovery, Test-Umgebungen. **Grenzen:** Performance-Overhead, Lizenzkosten." },
+        { front: "SAN vs. NAS vs. DAS", back: "**DAS (Direct Attached Storage):** Direkt angeschlossene Festplatten, USB/SATA. **NAS (Network Attached Storage):** Datei-basiert, SMB/NFS-Protokolle, IP-Netzwerk. **SAN (Storage Area Network):** Block-basiert, Fibre Channel/iSCSI, dediziertes Storage-Netzwerk. **IHK-Anwendung:** DAS für Einzelplätze, NAS für Datei-Sharing, SAN für High-Performance Datenbanken." },
+        { front: "Backup-Strategien", back: "**3-2-1-Regel:** 3 Kopien, 2 verschiedene Medien, 1 offsite. **Vollbackup:** Komplette Daten, langsam aber einfache Wiederherstellung. **Inkrementell:** Nur Änderungen seit letztem Backup. **Differenziell:** Änderungen seit letztem Vollbackup. **IHK-RPO/RTO:** Recovery Point/Time Objective definieren, Backup-Tests regelmäßig durchführen." }
+      ]
+    }
+  ],
+
+  "fachmodul-anwendungsentwicklung": [
+    {
+      type: "flashcards", 
+      title: "Fachmodul Anwendungsentwicklung - IHK Vertiefung",
+      cards: [
+        { front: "Design Patterns - Gang of Four", back: "**Creational:** Singleton, Factory, Builder - Objekt-Erzeugung. **Structural:** Adapter, Decorator, Facade - Objekt-Komposition. **Behavioral:** Observer, Strategy, Command - Interaktion zwischen Objekten. **IHK-Bedeutung:** Bewährte Lösungen für wiederkehrende Probleme, bessere Code-Struktur, Kommunikation im Team durch gemeinsame Sprache." },
+        { front: "Clean Code Prinzipien", back: "**Lesbarkeit:** Aussagekräftige Namen, kleine Funktionen, klare Kommentare. **DRY (Don't Repeat Yourself):** Code-Duplikation vermeiden. **SOLID:** Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion. **IHK-Qualität:** Wartbarkeit, Testbarkeit, reduzierte Fehlerrate, Teamproduktivität." },
+        { front: "Test-Driven Development (TDD)", back: "**Red-Green-Refactor Zyklus:** 1. Fehlschlagenden Test schreiben (Red), 2. Minimalen Code für Test (Green), 3. Code verbessern ohne Funktionsänderung (Refactor). **IHK-Vorteile:** Bessere Code-Qualität, automatische Regression-Tests, Dokumentation durch Tests, mutiges Refactoring möglich." }
+      ]
+    }
+  ]
 };
