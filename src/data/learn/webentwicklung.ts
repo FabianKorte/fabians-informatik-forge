@@ -444,6 +444,14 @@ async function doBackgroundSync() {
           { id: "svelte1", content: "Svelte", match: "Compile-Time Optimization" },
           { id: "next1", content: "Next.js", match: "Server-Side Rendering" },
           { id: "gatsby1", content: "Gatsby", match: "Static Site Generation" }
+        ]
+      }
+    ]
+  },
+  {
+    type: "scenario",
+    title: "Web Security Scenarios",
+    scenarios: [
       {
         title: "Security-Schwachstelle beheben",
         description: "Ein Penetrationstest hat XSS-Schwachstellen in Ihrer Webanwendung gefunden.",
