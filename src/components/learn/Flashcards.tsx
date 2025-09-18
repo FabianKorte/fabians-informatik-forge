@@ -172,7 +172,7 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
 
       {/* Enhanced Card with realistic 3D design */}
       <div
-        className={`relative h-[55vh] sm:h-[60vh] md:h-64 lg:h-72 rounded-2xl border-2 overflow-hidden select-none cursor-pointer flip-3d card-3d transition-all duration-300 ${
+        className={`relative h-[70vh] sm:h-[75vh] md:h-96 lg:h-[500px] rounded-2xl border-2 overflow-hidden select-none cursor-pointer flip-3d card-3d transition-all duration-300 ${
           currentCardStatus === "known"
             ? "border-success/30 bg-gradient-to-br from-success/10 to-success/5 shadow-accent"
             : currentCardStatus === "unknown"
