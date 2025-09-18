@@ -170,97 +170,173 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
         </p>
       </div>
 
-      {/* Card */}
+      {/* Enhanced Card with realistic 3D design */}
       <div
-        className={`relative h-[55vh] sm:h-[60vh] md:h-64 lg:h-72 rounded-2xl border shadow-elegant overflow-hidden select-none cursor-pointer flip-3d ${
+        className={`relative h-[55vh] sm:h-[60vh] md:h-64 lg:h-72 rounded-2xl border-2 overflow-hidden select-none cursor-pointer flip-3d card-3d transition-all duration-300 ${
           currentCardStatus === "known"
-            ? "border-success bg-success/5"
+            ? "border-success/30 bg-gradient-to-br from-success/10 to-success/5 shadow-accent"
             : currentCardStatus === "unknown"
-            ? "border-destructive bg-destructive/5"
-            : "border-border bg-card"
-        }`}
+            ? "border-destructive/30 bg-gradient-to-br from-destructive/10 to-destructive/5 shadow-accent"
+            : "border-border/30 bg-gradient-to-br from-card via-card/90 to-card/70 shadow-primary"
+        } hover:shadow-xl hover:border-primary/50`}
         onClick={() => setFlipped((f) => !f)}
         aria-label="Karte umdrehen"
         role="button"
       >
-        {/* Inner flipper */}
+        {/* Inner flipper with enhanced shadows */}
         <div className={`flip-3d-inner ${flipped ? "is-flipped" : ""}`}>
-          {/* Front face */}
-          <div className="flip-face bg-gradient-to-br from-card to-card/80 overflow-y-auto overscroll-contain touch-pan-y">
-            <div className="p-4 md:p-8 text-center">
-              <p className="text-base sm:text-lg md:text-2xl font-semibold text-foreground leading-snug md:leading-relaxed break-words mb-4">
+          {/* Front face - Question side */}
+          <div className="flip-face bg-gradient-to-br from-white via-gray-50 to-blue-50 dark:from-card dark:via-card/95 dark:to-primary/5 overflow-y-auto overscroll-contain touch-pan-y">
+            {/* Card texture overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/10 to-transparent pointer-events-none" />
+            
+            {/* Content */}
+            <div className="relative p-6 md:p-10 text-center h-full flex flex-col justify-center">
+              {/* Question icon */}
+              <div className="mx-auto mb-6 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                <span className="text-2xl">🤔</span>
+              </div>
+              
+              <p className="text-base sm:text-lg md:text-2xl font-semibold text-foreground leading-snug md:leading-relaxed break-words mb-6">
                 {current.front}
               </p>
-              <p className="text-sm text-muted-foreground">Tippe zum Umdrehen</p>
+              
+              {/* Flip instruction with animation */}
+              <div className="mt-auto">
+                <p className="text-sm text-muted-foreground mb-2">Tippe zum Umdrehen</p>
+                <div className="mx-auto w-8 h-1 bg-primary/30 rounded-full animate-pulse" />
+              </div>
             </div>
           </div>
-          {/* Back face */}
-          <div className="flip-face flip-face-back bg-gradient-to-br from-primary/5 to-accent/5 overflow-y-auto overscroll-contain touch-pan-y">
-            <div className="p-4 md:p-8 text-center">
+          
+          {/* Back face - Answer side */}
+          <div className="flip-face flip-face-back bg-gradient-to-br from-green-50 via-blue-50 to-indigo-50 dark:from-primary/5 dark:via-accent/5 dark:to-success/5 overflow-y-auto overscroll-contain touch-pan-y">
+            {/* Card texture overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/10 to-transparent pointer-events-none" />
+            
+            {/* Content */}
+            <div className="relative p-6 md:p-10 text-center h-full flex flex-col justify-center">
+              {/* Answer icon */}
+              <div className="mx-auto mb-6 w-12 h-12 rounded-full bg-success/10 flex items-center justify-center">
+                <span className="text-2xl">💡</span>
+              </div>
+              
               <p className="text-sm sm:text-base md:text-xl text-foreground leading-snug md:leading-relaxed break-words">
                 {current.back}
               </p>
+              
+              {/* Success pattern decoration */}
+              <div className="mt-auto flex justify-center space-x-2">
+                <div className="w-2 h-2 bg-success/40 rounded-full animate-pulse" />
+                <div className="w-2 h-2 bg-accent/40 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }} />
+                <div className="w-2 h-2 bg-primary/40 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }} />
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Status indicator */}
+        {/* Enhanced Status indicator with glow effect */}
         {currentCardStatus !== "neutral" && (
           <div
-            className={`absolute top-3 right-3 w-6 h-6 rounded-full flex items-center justify-center text-white text-sm font-bold ${
-              currentCardStatus === "known" ? "bg-success" : "bg-destructive"
+            className={`absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-lg status-indicator ${
+              currentCardStatus === "known" 
+                ? "bg-gradient-to-br from-success to-success-light animate-pulse-glow" 
+                : "bg-gradient-to-br from-destructive to-destructive/80 animate-pulse-glow"
             }`}
           >
             {currentCardStatus === "known" ? "✓" : "✗"}
           </div>
         )}
+
+        {/* Card number indicator */}
+        <div className="absolute bottom-4 left-4 px-3 py-1 rounded-full bg-black/10 dark:bg-white/10 backdrop-blur-sm">
+          <span className="text-xs font-medium text-muted-foreground">
+            {index + 1}/{cards.length}
+          </span>
+        </div>
       </div>
 
-      {/* Learning progress buttons - only show when flipped */}
+      {/* Enhanced learning progress buttons with better animations */}
       {flipped && (
-        <div className="flex gap-3 justify-center">
+        <div className="flex gap-4 justify-center animate-fade-in">
           <Button
             onClick={markAsUnknown}
             variant="outline"
-            className="border-destructive text-destructive hover:bg-destructive/10"
-            size="sm"
+            className="border-2 border-destructive/50 text-destructive hover:bg-destructive hover:text-white hover:border-destructive shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 min-w-[140px]"
+            size="default"
           >
-            ✗ Nicht gewusst
+            <span className="mr-2 text-lg">✗</span>
+            Nicht gewusst
           </Button>
           <Button
             onClick={markAsKnown}
-            variant="outline"
-            className="border-success text-success hover:bg-success/10"
-            size="sm"
+            variant="outline" 
+            className="border-2 border-success/50 text-success hover:bg-success hover:text-white hover:border-success shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 min-w-[140px]"
+            size="default"
           >
-            ✓ Gewusst
+            <span className="mr-2 text-lg">✓</span>
+            Gewusst
           </Button>
         </div>
       )}
 
-      {/* Footer controls */}
-      <div className="flex items-center justify-between">
-        <Button variant="outline" onClick={prev} aria-label="Vorherige Karte" size="sm">
+      {/* Enhanced footer controls with better statistics display */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-6 rounded-2xl bg-gradient-to-r from-card via-card/90 to-card border border-border/50 shadow-lg">
+        <Button 
+          variant="ghost" 
+          onClick={prev} 
+          aria-label="Vorherige Karte" 
+          size="default"
+          className="hover:bg-primary/10 hover:text-primary border border-border/30 min-w-[120px]"
+        >
           ← Zurück
         </Button>
 
         <div className="text-center" aria-live="polite">
-          <p className="text-sm text-muted-foreground mb-1">
-            Karte {index + 1} / {cards.length}
-          </p>
-          <div className="flex gap-4 text-xs text-muted-foreground">
-            <span className="text-success">Gewusst: {knownCards.size}</span>
-            <span className="text-destructive">Nicht gewusst: {unknownCards.size}</span>
-            <span>Neutral: {cards.length - knownCards.size - unknownCards.size}</span>
+          {/* Progress visualization */}
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <div className="w-3 h-3 rounded-full bg-success animate-pulse" />
+            <div className="w-12 h-1 bg-gradient-to-r from-success via-warning to-destructive rounded-full" />
+            <div className="w-3 h-3 rounded-full bg-destructive animate-pulse" />
           </div>
+          
+          {/* Statistics cards */}
+          <div className="grid grid-cols-3 gap-3 mb-2">
+            <div className="p-2 rounded-lg bg-success/10 border border-success/20">
+              <p className="text-lg font-bold text-success">{knownCards.size}</p>
+              <p className="text-xs text-muted-foreground">Gewusst</p>
+            </div>
+            <div className="p-2 rounded-lg bg-muted/50 border border-border/30">
+              <p className="text-lg font-bold text-foreground">{cards.length - knownCards.size - unknownCards.size}</p>
+              <p className="text-xs text-muted-foreground">Neutral</p>
+            </div>
+            <div className="p-2 rounded-lg bg-destructive/10 border border-destructive/20">
+              <p className="text-lg font-bold text-destructive">{unknownCards.size}</p>
+              <p className="text-xs text-muted-foreground">Schwer</p>
+            </div>
+          </div>
+          
+          <p className="text-sm text-muted-foreground">
+            Karte {index + 1} von {cards.length}
+          </p>
         </div>
 
         <div className="flex gap-2">
-          <Button onClick={next} aria-label="Nächste Karte" size="sm">
+          <Button 
+            onClick={next} 
+            aria-label="Nächste Karte" 
+            size="default"
+            className="primary-gradient text-white shadow-primary hover:shadow-xl min-w-[120px]"
+          >
             Weiter →
           </Button>
           {(knownCards.size > 0 || unknownCards.size > 0) && (
-            <Button onClick={resetProgress} variant="outline" size="sm">
+            <Button 
+              onClick={resetProgress} 
+              variant="ghost" 
+              size="default"
+              className="hover:bg-destructive/10 hover:text-destructive border border-border/30"
+            >
               Reset
             </Button>
           )}

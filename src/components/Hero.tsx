@@ -34,12 +34,24 @@ export const Hero = ({
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/20 to-background/80" />
       </div>
 
-      {/* Floating elements */}
+      {/* Enhanced floating elements with more variety */}
       <div className="absolute top-20 left-20 animate-float">
         <div className="w-20 h-20 rounded-full bg-accent/20 backdrop-blur-sm animate-pulse-glow" />
       </div>
       <div className="absolute bottom-32 right-20 animate-float" style={{ animationDelay: '1s' }}>
         <div className="w-16 h-16 rounded-full bg-primary/20 backdrop-blur-sm animate-pulse-glow" />
+      </div>
+      <div className="absolute top-1/3 right-32 animate-float-reverse" style={{ animationDelay: '2s' }}>
+        <div className="w-12 h-12 rounded-lg bg-success/20 backdrop-blur-sm animate-pulse-glow rotate-45" />
+      </div>
+      <div className="absolute bottom-1/2 left-32 animate-float" style={{ animationDelay: '3s' }}>
+        <div className="w-14 h-14 rounded-full bg-warning/20 backdrop-blur-sm animate-pulse-glow" />
+      </div>
+      <div className="absolute top-40 right-1/4 animate-float-reverse" style={{ animationDelay: '0.5s' }}>
+        <div className="w-8 h-8 rounded-full bg-accent/30 backdrop-blur-sm animate-pulse-glow" />
+      </div>
+      <div className="absolute bottom-20 left-1/3 animate-float" style={{ animationDelay: '2.5s' }}>
+        <div className="w-10 h-10 rounded-lg bg-primary/30 backdrop-blur-sm animate-pulse-glow rotate-12" />
       </div>
 
       {/* Main content */}
