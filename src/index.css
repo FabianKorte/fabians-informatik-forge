@@ -181,50 +181,29 @@ All colors MUST be HSL.
     background-image: var(--gradient-card);
   }
 
-/* Revolutionary background patterns and gradients */
+/* Elegant background patterns and gradients */
 .hero-gradient {
   background: linear-gradient(135deg, 
     hsl(var(--primary)) 0%, 
-    hsl(var(--accent)) 25%,
-    hsl(var(--primary-light)) 50%,
-    hsl(var(--success)) 75%,
-    hsl(var(--primary)) 100%);
-  background-size: 400% 400%;
-  animation: gradient-shift 6s ease infinite;
+    hsl(var(--accent)) 100%);
 }
 
 .card-gradient {
-  background: linear-gradient(135deg, 
+  background: linear-gradient(145deg, 
     hsl(var(--card)) 0%, 
-    hsl(var(--card-light)) 30%,
-    hsl(var(--card)) 60%,
-    hsl(var(--card-light)) 100%);
-  background-size: 200% 200%;
-  animation: gradient-shift 10s ease infinite;
+    hsl(var(--card-hover)) 100%);
 }
 
 .primary-gradient {
   background: linear-gradient(135deg, 
     hsl(var(--primary)) 0%, 
-    hsl(var(--accent)) 30%,
-    hsl(var(--primary-light)) 70%,
-    hsl(var(--primary)) 100%);
-  background-size: 200% 200%;
-  animation: gradient-shift 4s ease infinite;
-}
-
-.mesh-gradient {
-  background: radial-gradient(ellipse at top left, hsl(var(--primary) / 0.3) 0%, transparent 50%),
-              radial-gradient(ellipse at top right, hsl(var(--accent) / 0.3) 0%, transparent 50%),
-              radial-gradient(ellipse at bottom left, hsl(var(--success) / 0.3) 0%, transparent 50%),
-              radial-gradient(ellipse at bottom right, hsl(var(--primary-light) / 0.3) 0%, transparent 50%);
+    hsl(var(--primary-light)) 100%);
 }
 
 .glass-effect {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
   .shadow-elegant {
@@ -274,144 +253,73 @@ All colors MUST be HSL.
     @apply transform transition-all duration-200 hover:scale-105 active:scale-95;
   }
 
-  /* Revolutionary flip card styles */
+  /* Clean flip card styles */
   .flip-3d { 
-    perspective: 1500px; 
+    perspective: 1200px; 
     transform-style: preserve-3d;
   }
   .flip-3d-inner { 
     position: absolute; 
     inset: 0; 
     transform-style: preserve-3d; 
-    transition: all 0.9s cubic-bezier(0.23, 1, 0.32, 1); 
+    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); 
     will-change: transform; 
-    border-radius: 1.5rem;
-    box-shadow: 
-      0 20px 60px -10px rgba(0, 0, 0, 0.3),
-      0 8px 24px -4px rgba(0, 0, 0, 0.15),
-      0 0 0 1px rgba(255, 255, 255, 0.15) inset,
-      0 2px 0 rgba(255, 255, 255, 0.1) inset;
+    border-radius: 1rem;
   }
   .flip-3d-inner.is-flipped { 
-    transform: rotateY(180deg) scale(1.05); 
+    transform: rotateY(180deg); 
   }
   .flip-face { 
     position: absolute; 
     inset: 0; 
     backface-visibility: hidden; 
     -webkit-backface-visibility: hidden; 
-    border-radius: 1.5rem;
+    border-radius: 1rem;
     display: grid; 
     place-items: center;
-    box-shadow: 
-      0 20px 60px -10px rgba(0, 0, 0, 0.3),
-      0 8px 24px -4px rgba(0, 0, 0, 0.15),
-      0 0 0 1px rgba(255, 255, 255, 0.15) inset,
-      0 2px 0 rgba(255, 255, 255, 0.1) inset;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    overflow: hidden;
-  }
-  .flip-face::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.05) 100%);
-    pointer-events: none;
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+    border: 1px solid hsl(var(--border));
   }
   .flip-face-back { 
     transform: rotateY(180deg); 
   }
 
-  /* Advanced floating and interactive animations */
+  /* Clean floating animations */
   @keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
-    33% { transform: translateY(-15px) rotate(2deg) scale(1.02); }
-    66% { transform: translateY(-8px) rotate(-1deg) scale(0.98); }
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
   }
 
   @keyframes float-reverse {
-    0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
-    33% { transform: translateY(8px) rotate(-2deg) scale(0.98); }
-    66% { transform: translateY(15px) rotate(1deg) scale(1.02); }
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(10px); }
   }
 
-  @keyframes shimmer {
-    0% { transform: translateX(-100%) skewX(-15deg); opacity: 0; }
-    50% { opacity: 1; }
-    100% { transform: translateX(200%) skewX(-15deg); opacity: 0; }
-  }
-
-  @keyframes pulse-glow {
-    0%, 100% { 
-      box-shadow: 0 0 30px rgba(59, 130, 246, 0.4), 0 0 60px rgba(59, 130, 246, 0.2);
-      transform: scale(1);
-    }
-    50% { 
-      box-shadow: 0 0 50px rgba(59, 130, 246, 0.8), 0 0 100px rgba(59, 130, 246, 0.4);
-      transform: scale(1.08);
-    }
-  }
-
-  @keyframes morph {
-    0%, 100% { border-radius: 20px 20px 20px 20px; }
-    25% { border-radius: 20px 40px 20px 40px; }
-    50% { border-radius: 40px 20px 40px 20px; }
-    75% { border-radius: 30px 30px 30px 30px; }
-  }
-
-  @keyframes gradient-shift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-  }
-
-  @keyframes bounce-in {
-    0% { transform: scale(0.3) rotate(-10deg); opacity: 0; }
-    50% { transform: scale(1.1) rotate(5deg); opacity: 0.8; }
-    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  @keyframes fade-in {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
   }
 
   @keyframes slide-up {
-    0% { transform: translateY(50px); opacity: 0; }
+    0% { transform: translateY(30px); opacity: 0; }
     100% { transform: translateY(0); opacity: 1; }
   }
 
-  .animate-float { animation: float 8s ease-in-out infinite; }
-  .animate-float-reverse { animation: float-reverse 10s ease-in-out infinite; }
-  .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
-  .animate-shimmer { animation: shimmer 3s ease-in-out infinite; }
-  .animate-morph { animation: morph 8s ease-in-out infinite; }
-  .animate-gradient-shift { animation: gradient-shift 4s ease infinite; }
-  .animate-bounce-in { animation: bounce-in 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
-  .animate-slide-up { animation: slide-up 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-  .animate-gradient-flow { 
-    background-size: 200% 200%; 
-    animation: gradient-flow 6s ease infinite; 
-  }
+  .animate-float { animation: float 4s ease-in-out infinite; }
+  .animate-float-reverse { animation: float-reverse 4s ease-in-out infinite; }
+  .animate-fade-in { animation: fade-in 0.5s ease-out; }
+  .animate-slide-up { animation: slide-up 0.6s ease-out; }
 
-  /* Card enhancements with ultra-modern 3D effects */
+  /* Clean card enhancements */
   .card-3d {
     transform-style: preserve-3d;
-    box-shadow: 
-      0 8px 32px -8px rgba(0, 0, 0, 0.15),
-      0 4px 16px -4px rgba(0, 0, 0, 0.1),
-      0 0 0 1px rgba(255, 255, 255, 0.08) inset,
-      0 1px 0 rgba(255, 255, 255, 0.1) inset;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.1);
   }
   
   .card-3d:hover {
-    transform: translateY(-12px) rotateX(3deg) rotateY(-1deg) scale(1.02);
-    box-shadow: 
-      0 40px 80px -16px rgba(0, 0, 0, 0.3),
-      0 20px 40px -8px rgba(59, 130, 246, 0.1),
-      0 0 0 1px rgba(255, 255, 255, 0.15) inset,
-      0 1px 0 rgba(255, 255, 255, 0.2) inset;
-    backdrop-filter: blur(20px);
+    transform: translateY(-8px);
+    box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.15);
   }
 
   /* Status indicators */

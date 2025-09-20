@@ -170,169 +170,139 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
         </p>
       </div>
 
-      {/* Revolutionary Interactive Card with Mind-Blowing Effects */}
+      {/* Clean Interactive Card */}
       <div
-        className={`group relative h-[70vh] sm:h-[75vh] md:h-[28rem] lg:h-[600px] rounded-3xl border-2 overflow-hidden select-none cursor-pointer flip-3d transition-all duration-500 ${
+        className={`relative h-[60vh] sm:h-[65vh] md:h-[500px] lg:h-[500px] rounded-2xl border overflow-hidden select-none cursor-pointer flip-3d transition-all duration-300 ${
           currentCardStatus === "known"
-            ? "border-success/40 bg-gradient-to-br from-success/15 to-success/5 shadow-[0_20px_60px_-10px_rgba(34,197,94,0.3)]"
+            ? "border-success/50 bg-gradient-to-br from-success/5 to-card shadow-lg"
             : currentCardStatus === "unknown"
-            ? "border-destructive/40 bg-gradient-to-br from-destructive/15 to-destructive/5 shadow-[0_20px_60px_-10px_rgba(239,68,68,0.3)]"
-            : "border-border/40 bg-gradient-to-br from-card via-card/95 to-card/80 shadow-[0_20px_60px_-10px_rgba(59,130,246,0.3)]"
-        } hover:shadow-[0_40px_100px_-15px_rgba(59,130,246,0.4)] hover:border-primary/60 hover:scale-[1.02] active:scale-[0.98]`}
+            ? "border-destructive/50 bg-gradient-to-br from-destructive/5 to-card shadow-lg"
+            : "border-border bg-card shadow-lg"
+        } hover:shadow-xl hover:border-primary/50 hover:scale-[1.02]`}
         onClick={() => setFlipped((f) => !f)}
         aria-label="Karte umdrehen"
         role="button"
       >
-        {/* Revolutionary Inner Flipper with Mind-Bending Effects */}
+        {/* Clean Inner Flipper */}
         <div className={`flip-3d-inner ${flipped ? "is-flipped" : ""}`}>
-          {/* Front face - Question side with extraordinary design */}
-          <div className="flip-face bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-card dark:via-card/98 dark:to-primary/8 overflow-y-auto overscroll-contain touch-pan-y mesh-gradient">
-            {/* Revolutionary card texture overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-primary/10 pointer-events-none" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_70%)] pointer-events-none" />
-            
-            {/* Floating particles effect */}
-            <div className="absolute top-10 left-10 w-2 h-2 bg-primary/30 rounded-full animate-float"></div>
-            <div className="absolute top-20 right-16 w-1 h-1 bg-accent/40 rounded-full animate-float-reverse"></div>
-            <div className="absolute bottom-16 left-20 w-1.5 h-1.5 bg-success/30 rounded-full animate-float"></div>
-            
-            {/* Content with enhanced styling */}
-            <div className="relative p-8 md:p-12 text-center h-full flex flex-col justify-center animate-slide-up">
-              {/* Enhanced Question icon */}
-              <div className="mx-auto mb-8 w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center animate-bounce-in glass-effect">
-                <span className="text-3xl animate-pulse">🤔</span>
+          {/* Front face - Question side */}
+          <div className="flip-face bg-card overflow-y-auto">
+            <div className="p-8 md:p-12 text-center h-full flex flex-col justify-center animate-fade-in">
+              <div className="mx-auto mb-8 w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
+                <span className="text-3xl">🤔</span>
               </div>
               
-              <p className="text-lg sm:text-xl md:text-3xl font-bold text-foreground leading-snug md:leading-relaxed break-words mb-8 animate-slide-up">
+              <p className="text-lg sm:text-xl md:text-2xl font-semibold text-foreground leading-relaxed break-words mb-8">
                 {current.front}
               </p>
               
-              {/* Enhanced flip instruction with mesmerizing animation */}
-              <div className="mt-auto animate-bounce-in">
-                <p className="text-sm text-muted-foreground mb-3 font-medium">Tippe zum Umdrehen</p>
-                <div className="mx-auto w-12 h-2 bg-gradient-to-r from-primary/40 via-accent/40 to-primary/40 rounded-full animate-shimmer relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer"></div>
-                </div>
+              <div className="mt-auto">
+                <p className="text-sm text-muted-foreground mb-3">Tippe zum Umdrehen</p>
+                <div className="mx-auto w-12 h-1 bg-primary/40 rounded-full" />
               </div>
             </div>
           </div>
           
-          {/* Back face - Answer side with spectacular design */}
-          <div className="flip-face flip-face-back bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 dark:from-success/8 dark:via-accent/8 dark:to-primary/8 overflow-y-auto overscroll-contain touch-pan-y mesh-gradient">
-            {/* Spectacular card texture overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-success/20 via-transparent to-accent/10 pointer-events-none" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,rgba(34,197,94,0.15),transparent_70%)] pointer-events-none" />
-            
-            {/* Enhanced floating particles */}
-            <div className="absolute top-12 right-12 w-2 h-2 bg-success/40 rounded-full animate-float"></div>
-            <div className="absolute top-24 left-16 w-1 h-1 bg-emerald-400/50 rounded-full animate-float-reverse"></div>
-            <div className="absolute bottom-20 right-20 w-1.5 h-1.5 bg-teal-400/40 rounded-full animate-float"></div>
-            
-            {/* Content with spectacular styling */}
-            <div className="relative p-8 md:p-12 text-center h-full flex flex-col justify-center animate-slide-up">
-              {/* Spectacular Answer icon */}
-              <div className="mx-auto mb-8 w-16 h-16 rounded-2xl bg-gradient-to-br from-success/20 to-emerald-400/20 flex items-center justify-center animate-bounce-in glass-effect">
-                <span className="text-3xl animate-pulse">💡</span>
+          {/* Back face - Answer side */}
+          <div className="flip-face flip-face-back bg-card overflow-y-auto">
+            <div className="p-8 md:p-12 text-center h-full flex flex-col justify-center animate-fade-in">
+              <div className="mx-auto mb-8 w-16 h-16 rounded-2xl bg-success/10 flex items-center justify-center">
+                <span className="text-3xl">💡</span>
               </div>
               
-              <p className="text-base sm:text-lg md:text-2xl text-foreground leading-snug md:leading-relaxed break-words font-semibold animate-slide-up">
+              <p className="text-base sm:text-lg md:text-xl text-foreground leading-relaxed break-words font-medium">
                 {current.back}
               </p>
               
-              {/* Spectacular success pattern decoration */}
-              <div className="mt-auto flex justify-center space-x-3 animate-bounce-in">
-                <div className="w-3 h-3 bg-gradient-to-br from-success to-emerald-400 rounded-full animate-pulse shadow-lg" />
-                <div className="w-3 h-3 bg-gradient-to-br from-accent to-teal-400 rounded-full animate-pulse shadow-lg" style={{ animationDelay: '0.3s' }} />
-                <div className="w-3 h-3 bg-gradient-to-br from-primary to-cyan-400 rounded-full animate-pulse shadow-lg" style={{ animationDelay: '0.6s' }} />
+              <div className="mt-auto flex justify-center space-x-2">
+                <div className="w-2 h-2 bg-success/50 rounded-full" />
+                <div className="w-2 h-2 bg-accent/50 rounded-full" />
+                <div className="w-2 h-2 bg-primary/50 rounded-full" />
               </div>
             </div>
           </div>
         </div>
 
-        {/* Revolutionary Status indicator with mind-blowing effects */}
+        {/* Clean Status indicator */}
         {currentCardStatus !== "neutral" && (
           <div
-            className={`absolute top-6 right-6 w-12 h-12 rounded-2xl flex items-center justify-center text-white text-lg font-bold shadow-2xl status-indicator glass-effect animate-bounce-in ${
+            className={`absolute top-4 right-4 w-10 h-10 rounded-xl flex items-center justify-center text-white text-sm font-bold shadow-lg animate-fade-in ${
               currentCardStatus === "known" 
-                ? "bg-gradient-to-br from-success via-emerald-400 to-success-light animate-pulse-glow border-2 border-success/30" 
-                : "bg-gradient-to-br from-destructive via-red-400 to-destructive/80 animate-pulse-glow border-2 border-destructive/30"
+                ? "bg-success border border-success/20" 
+                : "bg-destructive border border-destructive/20"
             }`}
           >
             {currentCardStatus === "known" ? "✓" : "✗"}
           </div>
         )}
 
-        {/* Enhanced card number indicator */}
-        <div className="absolute bottom-6 left-6 px-4 py-2 rounded-2xl glass-effect animate-bounce-in">
-          <span className="text-sm font-bold text-foreground">
+        {/* Card number indicator */}
+        <div className="absolute bottom-4 left-4 px-3 py-1 rounded-lg glass-effect">
+          <span className="text-sm font-medium text-foreground">
             {index + 1}/{cards.length}
           </span>
         </div>
       </div>
 
-      {/* Revolutionary learning progress buttons with spectacular animations */}
+      {/* Clean learning progress buttons */}
       {flipped && (
-        <div className="flex gap-6 justify-center animate-bounce-in">
+        <div className="flex gap-4 justify-center animate-fade-in">
           <Button
             onClick={markAsUnknown}
             variant="outline"
-            className="border-3 border-destructive/60 text-destructive hover:bg-gradient-to-br hover:from-destructive hover:to-red-600 hover:text-white hover:border-destructive shadow-2xl hover:shadow-[0_20px_40px_-10px_rgba(239,68,68,0.4)] transform hover:scale-110 active:scale-95 transition-all duration-300 min-w-[160px] glass-effect hover:rotate-1"
+            className="border-destructive/50 text-destructive hover:bg-destructive hover:text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 min-w-[140px]"
             size="lg"
           >
-            <span className="mr-3 text-xl animate-pulse">✗</span>
+            <span className="mr-2 text-lg">✗</span>
             Nicht gewusst
           </Button>
           <Button
             onClick={markAsKnown}
             variant="outline" 
-            className="border-3 border-success/60 text-success hover:bg-gradient-to-br hover:from-success hover:to-emerald-600 hover:text-white hover:border-success shadow-2xl hover:shadow-[0_20px_40px_-10px_rgba(34,197,94,0.4)] transform hover:scale-110 active:scale-95 transition-all duration-300 min-w-[160px] glass-effect hover:rotate-[-1deg]"
+            className="border-success/50 text-success hover:bg-success hover:text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 min-w-[140px]"
             size="lg"
           >
-            <span className="mr-3 text-xl animate-pulse">✓</span>
+            <span className="mr-2 text-lg">✓</span>
             Gewusst
           </Button>
         </div>
       )}
 
-      {/* Revolutionary footer controls with mind-blowing statistics display */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-6 p-8 rounded-3xl glass-effect border-2 border-border/30 shadow-2xl animate-slide-up mesh-gradient">
+      {/* Clean footer controls */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-6 p-6 rounded-2xl glass-effect border border-border/50 shadow-lg animate-slide-up">
         <Button 
           variant="ghost" 
           onClick={prev} 
           aria-label="Vorherige Karte" 
           size="lg"
-          className="hover:bg-primary/20 hover:text-primary border-2 border-border/40 min-w-[140px] glass-effect hover:scale-110 hover:rotate-[-2deg] active:scale-95 transition-all duration-300 shadow-lg"
+          className="hover:bg-primary/10 hover:text-primary border border-border/40 min-w-[120px] transition-all duration-200"
         >
           ← Zurück
         </Button>
 
-        <div className="text-center animate-bounce-in" aria-live="polite">
-          {/* Revolutionary progress visualization */}
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-4 h-4 rounded-full bg-gradient-to-br from-success to-emerald-400 animate-pulse shadow-lg" />
-            <div className="w-16 h-2 bg-gradient-to-r from-success via-warning via-orange-400 to-destructive rounded-full shadow-inner animate-shimmer relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></div>
-            </div>
-            <div className="w-4 h-4 rounded-full bg-gradient-to-br from-destructive to-red-400 animate-pulse shadow-lg" />
+        <div className="text-center" aria-live="polite">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="w-3 h-3 rounded-full bg-success" />
+            <div className="w-12 h-2 bg-gradient-to-r from-success via-warning to-destructive rounded-full" />
+            <div className="w-3 h-3 rounded-full bg-destructive" />
           </div>
           
-          {/* Spectacular statistics cards */}
-          <div className="grid grid-cols-3 gap-4 mb-4">
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-success/20 to-emerald-400/10 border-2 border-success/30 glass-effect animate-morph">
-              <p className="text-2xl font-bold text-success animate-pulse">{knownCards.size}</p>
-              <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Gewusst</p>
+          <div className="grid grid-cols-3 gap-3 mb-3">
+            <div className="p-3 rounded-lg bg-success/10 border border-success/20">
+              <p className="text-lg font-bold text-success">{knownCards.size}</p>
+              <p className="text-xs text-muted-foreground uppercase tracking-wider">Gewusst</p>
             </div>
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-muted/50 to-gray-300/10 border-2 border-border/40 glass-effect animate-morph" style={{ animationDelay: '1s' }}>
-              <p className="text-2xl font-bold text-foreground animate-pulse">{cards.length - knownCards.size - unknownCards.size}</p>
-              <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Neutral</p>
+            <div className="p-3 rounded-lg bg-muted/30 border border-border/30">
+              <p className="text-lg font-bold text-foreground">{cards.length - knownCards.size - unknownCards.size}</p>
+              <p className="text-xs text-muted-foreground uppercase tracking-wider">Neutral</p>
             </div>
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-destructive/20 to-red-400/10 border-2 border-destructive/30 glass-effect animate-morph" style={{ animationDelay: '2s' }}>
-              <p className="text-2xl font-bold text-destructive animate-pulse">{unknownCards.size}</p>
-              <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Schwer</p>
+            <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20">
+              <p className="text-lg font-bold text-destructive">{unknownCards.size}</p>
+              <p className="text-xs text-muted-foreground uppercase tracking-wider">Schwer</p>
             </div>
           </div>
           
-          <p className="text-base text-muted-foreground font-semibold">
+          <p className="text-sm text-muted-foreground font-medium">
             Karte {index + 1} von {cards.length}
           </p>
         </div>
@@ -342,7 +312,7 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
             onClick={next} 
             aria-label="Nächste Karte" 
             size="lg"
-            className="bg-gradient-to-br from-primary via-accent to-primary-light text-white shadow-[0_20px_40px_-10px_rgba(59,130,246,0.4)] hover:shadow-[0_30px_60px_-15px_rgba(59,130,246,0.6)] min-w-[140px] hover:scale-110 hover:rotate-2 active:scale-95 transition-all duration-300 glass-effect border-2 border-primary/30"
+            className="primary-gradient text-white shadow-lg hover:shadow-xl min-w-[120px] hover:scale-105 transition-all duration-200"
           >
             Weiter →
           </Button>
@@ -351,7 +321,7 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
               onClick={resetProgress} 
               variant="ghost" 
               size="lg"
-              className="hover:bg-destructive/20 hover:text-destructive border-2 border-border/40 glass-effect hover:scale-110 hover:rotate-[-2deg] active:scale-95 transition-all duration-300 shadow-lg"
+              className="hover:bg-destructive/10 hover:text-destructive border border-border/40 transition-all duration-200"
             >
               Reset
             </Button>
