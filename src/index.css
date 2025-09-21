@@ -42,6 +42,10 @@ All colors MUST be HSL.
     --accent-light: 217 75% 70%;
     --accent-foreground: 0 0% 100%;
 
+    /* Gradient effect colors for category cards */
+    --gradient-start: 210 100% 24%;  /* #00367C */
+    --gradient-end: 276 100% 50%;    /* #8A00FF */
+
     /* Success - Subtle green */
     --success: 142 70% 45%;
     --success-light: 142 70% 55%;
@@ -127,6 +131,10 @@ All colors MUST be HSL.
     --accent: 217 75% 65%;
     --accent-light: 217 75% 75%;
     --accent-foreground: 220 15% 6%;
+
+    /* Gradient effect colors for category cards */
+    --gradient-start: 210 100% 24%;  /* #00367C */
+    --gradient-end: 276 100% 50%;    /* #8A00FF */
 
     --success: 142 70% 50%;
     --success-light: 142 70% 60%;
@@ -309,6 +317,57 @@ All colors MUST be HSL.
   .animate-float-reverse { animation: float-reverse 4s ease-in-out infinite; }
   .animate-fade-in { animation: fade-in 0.5s ease-out; }
   .animate-slide-up { animation: slide-up 0.6s ease-out; }
+
+  /* Gradient border effect for category cards */
+  .gradient-border-card {
+    position: relative;
+    background: hsl(var(--card));
+    border-radius: 1rem;
+    padding: 1px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .gradient-border-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    background: linear-gradient(135deg, hsl(var(--gradient-start)), hsl(var(--gradient-end)));
+    border-radius: inherit;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: xor;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .gradient-border-card:hover::before {
+    opacity: 1;
+  }
+
+  .gradient-border-card::after {
+    content: '';
+    position: absolute;
+    inset: -20px;
+    background: linear-gradient(135deg, hsl(var(--gradient-start) / 0.3), hsl(var(--gradient-end) / 0.3));
+    border-radius: 2rem;
+    filter: blur(20px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+  }
+
+  .gradient-border-card:hover::after {
+    opacity: 1;
+  }
+
+  .gradient-border-card-inner {
+    position: relative;
+    background: hsl(var(--card));
+    border-radius: calc(1rem - 1px);
+    z-index: 1;
+  }
 
   /* Clean card enhancements */
   .card-3d {

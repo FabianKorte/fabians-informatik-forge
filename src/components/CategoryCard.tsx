@@ -25,8 +25,8 @@ export const CategoryCard = ({
   const progress = totalElements > 0 ? (completedElements / totalElements) * 100 : 0;
 
   return (
-    <Card className="group cursor-pointer transition-all duration-200 hover:shadow-md hover:scale-[1.01] bg-card border-border">
-      <div className="p-8">
+    <div className="gradient-border-card group cursor-pointer">
+      <div className="gradient-border-card-inner p-8">
         <div className="flex items-start gap-4 mb-6">
           <div className="p-2.5 rounded-lg bg-accent/5 border border-accent/10">
             <Icon className="w-6 h-6 text-accent" />
@@ -66,6 +66,6 @@ export const CategoryCard = ({
           <ArrowRight className="w-4 h-4 ml-2" />
         </Button>
       </div>
-    </Card>
+    </div>
   );
 };
