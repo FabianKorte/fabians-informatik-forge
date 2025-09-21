@@ -22,126 +22,94 @@ export const Hero = ({
   const accuracy = answeredQuestions > 0 ? (correctAnswers / answeredQuestions) * 100 : 0;
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background with sophisticated overlay */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src={heroBackground}
-          alt=""
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 hero-gradient opacity-90" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/20 to-background/80" />
-      </div>
-
-      {/* Enhanced floating elements with more variety */}
-      <div className="absolute top-20 left-20 animate-float">
-        <div className="w-20 h-20 rounded-full bg-accent/20 backdrop-blur-sm animate-pulse-glow" />
-      </div>
-      <div className="absolute bottom-32 right-20 animate-float" style={{ animationDelay: '1s' }}>
-        <div className="w-16 h-16 rounded-full bg-primary/20 backdrop-blur-sm animate-pulse-glow" />
-      </div>
-      <div className="absolute top-1/3 right-32 animate-float-reverse" style={{ animationDelay: '2s' }}>
-        <div className="w-12 h-12 rounded-lg bg-success/20 backdrop-blur-sm animate-pulse-glow rotate-45" />
-      </div>
-      <div className="absolute bottom-1/2 left-32 animate-float" style={{ animationDelay: '3s' }}>
-        <div className="w-14 h-14 rounded-full bg-warning/20 backdrop-blur-sm animate-pulse-glow" />
-      </div>
-      <div className="absolute top-40 right-1/4 animate-float-reverse" style={{ animationDelay: '0.5s' }}>
-        <div className="w-8 h-8 rounded-full bg-accent/30 backdrop-blur-sm animate-pulse-glow" />
-      </div>
-      <div className="absolute bottom-20 left-1/3 animate-float" style={{ animationDelay: '2.5s' }}>
-        <div className="w-10 h-10 rounded-lg bg-primary/30 backdrop-blur-sm animate-pulse-glow rotate-12" />
-      </div>
+    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-background to-muted/30">
+      {/* Subtle floating elements */}
+      <div className="absolute top-1/4 left-1/4 w-2 h-2 rounded-full bg-accent/30 animate-float" />
+      <div className="absolute top-1/3 right-1/3 w-1 h-1 rounded-full bg-primary/20 animate-float" style={{ animationDelay: '2s' }} />
+      <div className="absolute bottom-1/3 left-1/2 w-1.5 h-1.5 rounded-full bg-accent/20 animate-float" style={{ animationDelay: '1s' }} />
 
       {/* Main content */}
-      <div className="relative z-10 text-center max-w-4xl mx-auto px-6">
-        {/* Logo/Icon */}
-        <div className="inline-flex items-center justify-center w-24 h-24 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 mb-8 animate-scale-in shadow-accent">
-          <BookOpen className="w-12 h-12 text-accent" />
+      <div className="relative z-10 text-center max-w-4xl mx-auto px-6 py-20">
+        {/* Minimalist icon */}
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-accent/5 border border-accent/10 mb-12 animate-fade-in">
+          <BookOpen className="w-8 h-8 text-accent" />
         </div>
 
-        {/* Main headline */}
-        <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 animate-fade-up">
-          <span className="block">Fabian Korte</span>
-          <span className="text-gradient bg-gradient-to-r from-accent to-accent-light bg-clip-text text-transparent">
+        {/* Clean headline */}
+        <h1 className="text-4xl md:text-6xl font-light text-foreground mb-4 animate-fade-in">
+          <span className="block font-medium">Fabian Korte</span>
+          <span className="block text-accent font-normal mt-2">
             Fachinformatiker
           </span>
-          <span className="block text-3xl md:text-4xl font-semibold mt-2 text-white/90">
+          <span className="block text-2xl md:text-3xl font-light mt-4 text-muted-foreground">
             Lernplattform
           </span>
         </h1>
 
-        {/* Subtitle */}
-        <p className="text-xl md:text-2xl text-white/80 mb-12 max-w-3xl mx-auto leading-relaxed animate-fade-up font-light" style={{ animationDelay: '0.2s' }}>
-          Professionelle Vorbereitung auf alle Fachinformatiker-Prüfungen. 
-          Interaktive Quizzes, strukturierte Lernpfade und umfassende Themenbereiche 
-          für eine erfolgreiche IT-Ausbildung.
+        {/* Clean subtitle */}
+        <p className="text-lg md:text-xl text-muted-foreground mb-16 max-w-2xl mx-auto leading-relaxed animate-fade-in font-light" style={{ animationDelay: '0.2s' }}>
+          Professionelle Vorbereitung auf alle Fachinformatiker-Prüfungen mit strukturierten Lernpfaden und interaktiven Inhalten.
         </p>
 
-        {/* Progress card */}
-        <div className="glass-effect rounded-2xl p-8 mb-10 max-w-lg mx-auto animate-scale-in" style={{ animationDelay: '0.4s' }}>
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center justify-center gap-2">
-            <Target className="w-5 h-5 text-accent" />
-            Gesamtfortschritt
+        {/* Minimal progress card */}
+        <div className="bg-card border border-border rounded-xl p-6 mb-12 max-w-md mx-auto shadow-sm animate-fade-in" style={{ animationDelay: '0.4s' }}>
+          <h3 className="text-sm font-medium text-muted-foreground mb-4 flex items-center justify-center gap-2">
+            <Target className="w-4 h-4" />
+            Lernfortschritt
           </h3>
           
           <div className="space-y-4">
-            <div className="flex justify-between items-center text-sm text-white/90">
-              <span>{Math.round(progressPercentage)}% abgeschlossen</span>
-              <span className="font-medium text-accent">{progressPercentage.toFixed(1)}%</span>
+            <div className="text-center">
+              <p className="text-2xl font-light text-foreground">{Math.round(progressPercentage)}%</p>
+              <p className="text-xs text-muted-foreground">Abgeschlossen</p>
             </div>
             
-            <Progress value={progressPercentage} className="h-3 bg-white/20" />
+            <Progress value={progressPercentage} className="h-1" />
             
             <div className="grid grid-cols-2 gap-4 pt-2">
               <div className="text-center">
-                <p className="text-2xl font-bold text-accent">{correctAnswers}</p>
-                <p className="text-xs text-white/70 uppercase tracking-wide">Richtige Antworten</p>
+                <p className="text-lg font-medium text-accent">{correctAnswers}</p>
+                <p className="text-xs text-muted-foreground">Richtige</p>
               </div>
               <div className="text-center">
-                <p className="text-2xl font-bold text-white">{answeredQuestions}</p>
-                <p className="text-xs text-white/70 uppercase tracking-wide">Bearbeitet</p>
+                <p className="text-lg font-medium text-foreground">{answeredQuestions}</p>
+                <p className="text-xs text-muted-foreground">Bearbeitet</p>
               </div>
             </div>
             
             {answeredQuestions > 0 && (
-              <div className="pt-2 border-t border-white/20">
+              <div className="pt-2 border-t border-border">
                 <div className="flex items-center justify-center gap-1 text-sm">
-                  <TrendingUp className="w-4 h-4 text-success" />
-                  <span className="text-success font-semibold">{accuracy.toFixed(1)}% Genauigkeit</span>
+                  <TrendingUp className="w-3 h-3 text-success" />
+                  <span className="text-success text-xs">{accuracy.toFixed(1)}% Genauigkeit</span>
                 </div>
               </div>
             )}
           </div>
         </div>
 
-        {/* Action buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-up" style={{ animationDelay: '0.6s' }}>
+        {/* Clean action buttons */}
+        <div className="flex flex-col sm:flex-row gap-3 justify-center items-center animate-fade-in" style={{ animationDelay: '0.6s' }}>
           <Button
             onClick={onShowProgress}
-            variant="glass"
+            variant="outline"
             size="lg"
-            className="min-w-[200px]"
+            className="min-w-[180px]"
           >
-            <TrendingUp className="w-5 h-5" />
+            <TrendingUp className="w-4 h-4" />
             Fortschritt anzeigen
           </Button>
           
           <Button
             onClick={onStartLearning}
-            variant="hero"
-            size="xl"
-            className="min-w-[250px] floating-action"
+            size="lg"
+            className="min-w-[180px]"
           >
-            <BookOpen className="w-6 h-6" />
-            Sofort starten
+            <BookOpen className="w-4 h-4" />
+            Jetzt starten
           </Button>
         </div>
       </div>
-
-      {/* Bottom gradient fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent z-5" />
     </section>
   );
 };
