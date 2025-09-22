@@ -318,18 +318,46 @@ All colors MUST be HSL.
   .animate-fade-in { animation: fade-in 0.5s ease-out; }
   .animate-slide-up { animation: slide-up 0.6s ease-out; }
 
-  /* Clean gradient shadow effect for category cards */
+  /* Enhanced gradient shadow effect with mouse tracking */
   .gradient-shadow-card {
+    position: relative;
     transition: all 0.3s ease;
     border-radius: 1rem;
+    overflow: hidden;
+  }
+
+  .gradient-shadow-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+      rgba(255, 255, 255, 0.15) 0%, 
+      rgba(255, 255, 255, 0.05) 20%, 
+      transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .gradient-shadow-card:hover::before {
+    opacity: 1;
   }
 
   .gradient-shadow-card:hover {
     box-shadow: 
       0 10px 30px -5px rgba(0, 54, 124, 0.4),
       0 20px 60px -10px rgba(138, 0, 255, 0.3),
-      0 0 40px rgba(0, 54, 124, 0.2);
+      0 0 40px rgba(0, 54, 124, 0.2),
+      0 0 20px rgba(255, 255, 255, 0.1);
     transform: translateY(-2px);
+  }
+
+  /* Ensure content stays above the overlay */
+  .gradient-shadow-card > * {
+    position: relative;
+    z-index: 2;
   }
 
   /* Clean card enhancements */

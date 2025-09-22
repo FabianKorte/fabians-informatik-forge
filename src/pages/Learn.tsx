@@ -75,8 +75,15 @@ const LearnPage = () => {
                   return (
                     <Card 
                       key={method.id} 
-                      className="cursor-pointer transition-all hover:scale-105 hover:shadow-lg"
+                      className="gradient-shadow-card cursor-pointer"
                       onClick={() => hasContent && setSelectedMethod(method.id)}
+                      onMouseMove={(e) => {
+                        const rect = e.currentTarget.getBoundingClientRect();
+                        const x = ((e.clientX - rect.left) / rect.width) * 100;
+                        const y = ((e.clientY - rect.top) / rect.height) * 100;
+                        e.currentTarget.style.setProperty('--mouse-x', `${x}%`);
+                        e.currentTarget.style.setProperty('--mouse-y', `${y}%`);
+                      }}
                     >
                       <CardHeader className="text-center">
                         <div className="text-4xl mb-2">{method.icon}</div>

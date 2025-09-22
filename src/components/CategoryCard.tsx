@@ -25,7 +25,16 @@ export const CategoryCard = ({
   const progress = totalElements > 0 ? (completedElements / totalElements) * 100 : 0;
 
   return (
-    <Card className="gradient-shadow-card group cursor-pointer p-8">
+    <Card 
+      className="gradient-shadow-card group cursor-pointer p-8"
+      onMouseMove={(e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        e.currentTarget.style.setProperty('--mouse-x', `${x}%`);
+        e.currentTarget.style.setProperty('--mouse-y', `${y}%`);
+      }}
+    >
       <div className="flex items-start gap-4 mb-6">
         <div className="p-2.5 rounded-lg bg-accent/5 border border-accent/10">
           <Icon className="w-6 h-6 text-accent" />
