@@ -325,14 +325,31 @@ All colors MUST be HSL.
     border-radius: 1rem;
   }
 
+  .gradient-shadow-card::before {
+    content: '';
+    position: absolute;
+    inset: -20px;
+    background: radial-gradient(circle 40px at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+      rgba(255, 255, 255, 0.4) 0%, 
+      rgba(255, 255, 255, 0.1) 30%, 
+      transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: -1;
+    filter: blur(15px);
+  }
+
+  .gradient-shadow-card:hover::before {
+    opacity: 1;
+  }
+
   .gradient-shadow-card:hover {
     box-shadow: 
       0 10px 30px -5px rgba(0, 54, 124, 0.4),
       0 20px 60px -10px rgba(138, 0, 255, 0.3),
-      0 0 40px rgba(0, 54, 124, 0.2),
-      0 0 20px rgba(255, 255, 255, 0.8);
+      0 0 40px rgba(0, 54, 124, 0.2);
     transform: translateY(-2px);
-    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
   }
 
   /* Clean card enhancements */
