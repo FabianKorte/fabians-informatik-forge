@@ -323,32 +323,53 @@ All colors MUST be HSL.
     position: relative;
     transition: all 0.3s ease;
     border-radius: 1rem;
+    will-change: filter, transform;
+    --glow-ox: 0px;
+    --glow-oy: 0px;
   }
 
   .gradient-shadow-card::before {
     content: '';
     position: absolute;
     inset: -20px;
-    background: radial-gradient(circle 40px at var(--mouse-x, 50%) var(--mouse-y, 50%), 
-      rgba(255, 255, 255, 0.4) 0%, 
-      rgba(255, 255, 255, 0.1) 30%, 
-      transparent 60%);
+    background: radial-gradient(80px circle at var(--glow-x, 50%) var(--glow-y, 50%), 
+      rgba(255, 255, 255, 0.45) 0%, 
+      rgba(255, 255, 255, 0.12) 40%, 
+      transparent 70%);
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.25s ease;
     pointer-events: none;
     z-index: -1;
-    filter: blur(15px);
+    filter: blur(16px);
   }
 
   .gradient-shadow-card:hover::before {
     opacity: 1;
   }
 
+  .gradient-shadow-card::after {
+    content: '';
+    position: absolute;
+    inset: -40px;
+    background: 
+      radial-gradient(560px circle at 20% 20%, hsl(214 100% 24% / 0.25), transparent 60%),
+      radial-gradient(560px circle at 80% 80%, hsl(276 100% 50% / 0.25), transparent 60%);
+    filter: blur(30px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -2;
+    pointer-events: none;
+  }
+
+  .gradient-shadow-card:hover::after {
+    opacity: 1;
+  }
+
   .gradient-shadow-card:hover {
     box-shadow: 
-      0 10px 30px -5px rgba(0, 54, 124, 0.4),
-      0 20px 60px -10px rgba(138, 0, 255, 0.3),
-      0 0 40px rgba(0, 54, 124, 0.2);
+      0 10px 30px -5px hsl(214 100% 24% / 0.35),
+      0 20px 60px -10px hsl(276 100% 50% / 0.3),
+      0 0 40px hsl(214 100% 24% / 0.2);
     transform: translateY(-2px);
   }
 

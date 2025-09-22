@@ -79,10 +79,20 @@ const LearnPage = () => {
                       onClick={() => hasContent && setSelectedMethod(method.id)}
                       onMouseMove={(e) => {
                         const rect = e.currentTarget.getBoundingClientRect();
-                        const x = ((e.clientX - rect.left) / rect.width) * 100;
-                        const y = ((e.clientY - rect.top) / rect.height) * 100;
-                        e.currentTarget.style.setProperty('--mouse-x', `${x}%`);
-                        e.currentTarget.style.setProperty('--mouse-y', `${y}%`);
+                        const mx = e.clientX - rect.left;
+                        const my = e.clientY - rect.top;
+                        const distLeft = mx;
+                        const distRight = rect.width - mx;
+                        const distTop = my;
+                        const distBottom = rect.height - my;
+                        const minDist = Math.min(distLeft, distRight, distTop, distBottom);
+                        let gx = mx, gy = my;
+                        if (minDist === distLeft) { gx = 0; gy = my; }
+                        else if (minDist === distRight) { gx = rect.width; gy = my; }
+                        else if (minDist === distTop) { gx = mx; gy = 0; }
+                        else { gx = mx; gy = rect.height; }
+                        e.currentTarget.style.setProperty('--glow-x', `${(gx / rect.width) * 100}%`);
+                        e.currentTarget.style.setProperty('--glow-y', `${(gy / rect.height) * 100}%`);
                       }}
                     >
                       <CardHeader className="text-center">
