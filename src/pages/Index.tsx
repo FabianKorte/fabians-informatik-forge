@@ -3,13 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { Hero } from "@/components/Hero";
 import { CategoryCard } from "@/components/CategoryCard";
 import { SearchBar } from "@/components/SearchBar";
-import { Button } from "@/components/ui/button";
+import { FeedbackForm } from "@/components/feedback/FeedbackForm";
+import { FeedbackList } from "@/components/feedback/FeedbackList";
 import { categories } from "@/data/categories";
 import { getModulesForCategory } from "@/data/learn";
 import type { LearnModule } from "@/types/learn";
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [feedbackRefreshTrigger, setFeedbackRefreshTrigger] = useState(0);
   const navigate = useNavigate();
   // Dynamic counts from learn content
   const countElements = (modules: LearnModule[]) => modules.reduce((sum, m) => {
@@ -64,6 +66,10 @@ const Index = () => {
 
   const handleCategoryStart = (categoryId: string) => {
     navigate(`/learn/${categoryId}`);
+  };
+
+  const handleFeedbackSubmitted = () => {
+    setFeedbackRefreshTrigger(prev => prev + 1);
   };
 
   return (
@@ -148,8 +154,31 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Feedback Section */}
+      <section className="py-20 px-6 bg-muted/30">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-medium text-foreground mb-4">
+              Feedback
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Teile deine Gedanken mit uns und sieh, was andere über die Lernplattform sagen.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="flex justify-center">
+              <FeedbackForm onFeedbackSubmitted={handleFeedbackSubmitted} />
+            </div>
+            <div className="flex justify-center">
+              <FeedbackList refreshTrigger={feedbackRefreshTrigger} />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Simple Footer */}
-      <footer className="py-12 px-6 border-t border-border bg-muted/30">
+      <footer className="py-12 px-6 border-t border-border bg-background">
         <div className="max-w-4xl mx-auto text-center">
           <h3 className="text-xl font-medium text-foreground mb-4">
             Fabian Korte - Fachinformatiker Lernplattform
@@ -157,15 +186,6 @@ const Index = () => {
           <p className="text-sm text-muted-foreground mb-6">
             Professionelle Vorbereitung auf alle IT-Prüfungen.
           </p>
-          
-          <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-6">
-            <Button variant="outline" size="sm">
-              Kontakt
-            </Button>
-            <Button variant="outline" size="sm">
-              Über das Projekt
-            </Button>
-          </div>
           
           <p className="text-xs text-muted-foreground">
             © 2025 Fabian Korte. Alle Rechte vorbehalten.
