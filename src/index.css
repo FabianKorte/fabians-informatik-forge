@@ -186,33 +186,22 @@ All colors MUST be HSL.
   }
 
   .card-gradient {
-    background-image: var(--gradient-card);
+    background: linear-gradient(145deg, 
+      hsl(var(--card)) 0%, 
+      hsl(var(--card-hover)) 100%);
   }
 
-/* Elegant background patterns and gradients */
-.hero-gradient {
-  background: linear-gradient(135deg, 
-    hsl(var(--primary)) 0%, 
-    hsl(var(--accent)) 100%);
-}
+  .hero-gradient {
+    background: linear-gradient(135deg, 
+      hsl(var(--primary)) 0%, 
+      hsl(var(--accent)) 100%);
+  }
 
-.card-gradient {
-  background: linear-gradient(145deg, 
-    hsl(var(--card)) 0%, 
-    hsl(var(--card-hover)) 100%);
-}
-
-.primary-gradient {
-  background: linear-gradient(135deg, 
-    hsl(var(--primary)) 0%, 
-    hsl(var(--primary-light)) 100%);
-}
-
-.glass-effect {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
+  .primary-gradient {
+    background: linear-gradient(135deg, 
+      hsl(var(--primary)) 0%, 
+      hsl(var(--primary-light)) 100%);
+  }
 
   .shadow-elegant {
     box-shadow: var(--shadow-lg);

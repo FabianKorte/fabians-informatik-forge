@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Card } from "@/components/ui/card";
-import { LucideIcon, ArrowRight, BookOpen, Clock, CheckCircle } from "lucide-react";
+import { GradientShadowCard } from "@/components/ui/gradient-shadow-card";
+import { LucideIcon, ArrowRight } from "lucide-react";
 
 interface CategoryCardProps {
   title: string;
@@ -25,26 +26,7 @@ export const CategoryCard = ({
   const progress = totalElements > 0 ? (completedElements / totalElements) * 100 : 0;
 
   return (
-    <div 
-      className="gradient-shadow-card"
-      onMouseMove={(e) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        const mx = e.clientX - rect.left;
-        const my = e.clientY - rect.top;
-        const distLeft = mx;
-        const distRight = rect.width - mx;
-        const distTop = my;
-        const distBottom = rect.height - my;
-        const minDist = Math.min(distLeft, distRight, distTop, distBottom);
-        let gx = mx, gy = my;
-        if (minDist === distLeft) { gx = 0; gy = my; }
-        else if (minDist === distRight) { gx = rect.width; gy = my; }
-        else if (minDist === distTop) { gx = mx; gy = 0; }
-        else { gx = mx; gy = rect.height; }
-        e.currentTarget.style.setProperty('--glow-x', `${(gx / rect.width) * 100}%`);
-        e.currentTarget.style.setProperty('--glow-y', `${(gy / rect.height) * 100}%`);
-      }}
-    >
+    <GradientShadowCard>
       <Card className="group cursor-pointer p-8">
       <div className="flex items-start gap-4 mb-6">
         <div className="p-2.5 rounded-lg bg-accent/5 border border-accent/10">
@@ -85,6 +67,6 @@ export const CategoryCard = ({
         <ArrowRight className="w-4 h-4 ml-2" />
       </Button>
     </Card>
-    </div>
+    </GradientShadowCard>
   );
 };
