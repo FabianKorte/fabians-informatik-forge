@@ -25,8 +25,8 @@ export const CategoryCard = ({
   const progress = totalElements > 0 ? (completedElements / totalElements) * 100 : 0;
 
   return (
-    <Card 
-      className="gradient-shadow-card group cursor-pointer p-8"
+    <div 
+      className="gradient-shadow-card"
       onMouseMove={(e) => {
         const rect = e.currentTarget.getBoundingClientRect();
         const mx = e.clientX - rect.left;
@@ -45,6 +45,7 @@ export const CategoryCard = ({
         e.currentTarget.style.setProperty('--glow-y', `${(gy / rect.height) * 100}%`);
       }}
     >
+      <Card className="group cursor-pointer p-8">
       <div className="flex items-start gap-4 mb-6">
         <div className="p-2.5 rounded-lg bg-accent/5 border border-accent/10">
           <Icon className="w-6 h-6 text-accent" />
@@ -84,5 +85,6 @@ export const CategoryCard = ({
         <ArrowRight className="w-4 h-4 ml-2" />
       </Button>
     </Card>
+    </div>
   );
 };

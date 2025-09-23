@@ -73,10 +73,9 @@ const LearnPage = () => {
                 {learningMethods.map((method) => {
                   const hasContent = modules.some(m => m.type === method.id);
                   return (
-                    <Card 
+                    <div 
                       key={method.id} 
-                      className="gradient-shadow-card cursor-pointer"
-                      onClick={() => hasContent && setSelectedMethod(method.id)}
+                      className="gradient-shadow-card"
                       onMouseMove={(e) => {
                         const rect = e.currentTarget.getBoundingClientRect();
                         const mx = e.clientX - rect.left;
@@ -95,6 +94,10 @@ const LearnPage = () => {
                         e.currentTarget.style.setProperty('--glow-y', `${(gy / rect.height) * 100}%`);
                       }}
                     >
+                      <Card 
+                        className="cursor-pointer"
+                        onClick={() => hasContent && setSelectedMethod(method.id)}
+                      >
                       <CardHeader className="text-center">
                         <div className="text-4xl mb-2">{method.icon}</div>
                         <CardTitle className="text-lg">{method.title}</CardTitle>
@@ -108,6 +111,7 @@ const LearnPage = () => {
                         )}
                       </CardContent>
                     </Card>
+                    </div>
                   );
                 })}
               </div>
