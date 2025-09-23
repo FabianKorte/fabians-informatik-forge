@@ -331,16 +331,16 @@ All colors MUST be HSL.
   .gradient-shadow-card::before {
     content: '';
     position: absolute;
-    inset: -20px;
-    background: radial-gradient(80px circle at var(--glow-x, 50%) var(--glow-y, 50%), 
-      rgba(255, 255, 255, 0.45) 0%, 
-      rgba(255, 255, 255, 0.12) 40%, 
-      transparent 70%);
+    inset: -25px;
+    background: radial-gradient(100px circle at var(--glow-x, 50%) var(--glow-y, 50%), 
+      rgba(255, 255, 255, 0.6) 0%, 
+      rgba(255, 255, 255, 0.2) 35%, 
+      transparent 65%);
     opacity: 0;
     transition: opacity 0.25s ease;
     pointer-events: none;
-    z-index: -1;
-    filter: blur(16px);
+    z-index: -3;
+    filter: blur(20px);
   }
 
   .gradient-shadow-card:hover::before {
