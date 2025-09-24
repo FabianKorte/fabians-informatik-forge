@@ -17,6 +17,15 @@ export const FeedbackForm = ({ onFeedbackSubmitted }: { onFeedbackSubmitted?: ()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!supabase) {
+      toast({
+        title: "Fehler",
+        description: "Feedback-System ist nicht verfügbar.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     if (!feedback.trim()) {
       toast({
         title: "Fehler",

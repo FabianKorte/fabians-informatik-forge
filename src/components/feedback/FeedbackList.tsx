@@ -22,6 +22,11 @@ export const FeedbackList = ({ refreshTrigger }: { refreshTrigger?: number }) =>
   const fetchFeedbacks = async () => {
     setIsLoading(true);
     try {
+      if (!supabase) {
+        setFeedbacks([]);
+        return;
+      }
+
       const { data, error } = await supabase
         .from('feedbacks')
         .select('*')
