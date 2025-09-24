@@ -28,77 +28,107 @@ const Progress = () => {
   const { getOverallProgress } = useProgress("", "", 0);
   const overallStats = getOverallProgress();
 
-  // Calculate detailed statistics for each category
+  // Calculate real statistics for each category from actual progress data
   const categoryStats = categories.map(category => {
     const modules = getModulesForCategory(category.id);
     let totalItems = 0;
     let completedItems = 0;
     let difficultItems = 0;
 
-    modules.forEach(module => {
+    modules.forEach((module, moduleIndex) => {
+      // Create a separate progress hook instance for each module
+      const progressHook = useProgress(category.id, module.type, moduleIndex);
+      const progress = progressHook.progressData;
+
       switch (module.type) {
         case "flashcards":
           if ('cards' in module) {
-            const items = module.cards.length;
-            totalItems += items;
-            completedItems += Math.floor(items * 0.6); // Mock 60% completion
-            difficultItems += Math.floor(items * 0.2); // Mock 20% difficult
+            totalItems += module.cards.length;
+            if (progress.flashcards?.knownCards) {
+              completedItems += progress.flashcards.knownCards.length;
+            }
+            if (progress.flashcards?.unknownCards) {
+              difficultItems += progress.flashcards.unknownCards.length;
+            }
           }
           break;
         case "quiz":
           if ('questions' in module) {
-            const items = module.questions.length;
-            totalItems += items;
-            completedItems += Math.floor(items * 0.6);
-            difficultItems += Math.floor(items * 0.2);
+            totalItems += module.questions.length;
+            if (progress.quiz?.completedQuestions) {
+              completedItems += progress.quiz.completedQuestions.length;
+            }
+            // For quiz, difficult items could be questions answered incorrectly
+            // We'll estimate based on scores if available
+            if (progress.quiz?.scores && progress.quiz.scores.length > 0) {
+              const avgScore = progress.quiz.scores.reduce((a, b) => a + b, 0) / progress.quiz.scores.length;
+              if (avgScore < 60) { // If average score is below 60%, consider it difficult
+                difficultItems += Math.ceil(module.questions.length * 0.4);
+              }
+            }
           }
           break;
         case "matching":
           if ('pairs' in module) {
-            const items = module.pairs.length;
-            totalItems += items;
-            completedItems += Math.floor(items * 0.5);
-            difficultItems += Math.floor(items * 0.15);
+            totalItems += module.pairs.length;
+            if (progress.matching?.completions && progress.matching.completions > 0) {
+              completedItems += module.pairs.length; // If completed at least once
+            }
+            if (progress.matching?.bestScore && progress.matching.bestScore < 80) {
+              difficultItems += Math.ceil(module.pairs.length * 0.3);
+            }
           }
           break;
         case "code":
           if ('challenges' in module) {
-            const items = module.challenges.length;
-            totalItems += items;
-            completedItems += Math.floor(items * 0.4);
-            difficultItems += Math.floor(items * 0.3);
+            totalItems += module.challenges.length;
+            if (progress.code?.completedChallenges) {
+              completedItems += progress.code.completedChallenges.length;
+              // Assume non-completed challenges are difficult
+              difficultItems += module.challenges.length - progress.code.completedChallenges.length;
+            } else {
+              // If no progress, all are difficult
+              difficultItems += module.challenges.length;
+            }
           }
           break;
         case "dragdrop":
           if ('games' in module) {
-            const items = module.games.length;
-            totalItems += items;
-            completedItems += Math.floor(items * 0.5);
-            difficultItems += Math.floor(items * 0.2);
+            totalItems += module.games.length;
+            if (progress.dragdrop?.completedGames) {
+              completedItems += progress.dragdrop.completedGames.length;
+            }
           }
           break;
         case "memory":
           if ('games' in module) {
-            const items = module.games.length;
-            totalItems += items;
-            completedItems += Math.floor(items * 0.5);
-            difficultItems += Math.floor(items * 0.2);
+            totalItems += module.games.length;
+            if (progress.memory?.completedGames) {
+              completedItems += progress.memory.completedGames.length;
+            }
           }
           break;
         case "timeline":
           if ('timelines' in module) {
-            const items = module.timelines.length;
-            totalItems += items;
-            completedItems += Math.floor(items * 0.7);
-            difficultItems += Math.floor(items * 0.1);
+            totalItems += module.timelines.length;
+            if (progress.timeline?.viewedTimelines) {
+              completedItems += progress.timeline.viewedTimelines.length;
+            }
           }
           break;
         case "scenario":
           if ('scenarios' in module) {
-            const items = module.scenarios.length;
-            totalItems += items;
-            completedItems += Math.floor(items * 0.5);
-            difficultItems += Math.floor(items * 0.25);
+            totalItems += module.scenarios.length;
+            if (progress.scenario?.completedScenarios) {
+              completedItems += progress.scenario.completedScenarios.length;
+              // Calculate difficult scenarios based on correctness
+              const correctRate = progress.scenario.correctChoices && progress.scenario.completedScenarios.length > 0 
+                ? progress.scenario.correctChoices / progress.scenario.completedScenarios.length 
+                : 0;
+              if (correctRate < 0.7) {
+                difficultItems += Math.ceil(progress.scenario.completedScenarios.length * 0.3);
+              }
+            }
           }
           break;
       }
