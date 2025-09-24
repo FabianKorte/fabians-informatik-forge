@@ -60,8 +60,7 @@ const Index = () => {
   };
 
   const handleShowProgress = () => {
-    // Could open a progress modal or navigate to progress page
-    console.log('Show progress clicked');
+    navigate('/progress');
   };
 
   const handleCategoryStart = (categoryId: string) => {
