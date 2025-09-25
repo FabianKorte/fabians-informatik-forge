@@ -312,16 +312,16 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
             onClick={next} 
             aria-label="Nächste Karte" 
             size="lg"
-            className="primary-gradient text-white shadow-lg hover:shadow-xl min-w-[120px] hover:scale-105 transition-all duration-200"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl min-w-[120px] hover:scale-105 transition-all duration-200"
           >
             Weiter →
           </Button>
           {(knownCards.size > 0 || unknownCards.size > 0) && (
             <Button 
               onClick={resetProgress} 
-              variant="ghost" 
+              variant="outline" 
               size="lg"
-              className="hover:bg-destructive/10 hover:text-destructive border border-border/40 transition-all duration-200"
+              className="hover:bg-destructive/10 hover:text-destructive border-destructive/50 text-destructive transition-all duration-200"
             >
               Reset
             </Button>
