@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { TrendingUp, BookOpen, Target } from "lucide-react";
 import heroBackground from "@/assets/hero-bg.jpg";
+import logo from "@/assets/logo.png";
 
 interface HeroProps {
   totalQuestions: number;
@@ -30,21 +31,19 @@ export const Hero = ({
 
       {/* Main content */}
       <div className="relative z-10 text-center max-w-4xl mx-auto px-6 py-20">
-        {/* Minimalist icon */}
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-accent/5 border border-accent/10 mb-12 animate-fade-in">
-          <BookOpen className="w-8 h-8 text-accent" />
+        {/* Logo */}
+        <div className="mb-8 animate-fade-in">
+          <img 
+            src={logo} 
+            alt="Fabian Korte - Fachinformatiker" 
+            className="mx-auto h-32 md:h-40 w-auto object-contain"
+          />
         </div>
 
-        {/* Clean headline */}
-        <h1 className="text-4xl md:text-6xl font-light text-foreground mb-4 animate-fade-in">
-          <span className="block font-medium">Fabian Korte</span>
-          <span className="block text-accent font-normal mt-2">
-            Fachinformatiker
-          </span>
-          <span className="block text-2xl md:text-3xl font-light mt-4 text-muted-foreground">
-            Lernplattform
-          </span>
-        </h1>
+        {/* Clean subtitle */}
+        <h2 className="text-2xl md:text-3xl font-light text-accent mb-4 animate-fade-in" style={{ animationDelay: '0.1s' }}>
+          Lernplattform
+        </h2>
 
         {/* Clean subtitle */}
         <p className="text-lg md:text-xl text-muted-foreground mb-16 max-w-2xl mx-auto leading-relaxed animate-fade-in font-light" style={{ animationDelay: '0.2s' }}>
