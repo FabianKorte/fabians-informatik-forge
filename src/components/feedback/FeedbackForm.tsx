@@ -7,6 +7,12 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2, Send } from "lucide-react";
+import { z } from "zod";
+
+const feedbackSchema = z.object({
+  name: z.string().trim().max(100, "Name darf maximal 100 Zeichen lang sein"),
+  message: z.string().trim().min(1, "Feedback ist erforderlich").max(1000, "Feedback darf maximal 1000 Zeichen lang sein")
+});
 
 export const FeedbackForm = ({ onFeedbackSubmitted }: { onFeedbackSubmitted?: () => void }) => {
   const [name, setName] = useState("");
@@ -26,10 +32,16 @@ export const FeedbackForm = ({ onFeedbackSubmitted }: { onFeedbackSubmitted?: ()
       return;
     }
     
-    if (!feedback.trim()) {
+    // Validate input with zod
+    const validationResult = feedbackSchema.safeParse({
+      name: name,
+      message: feedback
+    });
+    
+    if (!validationResult.success) {
       toast({
-        title: "Fehler",
-        description: "Bitte gib dein Feedback ein.",
+        title: "Eingabefehler",
+        description: validationResult.error.issues[0].message,
         variant: "destructive",
       });
       return;
@@ -38,11 +50,12 @@ export const FeedbackForm = ({ onFeedbackSubmitted }: { onFeedbackSubmitted?: ()
     setIsSubmitting(true);
     
     try {
+      const sanitizedData = validationResult.data;
       const { error } = await supabase
         .from('feedbacks')
         .insert([{
-          name: name.trim() || 'Anonym',
-          message: feedback.trim(),
+          name: sanitizedData.name || 'Anonym',
+          message: sanitizedData.message,
           created_at: new Date().toISOString()
         }]);
 

@@ -275,7 +275,7 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
           onClick={prev} 
           aria-label="Vorherige Karte" 
           size="lg"
-          className="hover:bg-primary/10 hover:text-primary border border-border/40 min-w-[120px] transition-all duration-200"
+          className="hover:bg-primary/10 hover:text-primary border border-border/40 min-w-[120px] transition-all duration-200 text-foreground"
         >
           ← Zurück
         </Button>

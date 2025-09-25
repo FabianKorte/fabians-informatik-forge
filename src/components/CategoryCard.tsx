@@ -27,7 +27,7 @@ export const CategoryCard = ({
 
   return (
     <GradientShadowCard>
-      <Card className="group cursor-pointer p-8">
+      <Card className="group cursor-pointer p-8 h-full flex flex-col">
       <div className="flex items-start gap-4 mb-6">
         <div className="p-2.5 rounded-lg bg-accent/5 border border-accent/10">
           <Icon className="w-6 h-6 text-accent" />
@@ -56,7 +56,7 @@ export const CategoryCard = ({
       )}
 
       <Button 
-        className="w-full justify-center" 
+        className="w-full justify-center mt-auto" 
         size="sm"
         onClick={(e) => {
           e.preventDefault();
