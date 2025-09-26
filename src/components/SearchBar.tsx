@@ -1,20 +1,16 @@
 import { useState } from "react";
-import { Search, Filter, X } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 interface SearchBarProps {
   placeholder?: string;
   onSearch: (query: string) => void;
-  onFilterToggle?: () => void;
-  showFilter?: boolean;
 }
 
 export const SearchBar = ({
   placeholder = "Kategorien durchsuchen...",
   onSearch,
-  onFilterToggle,
-  showFilter = false,
 }: SearchBarProps) => {
   const [query, setQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
@@ -72,25 +68,9 @@ export const SearchBar = ({
             <X className="w-4 h-4" />
           </Button>
         )}
-
-        {/* Filter button */}
-        {showFilter && onFilterToggle && (
-          <Button
-            onClick={onFilterToggle}
-            variant="ghost"
-            size="icon"
-            className={`
-              h-8 w-8 transition-colors
-              ${isFocused ? 'text-accent' : 'text-muted-foreground'}
-              hover:text-foreground
-            `}
-          >
-            <Filter className="w-4 h-4" />
-          </Button>
-        )}
       </div>
 
-      {/* Search suggestions or results count */}
+      {/* Search results indicator */}
       {query && (
         <div className="mt-2 text-center">
           <p className="text-sm text-muted-foreground">

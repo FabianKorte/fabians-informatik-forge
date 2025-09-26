@@ -5,8 +5,12 @@ import { CategoryCard } from "@/components/CategoryCard";
 import { SearchBar } from "@/components/SearchBar";
 import { FeedbackForm } from "@/components/feedback/FeedbackForm";
 import { FeedbackList } from "@/components/feedback/FeedbackList";
+import { RoadmapModal } from "@/components/RoadmapModal";
+import { Button } from "@/components/ui/button";
 import { categories } from "@/data/categories";
 import { getModulesForCategory } from "@/data/learn";
+import { Download, MapPin } from "lucide-react";
+import logo from "@/assets/logo.png";
 import type { LearnModule } from "@/types/learn";
 
 const Index = () => {
@@ -73,6 +77,30 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Floating Action Buttons */}
+      <div className="fixed top-6 right-6 z-50 flex flex-col gap-3">
+        <Button
+          variant="outline"
+          size="sm"
+          className="shadow-lg backdrop-blur-sm bg-background/80 border-border/50"
+          onClick={() => window.open('https://drive.google.com/drive/folders/1x_OJDgFV7z0XGMcSBPIvKe-fTTHqp1kR?usp=sharing', '_blank')}
+        >
+          <Download className="w-4 h-4" />
+          <span className="hidden sm:inline ml-2">Downloads</span>
+        </Button>
+        
+        <RoadmapModal>
+          <Button
+            variant="outline"
+            size="sm"
+            className="shadow-lg backdrop-blur-sm bg-background/80 border-border/50"
+          >
+            <MapPin className="w-4 h-4" />
+            <span className="hidden sm:inline ml-2">Roadmap</span>
+          </Button>
+        </RoadmapModal>
+      </div>
+
       {/* Hero Section */}
       <Hero
         totalQuestions={totalQuestions}
@@ -97,11 +125,7 @@ const Index = () => {
 
           {/* Search bar */}
           <div className="mb-12">
-            <SearchBar
-              onSearch={setSearchQuery}
-              showFilter={true}
-              onFilterToggle={() => console.log('Filter toggle')}
-            />
+          <SearchBar onSearch={setSearchQuery} />
           </div>
 
         {/* Minimalist statistics section */}
@@ -179,9 +203,13 @@ const Index = () => {
       {/* Simple Footer */}
       <footer className="py-12 px-6 border-t border-border bg-background">
         <div className="max-w-4xl mx-auto text-center">
-          <h3 className="text-xl font-medium text-foreground mb-4">
-            Fabian Korte - Fachinformatiker Lernplattform
-          </h3>
+          <div className="mb-6">
+            <img 
+              src={logo} 
+              alt="Fabian Korte - Fachinformatiker" 
+              className="mx-auto h-16 w-auto object-contain opacity-80"
+            />
+          </div>
           <p className="text-sm text-muted-foreground mb-6">
             Professionelle Vorbereitung auf alle IT-Prüfungen.
           </p>

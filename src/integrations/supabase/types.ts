@@ -35,6 +35,48 @@ export type Database = {
         }
         Relationships: []
       }
+      roadmap: {
+        Row: {
+          category: string | null
+          completion_date: string | null
+          created_at: string
+          description: string | null
+          estimated_completion: string | null
+          id: string
+          order_index: number
+          priority: number
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          completion_date?: string | null
+          created_at?: string
+          description?: string | null
+          estimated_completion?: string | null
+          id?: string
+          order_index?: number
+          priority?: number
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          completion_date?: string | null
+          created_at?: string
+          description?: string | null
+          estimated_completion?: string | null
+          id?: string
+          order_index?: number
+          priority?: number
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
