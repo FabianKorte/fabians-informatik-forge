@@ -211,7 +211,7 @@ const Index = () => {
             />
           </div>
           <p className="text-sm text-muted-foreground mb-6">
-            Professionelle Vorbereitung auf alle IT-Prüfungen.
+            Vorbereitung auf die IHK IT-Prüfungen.
           </p>
           
           <p className="text-xs text-muted-foreground">
