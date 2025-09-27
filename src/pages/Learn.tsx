@@ -10,7 +10,9 @@ import type { LearnModule } from "@/types/learn";
 import { Flashcards } from "@/components/learn/Flashcards";
 import { Quiz } from "@/components/learn/Quiz";
 import { FocusTraining } from "@/components/learn/FocusTraining";
-import { Play, Target, Brain } from "lucide-react";
+import { InteractiveTraining } from "@/components/learn/InteractiveTraining";
+import { interactiveTasksByCategory } from "@/data/learn/interactive-training";
+import { Play, Target, Brain, Zap } from "lucide-react";
 
 const LearnPage = () => {
   const { categoryId } = useParams();
@@ -29,6 +31,11 @@ const LearnPage = () => {
     });
     return activities;
   }, [modules]);
+
+  // Get interactive tasks for this category
+  const interactiveTasks = useMemo(() => {
+    return interactiveTasksByCategory[categoryId || ""] || [];
+  }, [categoryId]);
 
   if (!categoryId || !category) {
     return (
@@ -71,7 +78,7 @@ const LearnPage = () => {
                 </p>
               </div>
 
-              {allActivities.length === 0 ? (
+              {allActivities.length === 0 && interactiveTasks.length === 0 ? (
                 <Card className="p-8 text-center">
                   <div className="text-6xl mb-4">🚧</div>
                   <h3 className="text-xl font-semibold mb-2">Inhalte werden erstellt</h3>
@@ -81,26 +88,67 @@ const LearnPage = () => {
                 </Card>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {/* Interactive Start Button */}
-                  <GradientShadowCard>
-                    <Card 
-                      className="cursor-pointer p-8 text-center h-full flex flex-col justify-between hover:scale-105 transition-transform"
-                      onClick={() => setSelectedMethod('interactive')}
-                    >
-                      <div>
-                        <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
-                          <Play className="w-8 h-8 text-primary" />
+                  {/* New Interactive Training */}
+                  {interactiveTasks.length > 0 && (
+                    <div className="md:col-span-3 mb-6">
+                      <GradientShadowCard>
+                        <Card 
+                          className="cursor-pointer p-8 text-center hover:scale-[1.02] transition-transform bg-gradient-to-br from-primary/5 to-accent/5"
+                          onClick={() => setSelectedMethod('new-interactive')}
+                        >
+                          <div className="flex items-center justify-center gap-6">
+                            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+                              <Zap className="w-10 h-10 text-primary animate-pulse" />
+                            </div>
+                            <div className="text-left">
+                              <h3 className="text-2xl font-bold mb-2">🚀 Neues Interaktives Training</h3>
+                              <p className="text-muted-foreground leading-relaxed">
+                                Spannende, praxisnahe Aufgaben mit Hilfsmitteln, Tipps und Gamification-Elementen
+                              </p>
+                              <div className="flex gap-2 mt-3">
+                                <span className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">
+                                  {interactiveTasks.length} Aufgaben
+                                </span>
+                                <span className="px-2 py-1 bg-success/10 text-success text-xs rounded-full">
+                                  Punkte & Badges
+                                </span>
+                                <span className="px-2 py-1 bg-warning/10 text-warning text-xs rounded-full">
+                                  Adaptive Hilfe
+                                </span>
+                              </div>
+                            </div>
+                            <Button size="lg" className="ml-auto">
+                              <Zap className="w-5 h-5 mr-2" />
+                              Jetzt starten
+                            </Button>
+                          </div>
+                        </Card>
+                      </GradientShadowCard>
+                    </div>
+                  )}
+                  
+                  {/* Classic Interactive Training (fallback) */}
+                  {allActivities.length > 0 && (
+                    <GradientShadowCard>
+                      <Card 
+                        className="cursor-pointer p-8 text-center h-full flex flex-col justify-between hover:scale-105 transition-transform"
+                        onClick={() => setSelectedMethod('interactive')}
+                      >
+                        <div>
+                          <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+                            <Play className="w-8 h-8 text-primary" />
+                          </div>
+                          <h3 className="text-xl font-bold mb-2">Klassisches Training</h3>
+                          <p className="text-muted-foreground text-sm leading-relaxed">
+                            Bewährte Mischung aus Karteikarten und Quizzes
+                          </p>
                         </div>
-                        <h3 className="text-xl font-bold mb-2">Interaktives Training</h3>
-                        <p className="text-muted-foreground text-sm leading-relaxed">
-                          Abwechslungsreiche Mischung aus Karteikarten, Quizzes und anderen Aktivitäten
-                        </p>
-                      </div>
-                      <Button className="w-full mt-6" size="lg">
-                        Training starten
-                      </Button>
-                    </Card>
-                  </GradientShadowCard>
+                        <Button variant="outline" className="w-full mt-6" size="lg">
+                          Training starten
+                        </Button>
+                      </Card>
+                    </GradientShadowCard>
+                  )}
 
                   {/* Flashcards */}
                   <GradientShadowCard>
@@ -182,6 +230,10 @@ const LearnPage = () => {
               </div>
               
               <div className="rounded-2xl border border-border bg-card p-6 shadow-elegant">
+                {selectedMethod === 'new-interactive' && interactiveTasks.length > 0 && (
+                  <InteractiveTraining tasks={interactiveTasks} categoryId={categoryId} />
+                )}
+
                 {selectedMethod === 'interactive' && allActivities.length > 0 && (
                   <div>
                     <div className="text-center mb-6">
