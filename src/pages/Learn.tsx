@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { categories } from "@/data/categories";
 import { getModulesForCategory } from "@/data/learn";
 import { GradientShadowCard } from "@/components/ui/gradient-shadow-card";
@@ -12,25 +12,13 @@ import { Quiz } from "@/components/learn/Quiz";
 import { FocusTraining } from "@/components/learn/FocusTraining";
 import { InteractiveTraining } from "@/components/learn/InteractiveTraining";
 import { interactiveTasksByCategory } from "@/data/learn/interactive-training";
-import { Play, Target, Brain, Zap } from "lucide-react";
+import { Target, Brain, Zap } from "lucide-react";
 
 const LearnPage = () => {
   const { categoryId } = useParams();
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
-  const [currentActivityIndex, setCurrentActivityIndex] = useState(0);
   const modules: LearnModule[] = useMemo(() => getModulesForCategory(categoryId || ""), [categoryId]);
   const category = categories.find((c) => c.id === categoryId);
-
-  // Get all available activities from all modules
-  const allActivities = useMemo(() => {
-    const activities: Array<{module: LearnModule, moduleIndex: number}> = [];
-    modules.forEach((module, index) => {
-      if (module.type === 'flashcards' || module.type === 'quiz') {
-        activities.push({ module, moduleIndex: index });
-      }
-    });
-    return activities;
-  }, [modules]);
 
   // Get interactive tasks for this category
   const interactiveTasks = useMemo(() => {
@@ -78,7 +66,7 @@ const LearnPage = () => {
                 </p>
               </div>
 
-              {allActivities.length === 0 && interactiveTasks.length === 0 ? (
+              {interactiveTasks.length === 0 && modules.length === 0 ? (
                 <Card className="p-8 text-center">
                   <div className="text-6xl mb-4">🚧</div>
                   <h3 className="text-xl font-semibold mb-2">Inhalte werden erstellt</h3>
@@ -88,20 +76,20 @@ const LearnPage = () => {
                 </Card>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {/* New Interactive Training */}
+                  {/* Interactive Training */}
                   {interactiveTasks.length > 0 && (
                     <div className="md:col-span-3 mb-6">
                       <GradientShadowCard>
                         <Card 
                           className="cursor-pointer p-8 text-center hover:scale-[1.02] transition-transform bg-gradient-to-br from-primary/5 to-accent/5"
-                          onClick={() => setSelectedMethod('new-interactive')}
+                          onClick={() => setSelectedMethod('interactive')}
                         >
                           <div className="flex items-center justify-center gap-6">
                             <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
                               <Zap className="w-10 h-10 text-primary animate-pulse" />
                             </div>
                             <div className="text-left">
-                              <h3 className="text-2xl font-bold mb-2">🚀 Neues Interaktives Training</h3>
+                              <h3 className="text-2xl font-bold mb-2">🚀 Interaktives Training</h3>
                               <p className="text-muted-foreground leading-relaxed">
                                 Spannende, praxisnahe Aufgaben mit Hilfsmitteln, Tipps und Gamification-Elementen
                               </p>
@@ -125,29 +113,6 @@ const LearnPage = () => {
                         </Card>
                       </GradientShadowCard>
                     </div>
-                  )}
-                  
-                  {/* Classic Interactive Training (fallback) */}
-                  {allActivities.length > 0 && (
-                    <GradientShadowCard>
-                      <Card 
-                        className="cursor-pointer p-8 text-center h-full flex flex-col justify-between hover:scale-105 transition-transform"
-                        onClick={() => setSelectedMethod('interactive')}
-                      >
-                        <div>
-                          <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
-                            <Play className="w-8 h-8 text-primary" />
-                          </div>
-                          <h3 className="text-xl font-bold mb-2">Klassisches Training</h3>
-                          <p className="text-muted-foreground text-sm leading-relaxed">
-                            Bewährte Mischung aus Karteikarten und Quizzes
-                          </p>
-                        </div>
-                        <Button variant="outline" className="w-full mt-6" size="lg">
-                          Training starten
-                        </Button>
-                      </Card>
-                    </GradientShadowCard>
                   )}
 
                   {/* Flashcards */}
@@ -230,51 +195,11 @@ const LearnPage = () => {
               </div>
               
               <div className="rounded-2xl border border-border bg-card p-6 shadow-elegant">
-                {selectedMethod === 'new-interactive' && interactiveTasks.length > 0 && (
+                {selectedMethod === 'interactive' && interactiveTasks.length > 0 && (
                   <InteractiveTraining tasks={interactiveTasks} categoryId={categoryId} />
                 )}
 
-                {selectedMethod === 'interactive' && allActivities.length > 0 && (
-                  <div>
-                    <div className="text-center mb-6">
-                      <h3 className="text-xl font-semibold mb-2">Interaktives Training</h3>
-                      <p className="text-muted-foreground">Aktivität {currentActivityIndex + 1} von {allActivities.length}</p>
-                    </div>
-                    
-                    {(() => {
-                      const currentActivity = allActivities[currentActivityIndex];
-                      if (!currentActivity) return null;
-                      
-                      const { module, moduleIndex } = currentActivity;
-                      
-                      if (module.type === 'flashcards') {
-                        return <Flashcards cards={module.cards} categoryId={categoryId} moduleIndex={moduleIndex} />;
-                      }
-                      if (module.type === 'quiz') {
-                        return <Quiz questions={module.questions} />;
-                      }
-                      return null;
-                    })()}
-                    
-                    <div className="flex justify-center gap-4 mt-6">
-                      <Button 
-                        variant="outline" 
-                        onClick={() => setCurrentActivityIndex(Math.max(0, currentActivityIndex - 1))}
-                        disabled={currentActivityIndex === 0}
-                      >
-                        ← Vorherige
-                      </Button>
-                      <Button 
-                        onClick={() => setCurrentActivityIndex(Math.min(allActivities.length - 1, currentActivityIndex + 1))}
-                        disabled={currentActivityIndex === allActivities.length - 1}
-                      >
-                        Nächste →
-                      </Button>
-                    </div>
-                  </div>
-                )}
-
-                {selectedMethod === 'flashcards' && (
+                {selectedMethod === 'flashcards' && modules.filter(m => m.type === 'flashcards').length > 0 && (
                   <Tabs defaultValue="m-0" className="w-full">
                     <TabsList className="mb-6 flex flex-wrap gap-2">
                       {modules.filter(m => m.type === 'flashcards').map((m, i) => (
@@ -291,7 +216,7 @@ const LearnPage = () => {
                   </Tabs>
                 )}
 
-                {selectedMethod === 'quiz' && (
+                {selectedMethod === 'quiz' && modules.filter(m => m.type === 'quiz').length > 0 && (
                   <Tabs defaultValue="m-0" className="w-full">
                     <TabsList className="mb-6 flex flex-wrap gap-2">
                       {modules.filter(m => m.type === 'quiz').map((m, i) => (

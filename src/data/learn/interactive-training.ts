@@ -224,6 +224,49 @@ export const itSicherheitInteractiveTasks: InteractiveTask[] = [
         "Eingabevalidierung als einzige Lösung vorschlagen (Prepared Statements sind sicherer)"
       ]
     }
+  },
+  {
+    id: "sec-2",
+    category: "it-sicherheit",
+    difficulty: "mittel",
+    taskType: "error-finding",
+    taskText: "Eine Webanwendung zeigt Benutzerdaten an. Analysiere den folgenden HTML/PHP-Code und finde die XSS-Schwachstelle:\n\n<h1>Willkommen <?php echo $_GET['name']; ?>!</h1>\n<p>Ihre letzte Anmeldung: <?= $last_login ?></p>\n\nWas ist das Problem und wie kann es behoben werden?",
+    inputFormat: "text",
+    tools: ["XSS-Tester", "HTML-Entity-Encoder", "Browser-Entwicklertools"],
+    infoTexts: [
+      "Cross-Site Scripting (XSS) ermöglicht die Ausführung von JavaScript in anderen Browsern.",
+      "Nicht escapeⁿ Benutzereingaben können zu XSS-Angriffen führen.",
+      "htmlspecialchars() in PHP escaped gefährliche Zeichen wie <, >, & und \".",
+      "Content Security Policy (CSP) bietet zusätzlichen Schutz vor XSS."
+    ],
+    helpButtons: [
+      { label: "XSS-Angriff Beispiel", content: "URL: site.php?name=<script>alert('XSS')</script>\nErgebnis: JavaScript wird im Browser ausgeführt" },
+      { label: "Sichere Lösung", content: "<?php echo htmlspecialchars($_GET['name'], ENT_QUOTES, 'UTF-8'); ?>" }
+    ],
+    gamification: {
+      points: 30,
+      badge: "XSS-Hunter",
+      timeLimit: 180,
+      level: 3
+    },
+    adaptiveHelp: {
+      hintsAfterFailures: 2,
+      hints: [
+        "Schaue dir an, wie $_GET['name'] direkt ausgegeben wird",
+        "Was passiert wenn jemand <script>alert('XSS')</script> als Name übergibt?",
+        "Stichwort: Cross-Site Scripting durch unescapte Ausgabe"
+      ]
+    },
+    expectedSolution: ["XSS-Schwachstelle durch unescapte Ausgabe von $_GET['name']. Lösung: htmlspecialchars() verwenden", "Cross-Site Scripting möglich. $_GET['name'] muss escaped werden", "Direkte Ausgabe von Benutzereingaben ermöglicht XSS-Angriffe"],
+    feedback: {
+      correct: "Perfekt! Die unescapte Ausgabe von $_GET['name'] ermöglicht XSS-Angriffe. htmlspecialchars() löst das Problem.",
+      incorrect: "Die Schwachstelle liegt in der direkten Ausgabe von $_GET['name'] ohne Escaping. Das ermöglicht XSS-Angriffe.",
+      commonMistakes: [
+        "SQL-Injection statt XSS vermuten",
+        "Nur Eingabevalidierung vorschlagen (Output-Escaping ist wichtiger)",
+        "Die $last_login Variable als Problem sehen (kommt aus der Datenbank, nicht von Benutzereingabe)"
+      ]
+    }
   }
 ];
 
@@ -274,11 +317,153 @@ export const bwlInteractiveTasks: InteractiveTask[] = [
   }
 ];
 
+// Webentwicklung - Interactive Tasks
+export const webentwicklungInteractiveTasks: InteractiveTask[] = [
+  {
+    id: "web-1",
+    category: "webentwicklung",
+    difficulty: "leicht",
+    taskType: "code-complete",
+    taskText: "Du entwickelst eine responsive Webseite. Erstelle ein CSS-Flexbox-Layout für eine Navigationsleiste. Die Navigation soll horizontal ausgerichtet sein, die Menüpunkte sollen gleichmäßig verteilt werden und auf mobilen Geräten soll sie vertikal angeordnet werden.",
+    inputFormat: "code",
+    tools: ["CSS-Editor", "Browser-Entwicklertools", "Flexbox-Visualizer"],
+    infoTexts: [
+      "Flexbox ist ein eindimensionales Layout-System für CSS.",
+      "display: flex macht ein Element zum Flex-Container.",
+      "justify-content steuert die horizontale Ausrichtung der Flex-Items.",
+      "Media Queries ermöglichen responsive Design mit @media (max-width: 768px)."
+    ],
+    helpButtons: [
+      { label: "Flexbox-Grundlagen", content: ".nav {\n  display: flex;\n  justify-content: space-between;\n}" },
+      { label: "Media Query Syntax", content: "@media (max-width: 768px) {\n  .nav {\n    flex-direction: column;\n  }\n}" }
+    ],
+    gamification: {
+      points: 20,
+      badge: "CSS-Layouter",
+      timeLimit: 150,
+      level: 1
+    },
+    adaptiveHelp: {
+      hintsAfterFailures: 2,
+      hints: [
+        "Starte mit display: flex für den Container",
+        "Verwende justify-content: space-between für gleichmäßige Verteilung",
+        "Media Query für mobile Geräte: @media (max-width: 768px)"
+      ]
+    },
+    expectedSolution: ".nav {\n  display: flex;\n  justify-content: space-between;\n}\n\n@media (max-width: 768px) {\n  .nav {\n    flex-direction: column;\n  }\n}",
+    feedback: {
+      correct: "Großartig! Du hast ein responsives Flexbox-Layout erstellt. Die Navigation passt sich automatisch an verschiedene Bildschirmgrößen an.",
+      incorrect: "Überprüfe die Flexbox-Eigenschaften und die Media Query Syntax. Vergiss nicht flex-direction: column für mobile Geräte.",
+      commonMistakes: [
+        "display: flex vergessen",
+        "Media Query falsch geschrieben",
+        "flex-direction: column nicht in der Media Query verwendet"
+      ]
+    }
+  },
+  {
+    id: "web-2",
+    category: "webentwicklung",
+    difficulty: "mittel",
+    taskType: "error-finding",
+    taskText: "Ein JavaScript-Entwickler hat folgenden Code geschrieben, aber die Event-Listener funktionieren nicht korrekt:\n\nfor (var i = 0; i < buttons.length; i++) {\n  buttons[i].addEventListener('click', function() {\n    console.log('Button ' + i + ' clicked');\n  });\n}\n\nWas ist das Problem und wie kann es behoben werden?",
+    inputFormat: "text",
+    tools: ["JavaScript-Console", "Browser-Entwicklertools", "ES6-Referenz"],
+    infoTexts: [
+      "JavaScript-Closures 'schließen' Variablen in ihrem Gültigkeitsbereich ein.",
+      "var hat Funktions-Scope, let hat Block-Scope.",
+      "Event-Listener werden asynchron ausgeführt, nachdem die Schleife beendet ist.",
+      "Bei var wird die Variable i von allen Event-Listenern geteilt."
+    ],
+    helpButtons: [
+      { label: "Closure-Problem", content: "Alle Event-Listener teilen sich dieselbe Variable i. Wenn sie ausgeführt werden, ist i bereits buttons.length." },
+      { label: "Lösung mit let", content: "for (let i = 0; i < buttons.length; i++) {\n  // let erstellt eine neue Variable für jede Iteration\n}" }
+    ],
+    gamification: {
+      points: 35,
+      badge: "Closure-Meister",
+      timeLimit: 200,
+      level: 3
+    },
+    adaptiveHelp: {
+      hintsAfterFailures: 1,
+      hints: [
+        "Das Problem liegt bei der Variable i und wie Closures funktionieren",
+        "Alle Event-Listener teilen sich dieselbe Variable i",
+        "Lösung: let statt var verwenden für Block-Scope"
+      ]
+    },
+    expectedSolution: ["var durch let ersetzen für Block-Scope", "Closure-Problem: let i statt var i verwenden", "Variable i wird von allen Event-Listenern geteilt, let löst das Problem"],
+    feedback: {
+      correct: "Exzellent! Du hast das Closure-Problem erkannt. let erstellt für jede Iteration eine neue Variable i.",
+      incorrect: "Das Problem liegt bei var und Closures. Alle Event-Listener teilen sich dieselbe Variable i. let löst das Problem.",
+      commonMistakes: [
+        "addEventListener-Syntax als Problem sehen",
+        "buttons Array als Ursache vermuten",
+        "Nur auf console.log fokussieren statt auf das i-Problem"
+      ]
+    }
+  }
+];
+
+// Datenbanken - Interactive Tasks  
+export const datenbankenInteractiveTasks: InteractiveTask[] = [
+  {
+    id: "db-1",
+    category: "datenbanken",
+    difficulty: "mittel",
+    taskType: "code-complete",
+    taskText: "Eine E-Commerce-Datenbank hat Tabellen für Kunden (customers) und Bestellungen (orders). Schreibe eine SQL-Abfrage, die alle Kunden anzeigt, die in den letzten 30 Tagen mindestens eine Bestellung aufgegeben haben. Sortiere nach Kundennamen aufsteigend.",
+    inputFormat: "code",
+    tools: ["SQL-Editor", "Datenbank-Schema-Viewer", "Query-Planer"],
+    infoTexts: [
+      "JOIN verbindet Tabellen über gemeinsame Spalten (meist Foreign Keys).",
+      "WHERE-Klausel filtert Datensätze nach Bedingungen.",
+      "DISTINCT eliminiert Duplikate aus dem Ergebnis.",
+      "DATE-Funktionen: CURDATE(), DATE_SUB(), INTERVAL ermöglichen Datumsberechnungen."
+    ],
+    helpButtons: [
+      { label: "JOIN-Syntax", content: "SELECT * FROM customers c\nJOIN orders o ON c.customer_id = o.customer_id" },
+      { label: "Datum-Filter", content: "WHERE o.order_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)" }
+    ],
+    gamification: {
+      points: 30,
+      badge: "SQL-Profi",
+      timeLimit: 180,
+      level: 3
+    },
+    adaptiveHelp: {
+      hintsAfterFailures: 2,
+      hints: [
+        "Verwende INNER JOIN um customers und orders zu verbinden",
+        "Filter mit WHERE order_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)",
+        "DISTINCT um Duplikate zu vermeiden, ORDER BY für Sortierung"
+      ]
+    },
+    expectedSolution: "SELECT DISTINCT c.customer_name\nFROM customers c\nINNER JOIN orders o ON c.customer_id = o.customer_id\nWHERE o.order_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)\nORDER BY c.customer_name ASC;",
+    feedback: {
+      correct: "Perfekt! Deine SQL-Abfrage verbindet die Tabellen korrekt und filtert nach dem Datum. DISTINCT verhindert Duplikate.",
+      incorrect: "Überprüfe die JOIN-Bedingung, das Datum-Filter und vergiss nicht DISTINCT für eindeutige Kunden.",
+      commonMistakes: [
+        "DISTINCT vergessen (Kunden könnten mehrfach erscheinen)",
+        "Falsche Datum-Funktion verwenden",
+        "JOIN-Bedingung zwischen customer_id nicht korrekt"
+      ]
+    }
+  }
+];
+
 // Export all interactive tasks by category
 export const interactiveTasksByCategory: Record<string, InteractiveTask[]> = {
   programmierung: programmierungInteractiveTasks,
   "mathematik-logik": mathematikInteractiveTasks,
   "it-sicherheit": itSicherheitInteractiveTasks,
   betriebswirtschaft: bwlInteractiveTasks,
+  webentwicklung: webentwicklungInteractiveTasks,
+  datenbanken: datenbankenInteractiveTasks,
   // Weitere Kategorien können hier hinzugefügt werden
+  // "it-sicherheit-advanced": itSicherheitInteractiveTasks,
+  // "grundlagen-it": grundlagenItInteractiveTasks,
+  // "mobile-entwicklung": mobileEntwicklungInteractiveTasks,
 };
