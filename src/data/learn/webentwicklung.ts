@@ -1,6 +1,77 @@
-import { LearnModule } from "../../types/learn";
+import { LearnModule, InteractiveTrainingModule } from "../../types/learn";
+
+const interactiveTrainingModule: InteractiveTrainingModule = {
+  type: "interactive",
+  title: "Web-Entwicklung Interaktives Training",
+  tasks: [
+    {
+      id: "web-responsive-css",
+      taskText: "Du entwickelst eine responsive Website. Erstelle einen CSS-Code, der ein Div-Element auf Desktop-Geräten (min-width: 768px) eine Breite von 50% gibt und auf mobilen Geräten 100% Breite.",
+      difficulty: "mittel",
+      taskType: "code-complete",
+      category: "Webentwicklung",
+      inputFormat: "code",
+      tools: ["CSS-Editor", "Browser DevTools", "Responsive Design Guide"],
+      infoTexts: ["Media Queries ermöglichen responsive Designs", "Mobile-First Ansatz ist Best Practice", "Breakpoints: 768px für Tablets, 1024px für Desktop"],
+      helpButtons: [
+        { label: "Media Query Syntax", content: "@media (min-width: 768px) { }" },
+        { label: "CSS Eigenschaften", content: "width: 50%; für Desktop, width: 100%; für Mobile" }
+      ],
+      gamification: {
+        points: 35,
+        level: 2,
+        badge: "Responsive Designer",
+        timeLimit: 300
+      },
+      adaptiveHelp: {
+        hintsAfterFailures: 2,
+        hints: ["Verwende @media (min-width: 768px) für Desktop", "Mobile-First: Erst mobile Styles, dann Desktop"]
+      },
+      expectedSolution: [
+        ".container { width: 100%; } @media (min-width: 768px) { .container { width: 50%; } }",
+        ".container{width:100%;}@media(min-width:768px){.container{width:50%;}}"
+      ],
+      feedback: {
+        correct: "Perfekt! Du hast responsive CSS korrekt implementiert.",
+        incorrect: "Prüfe die Media Query Syntax und die Reihenfolge der CSS-Regeln.",
+        commonMistakes: ["Max-width statt min-width verwendet", "Desktop-Styles nicht in Media Query"]
+      }
+    },
+    {
+      id: "web-performance-optimization",
+      taskText: "Eine Website lädt langsam. Du analysierst die Performance und stellst fest, dass JavaScript-Dateien das Rendering blockieren. Finde den Fehler in diesem HTML-Code: <script src='app.js'></script> <script src='analytics.js'></script>",
+      difficulty: "schwer",
+      taskType: "error-finding",
+      category: "Webentwicklung",
+      inputFormat: "text",
+      tools: ["Browser DevTools", "Performance Analyzer", "HTML Validator"],
+      infoTexts: ["Async und defer Attribute verhindern Rendering-Blockierung", "Kritische Scripts sollten inline oder defer haben", "Analytics kann async geladen werden"],
+      helpButtons: [
+        { label: "Script Loading", content: "async für unabhängige Scripts, defer für DOM-abhängige" },
+        { label: "Performance Tipps", content: "Analytics immer async laden" }
+      ],
+      gamification: {
+        points: 40,
+        level: 3,
+        badge: "Performance Expert",
+        timeLimit: 180
+      },
+      adaptiveHelp: {
+        hintsAfterFailures: 2,
+        hints: ["Scripts ohne async/defer blockieren das Rendering", "Analytics-Scripts sollten async geladen werden"]
+      },
+      expectedSolution: ["async oder defer Attribute fehlen", "Fehlende async/defer Attribute", "Rendering-blockierende Scripts"],
+      feedback: {
+        correct: "Richtig! Die Scripts benötigen async oder defer Attribute für bessere Performance.",
+        incorrect: "Denke an die Script-Loading-Strategien. Welche Attribute verbessern die Performance?",
+        commonMistakes: ["Nur auf JavaScript-Syntax geachtet", "Performance-Aspekte übersehen"]
+      }
+    }
+  ]
+};
 
 export const webentwicklungContent: LearnModule[] = [
+  interactiveTrainingModule,
   {
     type: "flashcards",
     title: "HTML5 Grundlagen - IHK Prüfungswissen",

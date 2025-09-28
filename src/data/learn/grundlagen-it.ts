@@ -1,6 +1,74 @@
-import { LearnModule } from "../../types/learn";
+import { LearnModule, InteractiveTrainingModule } from "../../types/learn";
+
+const interactiveTrainingModule: InteractiveTrainingModule = {
+  type: "interactive",
+  title: "IT-Grundlagen Interaktives Training",
+  tasks: [
+    {
+      id: "it-speicher-umrechnung",
+      taskText: "Du sollst ein neues Computersystem für ein Büro konfigurieren. Der Computer benötigt 16GB RAM. Wie viele MB sind das? Gib das Ergebnis in MB an.",
+      difficulty: "leicht",
+      taskType: "number-conversion",
+      category: "IT-Grundlagen",
+      inputFormat: "number",
+      tools: ["Umrechnungstabelle", "Taschenrechner"],
+      infoTexts: ["1 GB = 1024 MB (binäre Umrechnung)", "Computer verwenden das Binärsystem für Speichergrößen"],
+      helpButtons: [
+        { label: "Umrechnungsfaktor", content: "1 GB = 1024 MB" },
+        { label: "Rechnung zeigen", content: "16 × 1024 = ?" }
+      ],
+      gamification: {
+        points: 20,
+        level: 1,
+        badge: "Speicher-Profi",
+        timeLimit: 90
+      },
+      adaptiveHelp: {
+        hintsAfterFailures: 1,
+        hints: ["Multipliziere 16 mit 1024", "Verwende die binäre Umrechnung (1024, nicht 1000)"]
+      },
+      expectedSolution: 16384,
+      feedback: {
+        correct: "Perfekt! 16 GB entsprechen 16.384 MB.",
+        incorrect: "Nicht korrekt. Achte auf die binäre Umrechnung (1024 MB = 1 GB).",
+        commonMistakes: ["1000 statt 1024 verwendet", "Division statt Multiplikation"]
+      }
+    },
+    {
+      id: "it-server-problem",
+      taskText: "Ein Server zeigt folgende Fehlermeldung: 'Disk full - 0 bytes available'. Du untersuchst das System und findest mehrere große Log-Dateien. Welche Schritte solltest du in der richtigen Reihenfolge durchführen?",
+      difficulty: "mittel",
+      taskType: "step-by-step",
+      category: "IT-Grundlagen",
+      inputFormat: "text",
+      tools: ["Systemanalyse-Tools", "Log-Management"],
+      infoTexts: ["Log-Dateien können schnell sehr groß werden", "Backup vor Löschung wichtig", "Automatische Log-Rotation verhindert das Problem"],
+      helpButtons: [
+        { label: "Erste Schritte", content: "Immer erst Backup, dann analysieren" },
+        { label: "Log-Management", content: "Alte Logs archivieren oder löschen" }
+      ],
+      gamification: {
+        points: 30,
+        level: 2,
+        badge: "System-Admin",
+        timeLimit: 240
+      },
+      adaptiveHelp: {
+        hintsAfterFailures: 2,
+        hints: ["Denke an die Reihenfolge: Backup → Analyse → Aktion", "Vergiss nicht die Log-Rotation für die Zukunft"]
+      },
+      expectedSolution: ["1. Backup erstellen 2. Logs analysieren 3. Alte Logs löschen 4. Log-Rotation einrichten", "Backup erstellen, Logs analysieren, löschen, Log-Rotation"],
+      feedback: {
+        correct: "Excellent! Du hast die richtige Reihenfolge für die Problemlösung gewählt.",
+        incorrect: "Die Reihenfolge ist wichtig. Backup zuerst, dann Analyse und Lösung.",
+        commonMistakes: ["Sofortiges Löschen ohne Backup", "Log-Rotation vergessen"]
+      }
+    }
+  ]
+};
 
 export const grundlagenItContent: LearnModule[] = [
+  interactiveTrainingModule,
   {
     type: "flashcards",
     title: "IT-Grundlagen - Hardware Fundamentals",

@@ -1,6 +1,74 @@
-import { LearnModule } from "../../types/learn";
+import { LearnModule, InteractiveTrainingModule } from "../../types/learn";
+
+const interactiveTrainingModule: InteractiveTrainingModule = {
+  type: "interactive",
+  title: "Mathematik & Logik Interaktives Training",
+  tasks: [
+    {
+      id: "math-binary-conversion",
+      taskText: "Ein Entwicklerteam arbeitet mit binären Schaltern. Du musst die Dezimalzahl 156 ins Binärsystem umwandeln, um den richtigen Schaltplan einzustellen. Gib das Ergebnis in binärer Schreibweise an.",
+      difficulty: "mittel",
+      taskType: "number-conversion",
+      category: "Mathematik",
+      inputFormat: "text",
+      tools: ["Taschenrechner (Basis-Umrechner)", "Umrechnungstabelle"],
+      infoTexts: ["Umwandlung in Binär erfolgt durch wiederholte Division durch 2. Reste werden von unten nach oben gelesen."],
+      helpButtons: [
+        { label: "Zeige Hilfstabelle", content: "128|64|32|16|8|4|2|1 - Welche Zahlen ergeben 156?" },
+        { label: "Gib mir den ersten Schritt", content: "156 ÷ 2 = 78 Rest 0" }
+      ],
+      gamification: {
+        points: 30,
+        level: 2,
+        badge: "Binär-Experte",
+        timeLimit: 200
+      },
+      adaptiveHelp: {
+        hintsAfterFailures: 2,
+        hints: ["Nach 2 Fehlversuchen: Zeige Division durch 2 mit Zwischenschritten", "156 = 128 + 28, jetzt 28 weiter zerlegen"]
+      },
+      expectedSolution: ["10011100", "0b10011100"],
+      feedback: {
+        correct: "Perfekt! 156 dezimal ist 10011100 binär.",
+        incorrect: "Viele vertun sich bei der Division durch 2. Achte darauf, den Rest jedes Schritts korrekt zu übernehmen.",
+        commonMistakes: ["Reste in falscher Reihenfolge", "Division durch 10 statt 2"]
+      }
+    },
+    {
+      id: "logic-truth-table",
+      taskText: "Du implementierst eine Logikschaltung. Gegeben sind die Aussagen: A = 'System läuft', B = 'Fehler erkannt'. Erstelle die Wahrheitstabelle für die Aussage: 'System läuft UND NICHT Fehler erkannt'.",
+      difficulty: "mittel",
+      taskType: "step-by-step",
+      category: "Logik",
+      inputFormat: "text",
+      tools: ["Wahrheitstabellen-Generator", "Logik-Simulator"],
+      infoTexts: ["UND (AND): nur wahr wenn beide Eingänge wahr", "NICHT (NOT): kehrt den Wahrheitswert um", "Wahrheitstabelle zeigt alle möglichen Kombinationen"],
+      helpButtons: [
+        { label: "Logik-Operatoren", content: "A AND (NOT B) - erst NOT B berechnen, dann AND" },
+        { label: "Tabellen-Format", content: "A | B | NOT B | A AND (NOT B)" }
+      ],
+      gamification: {
+        points: 35,
+        level: 2,
+        badge: "Logik-Meister",
+        timeLimit: 240
+      },
+      adaptiveHelp: {
+        hintsAfterFailures: 2,
+        hints: ["Erstelle erst die Spalte für NOT B", "Dann kombiniere A mit NOT B über AND"]
+      },
+      expectedSolution: ["A=1,B=0: wahr; A=1,B=1: falsch; A=0,B=0: falsch; A=0,B=1: falsch", "1,0:1; 1,1:0; 0,0:0; 0,1:0"],
+      feedback: {
+        correct: "Excellent! Die Wahrheitstabelle ist korrekt. System läuft nur ohne Fehler.",
+        incorrect: "Prüfe die Logik nochmal. Wann ist A AND (NOT B) wahr?",
+        commonMistakes: ["NOT Operation vergessen", "AND/OR verwechselt"]
+      }
+    }
+  ]
+};
 
 export const mathematikLogikContent: LearnModule[] = [
+  interactiveTrainingModule,
   {
     type: "flashcards",
     title: "Mathematik & Logik für IT - IHK Prüfungswissen",

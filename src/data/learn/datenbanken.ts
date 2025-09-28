@@ -1,6 +1,74 @@
-import type { LearnModule } from "../../types/learn";
+import type { LearnModule, InteractiveTrainingModule } from "../../types/learn";
+
+const interactiveTrainingModule: InteractiveTrainingModule = {
+  type: "interactive",
+  title: "Datenbanken Interaktives Training",
+  tasks: [
+    {
+      id: "db-sql-basic",
+      taskText: "Eine E-Commerce-Plattform benötigt eine SQL-Abfrage, um alle Bestellungen eines Kunden anzuzeigen. Die Tabelle heißt 'orders', die Spalte für Kunden-ID ist 'customer_id' und die gewünschte Kunden-ID ist 12345. Schreibe die SQL-Abfrage.",
+      difficulty: "leicht",
+      taskType: "code-complete",
+      category: "Datenbanken",
+      inputFormat: "code",
+      tools: ["SQL-Editor", "Datenbank-Schema", "Query-Tester"],
+      infoTexts: ["SELECT wählt Spalten aus", "FROM gibt die Tabelle an", "WHERE filtert nach Bedingungen"],
+      helpButtons: [
+        { label: "SQL Syntax", content: "SELECT * FROM tabelle WHERE spalte = wert" },
+        { label: "Werte einsetzen", content: "customer_id = 12345" }
+      ],
+      gamification: {
+        points: 20,
+        level: 1,
+        badge: "SQL Einsteiger",
+        timeLimit: 120
+      },
+      adaptiveHelp: {
+        hintsAfterFailures: 1,
+        hints: ["Verwende SELECT * FROM orders WHERE ...", "customer_id sollte mit 12345 verglichen werden"]
+      },
+      expectedSolution: ["SELECT * FROM orders WHERE customer_id = 12345", "SELECT*FROM orders WHERE customer_id=12345"],
+      feedback: {
+        correct: "Perfekt! Diese SQL-Abfrage findet alle Bestellungen des Kunden.",
+        incorrect: "Prüfe die SQL-Syntax. Vergiss nicht den WHERE-Teil für die Filterung.",
+        commonMistakes: ["WHERE vergessen", "Falsche Tabellen- oder Spaltennamen"]
+      }
+    },
+    {
+      id: "db-normalization",
+      taskText: "Du normalisierst eine Datenbank. Eine Tabelle 'customers' enthält: customer_id, name, address, city, postal_code, phone1, phone2, phone3. Welche Probleme siehst du und wie würdest du sie lösen?",
+      difficulty: "schwer",
+      taskType: "step-by-step",
+      category: "Datenbanken",
+      inputFormat: "text",
+      tools: ["Normalisierungsregeln", "ER-Diagramm-Tool"],
+      infoTexts: ["1. Normalform: Atomare Werte", "2. Normalform: Abhängigkeiten von Primärschlüssel", "3. Normalform: Keine transitiven Abhängigkeiten"],
+      helpButtons: [
+        { label: "Normalisierung", content: "Wiederholende Spalten in separate Tabelle auslagern" },
+        { label: "Telefonummern", content: "phone1, phone2, phone3 ist schlecht normalisiert" }
+      ],
+      gamification: {
+        points: 45,
+        level: 3,
+        badge: "Datenbank Architekt",
+        timeLimit: 400
+      },
+      adaptiveHelp: {
+        hintsAfterFailures: 2,
+        hints: ["Mehrere phone-Spalten verstoßen gegen Normalisierung", "Erstelle separate Tabelle für Telefonnummern"]
+      },
+      expectedSolution: ["Separate Tabelle für Telefonnummern erstellen", "phone1, phone2, phone3 in eigene Tabelle", "Telefonnummern normalisieren"],
+      feedback: {
+        correct: "Excellent! Du hast die Normalisierungsprobleme erkannt und gelöst.",
+        incorrect: "Denke an die Normalisierungsregeln. Wiederholende Spalten sind problematisch.",
+        commonMistakes: ["Normalisierungsprobleme übersehen", "Nur auf Syntax statt Design geachtet"]
+      }
+    }
+  ]
+};
 
 export const datenbankenModules: LearnModule[] = [
+  interactiveTrainingModule,
   {
     type: "flashcards",
     title: "Datenbank Grundlagen - IHK Prüfungswissen",

@@ -1,6 +1,73 @@
-import { LearnModule } from "../../types/learn";
+import { LearnModule, InteractiveTrainingModule } from "../../types/learn";
+
+const interactiveTrainingModule: InteractiveTrainingModule = {
+  type: "interactive",
+  title: "BWL Interaktives Training",
+  tasks: [
+    {
+      id: "bwl-break-even",
+      taskText: "Ein Unternehmen plant die Einführung eines neuen Produkts. Die Fixkosten betragen 50.000€, die variablen Kosten pro Stück 15€ und der Verkaufspreis 35€. Berechne den Break-Even-Point in Stück.",
+      difficulty: "mittel",
+      taskType: "calculation",
+      category: "Betriebswirtschaft",
+      inputFormat: "number",
+      tools: ["Taschenrechner", "Break-Even-Formel"],
+      infoTexts: ["Break-Even-Point = Fixkosten / (Verkaufspreis - variable Kosten pro Stück)"],
+      helpButtons: [
+        { label: "Formel zeigen", content: "BEP = FK / (VK - vK)" },
+        { label: "Werte einsetzen", content: "BEP = 50.000 / (35 - 15)" }
+      ],
+      gamification: {
+        points: 25,
+        level: 2,
+        badge: "BWL Rechner",
+        timeLimit: 180
+      },
+      adaptiveHelp: {
+        hintsAfterFailures: 2,
+        hints: ["Subtrahiere zuerst die variablen Kosten vom Verkaufspreis", "Teile dann die Fixkosten durch das Ergebnis"]
+      },
+      expectedSolution: 2500,
+      feedback: {
+        correct: "Perfekt! Der Break-Even-Point liegt bei 2.500 Stück.",
+        incorrect: "Nicht ganz richtig. Prüfe die Break-Even-Formel nochmal.",
+        commonMistakes: ["Vergessen, variable Kosten abzuziehen", "Falsche Reihenfolge der Rechenschritte"]
+      }
+    },
+    {
+      id: "bwl-fixkosten",
+      taskText: "Eine Firma analysiert ihre Kostenstruktur. Welche der folgenden Kosten sind Fixkosten? Gib die Antwort als Text ein: Miete, Materialkosten, Gehälter, Strom für Maschinen, Versicherungen.",
+      difficulty: "leicht",
+      taskType: "step-by-step",
+      category: "Betriebswirtschaft",
+      inputFormat: "text",
+      tools: ["Kostendefinitionen"],
+      infoTexts: ["Fixkosten bleiben konstant, unabhängig von der Produktionsmenge. Variable Kosten ändern sich mit der Produktionsmenge."],
+      helpButtons: [
+        { label: "Definition Fixkosten", content: "Kosten, die unabhängig von der Produktionsmenge anfallen" }
+      ],
+      gamification: {
+        points: 15,
+        level: 1,
+        badge: "Kostenexperte",
+        timeLimit: 120
+      },
+      adaptiveHelp: {
+        hintsAfterFailures: 1,
+        hints: ["Denke daran: Welche Kosten fallen auch an, wenn nichts produziert wird?"]
+      },
+      expectedSolution: ["Miete, Gehälter, Versicherungen", "Miete Gehälter Versicherungen"],
+      feedback: {
+        correct: "Richtig! Miete, Gehälter und Versicherungen sind typische Fixkosten.",
+        incorrect: "Nicht alle Antworten sind korrekt. Überlege, welche Kosten auch bei Stillstand anfallen.",
+        commonMistakes: ["Materialkosten als Fixkosten betrachtet", "Strom für Maschinen als Fixkosten betrachtet"]
+      }
+    }
+  ]
+};
 
 export const betriebswirtschaftContent: LearnModule[] = [
+  interactiveTrainingModule,
   {
     type: "flashcards",
     title: "Betriebswirtschaft Grundlagen - IHK Prüfungswissen",
