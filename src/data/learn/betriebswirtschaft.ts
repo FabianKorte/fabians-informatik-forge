@@ -33,9 +33,68 @@ const interactiveTrainingModule: InteractiveTrainingModule = {
         incorrect: "Nicht ganz richtig. Prüfe die Break-Even-Formel nochmal.",
         commonMistakes: ["Vergessen, variable Kosten abzuziehen", "Falsche Reihenfolge der Rechenschritte"]
       }
-    },
-    {
-      id: "bwl-fixkosten",
+      },
+      {
+        id: "bwl-kostenarten",
+        taskText: "Ordnen Sie die folgenden Kosten den richtigen Kategorien zu: Personalkosten, Materialkosten, Abschreibungen, Mietkosten.",
+        difficulty: "mittel",
+        taskType: "drag-drop",
+        category: "Betriebswirtschaft",
+        inputFormat: "drag-drop",
+        tools: ["Kostenrechnung-Schema"],
+        infoTexts: ["Kosten werden nach verschiedenen Kriterien klassifiziert: nach Art, Verhalten und Zurechenbarkeit."],
+        helpButtons: [
+          { label: "Kostenarten", content: "Personalkosten = Lohn/Gehalt, Materialkosten = Rohstoffe, Abschreibungen = Wertminderung" }
+        ],
+        gamification: {
+          points: 20,
+          level: 2,
+          badge: "Kostenrechner",
+          timeLimit: 150
+        },
+        adaptiveHelp: {
+          hintsAfterFailures: 1,
+          hints: ["Denken Sie an die drei Hauptkostenarten: Personal, Material, Betriebsmittel"]
+        },
+        expectedSolution: ["Personalkosten: variable Kosten", "Materialkosten: variable Kosten", "Abschreibungen: Fixkosten", "Mietkosten: Fixkosten"],
+        feedback: {
+          correct: "Sehr gut! Sie verstehen die Kostenarten-Klassifizierung.",
+          incorrect: "Überprüfen Sie die Unterscheidung zwischen fixen und variablen Kosten.",
+          commonMistakes: ["Personalkosten werden oft als Fixkosten gesehen", "Abschreibungen sind immer Fixkosten"]
+        }
+      },
+      {
+        id: "bwl-marktanalyse",
+        taskText: "Sie führen eine Marktanalyse durch. Berechnen Sie das Marktpotential: Zielgruppe 2 Mio. Menschen, 15% Kaufwahrscheinlichkeit, durchschnittlicher Preis 120€.",
+        difficulty: "schwer",
+        taskType: "calculation",
+        category: "Betriebswirtschaft",
+        inputFormat: "number",
+        tools: ["Taschenrechner", "Marktanalyse-Tool"],
+        infoTexts: ["Marktpotential = Zielgruppe × Kaufwahrscheinlichkeit × durchschnittlicher Preis"],
+        helpButtons: [
+          { label: "Formel", content: "Marktpotential = Anzahl potentieller Kunden × Kaufwahrscheinlichkeit × Preis" },
+          { label: "Schritt-für-Schritt", content: "1. Potentielle Kunden berechnen 2. Mit Preis multiplizieren" }
+        ],
+        gamification: {
+          points: 30,
+          level: 3,
+          badge: "Marktforscher",
+          timeLimit: 200
+        },
+        adaptiveHelp: {
+          hintsAfterFailures: 2,
+          hints: ["Berechnen Sie zuerst 15% von 2 Millionen", "Dann multiplizieren Sie mit 120€"]
+        },
+        expectedSolution: 36000000,
+        feedback: {
+          correct: "Exzellent! Das Marktpotential beträgt 36 Millionen Euro.",
+          incorrect: "Prüfen Sie Ihre Berechnung: (2.000.000 × 0,15) × 120€",
+          commonMistakes: ["Prozentsatz falsch umgerechnet", "Reihenfolge der Multiplikation vertauscht"]
+        }
+      },
+      {
+        id: "bwl-fixkosten",
       taskText: "Eine Firma analysiert ihre Kostenstruktur. Welche der folgenden Kosten sind Fixkosten? Gib die Antwort als Text ein: Miete, Materialkosten, Gehälter, Strom für Maschinen, Versicherungen.",
       difficulty: "leicht",
       taskType: "step-by-step",
