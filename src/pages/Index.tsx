@@ -133,7 +133,7 @@ const Index = () => {
           <div className="container mx-auto px-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl mx-auto">
               <div className="text-center p-6 bg-card rounded-lg border border-border">
-                <div className="text-2xl font-light text-foreground mb-1">{Object.keys(filteredCategories).length}</div>
+                <div className="text-2xl font-light text-foreground mb-1">{filteredCategories.length}</div>
                 <div className="text-sm text-muted-foreground">Kategorien</div>
               </div>
               <div className="text-center p-6 bg-card rounded-lg border border-border">

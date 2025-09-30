@@ -39,12 +39,12 @@ export const AIChatbot = () => {
 
     try {
       const response = await fetch(
-        `https://bjjxfcpxnoivjkplxktw.supabase.co/functions/v1/ai-tutor`,
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-tutor`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqanhmY3B4bm9pdmprcGx4a3R3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg2OTMyMzEsImV4cCI6MjA3NDI2OTIzMX0.Jfx5Hj3mUSAtDopLwXL1NNgA1In2zyahaM7AGTEby74`,
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
           },
           body: JSON.stringify({ messages: [...messages, userMsg] }),
         }
@@ -127,33 +127,38 @@ export const AIChatbot = () => {
       <Button
         onClick={() => setIsOpen(true)}
         size="lg"
-        className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-r from-primary to-primary/80 hover:scale-110"
+        className="fixed bottom-6 right-6 h-16 w-16 rounded-full shadow-elegant hover:shadow-glow transition-all duration-300 bg-gradient-to-br from-primary via-primary to-primary-glow hover:scale-110 group"
       >
-        <MessageCircle className="h-6 w-6" />
+        <MessageCircle className="h-7 w-7 group-hover:rotate-12 transition-transform" />
       </Button>
     );
   }
 
   return (
-    <Card className="fixed bottom-6 right-6 w-[380px] h-[600px] flex flex-col shadow-2xl border-2 animate-in slide-in-from-bottom-4 duration-300">
+    <Card className="fixed bottom-6 right-6 w-[400px] h-[650px] flex flex-col shadow-elegant border-0 animate-in slide-in-from-bottom-4 duration-300 bg-background/95 backdrop-blur-sm">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-primary to-primary/80 text-white rounded-t-lg">
-        <div className="flex items-center gap-2">
-          <Sparkles className="h-5 w-5" />
-          <h3 className="font-semibold">KI-Tutor</h3>
+      <div className="flex items-center justify-between p-5 border-b border-border/50 bg-gradient-to-r from-primary via-primary to-primary-glow text-primary-foreground rounded-t-xl">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
+            <Sparkles className="h-5 w-5" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-base">KI-Tutor</h3>
+            <p className="text-xs opacity-90">Immer für dich da</p>
+          </div>
         </div>
         <Button
           variant="ghost"
           size="icon"
           onClick={() => setIsOpen(false)}
-          className="text-white hover:bg-white/20 h-8 w-8"
+          className="text-primary-foreground hover:bg-white/20 h-9 w-9 rounded-lg"
         >
           <X className="h-4 w-4" />
         </Button>
       </div>
 
       {/* Messages */}
-      <ScrollArea className="flex-1 p-4" ref={scrollRef}>
+      <ScrollArea className="flex-1 p-5" ref={scrollRef}>
         <div className="space-y-4">
           {messages.map((message, index) => (
             <div
@@ -163,21 +168,21 @@ export const AIChatbot = () => {
               }`}
             >
               <div
-                className={`max-w-[80%] rounded-lg p-3 ${
+                className={`max-w-[85%] rounded-2xl px-4 py-3 shadow-sm ${
                   message.role === "user"
-                    ? "bg-primary text-white"
-                    : "bg-muted text-foreground"
+                    ? "bg-primary text-primary-foreground rounded-br-sm"
+                    : "bg-muted/80 text-foreground rounded-bl-sm border border-border/50"
                 }`}
               >
-                <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
               </div>
             </div>
           ))}
           {isLoading && (
             <div className="flex justify-start">
-              <div className="bg-muted rounded-lg p-3 flex items-center gap-2">
-                <Loader2 className="h-4 w-4 animate-spin" />
-                <span className="text-sm">Denke nach...</span>
+              <div className="bg-muted/80 rounded-2xl rounded-bl-sm px-4 py-3 flex items-center gap-3 border border-border/50">
+                <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                <span className="text-sm text-muted-foreground">Denke nach...</span>
               </div>
             </div>
           )}
@@ -185,16 +190,21 @@ export const AIChatbot = () => {
       </ScrollArea>
 
       {/* Input */}
-      <form onSubmit={handleSubmit} className="p-4 border-t">
+      <form onSubmit={handleSubmit} className="p-4 border-t border-border/50 bg-background/50">
         <div className="flex gap-2">
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Stelle eine Frage..."
             disabled={isLoading}
-            className="flex-1"
+            className="flex-1 rounded-xl border-border/50 bg-background focus-visible:ring-primary"
           />
-          <Button type="submit" disabled={isLoading || !input.trim()} size="icon">
+          <Button 
+            type="submit" 
+            disabled={isLoading || !input.trim()} 
+            size="icon"
+            className="h-10 w-10 rounded-xl"
+          >
             <Send className="h-4 w-4" />
           </Button>
         </div>

@@ -1,5 +1,4 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import "https://deno.land/x/xhr@0.1.0/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -13,10 +12,10 @@ serve(async (req) => {
 
   try {
     const { messages } = await req.json();
-    const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
 
-    if (!openAIApiKey) {
-      throw new Error('OPENAI_API_KEY is not configured');
+    if (!LOVABLE_API_KEY) {
+      throw new Error('LOVABLE_API_KEY is not configured');
     }
 
     console.log('Processing chat request with', messages.length, 'messages');
@@ -46,31 +45,43 @@ Dein Stil:
 
 Wichtig: Du hilfst beim Lernen, aber löst keine kompletten Prüfungsaufgaben vor. Leite stattdessen an, wie man selbst zur Lösung kommt.`;
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
+        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'google/gemini-2.5-flash',
         messages: [
           { role: 'system', content: systemPrompt },
           ...messages
         ],
-        temperature: 0.7,
-        max_tokens: 1000,
         stream: true,
       }),
     });
 
     if (!response.ok) {
       const error = await response.text();
-      console.error('OpenAI API error:', response.status, error);
-      throw new Error(`OpenAI API error: ${response.status}`);
+      console.error('AI Gateway error:', response.status, error);
+      
+      if (response.status === 429) {
+        return new Response(JSON.stringify({ error: "Rate limit erreicht, bitte versuche es später erneut." }), {
+          status: 429,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+      
+      if (response.status === 402) {
+        return new Response(JSON.stringify({ error: "Zahlungsinformationen erforderlich, bitte füge Guthaben zu deinem Lovable AI Workspace hinzu." }), {
+          status: 402,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+      
+      throw new Error(`AI Gateway error: ${response.status}`);
     }
 
-    // Return the stream directly
     return new Response(response.body, {
       headers: {
         ...corsHeaders,
