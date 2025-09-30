@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      categories: {
+        Row: {
+          created_at: string
+          description: string
+          difficulty: string
+          gradient: string
+          icon: string
+          id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          difficulty: string
+          gradient: string
+          icon: string
+          id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          difficulty?: string
+          gradient?: string
+          icon?: string
+          id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       feedbacks: {
         Row: {
           created_at: string | null
@@ -34,6 +67,47 @@ export type Database = {
           name?: string
         }
         Relationships: []
+      }
+      learn_modules: {
+        Row: {
+          category_id: string
+          content: Json
+          created_at: string
+          id: string
+          order_index: number
+          title: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          category_id: string
+          content: Json
+          created_at?: string
+          id?: string
+          order_index?: number
+          title: string
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          category_id?: string
+          content?: Json
+          created_at?: string
+          id?: string
+          order_index?: number
+          title?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "learn_modules_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       roadmap: {
         Row: {
