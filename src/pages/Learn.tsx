@@ -1,11 +1,12 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { categories } from "@/data/categories";
-import { getModulesForCategory } from "@/data/learn";
+import { getCategoriesFromDatabase } from "@/lib/categoryUtils";
+import { getModulesForCategory } from "@/lib/learnContentUtils";
 import { GradientShadowCard } from "@/components/ui/gradient-shadow-card";
+import type { Category } from "@/data/categories";
 import type { LearnModule } from "@/types/learn";
 import { Flashcards } from "@/components/learn/Flashcards";
 import { Quiz } from "@/components/learn/Quiz";
@@ -17,13 +18,47 @@ import { Target, Brain, Zap } from "lucide-react";
 const LearnPage = () => {
   const { categoryId } = useParams();
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
-  const modules: LearnModule[] = useMemo(() => getModulesForCategory(categoryId || ""), [categoryId]);
-  const category = categories.find((c) => c.id === categoryId);
+  const [category, setCategory] = useState<Category | undefined>();
+  const [modules, setModules] = useState<LearnModule[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      if (!categoryId) return;
+      
+      try {
+        setIsLoading(true);
+        const categories = await getCategoriesFromDatabase();
+        const foundCategory = categories.find(c => c.id === categoryId);
+        setCategory(foundCategory);
+        
+        const categoryModules = await getModulesForCategory(categoryId);
+        setModules(categoryModules);
+      } catch (error) {
+        console.error('Error loading learn data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
+  }, [categoryId]);
 
   // Get interactive tasks for this category
   const interactiveTasks = useMemo(() => {
     return interactiveTasksByCategory[categoryId || ""] || [];
   }, [categoryId]);
+
+  if (isLoading) {
+    return (
+      <main className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Lade Lerninhalte...</p>
+        </div>
+      </main>
+    );
+  }
 
   if (!categoryId || !category) {
     return (

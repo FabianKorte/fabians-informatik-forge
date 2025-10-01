@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Hero } from "@/components/Hero";
 import { CategoryCard } from "@/components/CategoryCard";
@@ -7,8 +7,10 @@ import { FeedbackForm } from "@/components/feedback/FeedbackForm";
 import { FeedbackList } from "@/components/feedback/FeedbackList";
 import { RoadmapModal } from "@/components/RoadmapModal";
 import { Button } from "@/components/ui/button";
-import { categories } from "@/data/categories";
-import { getModulesForCategory } from "@/data/learn";
+import { seedDatabase } from "@/lib/seedDatabase";
+import { getCategoriesFromDatabase, updateCategoryElementCounts } from "@/lib/categoryUtils";
+import { getAllModules } from "@/lib/learnContentUtils";
+import type { Category } from "@/data/categories";
 import { Download, MapPin } from "lucide-react";
 import logo from "@/assets/logo.png";
 import type { LearnModule } from "@/types/learn";
@@ -16,7 +18,36 @@ import type { LearnModule } from "@/types/learn";
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [feedbackRefreshTrigger, setFeedbackRefreshTrigger] = useState(0);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [allModules, setAllModules] = useState<Record<string, LearnModule[]>>({});
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const initializeData = async () => {
+      try {
+        setIsLoading(true);
+        // Seed database if needed
+        await seedDatabase();
+        // Load categories from database
+        let cats = await getCategoriesFromDatabase();
+        // Update element counts
+        cats = await updateCategoryElementCounts(cats);
+        setCategories(cats);
+        
+        // Load all modules
+        const modules = await getAllModules();
+        setAllModules(modules);
+      } catch (error) {
+        console.error('Error initializing data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initializeData();
+  }, []);
+
   // Dynamic counts from learn content
   const countElements = (modules: LearnModule[]) => modules.reduce((sum, m) => {
     switch (m.type) {
@@ -42,7 +73,7 @@ const Index = () => {
   }, 0);
 
   const dynamicTotalsByCategory: Record<string, number> = Object.fromEntries(
-    categories.map((cat) => [cat.id, countElements(getModulesForCategory(cat.id))])
+    categories.map((cat) => [cat.id, countElements(allModules[cat.id] || [])])
   );
 
   const totalQuestions = Object.values(dynamicTotalsByCategory).reduce((a, b) => a + b, 0);
@@ -74,6 +105,17 @@ const Index = () => {
   const handleFeedbackSubmitted = () => {
     setFeedbackRefreshTrigger(prev => prev + 1);
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Lade Lerninhalte...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
