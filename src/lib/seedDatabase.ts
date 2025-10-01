@@ -11,59 +11,63 @@ export async function seedDatabase(forceReseed = false) {
       .limit(1);
 
     if (existingCategories && existingCategories.length > 0 && !forceReseed) {
-      console.log('Database already seeded');
-      return;
+      console.log('Categories already present - will ensure modules are seeded');
+      // Do not return here; continue to seed learn_modules if needed
     }
 
-    // If forceReseed, delete existing data
+    // Optional: Clear existing data only when forceReseed
     if (forceReseed) {
-      console.log('Force reseed requested - clearing existing data...');
-      
-      // Delete learn_modules first (due to foreign key constraint)
+      console.log('Force reseed requested - attempting to clear existing data...');
+      // Try to delete learn_modules first (may fail if no DELETE policy)
       const { error: deleteModulesError } = await supabase
         .from('learn_modules')
         .delete()
-        .neq('id', '00000000-0000-0000-0000-000000000000'); // Delete all
-      
-      if (deleteModulesError) {
-        console.error('Error deleting learn modules:', deleteModulesError);
-      }
+        .neq('id', '00000000-0000-0000-0000-000000000000');
+      if (deleteModulesError) console.warn('Skipping delete learn_modules due to RLS:', deleteModulesError.message);
 
-      // Delete categories
       const { error: deleteCategoriesError } = await supabase
         .from('categories')
         .delete()
-        .neq('id', ''); // Delete all
-      
-      if (deleteCategoriesError) {
-        console.error('Error deleting categories:', deleteCategoriesError);
-      }
-      
-      console.log('Existing data cleared');
+        .neq('id', '');
+      if (deleteCategoriesError) console.warn('Skipping delete categories due to RLS:', deleteCategoriesError.message);
     }
 
     console.log('Starting database seeding...');
 
-    // Insert categories
+    // Upsert categories to avoid conflicts
     const categoriesToInsert = categories.map(cat => ({
       id: cat.id,
       title: cat.title,
       description: cat.description,
-      icon: cat.icon.name || 'Code2',
+      icon: (cat.icon as any)?.name || 'Code2',
       difficulty: cat.difficulty,
       gradient: cat.gradient
     }));
 
     const { error: categoriesError } = await supabase
       .from('categories')
-      .insert(categoriesToInsert);
+      .upsert(categoriesToInsert, { onConflict: 'id' });
 
     if (categoriesError) {
       console.error('Error seeding categories:', categoriesError);
       throw categoriesError;
     }
 
-    console.log(`Seeded ${categoriesToInsert.length} categories`);
+    console.log(`Upserted ${categoriesToInsert.length} categories`);
+
+    // If not forceReseed and modules already exist, skip inserting modules
+    const { count: existingModulesCount, error: countError } = await supabase
+      .from('learn_modules')
+      .select('id', { count: 'exact', head: true });
+
+    if (countError) {
+      console.warn('Could not count learn_modules:', countError.message);
+    }
+
+    if (!forceReseed && (existingModulesCount || 0) > 0) {
+      console.log('Learn modules already present - skipping insert');
+      return;
+    }
 
     // Insert learn modules with full content
     const learnModulesToInsert = [];
@@ -92,7 +96,7 @@ export async function seedDatabase(forceReseed = false) {
     console.log(`Total modules to insert: ${learnModulesToInsert.length}`);
 
     // Insert in batches to avoid payload size limits
-    const batchSize = 50;
+    const batchSize = 10;
     for (let i = 0; i < learnModulesToInsert.length; i += batchSize) {
       const batch = learnModulesToInsert.slice(i, i + batchSize);
       const { error: modulesError } = await supabase
