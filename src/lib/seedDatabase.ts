@@ -1,8 +1,8 @@
 import { supabase } from "@/integrations/supabase/client";
 import { categories } from "@/data/categories";
-import { learnContent } from "@/data/learnContent";
+import { learnContent } from "@/data/learn/index";
 
-export async function seedDatabase() {
+export async function seedDatabase(forceReseed = false) {
   try {
     // Check if data already exists
     const { data: existingCategories } = await supabase
@@ -10,9 +10,36 @@ export async function seedDatabase() {
       .select('id')
       .limit(1);
 
-    if (existingCategories && existingCategories.length > 0) {
+    if (existingCategories && existingCategories.length > 0 && !forceReseed) {
       console.log('Database already seeded');
       return;
+    }
+
+    // If forceReseed, delete existing data
+    if (forceReseed) {
+      console.log('Force reseed requested - clearing existing data...');
+      
+      // Delete learn_modules first (due to foreign key constraint)
+      const { error: deleteModulesError } = await supabase
+        .from('learn_modules')
+        .delete()
+        .neq('id', '00000000-0000-0000-0000-000000000000'); // Delete all
+      
+      if (deleteModulesError) {
+        console.error('Error deleting learn modules:', deleteModulesError);
+      }
+
+      // Delete categories
+      const { error: deleteCategoriesError } = await supabase
+        .from('categories')
+        .delete()
+        .neq('id', ''); // Delete all
+      
+      if (deleteCategoriesError) {
+        console.error('Error deleting categories:', deleteCategoriesError);
+      }
+      
+      console.log('Existing data cleared');
     }
 
     console.log('Starting database seeding...');
@@ -38,21 +65,31 @@ export async function seedDatabase() {
 
     console.log(`Seeded ${categoriesToInsert.length} categories`);
 
-    // Insert learn modules
+    // Insert learn modules with full content
     const learnModulesToInsert = [];
     let orderIndex = 0;
 
+    console.log('Preparing learn modules for insertion...');
+    console.log('Categories in learnContent:', Object.keys(learnContent));
+
     for (const [categoryId, modules] of Object.entries(learnContent)) {
+      console.log(`Processing category ${categoryId} with ${modules.length} modules`);
+      
       for (const module of modules) {
-        learnModulesToInsert.push({
+        // Ensure we're storing the complete module with all its content
+        const moduleData = {
           category_id: categoryId,
           type: module.type,
           title: module.title,
-          content: module,
+          content: JSON.parse(JSON.stringify(module)), // Deep clone to ensure all data is captured
           order_index: orderIndex++
-        });
+        };
+        
+        learnModulesToInsert.push(moduleData);
       }
     }
+
+    console.log(`Total modules to insert: ${learnModulesToInsert.length}`);
 
     // Insert in batches to avoid payload size limits
     const batchSize = 50;
