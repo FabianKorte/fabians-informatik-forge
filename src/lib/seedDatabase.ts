@@ -44,16 +44,32 @@ export async function seedDatabase(forceReseed = false) {
       gradient: cat.gradient
     }));
 
-    const { error: categoriesError } = await supabase
+    // Avoid RLS UPDATE violation by inserting only new categories
+    const { data: existingCatIds, error: existingCatsError } = await supabase
       .from('categories')
-      .upsert(categoriesToInsert, { onConflict: 'id' });
+      .select('id');
 
-    if (categoriesError) {
-      console.error('Error seeding categories:', categoriesError);
-      throw categoriesError;
+    if (existingCatsError) {
+      console.warn('Could not fetch existing categories:', existingCatsError.message);
     }
 
-    console.log(`Upserted ${categoriesToInsert.length} categories`);
+    const existingIds = new Set((existingCatIds || []).map((c: any) => c.id));
+    const newCategories = categoriesToInsert.filter(c => !existingIds.has(c.id));
+
+    if (newCategories.length > 0) {
+      const { error: categoriesError } = await supabase
+        .from('categories')
+        .insert(newCategories);
+
+      if (categoriesError) {
+        console.error('Error seeding categories:', categoriesError);
+        throw categoriesError;
+      }
+
+      console.log(`Inserted ${newCategories.length} new categories`);
+    } else {
+      console.log('No new categories to insert');
+    }
 
     // If not forceReseed and modules already exist, skip inserting modules
     const { count: existingModulesCount, error: countError } = await supabase
