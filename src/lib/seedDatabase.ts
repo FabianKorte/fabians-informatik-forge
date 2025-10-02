@@ -96,7 +96,7 @@ export async function seedDatabase(forceReseed = false) {
     console.log(`Total modules to insert: ${learnModulesToInsert.length}`);
 
     // Insert in batches to avoid payload size limits
-    const batchSize = 10;
+    const batchSize = 1;
     for (let i = 0; i < learnModulesToInsert.length; i += batchSize) {
       const batch = learnModulesToInsert.slice(i, i + batchSize);
       const { error: modulesError } = await supabase
