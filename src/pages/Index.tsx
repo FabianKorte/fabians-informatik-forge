@@ -27,8 +27,8 @@ const Index = () => {
     const initializeData = async () => {
       try {
         setIsLoading(true);
-        // Seed database with force reseed to ensure all content is loaded once
-        await seedDatabase(true);
+        // Seed database without forced reseed to avoid repeated heavy inserts
+        await seedDatabase(false);
         // Load categories from database
         let cats = await getCategoriesFromDatabase();
         // Update element counts
