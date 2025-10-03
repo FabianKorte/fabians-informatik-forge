@@ -71,18 +71,15 @@ export async function seedDatabase(forceReseed = false) {
       console.log('No new categories to insert');
     }
 
-    // If not forceReseed and modules already exist, skip inserting modules
+    // We won't early-return if some modules exist; we'll backfill missing modules below
     const { count: existingModulesCount, error: countError } = await supabase
       .from('learn_modules')
       .select('id', { count: 'exact', head: true });
 
     if (countError) {
       console.warn('Could not count learn_modules:', countError.message);
-    }
-
-    if (!forceReseed && (existingModulesCount || 0) > 0) {
-      console.log('Learn modules already present - skipping insert');
-      return;
+    } else {
+      console.log('Existing learn_modules count:', existingModulesCount);
     }
 
     // Insert learn modules with full content
@@ -109,12 +106,26 @@ export async function seedDatabase(forceReseed = false) {
       }
     }
 
-    console.log(`Total modules to insert: ${learnModulesToInsert.length}`);
+    console.log(`Total modules prepared: ${learnModulesToInsert.length}`);
+
+    // Deduplicate against existing modules by (category_id, type, title)
+    const { data: existingModulesKeys, error: existingModulesKeysError } = await supabase
+      .from('learn_modules')
+      .select('category_id, type, title');
+
+    if (existingModulesKeysError) {
+      console.warn('Could not fetch existing learn_modules keys:', existingModulesKeysError.message);
+    }
+
+    const existingKeySet = new Set((existingModulesKeys || []).map((m: any) => `${m.category_id}::${m.type}::${m.title}`));
+    const toInsert = learnModulesToInsert.filter((m: any) => !existingKeySet.has(`${m.category_id}::${m.type}::${m.title}`));
+
+    console.log(`New modules to insert (deduped): ${toInsert.length}`);
 
     // Insert in batches to avoid payload size limits
-    const batchSize = 1;
-    for (let i = 0; i < learnModulesToInsert.length; i += batchSize) {
-      const batch = learnModulesToInsert.slice(i, i + batchSize);
+    const batchSize = 50;
+    for (let i = 0; i < toInsert.length; i += batchSize) {
+      const batch = toInsert.slice(i, i + batchSize);
       const { error: modulesError } = await supabase
         .from('learn_modules')
         .insert(batch);
@@ -124,10 +135,10 @@ export async function seedDatabase(forceReseed = false) {
         throw modulesError;
       }
       
-      console.log(`Seeded batch ${i / batchSize + 1} (${batch.length} modules)`);
+      console.log(`Seeded batch ${Math.floor(i / batchSize) + 1} (${batch.length} modules)`);
     }
 
-    console.log(`Successfully seeded ${learnModulesToInsert.length} learn modules`);
+    console.log(`Successfully seeded ${toInsert.length} learn modules`);
     console.log('Database seeding completed successfully');
 
   } catch (error) {
