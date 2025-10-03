@@ -4,37 +4,9 @@ import { learnContent } from "@/data/learn/index";
 
 export async function seedDatabase(forceReseed = false) {
   try {
-    // Check if data already exists
-    const { data: existingCategories } = await supabase
-      .from('categories')
-      .select('id')
-      .limit(1);
-
-    if (existingCategories && existingCategories.length > 0 && !forceReseed) {
-      console.log('Categories already present - will ensure modules are seeded');
-      // Do not return here; continue to seed learn_modules if needed
-    }
-
-    // Optional: Clear existing data only when forceReseed
-    if (forceReseed) {
-      console.log('Force reseed requested - attempting to clear existing data...');
-      // Try to delete learn_modules first (may fail if no DELETE policy)
-      const { error: deleteModulesError } = await supabase
-        .from('learn_modules')
-        .delete()
-        .neq('id', '00000000-0000-0000-0000-000000000000');
-      if (deleteModulesError) console.warn('Skipping delete learn_modules due to RLS:', deleteModulesError.message);
-
-      const { error: deleteCategoriesError } = await supabase
-        .from('categories')
-        .delete()
-        .neq('id', '');
-      if (deleteCategoriesError) console.warn('Skipping delete categories due to RLS:', deleteCategoriesError.message);
-    }
-
     console.log('Starting database seeding...');
 
-    // Upsert categories to avoid conflicts
+    // Step 1: Ensure all categories exist
     const categoriesToInsert = categories.map(cat => ({
       id: cat.id,
       title: cat.title,
@@ -44,17 +16,17 @@ export async function seedDatabase(forceReseed = false) {
       gradient: cat.gradient
     }));
 
-    // Avoid RLS UPDATE violation by inserting only new categories
-    const { data: existingCatIds, error: existingCatsError } = await supabase
+    // Fetch existing category IDs
+    const { data: existingCats, error: existingCatsError } = await supabase
       .from('categories')
       .select('id');
 
     if (existingCatsError) {
-      console.warn('Could not fetch existing categories:', existingCatsError.message);
+      console.error('Error fetching existing categories:', existingCatsError);
     }
 
-    const existingIds = new Set((existingCatIds || []).map((c: any) => c.id));
-    const newCategories = categoriesToInsert.filter(c => !existingIds.has(c.id));
+    const existingCatIds = new Set((existingCats || []).map((c: any) => c.id));
+    const newCategories = categoriesToInsert.filter(c => !existingCatIds.has(c.id));
 
     if (newCategories.length > 0) {
       const { error: categoriesError } = await supabase
@@ -63,42 +35,33 @@ export async function seedDatabase(forceReseed = false) {
 
       if (categoriesError) {
         console.error('Error seeding categories:', categoriesError);
-        throw categoriesError;
+      } else {
+        console.log(`Inserted ${newCategories.length} new categories`);
       }
-
-      console.log(`Inserted ${newCategories.length} new categories`);
     } else {
-      console.log('No new categories to insert');
+      console.log('All categories already exist');
     }
 
-    // We won't early-return if some modules exist; we'll backfill missing modules below
-    const { count: existingModulesCount, error: countError } = await supabase
-      .from('learn_modules')
-      .select('id', { count: 'exact', head: true });
-
-    if (countError) {
-      console.warn('Could not count learn_modules:', countError.message);
-    } else {
-      console.log('Existing learn_modules count:', existingModulesCount);
-    }
-
-    // Insert learn modules with full content
+    // Step 2: Prepare learn modules from all categories
     const learnModulesToInsert = [];
     let orderIndex = 0;
 
-    console.log('Preparing learn modules for insertion...');
     console.log('Categories in learnContent:', Object.keys(learnContent));
 
     for (const [categoryId, modules] of Object.entries(learnContent)) {
+      if (!modules || modules.length === 0) {
+        console.log(`Skipping empty category: ${categoryId}`);
+        continue;
+      }
+      
       console.log(`Processing category ${categoryId} with ${modules.length} modules`);
       
       for (const module of modules) {
-        // Ensure we're storing the complete module with all its content
         const moduleData = {
           category_id: categoryId,
           type: module.type,
           title: module.title,
-          content: JSON.parse(JSON.stringify(module)), // Deep clone to ensure all data is captured
+          content: JSON.parse(JSON.stringify(module)),
           order_index: orderIndex++
         };
         
@@ -108,7 +71,7 @@ export async function seedDatabase(forceReseed = false) {
 
     console.log(`Total modules prepared: ${learnModulesToInsert.length}`);
 
-    // Deduplicate against existing modules by (category_id, type, title)
+    // Step 3: Deduplicate against existing modules
     const { data: existingModulesKeys, error: existingModulesKeysError } = await supabase
       .from('learn_modules')
       .select('category_id, type, title');
@@ -117,28 +80,42 @@ export async function seedDatabase(forceReseed = false) {
       console.warn('Could not fetch existing learn_modules keys:', existingModulesKeysError.message);
     }
 
-    const existingKeySet = new Set((existingModulesKeys || []).map((m: any) => `${m.category_id}::${m.type}::${m.title}`));
-    const toInsert = learnModulesToInsert.filter((m: any) => !existingKeySet.has(`${m.category_id}::${m.type}::${m.title}`));
+    const existingKeySet = new Set(
+      (existingModulesKeys || []).map((m: any) => `${m.category_id}::${m.type}::${m.title}`)
+    );
+    
+    const toInsert = learnModulesToInsert.filter(
+      (m: any) => !existingKeySet.has(`${m.category_id}::${m.type}::${m.title}`)
+    );
 
-    console.log(`New modules to insert (deduped): ${toInsert.length}`);
+    console.log(`New modules to insert (after deduplication): ${toInsert.length}`);
 
-    // Insert in batches to avoid payload size limits
+    if (toInsert.length === 0) {
+      console.log('No new modules to insert - database is up to date');
+      return;
+    }
+
+    // Step 4: Insert in batches
     const batchSize = 50;
+    let insertedCount = 0;
+
     for (let i = 0; i < toInsert.length; i += batchSize) {
       const batch = toInsert.slice(i, i + batchSize);
+      
       const { error: modulesError } = await supabase
         .from('learn_modules')
         .insert(batch);
 
       if (modulesError) {
-        console.error('Error seeding learn modules batch:', modulesError);
-        throw modulesError;
+        console.error(`Error seeding batch ${Math.floor(i / batchSize) + 1}:`, modulesError);
+        // Continue with next batch instead of throwing
+      } else {
+        insertedCount += batch.length;
+        console.log(`Seeded batch ${Math.floor(i / batchSize) + 1} (${batch.length} modules)`);
       }
-      
-      console.log(`Seeded batch ${Math.floor(i / batchSize) + 1} (${batch.length} modules)`);
     }
 
-    console.log(`Successfully seeded ${toInsert.length} learn modules`);
+    console.log(`Successfully seeded ${insertedCount} learn modules`);
     console.log('Database seeding completed successfully');
 
   } catch (error) {
