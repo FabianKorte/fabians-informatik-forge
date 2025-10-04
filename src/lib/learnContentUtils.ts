@@ -41,5 +41,8 @@ export async function getAllModules(): Promise<Record<string, LearnModule[]>> {
     grouped[module.category_id].push(module.content as unknown as LearnModule);
   }
 
+  // Add random training modules
+  grouped['zufallstraining'] = await generateRandomTrainingModules();
+
   return grouped;
 }

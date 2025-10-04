@@ -49,19 +49,22 @@ const Index = () => {
     return () => { mounted = false; };
   }, []);
 
-  const countElements = useMemo(() => (modules: LearnModule[]) => modules.reduce((sum, m) => {
-    switch (m.type) {
-      case "flashcards": return sum + m.cards.length;
-      case "quiz": return sum + m.questions.length;
-      case "matching": return sum + m.pairs.length;
-      case "code": return sum + m.challenges.length;
-      case "dragdrop": return sum + m.games.reduce((a, g) => a + g.items.length, 0);
-      case "memory": return sum + m.games.reduce((a, g) => a + g.pairs.length, 0);
-      case "timeline": return sum + m.timelines.reduce((a, t) => a + t.events.length, 0);
-      case "scenario": return sum + m.scenarios.length;
-      default: return sum;
-    }
-  }, 0), []);
+  const countElements = useMemo(() => (modules: LearnModule[]) => {
+    if (!modules || modules.length === 0) return 0;
+    return modules.reduce((sum, m) => {
+      switch (m.type) {
+        case "flashcards": return sum + (m.cards?.length || 0);
+        case "quiz": return sum + (m.questions?.length || 0);
+        case "matching": return sum + (m.pairs?.length || 0);
+        case "code": return sum + (m.challenges?.length || 0);
+        case "dragdrop": return sum + (m.games?.reduce((a, g) => a + (g.items?.length || 0), 0) || 0);
+        case "memory": return sum + (m.games?.reduce((a, g) => a + (g.pairs?.length || 0), 0) || 0);
+        case "timeline": return sum + (m.timelines?.reduce((a, t) => a + (t.events?.length || 0), 0) || 0);
+        case "scenario": return sum + (m.scenarios?.length || 0);
+        default: return sum;
+      }
+    }, 0);
+  }, []);
 
   const { regularCategories, randomTrainingCategory, stats } = useMemo(() => {
     const random = categories.find(c => c.id === 'zufallstraining');
