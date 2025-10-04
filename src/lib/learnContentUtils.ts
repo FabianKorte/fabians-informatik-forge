@@ -1,7 +1,12 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { LearnModule } from "@/types/learn";
+import { generateRandomTrainingModules } from "./randomTrainingUtils";
 
 export async function getModulesForCategory(categoryId: string): Promise<LearnModule[]> {
+  if (categoryId === 'zufallstraining') {
+    return generateRandomTrainingModules();
+  }
+
   const { data, error } = await supabase
     .from('learn_modules')
     .select('*')

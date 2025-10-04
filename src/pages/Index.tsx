@@ -27,15 +27,11 @@ const Index = () => {
     const initializeData = async () => {
       try {
         setIsLoading(true);
-        // Trigger re-seed with force to populate all missing modules
-        await seedDatabase(true);
-        // Load categories from database
+        await seedDatabase();
         let cats = await getCategoriesFromDatabase();
-        // Update element counts
         cats = await updateCategoryElementCounts(cats);
         setCategories(cats);
         
-        // Load all modules
         const modules = await getAllModules();
         setAllModules(modules);
       } catch (error) {
@@ -48,27 +44,17 @@ const Index = () => {
     initializeData();
   }, []);
 
-  // Dynamic counts from learn content
   const countElements = (modules: LearnModule[]) => modules.reduce((sum, m) => {
     switch (m.type) {
-      case "flashcards":
-        return sum + m.cards.length;
-      case "quiz":
-        return sum + m.questions.length;
-      case "matching":
-        return sum + m.pairs.length;
-      case "code":
-        return sum + m.challenges.length;
-      case "dragdrop":
-        return sum + m.games.reduce((a, g) => a + g.items.length, 0);
-      case "memory":
-        return sum + m.games.reduce((a, g) => a + g.pairs.length, 0);
-      case "timeline":
-        return sum + m.timelines.reduce((a, t) => a + t.events.length, 0);
-      case "scenario":
-        return sum + m.scenarios.length;
-      default:
-        return sum;
+      case "flashcards": return sum + m.cards.length;
+      case "quiz": return sum + m.questions.length;
+      case "matching": return sum + m.pairs.length;
+      case "code": return sum + m.challenges.length;
+      case "dragdrop": return sum + m.games.reduce((a, g) => a + g.items.length, 0);
+      case "memory": return sum + m.games.reduce((a, g) => a + g.pairs.length, 0);
+      case "timeline": return sum + m.timelines.reduce((a, t) => a + t.events.length, 0);
+      case "scenario": return sum + m.scenarios.length;
+      default: return sum;
     }
   }, 0);
 
@@ -78,33 +64,20 @@ const Index = () => {
 
   const totalQuestions = Object.values(dynamicTotalsByCategory).reduce((a, b) => a + b, 0);
   const answeredQuestions = categories.reduce((sum, cat) => sum + (cat.completedElements || 0), 0);
-  const correctAnswers = Math.floor(answeredQuestions * 0.78); // 78% accuracy simulation
+  const correctAnswers = Math.floor(answeredQuestions * 0.78);
 
-  // Filter categories based on search
   const filteredCategories = categories.filter(category =>
     category.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     category.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleStartLearning = () => {
-    // Scroll to categories section
-    const categoriesSection = document.getElementById('categories-section');
-    if (categoriesSection) {
-      categoriesSection.scrollIntoView({ behavior: 'smooth' });
-    }
+    document.getElementById('categories-section')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleShowProgress = () => {
-    navigate('/progress');
-  };
-
-  const handleCategoryStart = (categoryId: string) => {
-    navigate(`/learn/${categoryId}`);
-  };
-
-  const handleFeedbackSubmitted = () => {
-    setFeedbackRefreshTrigger(prev => prev + 1);
-  };
+  const handleShowProgress = () => navigate('/progress');
+  const handleCategoryStart = (categoryId: string) => navigate(`/learn/${categoryId}`);
+  const handleFeedbackSubmitted = () => setFeedbackRefreshTrigger(prev => prev + 1);
 
   if (isLoading) {
     return (
@@ -143,7 +116,6 @@ const Index = () => {
         </RoadmapModal>
       </div>
 
-      {/* Hero Section */}
       <Hero
         totalQuestions={totalQuestions}
         answeredQuestions={answeredQuestions}
@@ -152,25 +124,19 @@ const Index = () => {
         onShowProgress={handleShowProgress}
       />
 
-      {/* Categories Section */}
       <section id="categories-section" className="py-20 px-6 bg-background">
         <div className="max-w-6xl mx-auto">
-          {/* Section header */}
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-medium text-foreground mb-4">
-              Lernkategorien
-            </h2>
+            <h2 className="text-3xl font-medium text-foreground mb-4">Lernkategorien</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Wähle eine Kategorie aus und beginne dein strukturiertes Lernen.
             </p>
           </div>
 
-          {/* Search bar */}
           <div className="mb-12">
-          <SearchBar onSearch={setSearchQuery} />
+            <SearchBar onSearch={setSearchQuery} />
           </div>
 
-        {/* Minimalist statistics section */}
         <section className="py-16 bg-muted/30">
           <div className="container mx-auto px-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl mx-auto">
@@ -190,7 +156,6 @@ const Index = () => {
           </div>
         </section>
 
-          {/* Category grid */}
           {filteredCategories.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredCategories.map((category) => (
@@ -219,13 +184,10 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Feedback Section */}
       <section className="py-20 px-6 bg-muted/30">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-medium text-foreground mb-4">
-              Feedback
-            </h2>
+            <h2 className="text-3xl font-medium text-foreground mb-4">Feedback</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Teile deine Gedanken mit uns und sieh, was andere über die Lernplattform sagen.
             </p>
@@ -242,7 +204,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Simple Footer */}
       <footer className="py-12 px-6 border-t border-border bg-background">
         <div className="max-w-4xl mx-auto text-center">
           <div className="mb-6">

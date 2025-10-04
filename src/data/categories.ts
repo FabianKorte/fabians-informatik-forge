@@ -199,5 +199,15 @@ export const categories: Category[] = [
     icon: Braces,
     difficulty: "Experte",
     gradient: "from-fuchsia-500 to-purple-600"
+  },
+  {
+    id: "zufallstraining",
+    title: "Zufallstraining",
+    description: "Alle Aufgaben aus allen Kategorien - Perfekt zur Prüfungsvorbereitung",
+    totalElements: 500,
+    completedElements: 0,
+    icon: Brain,
+    difficulty: "Fortgeschritten",
+    gradient: "from-violet-500 to-fuchsia-600"
   }
 ];

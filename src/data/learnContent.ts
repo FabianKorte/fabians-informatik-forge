@@ -87,33 +87,6 @@ export const learnContent: Record<string, LearnModule[]> = {
       ]
     }
   ],
-  programmierung: [
-    {
-      type: "flashcards",
-      title: "Grundbegriffe der Programmierung - IHK Prüfungswissen",
-      cards: [
-        { front: "Algorithmus - Definition und Eigenschaften", back: "Ein Algorithmus ist eine endliche, eindeutige Schrittfolge zur Lösung eines Problems. **Wichtige Eigenschaften für die IHK-Prüfung:** 1. **Finitheit** (endlich beschreibbar), 2. **Determinismus** (eindeutig), 3. **Terminierung** (bricht ab), 4. **Effizienz** (ressourcenschonend). **Prüfungstipp:** Kann in Pseudocode oder Struktogramm dargestellt werden. Beispiele: Sortieralgorithmen (Bubble Sort O(n²), Quick Sort O(n log n))." },
-        { front: "Datentypen in der Programmierung", back: "**Primitive Datentypen:** Integer (ganze Zahlen), Float/Double (Gleitkomma), Boolean (wahr/falsch), Character (Zeichen). **Komplexe Datentypen:** Array (indizierte Liste), String (Zeichenkette), Object/Record (strukturierte Daten). **IHK-Prüfungsrelevant:** Speicherverbrauch (int: 4 Byte, double: 8 Byte), Wertebereich (int: -2³¹ bis 2³¹-1), Typkonvertierung (implizit vs. explizit)." },
-        { front: "Objektorientierte Programmierung - Grundlagen", back: "**Vier Grundprinzipien:** 1. **Kapselung** (Information Hiding), 2. **Vererbung** (Inheritance), 3. **Polymorphismus** (Methodenüberladung), 4. **Abstraktion** (Datenabstraktion). **IHK-Prüfungsrelevant:** Klasse vs. Objekt, Konstruktor, Destruktor, Zugriffsmodifizierer (private, protected, public), UML-Klassendiagramme. **Praxisbeispiel:** Fahrzeug (Oberklasse) → PKW, LKW (Unterklassen)." },
-      ]
-    },
-    {
-      type: "quiz",
-      title: "IHK-Prüfungsfragen Programmierung - Grundlagen",
-      questions: [
-        {
-          question: "Welche Zeitkomplexität hat die binäre Suche in einem sortierten Array mit n Elementen?",
-          options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
-          correctIndex: 1,
-          explanation: "Die binäre Suche teilt den Suchbereich in jedem Schritt in der Hälfte, daher logarithmische Komplexität O(log n). Bei 1000 Elementen sind maximal 10 Vergleiche nötig (2¹⁰ = 1024)."
-        },
-        {
-          question: "Was ist der Hauptunterschied zwischen Call by Value und Call by Reference?",
-          options: ["Geschwindigkeit der Ausführung", "Call by Value übergibt Kopie, Call by Reference übergibt Adresse", "Call by Reference ist sicherer", "Kein Unterschied"],
-          correctIndex: 1,
-          explanation: "**Call by Value** erstellt eine Kopie des Wertes (ursprüngliche Variable bleibt unverändert). **Call by Reference** übergibt die Speicheradresse (ursprüngliche Variable kann verändert werden)."
-        },
-      ]
-    }
-  ]
+  programmierung: [],
+  zufallstraining: []
 };
