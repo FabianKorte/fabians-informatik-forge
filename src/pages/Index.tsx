@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Hero } from "@/components/Hero";
 import { CategoryCard } from "@/components/CategoryCard";
@@ -11,7 +11,7 @@ import { seedDatabase } from "@/lib/seedDatabase";
 import { getCategoriesFromDatabase, updateCategoryElementCounts } from "@/lib/categoryUtils";
 import { getAllModules } from "@/lib/learnContentUtils";
 import type { Category } from "@/data/categories";
-import { Download, MapPin } from "lucide-react";
+import { Download, MapPin, Sparkles } from "lucide-react";
 import logo from "@/assets/logo.png";
 import type { LearnModule } from "@/types/learn";
 
@@ -24,27 +24,32 @@ const Index = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    let mounted = true;
+    
     const initializeData = async () => {
       try {
         setIsLoading(true);
         await seedDatabase();
-        let cats = await getCategoriesFromDatabase();
-        cats = await updateCategoryElementCounts(cats);
-        setCategories(cats);
+        const cats = await getCategoriesFromDatabase();
+        const catsWithCounts = await updateCategoryElementCounts(cats);
         
-        const modules = await getAllModules();
-        setAllModules(modules);
+        if (mounted) {
+          setCategories(catsWithCounts);
+          const modules = await getAllModules();
+          setAllModules(modules);
+        }
       } catch (error) {
         console.error('Error initializing data:', error);
       } finally {
-        setIsLoading(false);
+        if (mounted) setIsLoading(false);
       }
     };
 
     initializeData();
+    return () => { mounted = false; };
   }, []);
 
-  const countElements = (modules: LearnModule[]) => modules.reduce((sum, m) => {
+  const countElements = useMemo(() => (modules: LearnModule[]) => modules.reduce((sum, m) => {
     switch (m.type) {
       case "flashcards": return sum + m.cards.length;
       case "quiz": return sum + m.questions.length;
@@ -56,19 +61,38 @@ const Index = () => {
       case "scenario": return sum + m.scenarios.length;
       default: return sum;
     }
-  }, 0);
+  }, 0), []);
 
-  const dynamicTotalsByCategory: Record<string, number> = Object.fromEntries(
-    categories.map((cat) => [cat.id, countElements(allModules[cat.id] || [])])
-  );
+  const { regularCategories, randomTrainingCategory, stats } = useMemo(() => {
+    const random = categories.find(c => c.id === 'zufallstraining');
+    const regular = categories.filter(c => c.id !== 'zufallstraining');
+    
+    const dynamicTotalsByCategory: Record<string, number> = Object.fromEntries(
+      categories.map((cat) => [cat.id, countElements(allModules[cat.id] || [])])
+    );
 
-  const totalQuestions = Object.values(dynamicTotalsByCategory).reduce((a, b) => a + b, 0);
-  const answeredQuestions = categories.reduce((sum, cat) => sum + (cat.completedElements || 0), 0);
-  const correctAnswers = Math.floor(answeredQuestions * 0.78);
+    const totalQuestions = Object.values(dynamicTotalsByCategory).reduce((a, b) => a + b, 0);
+    const answeredQuestions = categories.reduce((sum, cat) => sum + (cat.completedElements || 0), 0);
+    const correctAnswers = Math.floor(answeredQuestions * 0.78);
 
-  const filteredCategories = categories.filter(category =>
-    category.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    category.description.toLowerCase().includes(searchQuery.toLowerCase())
+    return {
+      regularCategories: regular,
+      randomTrainingCategory: random,
+      stats: {
+        totalCategories: regular.length,
+        totalQuestions,
+        answeredQuestions,
+        correctAnswers,
+        dynamicTotalsByCategory
+      }
+    };
+  }, [categories, allModules, countElements]);
+
+  const filteredCategories = useMemo(() => 
+    regularCategories.filter(category =>
+      category.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      category.description.toLowerCase().includes(searchQuery.toLowerCase())
+    ), [regularCategories, searchQuery]
   );
 
   const handleStartLearning = () => {
@@ -117,12 +141,42 @@ const Index = () => {
       </div>
 
       <Hero
-        totalQuestions={totalQuestions}
-        answeredQuestions={answeredQuestions}
-        correctAnswers={correctAnswers}
+        totalQuestions={stats.totalQuestions}
+        answeredQuestions={stats.answeredQuestions}
+        correctAnswers={stats.correctAnswers}
         onStartLearning={handleStartLearning}
         onShowProgress={handleShowProgress}
       />
+
+      {randomTrainingCategory && (
+        <section className="py-12 px-6 bg-gradient-to-br from-violet-500/10 via-fuchsia-500/10 to-purple-500/10">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center gap-2 mb-4">
+                <Sparkles className="w-6 h-6 text-violet-500" />
+                <h2 className="text-3xl font-medium text-foreground">Zufallstraining</h2>
+                <Sparkles className="w-6 h-6 text-fuchsia-500" />
+              </div>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
+                Alle Aufgaben aus allen Kategorien in einem Training - Perfekt zur Prüfungsvorbereitung
+              </p>
+            </div>
+            <div className="flex justify-center">
+              <div className="w-full max-w-md">
+                <CategoryCard
+                  title={randomTrainingCategory.title}
+                  description={randomTrainingCategory.description}
+                  totalElements={stats.dynamicTotalsByCategory[randomTrainingCategory.id]}
+                  completedElements={randomTrainingCategory.completedElements}
+                  icon={randomTrainingCategory.icon}
+                  difficulty={randomTrainingCategory.difficulty}
+                  onStart={() => handleCategoryStart(randomTrainingCategory.id)}
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       <section id="categories-section" className="py-20 px-6 bg-background">
         <div className="max-w-6xl mx-auto">
@@ -137,24 +191,24 @@ const Index = () => {
             <SearchBar onSearch={setSearchQuery} />
           </div>
 
-        <section className="py-16 bg-muted/30">
-          <div className="container mx-auto px-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl mx-auto">
-              <div className="text-center p-6 bg-card rounded-lg border border-border">
-                <div className="text-2xl font-light text-foreground mb-1">{filteredCategories.length}</div>
-                <div className="text-sm text-muted-foreground">Kategorien</div>
-              </div>
-              <div className="text-center p-6 bg-card rounded-lg border border-border">
-                <div className="text-2xl font-light text-accent mb-1">{totalQuestions}</div>
-                <div className="text-sm text-muted-foreground">Fragen insgesamt</div>
-              </div>
-              <div className="text-center p-6 bg-card rounded-lg border border-border">
-                <div className="text-2xl font-light text-success mb-1">{correctAnswers}</div>
-                <div className="text-sm text-muted-foreground">Richtig beantwortet</div>
+          <section className="py-16 bg-muted/30 rounded-xl mb-12">
+            <div className="container mx-auto px-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl mx-auto">
+                <div className="text-center p-6 bg-card rounded-lg border border-border">
+                  <div className="text-2xl font-light text-foreground mb-1">{stats.totalCategories}</div>
+                  <div className="text-sm text-muted-foreground">Kategorien</div>
+                </div>
+                <div className="text-center p-6 bg-card rounded-lg border border-border">
+                  <div className="text-2xl font-light text-accent mb-1">{stats.totalQuestions}</div>
+                  <div className="text-sm text-muted-foreground">Fragen insgesamt</div>
+                </div>
+                <div className="text-center p-6 bg-card rounded-lg border border-border">
+                  <div className="text-2xl font-light text-success mb-1">{stats.correctAnswers}</div>
+                  <div className="text-sm text-muted-foreground">Richtig beantwortet</div>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
           {filteredCategories.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -163,7 +217,7 @@ const Index = () => {
                   key={category.id}
                   title={category.title}
                   description={category.description}
-                  totalElements={dynamicTotalsByCategory[category.id]}
+                  totalElements={stats.dynamicTotalsByCategory[category.id]}
                   completedElements={category.completedElements}
                   icon={category.icon}
                   difficulty={category.difficulty}
