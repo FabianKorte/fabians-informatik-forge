@@ -127,6 +127,16 @@ const Index = () => {
           variant="outline"
           size="sm"
           className="shadow-lg backdrop-blur-sm bg-background/80 border-border/50"
+          onClick={() => navigate('/admin')}
+        >
+          <span className="hidden sm:inline">Admin</span>
+          <span className="sm:hidden">🔐</span>
+        </Button>
+        
+        <Button
+          variant="outline"
+          size="sm"
+          className="shadow-lg backdrop-blur-sm bg-background/80 border-border/50"
           onClick={() => window.open('https://drive.google.com/drive/folders/1x_OJDgFV7z0XGMcSBPIvKe-fTTHqp1kR?usp=sharing', '_blank')}
         >
           <Download className="w-4 h-4" />

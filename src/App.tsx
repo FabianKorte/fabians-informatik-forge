@@ -7,26 +7,41 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import LearnPage from "./pages/Learn";
 import Progress from "./pages/Progress";
+import Auth from "./pages/Auth";
+import Admin from "./pages/Admin";
 import { AIChatbot } from "@/components/AIChatbot";
+import { AuthProvider } from "@/hooks/useAuth";
+import { ProtectedRoute } from "@/components/admin/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/progress" element={<Progress />} />
-          <Route path="/learn/:categoryId" element={<LearnPage />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-      <AIChatbot />
-    </TooltipProvider>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/progress" element={<Progress />} />
+            <Route path="/learn/:categoryId" element={<LearnPage />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route 
+              path="/admin" 
+              element={
+                <ProtectedRoute>
+                  <Admin />
+                </ProtectedRoute>
+              } 
+            />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+        <AIChatbot />
+      </TooltipProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 
