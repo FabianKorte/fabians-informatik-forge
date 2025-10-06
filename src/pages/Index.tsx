@@ -8,7 +8,7 @@ import { FeedbackList } from "@/components/feedback/FeedbackList";
 import { RoadmapModal } from "@/components/RoadmapModal";
 import { Button } from "@/components/ui/button";
 import { seedDatabase } from "@/lib/seedDatabase";
-import { getCategoriesFromDatabase, updateCategoryElementCounts } from "@/lib/categoryUtils";
+import { getCategoriesFromDatabase } from "@/lib/categoryUtils";
 import { getAllModules } from "@/lib/learnContentUtils";
 import type { Category } from "@/data/categories";
 import { Download, MapPin, Sparkles } from "lucide-react";
@@ -30,12 +30,13 @@ const Index = () => {
       try {
         setIsLoading(true);
         await seedDatabase();
-        const cats = await getCategoriesFromDatabase();
-        const catsWithCounts = await updateCategoryElementCounts(cats);
+        const [cats, modules] = await Promise.all([
+          getCategoriesFromDatabase(),
+          getAllModules(),
+        ]);
         
         if (mounted) {
-          setCategories(catsWithCounts);
-          const modules = await getAllModules();
+          setCategories(cats);
           setAllModules(modules);
         }
       } catch (error) {
@@ -61,6 +62,7 @@ const Index = () => {
         case "memory": return sum + (m.games?.reduce((a, g) => a + (g.pairs?.length || 0), 0) || 0);
         case "timeline": return sum + (m.timelines?.reduce((a, t) => a + (t.events?.length || 0), 0) || 0);
         case "scenario": return sum + (m.scenarios?.length || 0);
+        case "interactive": return sum + (m.tasks?.length || 0);
         default: return sum;
       }
     }, 0);
