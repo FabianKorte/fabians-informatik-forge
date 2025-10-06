@@ -32,6 +32,21 @@ export const FeedbackForm = ({ onFeedbackSubmitted }: { onFeedbackSubmitted?: ()
       return;
     }
     
+    // Check 24h rate limit
+    const lastSubmission = localStorage.getItem('lastFeedbackSubmission');
+    if (lastSubmission) {
+      const hoursSinceLastSubmission = (Date.now() - parseInt(lastSubmission)) / (1000 * 60 * 60);
+      if (hoursSinceLastSubmission < 24) {
+        const hoursRemaining = Math.ceil(24 - hoursSinceLastSubmission);
+        toast({
+          title: "Zu früh",
+          description: `Du kannst nur alle 24 Stunden Feedback senden. Versuche es in ${hoursRemaining} Stunde(n) erneut.`,
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+    
     // Validate input with zod
     const validationResult = feedbackSchema.safeParse({
       name: name,
@@ -61,6 +76,9 @@ export const FeedbackForm = ({ onFeedbackSubmitted }: { onFeedbackSubmitted?: ()
 
       if (error) throw error;
 
+      // Store submission timestamp
+      localStorage.setItem('lastFeedbackSubmission', Date.now().toString());
+      
       toast({
         title: "Feedback gesendet!",
         description: "Vielen Dank für dein Feedback.",
