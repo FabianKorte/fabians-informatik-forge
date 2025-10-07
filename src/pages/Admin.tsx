@@ -8,6 +8,8 @@ import { LogOut, BookOpen, MapPin, MessageSquare, Home } from "lucide-react";
 import { AdminLearningContent } from "@/components/admin/AdminLearningContent";
 import { AdminRoadmap } from "@/components/admin/AdminRoadmap";
 import { AdminFeedbacks } from "@/components/admin/AdminFeedbacks";
+import { AdminUsers } from "@/components/admin/AdminUsers";
+import { AdminSuggestions } from "@/components/admin/AdminSuggestions";
 
 export default function Admin() {
   const { signOut } = useAuth();
@@ -49,10 +51,14 @@ export default function Admin() {
           </CardHeader>
           <CardContent>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="grid w-full grid-cols-5">
                 <TabsTrigger value="learning">
                   <BookOpen className="w-4 h-4 mr-2" />
                   Lerninhalte
+                </TabsTrigger>
+                <TabsTrigger value="suggestions">
+                  <MessageSquare className="w-4 h-4 mr-2" />
+                  Vorschläge
                 </TabsTrigger>
                 <TabsTrigger value="roadmap">
                   <MapPin className="w-4 h-4 mr-2" />
@@ -62,10 +68,18 @@ export default function Admin() {
                   <MessageSquare className="w-4 h-4 mr-2" />
                   Feedbacks
                 </TabsTrigger>
+                <TabsTrigger value="users">
+                  <Home className="w-4 h-4 mr-2" />
+                  Benutzer
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="learning" className="mt-6">
                 <AdminLearningContent />
+              </TabsContent>
+
+              <TabsContent value="suggestions" className="mt-6">
+                <AdminSuggestions />
               </TabsContent>
 
               <TabsContent value="roadmap" className="mt-6">
@@ -74,6 +88,10 @@ export default function Admin() {
 
               <TabsContent value="feedbacks" className="mt-6">
                 <AdminFeedbacks />
+              </TabsContent>
+
+              <TabsContent value="users" className="mt-6">
+                <AdminUsers />
               </TabsContent>
             </Tabs>
           </CardContent>

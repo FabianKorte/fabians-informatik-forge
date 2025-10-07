@@ -68,6 +68,45 @@ export type Database = {
         }
         Relationships: []
       }
+      learn_module_suggestions: {
+        Row: {
+          admin_notes: string | null
+          category_id: string
+          content: Json
+          created_at: string
+          id: string
+          module_type: string
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          category_id: string
+          content: Json
+          created_at?: string
+          id?: string
+          module_type: string
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          category_id?: string
+          content?: Json
+          created_at?: string
+          id?: string
+          module_type?: string
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       learn_modules: {
         Row: {
           category_id: string
@@ -109,6 +148,27 @@ export type Database = {
           },
         ]
       }
+      profiles: {
+        Row: {
+          created_at: string
+          id: string
+          updated_at: string
+          username: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          updated_at?: string
+          username: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          updated_at?: string
+          username?: string
+        }
+        Relationships: []
+      }
       roadmap: {
         Row: {
           category: string | null
@@ -148,6 +208,39 @@ export type Database = {
           status?: string
           title?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      user_progress: {
+        Row: {
+          category_id: string
+          created_at: string
+          id: string
+          module_index: number
+          module_type: string
+          progress_data: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category_id: string
+          created_at?: string
+          id?: string
+          module_index: number
+          module_type: string
+          progress_data?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category_id?: string
+          created_at?: string
+          id?: string
+          module_index?: number
+          module_type?: string
+          progress_data?: Json
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
