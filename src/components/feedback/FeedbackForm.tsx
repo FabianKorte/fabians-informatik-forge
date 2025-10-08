@@ -109,6 +109,10 @@ export const FeedbackForm = ({ onFeedbackSubmitted }: { onFeedbackSubmitted?: ()
         </CardTitle>
         <CardDescription>
           Teile deine Gedanken und Verbesserungsvorschläge mit uns.
+          <br />
+          <span className="text-xs text-muted-foreground">
+            Hinweis: Feedbacks sind nur für Administratoren sichtbar und werden vertraulich behandelt.
+          </span>
         </CardDescription>
       </CardHeader>
       <CardContent>
