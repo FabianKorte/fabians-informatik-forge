@@ -23,7 +23,7 @@ const Index = () => {
   const [allModules, setAllModules] = useState<Record<string, LearnModule[]>>({});
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
 
   useEffect(() => {
     let mounted = true;
@@ -126,15 +126,28 @@ const Index = () => {
       {/* Floating Action Buttons */}
       <div className="fixed top-6 right-6 z-50 flex flex-col gap-3">
         {user ? (
-          <Button
-            variant="outline"
-            size="sm"
-            className="shadow-lg backdrop-blur-sm bg-background/80 border-border/50"
-            onClick={() => navigate('/dashboard')}
-          >
-            <span className="hidden sm:inline">Dashboard</span>
-            <span className="sm:hidden">👤</span>
-          </Button>
+          <>
+            <Button
+              variant="outline"
+              size="sm"
+              className="shadow-lg backdrop-blur-sm bg-background/80 border-border/50"
+              onClick={() => navigate('/dashboard')}
+            >
+              <span className="hidden sm:inline">Dashboard</span>
+              <span className="sm:hidden">👤</span>
+            </Button>
+            {isAdmin && (
+              <Button
+                variant="default"
+                size="sm"
+                className="shadow-lg backdrop-blur-sm"
+                onClick={() => navigate('/admin')}
+              >
+                <span className="hidden sm:inline">Admin-Bereich</span>
+                <span className="sm:hidden">⚙️</span>
+              </Button>
+            )}
+          </>
         ) : (
           <Button
             variant="outline"

@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_notes: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       categories: {
         Row: {
           created_at: string
@@ -53,18 +80,21 @@ export type Database = {
           id: string
           message: string
           name: string
+          status: string | null
         }
         Insert: {
           created_at?: string | null
           id?: string
           message: string
           name?: string
+          status?: string | null
         }
         Update: {
           created_at?: string | null
           id?: string
           message?: string
           name?: string
+          status?: string | null
         }
         Relationships: []
       }

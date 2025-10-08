@@ -4,12 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/useAuth";
-import { LogOut, BookOpen, MapPin, MessageSquare, Home } from "lucide-react";
+import { LogOut, BookOpen, MapPin, MessageSquare, Home, FileText } from "lucide-react";
 import { AdminLearningContent } from "@/components/admin/AdminLearningContent";
 import { AdminRoadmap } from "@/components/admin/AdminRoadmap";
 import { AdminFeedbacks } from "@/components/admin/AdminFeedbacks";
 import { AdminUsers } from "@/components/admin/AdminUsers";
 import { AdminSuggestions } from "@/components/admin/AdminSuggestions";
+import { AdminNotes } from "@/components/admin/AdminNotes";
 
 export default function Admin() {
   const { signOut } = useAuth();
@@ -51,7 +52,7 @@ export default function Admin() {
           </CardHeader>
           <CardContent>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-5">
+              <TabsList className="grid w-full grid-cols-6">
                 <TabsTrigger value="learning">
                   <BookOpen className="w-4 h-4 mr-2" />
                   Lerninhalte
@@ -71,6 +72,10 @@ export default function Admin() {
                 <TabsTrigger value="users">
                   <Home className="w-4 h-4 mr-2" />
                   Benutzer
+                </TabsTrigger>
+                <TabsTrigger value="notes">
+                  <FileText className="w-4 h-4 mr-2" />
+                  Notizen
                 </TabsTrigger>
               </TabsList>
 
@@ -92,6 +97,10 @@ export default function Admin() {
 
               <TabsContent value="users" className="mt-6">
                 <AdminUsers />
+              </TabsContent>
+
+              <TabsContent value="notes" className="mt-6">
+                <AdminNotes />
               </TabsContent>
             </Tabs>
           </CardContent>

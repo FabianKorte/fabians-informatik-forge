@@ -17,20 +17,32 @@ export const SimpleLearningContentForm = () => {
   const [categoryId, setCategoryId] = useState("");
   const [moduleType, setModuleType] = useState("");
   const [title, setTitle] = useState("");
-  const [items, setItems] = useState<string[]>(["", ""]);
+  const [items, setItems] = useState<any[]>([{ front: "", back: "" }]);
 
   const addItem = () => {
-    setItems([...items, ""]);
+    if (moduleType === "flashcards") {
+      setItems([...items, { front: "", back: "" }]);
+    } else if (moduleType === "quiz") {
+      setItems([...items, { question: "", options: ["", "", "", ""], correctAnswer: 0 }]);
+    }
   };
 
-  const updateItem = (index: number, value: string) => {
+  const updateItem = (index: number, field: string, value: any) => {
     const newItems = [...items];
-    newItems[index] = value;
+    newItems[index] = { ...newItems[index], [field]: value };
+    setItems(newItems);
+  };
+
+  const updateQuizOption = (itemIndex: number, optionIndex: number, value: string) => {
+    const newItems = [...items];
+    const options = [...newItems[itemIndex].options];
+    options[optionIndex] = value;
+    newItems[itemIndex] = { ...newItems[itemIndex], options };
     setItems(newItems);
   };
 
   const removeItem = (index: number) => {
-    if (items.length > 2) {
+    if (items.length > 1) {
       setItems(items.filter((_, i) => i !== index));
     }
   };
@@ -47,7 +59,7 @@ export const SimpleLearningContentForm = () => {
       return;
     }
 
-    if (!categoryId || !moduleType || !title || items.some(item => !item.trim())) {
+    if (!categoryId || !moduleType || !title) {
       toast({
         title: "Fehler",
         description: "Bitte fülle alle Felder aus",
@@ -56,42 +68,59 @@ export const SimpleLearningContentForm = () => {
       return;
     }
 
+    // Validate based on type
+    if (moduleType === "flashcards") {
+      const invalid = items.some(item => !item.front?.trim() || !item.back?.trim());
+      if (invalid) {
+        toast({
+          title: "Fehler",
+          description: "Bitte fülle alle Karteikarten-Felder aus",
+          variant: "destructive",
+        });
+        return;
+      }
+    } else if (moduleType === "quiz") {
+      const invalid = items.some(item => 
+        !item.question?.trim() || 
+        item.options.some((opt: string) => !opt?.trim())
+      );
+      if (invalid) {
+        toast({
+          title: "Fehler",
+          description: "Bitte fülle alle Quiz-Felder aus",
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+
     setIsLoading(true);
 
     try {
-      // Create simple content structure based on type
+      // Create content structure based on type
       let content = {};
-      const cleanItems = items.filter(item => item.trim());
 
       switch (moduleType) {
         case "flashcards":
           content = {
-            cards: cleanItems.map((item, index) => ({
-              question: item,
-              answer: `Antwort ${index + 1} (wird vom Admin bearbeitet)`
+            cards: items.map(item => ({
+              question: item.front,
+              answer: item.back
             }))
           };
           break;
         case "quiz":
           content = {
-            questions: cleanItems.map((item, index) => ({
-              question: item,
-              options: ["Option A", "Option B", "Option C", "Option D"],
-              correctAnswer: 0,
-              explanation: "Wird vom Admin bearbeitet"
-            }))
-          };
-          break;
-        case "matching":
-          content = {
-            pairs: cleanItems.map((item, index) => ({
-              term: item,
-              definition: `Definition ${index + 1} (wird vom Admin bearbeitet)`
+            questions: items.map(item => ({
+              question: item.question,
+              options: item.options,
+              correctAnswer: item.correctAnswer,
+              explanation: "(wird vom Admin bearbeitet)"
             }))
           };
           break;
         default:
-          content = { items: cleanItems };
+          content = { items: [] };
       }
 
       const { error } = await supabase
@@ -117,7 +146,7 @@ export const SimpleLearningContentForm = () => {
       setCategoryId("");
       setModuleType("");
       setTitle("");
-      setItems(["", ""]);
+      setItems([{ front: "", back: "" }]);
     } catch (error: any) {
       toast({
         title: "Fehler",
@@ -162,14 +191,25 @@ export const SimpleLearningContentForm = () => {
 
         <div className="space-y-2">
           <Label htmlFor="type">Lern-Typ</Label>
-          <Select value={moduleType} onValueChange={setModuleType} disabled={isLoading}>
+          <Select 
+            value={moduleType} 
+            onValueChange={(value) => {
+              setModuleType(value);
+              // Reset items when type changes
+              if (value === "flashcards") {
+                setItems([{ front: "", back: "" }]);
+              } else if (value === "quiz") {
+                setItems([{ question: "", options: ["", "", "", ""], correctAnswer: 0 }]);
+              }
+            }} 
+            disabled={isLoading}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Wähle einen Typ" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="flashcards">Karteikarten</SelectItem>
               <SelectItem value="quiz">Quiz</SelectItem>
-              <SelectItem value="matching">Zuordnung</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -186,45 +226,109 @@ export const SimpleLearningContentForm = () => {
         </div>
 
         <div className="space-y-2">
-          <Label>Inhalte (mindestens 2)</Label>
+          <Label>Inhalte (mindestens 1)</Label>
           <p className="text-xs text-muted-foreground mb-2">
-            {moduleType === "flashcards" && "Gib die Fragen ein - Antworten werden später vom Admin ergänzt"}
-            {moduleType === "quiz" && "Gib die Fragen ein - Optionen und Antworten werden später vom Admin ergänzt"}
-            {moduleType === "matching" && "Gib die Begriffe ein - Definitionen werden später vom Admin ergänzt"}
+            {moduleType === "flashcards" && "Erstelle Karteikarten mit Vorder- und Rückseite"}
+            {moduleType === "quiz" && "Erstelle Quiz-Fragen mit 4 Antwortmöglichkeiten"}
             {!moduleType && "Wähle zuerst einen Lern-Typ"}
           </p>
-          {items.map((item, index) => (
-            <div key={index} className="flex gap-2">
-              <Input
-                placeholder={`${moduleType === 'flashcards' ? 'Frage' : moduleType === 'quiz' ? 'Frage' : 'Begriff'} ${index + 1}`}
-                value={item}
-                onChange={(e) => updateItem(index, e.target.value)}
-                disabled={isLoading}
-              />
-              {items.length > 2 && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="icon"
-                  onClick={() => removeItem(index)}
+          
+          {moduleType === "flashcards" && items.map((item, index) => (
+            <Card key={index} className="p-4">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between mb-2">
+                  <Label className="text-sm font-medium">Karteikarte {index + 1}</Label>
+                  {items.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeItem(index)}
+                      disabled={isLoading}
+                    >
+                      <span className="text-lg">×</span>
+                    </Button>
+                  )}
+                </div>
+                <Input
+                  placeholder="Vorderseite (Frage)"
+                  value={item.front}
+                  onChange={(e) => updateItem(index, "front", e.target.value)}
                   disabled={isLoading}
-                >
-                  <span className="text-lg">×</span>
-                </Button>
-              )}
-            </div>
+                />
+                <Input
+                  placeholder="Rückseite (Antwort)"
+                  value={item.back}
+                  onChange={(e) => updateItem(index, "back", e.target.value)}
+                  disabled={isLoading}
+                />
+              </div>
+            </Card>
           ))}
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={addItem}
-            disabled={isLoading}
-            className="w-full"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Weiteren Inhalt hinzufügen
-          </Button>
+
+          {moduleType === "quiz" && items.map((item, index) => (
+            <Card key={index} className="p-4">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between mb-2">
+                  <Label className="text-sm font-medium">Quiz-Frage {index + 1}</Label>
+                  {items.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeItem(index)}
+                      disabled={isLoading}
+                    >
+                      <span className="text-lg">×</span>
+                    </Button>
+                  )}
+                </div>
+                <Input
+                  placeholder="Frage"
+                  value={item.question}
+                  onChange={(e) => updateItem(index, "question", e.target.value)}
+                  disabled={isLoading}
+                />
+                <div className="space-y-1">
+                  <Label className="text-xs">Antwortmöglichkeiten</Label>
+                  {item.options.map((option: string, optIndex: number) => (
+                    <div key={optIndex} className="flex gap-2 items-center">
+                      <input
+                        type="radio"
+                        name={`correct-${index}`}
+                        checked={item.correctAnswer === optIndex}
+                        onChange={() => updateItem(index, "correctAnswer", optIndex)}
+                        disabled={isLoading}
+                      />
+                      <Input
+                        placeholder={`Option ${optIndex + 1}`}
+                        value={option}
+                        onChange={(e) => updateQuizOption(index, optIndex, e.target.value)}
+                        disabled={isLoading}
+                      />
+                    </div>
+                  ))}
+                  <p className="text-xs text-muted-foreground">
+                    Wähle die richtige Antwort mit dem Radio-Button aus
+                  </p>
+                </div>
+              </div>
+            </Card>
+          ))}
+
+          {moduleType && (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={addItem}
+              disabled={isLoading}
+              className="w-full"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              {moduleType === "flashcards" ? "Weitere Karteikarte" : "Weitere Frage"} hinzufügen
+            </Button>
+          )}
         </div>
 
         <Button type="submit" disabled={isLoading} className="w-full">

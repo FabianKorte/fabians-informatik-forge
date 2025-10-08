@@ -3,7 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Trash2, RefreshCw } from "lucide-react";
+import { Loader2, Trash2, RefreshCw, Circle } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
 
@@ -12,6 +14,7 @@ interface Feedback {
   name: string;
   message: string;
   created_at: string;
+  status: string;
 }
 
 export const AdminFeedbacks = () => {
@@ -65,6 +68,27 @@ export const AdminFeedbacks = () => {
     }
   };
 
+  const handleStatusChange = async (id: string, newStatus: string) => {
+    const { error } = await supabase
+      .from('feedbacks')
+      .update({ status: newStatus })
+      .eq('id', id);
+
+    if (error) {
+      toast({
+        title: "Fehler",
+        description: "Konnte Status nicht ändern",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Erfolg",
+        description: "Status wurde aktualisiert",
+      });
+      fetchFeedbacks();
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex justify-center py-8">
@@ -100,11 +124,34 @@ export const AdminFeedbacks = () => {
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="font-semibold">{feedback.name}</span>
+                    <Badge variant={
+                      feedback.status === 'resolved' ? 'default' :
+                      feedback.status === 'in_progress' ? 'secondary' :
+                      'outline'
+                    }>
+                      <Circle className="w-2 h-2 mr-1 fill-current" />
+                      {feedback.status === 'new' ? 'Neu' :
+                       feedback.status === 'in_progress' ? 'In Arbeit' :
+                       'Erledigt'}
+                    </Badge>
                     <span className="text-xs text-muted-foreground">
                       {format(new Date(feedback.created_at), "PPp", { locale: de })}
                     </span>
                   </div>
-                  <p className="text-sm">{feedback.message}</p>
+                  <p className="text-sm mb-3">{feedback.message}</p>
+                  <Select 
+                    value={feedback.status} 
+                    onValueChange={(value) => handleStatusChange(feedback.id, value)}
+                  >
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="new">Neu</SelectItem>
+                      <SelectItem value="in_progress">In Arbeit</SelectItem>
+                      <SelectItem value="resolved">Erledigt</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <Button 
                   size="sm" 

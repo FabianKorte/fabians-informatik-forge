@@ -40,20 +40,31 @@ export default function Auth() {
   const handleSubmit = async (e: React.FormEvent, mode: "login" | "signup") => {
     e.preventDefault();
     
-    const validationData = mode === "signup" 
-      ? { email, password, username }
-      : { email, password };
-    
-    const validationResult = authSchema.safeParse(validationData);
-    
-    if (!validationResult.success) {
-      toast({
-        title: "Eingabefehler",
-        description: validationResult.error.issues[0].message,
-        variant: "destructive",
-        duration: 5000,
-      });
-      return;
+    // Only validate password requirements for signup
+    if (mode === "signup") {
+      const validationData = { email, password, username };
+      const validationResult = authSchema.safeParse(validationData);
+      
+      if (!validationResult.success) {
+        toast({
+          title: "Eingabefehler",
+          description: validationResult.error.issues[0].message,
+          variant: "destructive",
+          duration: 5000,
+        });
+        return;
+      }
+    } else {
+      // Simple validation for login
+      if (!email || !password) {
+        toast({
+          title: "Eingabefehler",
+          description: "Bitte E-Mail und Passwort eingeben",
+          variant: "destructive",
+          duration: 5000,
+        });
+        return;
+      }
     }
 
     setIsLoading(true);

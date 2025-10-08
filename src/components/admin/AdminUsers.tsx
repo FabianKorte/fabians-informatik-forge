@@ -4,7 +4,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Shield, User, Trash2 } from "lucide-react";
+import { Loader2, Shield, User, Trash2, Info, Key } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,6 +28,7 @@ interface UserWithRole {
 export const AdminUsers = () => {
   const [users, setUsers] = useState<UserWithRole[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedUser, setSelectedUser] = useState<UserWithRole | null>(null);
   const { toast } = useToast();
 
   const fetchUsers = async () => {
@@ -124,6 +125,34 @@ export const AdminUsers = () => {
     }
   };
 
+  const handlePasswordReset = async (email: string) => {
+    if (!email || email === 'Unbekannt') {
+      toast({
+        title: "Fehler",
+        description: "Keine gültige E-Mail-Adresse vorhanden",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/auth`,
+    });
+
+    if (error) {
+      toast({
+        title: "Fehler",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Erfolgreich",
+        description: "Passwort-Reset-E-Mail wurde gesendet",
+      });
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-8">
@@ -167,6 +196,41 @@ export const AdminUsers = () => {
               </div>
 
               <div className="flex gap-2">
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      <Info className="w-4 h-4 mr-2" />
+                      Details
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Benutzerdetails</AlertDialogTitle>
+                      <AlertDialogDescription asChild>
+                        <div className="space-y-2 text-left">
+                          <p><strong>Benutzername:</strong> {user.username}</p>
+                          <p><strong>E-Mail:</strong> {user.email}</p>
+                          <p><strong>User ID:</strong> {user.id}</p>
+                          <p><strong>Registriert am:</strong> {new Date(user.created_at).toLocaleString('de-DE')}</p>
+                          <p><strong>Rolle:</strong> {user.is_admin ? 'Administrator' : 'Benutzer'}</p>
+                        </div>
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Schließen</AlertDialogCancel>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handlePasswordReset(user.email)}
+                >
+                  <Key className="w-4 h-4 mr-2" />
+                  Passwort zurücksetzen
+                </Button>
+
                 <Button
                   variant={user.is_admin ? "destructive" : "default"}
                   size="sm"
