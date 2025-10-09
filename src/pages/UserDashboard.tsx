@@ -74,17 +74,19 @@ export default function UserDashboard() {
         </div>
 
         <Tabs defaultValue="suggest" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="suggest">
-              <Lightbulb className="w-4 h-4 mr-2" />
-              Inhalte vorschlagen
+          <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 gap-2">
+            <TabsTrigger value="suggest" className="text-xs sm:text-sm">
+              <Lightbulb className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">Inhalte vorschlagen</span>
+              <span className="sm:hidden">Vorschlagen</span>
             </TabsTrigger>
-            <TabsTrigger value="my-suggestions">
-              <BookOpen className="w-4 h-4 mr-2" />
-              Meine Vorschläge
+            <TabsTrigger value="my-suggestions" className="text-xs sm:text-sm">
+              <BookOpen className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">Meine Vorschläge</span>
+              <span className="sm:hidden">Vorschläge</span>
             </TabsTrigger>
-            <TabsTrigger value="progress">
-              <TrendingUp className="w-4 h-4 mr-2" />
+            <TabsTrigger value="progress" className="text-xs sm:text-sm">
+              <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
               Fortschritt
             </TabsTrigger>
           </TabsList>
@@ -104,29 +106,29 @@ export default function UserDashboard() {
               <CardContent>
                 <div className="space-y-4">
                   {suggestions.map((suggestion) => (
-                    <Card key={suggestion.id} className="p-4">
-                      <div className="flex items-start justify-between">
+                  <Card key={suggestion.id} className="p-4">
+                      <div className="flex flex-col gap-3">
                         <div>
-                          <div className="flex items-center gap-2 mb-1">
-                            <h4 className="font-medium">{suggestion.title}</h4>
+                          <div className="flex items-start gap-2 mb-1 flex-wrap">
+                            <h4 className="font-medium text-sm sm:text-base">{suggestion.title}</h4>
                             <Badge variant={
                               suggestion.status === 'approved' ? 'default' :
                               suggestion.status === 'rejected' ? 'destructive' :
                               'secondary'
-                            }>
+                            } className="shrink-0">
                               {suggestion.status === 'approved' ? 'Genehmigt' :
                                suggestion.status === 'rejected' ? 'Abgelehnt' :
                                'In Prüfung'}
                             </Badge>
                           </div>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-xs sm:text-sm text-muted-foreground">
                             Kategorie: {suggestion.category_id} • Typ: {suggestion.module_type}
                           </p>
                           <p className="text-xs text-muted-foreground">
                             Eingereicht am {new Date(suggestion.created_at).toLocaleDateString('de-DE')}
                           </p>
                           {suggestion.admin_notes && (
-                            <p className="text-sm text-muted-foreground mt-2 italic">
+                            <p className="text-xs sm:text-sm text-muted-foreground mt-2 italic">
                               Admin-Notiz: {suggestion.admin_notes}
                             </p>
                           )}

@@ -47,25 +47,24 @@ export const AdminUsers = () => {
 
       if (rolesError) throw rolesError;
 
-      // Try to get auth users (requires admin privileges)
-      let authUsers: any[] = [];
+      // Fetch emails from edge function
+      let emailMap: Record<string, string> = {};
       try {
-        const { data, error: authError } = await supabase.auth.admin.listUsers();
-        if (!authError && data && data.users) {
-          authUsers = data.users;
+        const { data: emailData, error: emailError } = await supabase.functions.invoke('get-user-emails');
+        if (!emailError && emailData?.emailMap) {
+          emailMap = emailData.emailMap;
         }
-      } catch (authError) {
-        console.error("Could not fetch auth users:", authError);
+      } catch (err) {
+        console.error("Could not fetch emails:", err);
       }
 
       // Combine data
       const usersWithRoles: UserWithRole[] = (profiles || []).map(profile => {
-        const authUser = authUsers.find((u: any) => u.id === profile.id);
         const userRole = roles?.find(r => r.user_id === profile.id);
         
         return {
           id: profile.id,
-          email: authUser?.email || 'Unbekannt',
+          email: emailMap[profile.id] || 'Nicht verfügbar',
           username: profile.username,
           created_at: profile.created_at,
           is_admin: userRole?.role === 'admin'
@@ -170,32 +169,32 @@ export const AdminUsers = () => {
         </p>
       </div>
 
-      <div className="space-y-2">
+      <div className="grid grid-cols-1 gap-4">
         {users.map((user) => (
           <Card key={user.id} className="p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-muted rounded-full">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="p-2 bg-muted rounded-full shrink-0">
                   <User className="w-4 h-4" />
                 </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <p className="font-medium">{user.username}</p>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <p className="font-medium truncate">{user.username}</p>
                     {user.is_admin && (
-                      <Badge variant="default" className="flex items-center gap-1">
+                      <Badge variant="default" className="flex items-center gap-1 shrink-0">
                         <Shield className="w-3 h-3" />
                         Admin
                       </Badge>
                     )}
                   </div>
-                  <p className="text-sm text-muted-foreground">{user.email}</p>
+                  <p className="text-sm text-muted-foreground truncate">{user.email}</p>
                   <p className="text-xs text-muted-foreground">
                     Registriert: {new Date(user.created_at).toLocaleDateString('de-DE')}
                   </p>
                 </div>
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2 lg:shrink-0">
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant="outline" size="sm">

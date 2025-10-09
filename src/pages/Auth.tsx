@@ -7,9 +7,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
-import { Loader2, LogIn, UserPlus } from "lucide-react";
+import { Loader2, LogIn, UserPlus, Eye, EyeOff, Shield } from "lucide-react";
 import { z } from "zod";
 import { ArrowLeft } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const authSchema = z.object({
   email: z.string().trim().email("Ungültige E-Mail-Adresse"),
@@ -27,6 +36,10 @@ export default function Auth() {
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("login");
+  const [showPassword, setShowPassword] = useState(false);
+  const [show2FADialog, setShow2FADialog] = useState(false);
+  const [qrCode, setQrCode] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
   const { toast } = useToast();
   const navigate = useNavigate();
   const { user, signIn, signUp } = useAuth();
@@ -36,6 +49,68 @@ export default function Auth() {
       navigate("/");
     }
   }, [user, navigate]);
+
+  const setup2FA = async () => {
+    try {
+      const { data, error } = await supabase.auth.mfa.enroll({
+        factorType: 'totp',
+      });
+
+      if (error) throw error;
+
+      if (data) {
+        setQrCode(data.totp.qr_code);
+        setShow2FADialog(true);
+      }
+    } catch (error: any) {
+      toast({
+        title: "Fehler",
+        description: "2FA konnte nicht eingerichtet werden: " + error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const verify2FA = async () => {
+    try {
+      const factors = await supabase.auth.mfa.listFactors();
+      if (!factors.data?.totp || factors.data.totp.length === 0) {
+        throw new Error("Kein 2FA-Faktor gefunden");
+      }
+
+      const factorId = factors.data.totp[0].id;
+
+      // Challenge the factor first
+      const { data: challengeData, error: challengeError } = await supabase.auth.mfa.challenge({
+        factorId
+      });
+
+      if (challengeError) throw challengeError;
+
+      // Then verify with the challenge ID
+      const { error } = await supabase.auth.mfa.verify({
+        factorId,
+        challengeId: challengeData.id,
+        code: verificationCode,
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Erfolgreich",
+        description: "2FA wurde erfolgreich aktiviert",
+      });
+
+      setShow2FADialog(false);
+      setVerificationCode("");
+    } catch (error: any) {
+      toast({
+        title: "Fehler",
+        description: "Verifizierung fehlgeschlagen: " + error.message,
+        variant: "destructive",
+      });
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent, mode: "login" | "signup") => {
     e.preventDefault();
@@ -155,15 +230,32 @@ export default function Auth() {
                 
                 <div className="space-y-2">
                   <Label htmlFor="login-password">Passwort</Label>
-                  <Input
-                    id="login-password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    disabled={isLoading}
-                    required
-                  />
+                  <div className="relative">
+                    <Input
+                      id="login-password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      disabled={isLoading}
+                      required
+                      className="pr-10"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                      onClick={() => setShowPassword(!showPassword)}
+                      disabled={isLoading}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4 text-muted-foreground" />
+                      ) : (
+                        <Eye className="h-4 w-4 text-muted-foreground" />
+                      )}
+                    </Button>
+                  </div>
                 </div>
                 
                 <Button type="submit" className="w-full" disabled={isLoading}>
@@ -215,15 +307,32 @@ export default function Auth() {
                 
                 <div className="space-y-2">
                   <Label htmlFor="signup-password">Passwort</Label>
-                  <Input
-                    id="signup-password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    disabled={isLoading}
-                    required
-                  />
+                  <div className="relative">
+                    <Input
+                      id="signup-password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      disabled={isLoading}
+                      required
+                      className="pr-10"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                      onClick={() => setShowPassword(!showPassword)}
+                      disabled={isLoading}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4 text-muted-foreground" />
+                      ) : (
+                        <Eye className="h-4 w-4 text-muted-foreground" />
+                      )}
+                    </Button>
+                  </div>
                   <p className="text-xs text-muted-foreground">
                     Mind. 8 Zeichen, 1 Großbuchstabe, 1 Zahl, 1 Sonderzeichen
                   </p>
@@ -246,7 +355,55 @@ export default function Auth() {
             </TabsContent>
           </Tabs>
         </CardContent>
-      </Card>
+        </Card>
+
+        {user && (
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle>Zwei-Faktor-Authentifizierung</CardTitle>
+              <CardDescription>
+                Erhöhe die Sicherheit deines Accounts mit 2FA
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button onClick={setup2FA} className="w-full">
+                <Shield className="w-4 h-4 mr-2" />
+                2FA einrichten
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
+        <Dialog open={show2FADialog} onOpenChange={setShow2FADialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>2FA einrichten</DialogTitle>
+              <DialogDescription>
+                Scanne diesen QR-Code mit deiner Authenticator-App (z.B. Google Authenticator, Authy)
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4">
+              {qrCode && (
+                <div className="flex justify-center">
+                  <img src={qrCode} alt="2FA QR Code" className="w-48 h-48" />
+                </div>
+              )}
+              <div className="space-y-2">
+                <Label htmlFor="verification-code">Verifizierungscode</Label>
+                <Input
+                  id="verification-code"
+                  placeholder="6-stelliger Code"
+                  value={verificationCode}
+                  onChange={(e) => setVerificationCode(e.target.value)}
+                  maxLength={6}
+                />
+              </div>
+              <Button onClick={verify2FA} className="w-full">
+                Verifizieren
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

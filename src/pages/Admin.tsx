@@ -52,30 +52,36 @@ export default function Admin() {
           </CardHeader>
           <CardContent>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-6">
-                <TabsTrigger value="learning">
-                  <BookOpen className="w-4 h-4 mr-2" />
-                  Lerninhalte
+              <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 gap-1">
+                <TabsTrigger value="learning" className="text-xs lg:text-sm">
+                  <BookOpen className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
+                  <span className="hidden sm:inline">Lerninhalte</span>
+                  <span className="sm:hidden">Inhalte</span>
                 </TabsTrigger>
-                <TabsTrigger value="suggestions">
-                  <MessageSquare className="w-4 h-4 mr-2" />
-                  Vorschläge
+                <TabsTrigger value="suggestions" className="text-xs lg:text-sm">
+                  <MessageSquare className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
+                  <span className="hidden sm:inline">Vorschläge</span>
+                  <span className="sm:hidden">Vor.</span>
                 </TabsTrigger>
-                <TabsTrigger value="roadmap">
-                  <MapPin className="w-4 h-4 mr-2" />
-                  Roadmap
+                <TabsTrigger value="roadmap" className="text-xs lg:text-sm">
+                  <MapPin className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
+                  <span className="hidden sm:inline">Roadmap</span>
+                  <span className="sm:hidden">Road</span>
                 </TabsTrigger>
-                <TabsTrigger value="feedbacks">
-                  <MessageSquare className="w-4 h-4 mr-2" />
-                  Feedbacks
+                <TabsTrigger value="feedbacks" className="text-xs lg:text-sm">
+                  <MessageSquare className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
+                  <span className="hidden sm:inline">Feedbacks</span>
+                  <span className="sm:hidden">Feed</span>
                 </TabsTrigger>
-                <TabsTrigger value="users">
-                  <Home className="w-4 h-4 mr-2" />
-                  Benutzer
+                <TabsTrigger value="users" className="text-xs lg:text-sm">
+                  <Home className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
+                  <span className="hidden sm:inline">Benutzer</span>
+                  <span className="sm:hidden">User</span>
                 </TabsTrigger>
-                <TabsTrigger value="notes">
-                  <FileText className="w-4 h-4 mr-2" />
-                  Notizen
+                <TabsTrigger value="notes" className="text-xs lg:text-sm">
+                  <FileText className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
+                  <span className="hidden sm:inline">Notizen</span>
+                  <span className="sm:hidden">Note</span>
                 </TabsTrigger>
               </TabsList>
 

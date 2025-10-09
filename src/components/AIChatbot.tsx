@@ -16,7 +16,7 @@ export const AIChatbot = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Hallo! Ich bin dein KI-Tutor für die Fachinformatiker-Ausbildung. Wie kann ich dir heute helfen?",
+      content: "Hallo! Ich bin dein KI-Lernberater und unterstütze dich bei der Vorbereitung auf deine IHK-Prüfung. Wie kann ich dir heute helfen?",
     },
   ]);
   const [input, setInput] = useState("");

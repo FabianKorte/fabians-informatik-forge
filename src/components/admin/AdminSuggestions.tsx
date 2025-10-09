@@ -6,7 +6,9 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Loader2, Check, X, Eye } from "lucide-react";
+import { Loader2, Check, X, Eye, Code } from "lucide-react";
+import { SuggestionPreview } from "./SuggestionPreview";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Dialog,
   DialogContent,
@@ -152,67 +154,92 @@ export const AdminSuggestions = () => {
       {pendingSuggestions.length > 0 && (
         <div className="space-y-4">
           <h4 className="font-medium">Ausstehende Vorschläge ({pendingSuggestions.length})</h4>
-          {pendingSuggestions.map((suggestion) => (
-            <Card key={suggestion.id} className="p-4">
-              <div className="space-y-3">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h5 className="font-medium">{suggestion.title}</h5>
-                    <p className="text-sm text-muted-foreground">
-                      Kategorie: {suggestion.category_id} • Typ: {suggestion.module_type}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      Von: {suggestion.profiles?.username || 'Unbekannt'} • 
-                      {new Date(suggestion.created_at).toLocaleDateString('de-DE')}
-                    </p>
-                  </div>
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button variant="outline" size="sm">
-                        <Eye className="w-4 h-4 mr-2" />
-                        Vorschau
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                  {suggestions.map((suggestion) => (
+                    <Card key={suggestion.id} className="p-3 sm:p-4">
+                      <div className="space-y-2">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center gap-2 flex-wrap mb-1">
+                              <h5 className="font-medium text-sm truncate">{suggestion.title}</h5>
+                            </div>
+                            <p className="text-xs sm:text-sm text-muted-foreground">
+                              Kategorie: {suggestion.category_id} • Typ: {suggestion.module_type}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              Von: {suggestion.profiles?.username || 'Unbekannt'} • 
+                              {new Date(suggestion.created_at).toLocaleDateString('de-DE')}
+                            </p>
+                          </div>
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button variant="outline" size="sm" className="shrink-0">
+                                <Eye className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
+                                <span className="hidden sm:inline">Vorschau</span>
+                              </Button>
+                            </DialogTrigger>
+                    <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
                       <DialogHeader>
                         <DialogTitle>{suggestion.title}</DialogTitle>
                         <DialogDescription>
-                          Inhalt des Vorschlags
+                          Inhalt des Vorschlags ansehen
                         </DialogDescription>
                       </DialogHeader>
-                      <pre className="bg-muted p-4 rounded-lg text-sm overflow-x-auto">
-                        {JSON.stringify(suggestion.content, null, 2)}
-                      </pre>
+                      <Tabs defaultValue="preview" className="w-full">
+                        <TabsList className="grid w-full grid-cols-2">
+                          <TabsTrigger value="preview">
+                            <Eye className="w-4 h-4 mr-2" />
+                            Vorschau
+                          </TabsTrigger>
+                          <TabsTrigger value="code">
+                            <Code className="w-4 h-4 mr-2" />
+                            Code
+                          </TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="preview" className="mt-4">
+                          <SuggestionPreview 
+                            content={suggestion.content} 
+                            moduleType={suggestion.module_type}
+                          />
+                        </TabsContent>
+                        <TabsContent value="code" className="mt-4">
+                          <pre className="bg-muted p-4 rounded-lg text-sm overflow-x-auto">
+                            {JSON.stringify(suggestion.content, null, 2)}
+                          </pre>
+                        </TabsContent>
+                      </Tabs>
                     </DialogContent>
                   </Dialog>
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Admin-Notizen (optional)</Label>
+                  <Label className="text-xs sm:text-sm">Admin-Notizen (optional)</Label>
                   <Textarea
                     placeholder="Notizen für den Benutzer..."
                     value={adminNotes}
                     onChange={(e) => setAdminNotes(e.target.value)}
                     rows={2}
+                    className="text-sm"
                   />
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   <Button
                     variant="default"
                     size="sm"
                     onClick={() => updateSuggestionStatus(suggestion.id, 'approved')}
+                    className="flex-1 sm:flex-initial"
                   >
-                    <Check className="w-4 h-4 mr-2" />
-                    Genehmigen
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                    <span className="text-xs sm:text-sm">Genehmigen</span>
                   </Button>
                   <Button
                     variant="destructive"
                     size="sm"
                     onClick={() => updateSuggestionStatus(suggestion.id, 'rejected')}
+                    className="flex-1 sm:flex-initial"
                   >
-                    <X className="w-4 h-4 mr-2" />
-                    Ablehnen
+                    <X className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                    <span className="text-xs sm:text-sm">Ablehnen</span>
                   </Button>
                 </div>
               </div>
