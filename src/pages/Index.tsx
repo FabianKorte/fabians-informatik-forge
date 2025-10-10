@@ -125,6 +125,30 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       {/* Floating Action Buttons */}
       <div className="fixed top-6 right-6 z-50 flex flex-col gap-3">
+        {user && (
+          <Button
+            variant="outline"
+            size="sm"
+            className="shadow-lg backdrop-blur-sm bg-background/80 border-border/50"
+            onClick={() => navigate('/dashboard')}
+          >
+            <span className="hidden sm:inline">Dashboard</span>
+            <span className="sm:hidden">👤</span>
+          </Button>
+        )}
+        
+        {!user && (
+          <Button
+            variant="outline"
+            size="sm"
+            className="shadow-lg backdrop-blur-sm bg-background/80 border-border/50"
+            onClick={() => navigate('/auth')}
+          >
+            <span className="hidden sm:inline">Anmelden</span>
+            <span className="sm:hidden">🔐</span>
+          </Button>
+        )}
+        
         <Button
           variant="outline"
           size="sm"

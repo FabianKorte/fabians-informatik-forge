@@ -26,32 +26,19 @@ export const FeedbackList = ({ refreshTrigger }: { refreshTrigger?: number }) =>
   const fetchFeedbacks = async () => {
     setIsLoading(true);
     try {
-      if (!supabase) {
-        setFeedbacks([]);
-        setHasAccess(false);
-        return;
-      }
-
       const { data, error } = await supabase
         .from('feedbacks')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) {
-        // Check if error is due to RLS policy
-        if (error.code === 'PGRST116' || error.message.includes('policy')) {
-          setHasAccess(false);
-          setFeedbacks([]);
-        } else {
-          throw error;
-        }
-      } else {
-        setHasAccess(true);
-        setFeedbacks(data || []);
-      }
+      if (error) throw error;
+      
+      setHasAccess(true);
+      setFeedbacks(data || []);
     } catch (error) {
       console.error('Error fetching feedbacks:', error);
       setHasAccess(false);
+      setFeedbacks([]);
     } finally {
       setIsLoading(false);
     }
