@@ -12,7 +12,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { getCategoriesFromDatabase } from "@/lib/categoryUtils";
 import { getAllModules } from "@/lib/learnContentUtils";
 import type { Category } from "@/data/categories";
-import { Download, MapPin, Sparkles, Shield } from "lucide-react";
+import { Download, MapPin, Sparkles } from "lucide-react";
 import logo from "@/assets/logo.png";
 import type { LearnModule } from "@/types/learn";
 
@@ -125,53 +125,6 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       {/* Floating Action Buttons */}
       <div className="fixed top-6 right-6 z-50 flex flex-col gap-3">
-        {user ? (
-          <>
-            <Button
-              variant="outline"
-              size="sm"
-              className="shadow-lg backdrop-blur-sm bg-background/80 border-border/50"
-              onClick={() => navigate('/dashboard')}
-            >
-              <span className="hidden sm:inline">Dashboard</span>
-              <span className="sm:hidden">👤</span>
-            </Button>
-            {isAdmin && (
-              <Button
-                variant="default"
-                size="sm"
-                className="shadow-lg backdrop-blur-sm"
-                onClick={() => navigate('/admin')}
-              >
-                <span className="hidden sm:inline">Admin-Bereich</span>
-                <span className="sm:hidden">⚙️</span>
-              </Button>
-            )}
-          </>
-        ) : (
-          <Button
-            variant="outline"
-            size="sm"
-            className="shadow-lg backdrop-blur-sm bg-background/80 border-border/50"
-            onClick={() => navigate('/auth')}
-          >
-            <span className="hidden sm:inline">Anmelden</span>
-            <span className="sm:hidden">🔐</span>
-          </Button>
-        )}
-        
-        {user && (
-          <Button
-            variant="outline"
-            size="sm"
-            className="shadow-lg backdrop-blur-sm bg-background/80 border-border/50"
-            onClick={() => navigate('/auth')}
-          >
-            <Shield className="w-4 h-4" />
-            <span className="hidden sm:inline ml-2">2FA</span>
-          </Button>
-        )}
-        
         <Button
           variant="outline"
           size="sm"

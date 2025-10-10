@@ -17,13 +17,13 @@ export const SimpleLearningContentForm = () => {
   const [categoryId, setCategoryId] = useState("");
   const [moduleType, setModuleType] = useState("");
   const [title, setTitle] = useState("");
-  const [items, setItems] = useState<any[]>([{ front: "", back: "" }]);
+  const [items, setItems] = useState<any[]>([{ front: "", back: "", explanation: "" }]);
 
   const addItem = () => {
     if (moduleType === "flashcards") {
-      setItems([...items, { front: "", back: "" }]);
+      setItems([...items, { front: "", back: "", explanation: "" }]);
     } else if (moduleType === "quiz") {
-      setItems([...items, { question: "", options: ["", "", "", ""], correctAnswer: 0 }]);
+      setItems([...items, { question: "", options: ["", "", "", ""], correctAnswer: 0, explanation: "" }]);
     }
   };
 
@@ -70,11 +70,11 @@ export const SimpleLearningContentForm = () => {
 
     // Validate based on type
     if (moduleType === "flashcards") {
-      const invalid = items.some(item => !item.front?.trim() || !item.back?.trim());
+      const invalid = items.some(item => !item.front?.trim() || !item.back?.trim() || !item.explanation?.trim());
       if (invalid) {
         toast({
           title: "Fehler",
-          description: "Bitte fülle alle Karteikarten-Felder aus",
+          description: "Bitte fülle alle Felder aus (inkl. Erklärung)",
           variant: "destructive",
         });
         return;
@@ -82,12 +82,13 @@ export const SimpleLearningContentForm = () => {
     } else if (moduleType === "quiz") {
       const invalid = items.some(item => 
         !item.question?.trim() || 
-        item.options.some((opt: string) => !opt?.trim())
+        item.options.some((opt: string) => !opt?.trim()) ||
+        !item.explanation?.trim()
       );
       if (invalid) {
         toast({
           title: "Fehler",
-          description: "Bitte fülle alle Quiz-Felder aus",
+          description: "Bitte fülle alle Felder aus (inkl. Erklärung)",
           variant: "destructive",
         });
         return;
@@ -105,7 +106,8 @@ export const SimpleLearningContentForm = () => {
           content = {
             cards: items.map(item => ({
               question: item.front,
-              answer: item.back
+              answer: item.back,
+              explanation: item.explanation
             }))
           };
           break;
@@ -115,7 +117,7 @@ export const SimpleLearningContentForm = () => {
               question: item.question,
               options: item.options,
               correctAnswer: item.correctAnswer,
-              explanation: "(wird vom Admin bearbeitet)"
+              explanation: item.explanation
             }))
           };
           break;
@@ -146,7 +148,7 @@ export const SimpleLearningContentForm = () => {
       setCategoryId("");
       setModuleType("");
       setTitle("");
-      setItems([{ front: "", back: "" }]);
+      setItems([{ front: "", back: "", explanation: "" }]);
     } catch (error: any) {
       toast({
         title: "Fehler",
@@ -197,11 +199,11 @@ export const SimpleLearningContentForm = () => {
               setModuleType(value);
               // Reset items when type changes
               if (value === "flashcards") {
-                setItems([{ front: "", back: "" }]);
+                setItems([{ front: "", back: "", explanation: "" }]);
               } else if (value === "quiz") {
-                setItems([{ question: "", options: ["", "", "", ""], correctAnswer: 0 }]);
+                setItems([{ question: "", options: ["", "", "", ""], correctAnswer: 0, explanation: "" }]);
               }
-            }} 
+            }}
             disabled={isLoading}
           >
             <SelectTrigger>
@@ -262,6 +264,12 @@ export const SimpleLearningContentForm = () => {
                   onChange={(e) => updateItem(index, "back", e.target.value)}
                   disabled={isLoading}
                 />
+                <Input
+                  placeholder="Erklärung (z.B. zusätzlicher Kontext)"
+                  value={item.explanation}
+                  onChange={(e) => updateItem(index, "explanation", e.target.value)}
+                  disabled={isLoading}
+                />
               </div>
             </Card>
           ))}
@@ -312,6 +320,12 @@ export const SimpleLearningContentForm = () => {
                     Wähle die richtige Antwort mit dem Radio-Button aus
                   </p>
                 </div>
+                <Input
+                  placeholder="Erklärung zur Antwort"
+                  value={item.explanation}
+                  onChange={(e) => updateItem(index, "explanation", e.target.value)}
+                  disabled={isLoading}
+                />
               </div>
             </Card>
           ))}

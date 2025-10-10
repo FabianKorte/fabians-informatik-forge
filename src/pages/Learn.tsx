@@ -235,37 +235,17 @@ const LearnPage = () => {
                 )}
 
                 {selectedMethod === 'flashcards' && modules.filter(m => m.type === 'flashcards').length > 0 && (
-                  <Tabs defaultValue="m-0" className="w-full">
-                    <TabsList className="mb-6 flex flex-wrap gap-2">
-                      {modules.filter(m => m.type === 'flashcards').map((m, i) => (
-                        <TabsTrigger key={i} value={`m-${i}`} className="capitalize">
-                          {m.title}
-                        </TabsTrigger>
-                      ))}
-                    </TabsList>
-                    {modules.filter(m => m.type === 'flashcards').map((m, i) => (
-                      <TabsContent key={i} value={`m-${i}`}>
-                        <Flashcards cards={m.cards} categoryId={categoryId} moduleIndex={i} />
-                      </TabsContent>
-                    ))}
-                  </Tabs>
+                  <Flashcards 
+                    cards={modules.filter(m => m.type === 'flashcards').flatMap(m => m.cards)} 
+                    categoryId={categoryId} 
+                    moduleIndex={0} 
+                  />
                 )}
 
                 {selectedMethod === 'quiz' && modules.filter(m => m.type === 'quiz').length > 0 && (
-                  <Tabs defaultValue="m-0" className="w-full">
-                    <TabsList className="mb-6 flex flex-wrap gap-2">
-                      {modules.filter(m => m.type === 'quiz').map((m, i) => (
-                        <TabsTrigger key={i} value={`m-${i}`} className="capitalize">
-                          {m.title}
-                        </TabsTrigger>
-                      ))}
-                    </TabsList>
-                    {modules.filter(m => m.type === 'quiz').map((m, i) => (
-                      <TabsContent key={i} value={`m-${i}`}>
-                        <Quiz questions={m.questions} />
-                      </TabsContent>
-                    ))}
-                  </Tabs>
+                  <Quiz 
+                    questions={modules.filter(m => m.type === 'quiz').flatMap(m => m.questions)} 
+                  />
                 )}
 
                 {selectedMethod === 'focus' && (

@@ -3,15 +3,207 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, BookOpen, Lightbulb, TrendingUp } from "lucide-react";
+import { ArrowLeft, BookOpen, Lightbulb, TrendingUp, Shield, Settings, LogOut } from "lucide-react";
 import { SimpleLearningContentForm } from "@/components/user/SimpleLearningContentForm";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
+import { Progress as ProgressBar } from "@/components/ui/progress";
+import { categories } from "@/data/categories";
+import { getModulesForCategory } from "@/lib/learnContentUtils";
+import { useProgress } from "@/hooks/useProgress";
+import { 
+  Brain, 
+  Trophy,
+  AlertCircle,
+  CheckCircle,
+  Clock,
+  Target
+} from "lucide-react";
+
+const ProgressView = ({ userId }: { userId?: string }) => {
+  const [categoryStats, setCategoryStats] = useState<any[]>([]);
+  const { getOverallProgress } = useProgress("", "", 0);
+  const overallStats = getOverallProgress();
+
+  useEffect(() => {
+    const loadProgress = async () => {
+      const stats = await Promise.all(
+        categories.map(async (category) => {
+          const modules = await getModulesForCategory(category.id);
+          let totalItems = 0;
+          let completedItems = 0;
+          let difficultItems = 0;
+
+          modules.forEach((module, moduleIndex) => {
+            const progressHook = useProgress(category.id, module.type, moduleIndex);
+            const progress = progressHook.progressData;
+
+            switch (module.type) {
+              case "flashcards":
+                if ('cards' in module) {
+                  totalItems += module.cards.length;
+                  if (progress.flashcards?.knownCards) {
+                    completedItems += progress.flashcards.knownCards.length;
+                  }
+                  if (progress.flashcards?.unknownCards) {
+                    difficultItems += progress.flashcards.unknownCards.length;
+                  }
+                }
+                break;
+              case "quiz":
+                if ('questions' in module) {
+                  totalItems += module.questions.length;
+                  if (progress.quiz?.completedQuestions) {
+                    completedItems += progress.quiz.completedQuestions.length;
+                  }
+                }
+                break;
+            }
+          });
+
+          const completionRate = totalItems > 0 ? (completedItems / totalItems) * 100 : 0;
+
+          return {
+            ...category,
+            totalItems,
+            completedItems,
+            difficultItems,
+            completionRate,
+          };
+        })
+      );
+
+      const filteredStats = stats
+        .filter(cat => cat.totalItems > 0)
+        .sort((a, b) => b.completionRate - a.completionRate);
+      
+      setCategoryStats(filteredStats);
+    };
+
+    loadProgress();
+  }, [userId]);
+
+  return (
+    <div className="space-y-6">
+      {/* Statistics */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card className="p-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-primary/10 rounded-lg">
+              <Trophy className="w-4 h-4 text-primary" />
+            </div>
+            <div>
+              <p className="text-xl font-semibold">{overallStats.totalCategories}</p>
+              <p className="text-xs text-muted-foreground">Kategorien</p>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="p-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-accent/10 rounded-lg">
+              <BookOpen className="w-4 h-4 text-accent" />
+            </div>
+            <div>
+              <p className="text-xl font-semibold">
+                {categoryStats.reduce((sum, cat) => sum + cat.completedItems, 0)}
+              </p>
+              <p className="text-xs text-muted-foreground">Abgeschlossen</p>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="p-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-success/10 rounded-lg">
+              <Target className="w-4 h-4 text-success" />
+            </div>
+            <div>
+              <p className="text-xl font-semibold">
+                {Math.round(
+                  categoryStats.reduce((sum, cat) => sum + cat.completionRate, 0) / 
+                  Math.max(categoryStats.length, 1)
+                )}%
+              </p>
+              <p className="text-xs text-muted-foreground">Durchschnitt</p>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="p-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-destructive/10 rounded-lg">
+              <Brain className="w-4 h-4 text-destructive" />
+            </div>
+            <div>
+              <p className="text-xl font-semibold">
+                {categoryStats.reduce((sum, cat) => sum + cat.difficultItems, 0)}
+              </p>
+              <p className="text-xs text-muted-foreground">Schwierig</p>
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      {/* Category Progress */}
+      <div className="space-y-4">
+        {categoryStats.map((category) => (
+          <Card key={category.id} className="p-4">
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 bg-accent/10 rounded-lg">
+                  <category.icon className="w-4 h-4 text-accent" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-medium">{category.title}</h3>
+                  <p className="text-xs text-muted-foreground">
+                    {category.completedItems} / {category.totalItems} 
+                    ({Math.round(category.completionRate)}%)
+                  </p>
+                </div>
+              </div>
+              <Badge variant={category.completionRate > 75 ? "default" : "secondary"} className="text-xs">
+                {category.difficulty}
+              </Badge>
+            </div>
+
+            <ProgressBar value={category.completionRate} className="h-2 mb-3" />
+
+            <div className="grid grid-cols-3 gap-2 text-xs">
+              <div className="flex items-center gap-1">
+                <CheckCircle className="w-3 h-3 text-success" />
+                <span className="text-muted-foreground">{category.completedItems} ✓</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <AlertCircle className="w-3 h-3 text-destructive" />
+                <span className="text-muted-foreground">{category.difficultItems} ⚠</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Clock className="w-3 h-3 text-muted-foreground" />
+                <span className="text-muted-foreground">
+                  {category.totalItems - category.completedItems} offen
+                </span>
+              </div>
+            </div>
+          </Card>
+        ))}
+
+        {categoryStats.length === 0 && (
+          <div className="text-center py-8 text-muted-foreground">
+            <Trophy className="w-12 h-12 mx-auto mb-4 opacity-50" />
+            <p>Noch keine Lernaktivitäten vorhanden</p>
+            <p className="text-sm">Starte mit dem Lernen, um deinen Fortschritt zu sehen!</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
 export default function UserDashboard() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, isAdmin, signOut } = useAuth();
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [username, setUsername] = useState<string>("");
 
@@ -58,10 +250,26 @@ export default function UserDashboard() {
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-bold">Mein Dashboard</h1>
           </div>
-          <Button variant="outline" onClick={() => navigate("/")}>
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Zurück zur Startseite
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={() => navigate("/auth")}>
+              <Shield className="w-4 h-4 mr-2" />
+              <span className="hidden sm:inline">2FA</span>
+            </Button>
+            {isAdmin && (
+              <Button variant="default" onClick={() => navigate("/admin")}>
+                <Settings className="w-4 h-4 mr-2" />
+                <span className="hidden sm:inline">Admin</span>
+              </Button>
+            )}
+            <Button variant="outline" onClick={() => signOut()}>
+              <LogOut className="w-4 h-4 mr-2" />
+              <span className="hidden sm:inline">Abmelden</span>
+            </Button>
+            <Button variant="outline" onClick={() => navigate("/")}>
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              <span className="hidden sm:inline">Startseite</span>
+            </Button>
+          </div>
         </div>
       </header>
 
@@ -152,15 +360,11 @@ export default function UserDashboard() {
               <CardHeader>
                 <CardTitle>Dein Lernfortschritt</CardTitle>
                 <CardDescription>
-                  Deine Fortschritte werden automatisch zwischen deinen Geräten synchronisiert
+                  Übersicht über deine Lernaktivitäten und Fortschritte
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="text-center py-8">
-                  <Button onClick={() => navigate("/progress")}>
-                    Zu den Fortschritten
-                  </Button>
-                </div>
+                <ProgressView userId={user?.id} />
               </CardContent>
             </Card>
           </TabsContent>

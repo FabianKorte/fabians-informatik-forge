@@ -88,6 +88,10 @@ export const AdminLearningContent = () => {
     setModuleType(module.type);
     setTitle(module.title);
     setContent(JSON.stringify(module.content, null, 2));
+    // Switch to the create/edit tab
+    const tabsList = document.querySelector('[role="tablist"]');
+    const createTab = tabsList?.querySelector('[value="create"]') as HTMLElement;
+    createTab?.click();
   };
 
   const handleCancelEdit = () => {
