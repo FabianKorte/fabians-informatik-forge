@@ -11,9 +11,11 @@ import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import UserDashboard from "./pages/UserDashboard";
 import Profile from "./pages/Profile";
+import Privacy from "./pages/Privacy";
 import { AIChatbot } from "@/components/AIChatbot";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ProtectedRoute } from "@/components/admin/ProtectedRoute";
+import { Footer } from "@/components/Footer";
 
 const queryClient = new QueryClient();
 
@@ -24,24 +26,30 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/progress" element={<Progress />} />
-            <Route path="/learn/:categoryId" element={<LearnPage />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route 
-              path="/admin" 
-              element={
-                <ProtectedRoute>
-                  <Admin />
-                </ProtectedRoute>
-              } 
-            />
-            <Route path="/dashboard" element={<UserDashboard />} />
-            <Route path="/profile" element={<Profile />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <div className="flex flex-col min-h-screen">
+            <div className="flex-1">
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/progress" element={<Progress />} />
+                <Route path="/learn/:categoryId" element={<LearnPage />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route 
+                  path="/admin" 
+                  element={
+                    <ProtectedRoute>
+                      <Admin />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route path="/dashboard" element={<UserDashboard />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/privacy" element={<Privacy />} />
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </div>
+            <Footer />
+          </div>
         </BrowserRouter>
         <AIChatbot />
       </TooltipProvider>
