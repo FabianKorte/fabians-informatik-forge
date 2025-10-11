@@ -59,10 +59,10 @@ const Profile = () => {
     try {
       setIsLoading(true);
 
-      // Check 2FA status
+      // Check 2FA status (look for any verified TOTP factor)
       const { data: factors } = await supabase.auth.mfa.listFactors();
-      const totpFactor = factors?.totp?.[0];
-      setHas2FA(totpFactor?.status === 'verified');
+      const hasVerifiedTotp = Boolean(factors?.totp?.some((f: any) => f.status === 'verified'));
+      setHas2FA(hasVerifiedTotp);
 
       // Fetch profile
       const { data, error } = await supabase

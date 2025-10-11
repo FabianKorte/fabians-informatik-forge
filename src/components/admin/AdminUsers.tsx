@@ -78,11 +78,23 @@ export const AdminUsers = () => {
           body: { userIds }
         });
         console.log('2FA status response:', statusData, statusError);
-        if (!statusError && statusData?.statusMap) {
+        if (statusError) {
+          toast({
+            title: "2FA-Status konnte nicht geladen werden",
+            description: "Bitte Edge-Function Logs prüfen",
+            variant: "destructive",
+          });
+        }
+        if (statusData?.statusMap) {
           statusMap = statusData.statusMap;
         }
       } catch (err) {
         console.error("Could not fetch 2FA status:", err);
+        toast({
+          title: "2FA-Status Fehler",
+          description: "Fehler beim Abrufen des 2FA-Status",
+          variant: "destructive",
+        });
       }
 
       // Combine data
