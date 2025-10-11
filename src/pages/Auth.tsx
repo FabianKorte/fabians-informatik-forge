@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
-import { Loader2, LogIn, UserPlus, Eye, EyeOff, Shield } from "lucide-react";
+import { Loader2, LogIn, UserPlus, Eye, EyeOff, Shield, Copy as CopyIcon, ExternalLink } from "lucide-react";
 import { z } from "zod";
 import { ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -19,6 +19,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import QRCode from "qrcode";
 
 const authSchema = z.object({
   email: z.string().trim().email("Ungültige E-Mail-Adresse"),
@@ -77,16 +78,33 @@ export default function Auth() {
       if (data) {
         // Save factor info
         setEnrollFactorId(data.id);
-        setEnrollSecret((data as any).totp?.secret || null);
-        setEnrollUri((data as any).totp?.uri || null);
+        const secret = (data as any).totp?.secret || null;
+        const uri = (data as any).totp?.uri || null;
+        setEnrollSecret(secret);
+        setEnrollUri(uri);
 
-        // Prepare QR code for rendering
-        const rawQr = (data as any).totp?.qr_code || '';
-        const isDataUrl = typeof rawQr === 'string' && rawQr.startsWith('data:');
-        const isSvg = typeof rawQr === 'string' && rawQr.trim().startsWith('<svg');
-        const qrSrc = isDataUrl ? rawQr : isSvg ? `data:image/svg+xml;utf8,${encodeURIComponent(rawQr)}` : '';
+        // Prefer a high-contrast PNG from the otpauth URI for better scanner support
+        let qrSrc = '';
+        try {
+          if (uri) {
+            qrSrc = await QRCode.toDataURL(uri, {
+              width: 256,
+              margin: 2,
+              color: { dark: '#000000', light: '#ffffff' },
+              errorCorrectionLevel: 'M',
+            });
+          }
+        } catch {}
+
+        if (!qrSrc) {
+          // Fallback to server-provided QR (SVG/Data URL)
+          const rawQr = (data as any).totp?.qr_code || '';
+          const isDataUrl = typeof rawQr === 'string' && rawQr.startsWith('data:');
+          const isSvg = typeof rawQr === 'string' && rawQr.trim().startsWith('<svg');
+          qrSrc = isDataUrl ? rawQr : isSvg ? `data:image/svg+xml;utf8,${encodeURIComponent(rawQr)}` : '';
+        }
+
         setQrCode(qrSrc);
-
         setShow2FADialog(true);
       }
     } catch (error: any) {
@@ -447,15 +465,63 @@ export default function Auth() {
             <DialogHeader>
               <DialogTitle>2FA einrichten</DialogTitle>
               <DialogDescription>
-                Scanne diesen QR-Code mit deiner Authenticator-App (z.B. Google Authenticator, Authy)
+                Scanne den QR‑Code mit deiner Authenticator‑App (z. B. Authy, Google Authenticator) oder füge den Code manuell hinzu.
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               {qrCode && (
                 <div className="flex justify-center">
-                  <img src={qrCode} alt="2FA QR Code" className="w-48 h-48" />
+                  <div className="p-3 bg-white rounded-md border">
+                    <img src={qrCode} alt="2FA QR Code" className="w-56 h-56 object-contain" />
+                  </div>
                 </div>
               )}
+
+              {enrollUri && (
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <Button asChild variant="outline" className="w-full sm:w-auto">
+                    <a href={enrollUri}>
+                      <ExternalLink className="w-4 h-4 mr-2" /> In Auth‑App öffnen
+                    </a>
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full sm:w-auto"
+                    onClick={async () => {
+                      try {
+                        await navigator.clipboard.writeText(enrollUri);
+                        toast({ title: 'Kopiert', description: 'otpauth Link kopiert' });
+                      } catch {}
+                    }}
+                  >
+                    <CopyIcon className="w-4 h-4 mr-2" /> Link kopieren
+                  </Button>
+                </div>
+              )}
+
+              {enrollSecret && (
+                <div className="space-y-1">
+                  <Label>Manueller Code (Secret)</Label>
+                  <div className="flex items-center gap-2">
+                    <code className="px-2 py-1 rounded bg-muted text-sm break-all flex-1">{enrollSecret}</code>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      onClick={async () => {
+                        try {
+                          await navigator.clipboard.writeText(enrollSecret);
+                          toast({ title: 'Kopiert', description: 'Secret kopiert' });
+                        } catch {}
+                      }}
+                    >
+                      <CopyIcon className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+              )}
+
               <div className="space-y-2">
                 <Label htmlFor="verification-code">Verifizierungscode</Label>
                 <Input
@@ -469,6 +535,9 @@ export default function Auth() {
               <Button onClick={verify2FA} className="w-full">
                 Verifizieren
               </Button>
+              <p className="text-xs text-muted-foreground">
+                Tipp: Wenn Scannen nicht funktioniert, nutze „In Auth‑App öffnen“ (mobil) oder füge den „Manueller Code (Secret)“ in deiner App hinzu.
+              </p>
             </div>
           </DialogContent>
         </Dialog>
