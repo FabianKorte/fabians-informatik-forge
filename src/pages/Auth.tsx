@@ -40,6 +40,14 @@ export default function Auth() {
   const [show2FADialog, setShow2FADialog] = useState(false);
   const [qrCode, setQrCode] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
+  const [enrollFactorId, setEnrollFactorId] = useState<string | null>(null);
+  const [enrollSecret, setEnrollSecret] = useState<string | null>(null);
+  const [enrollUri, setEnrollUri] = useState<string | null>(null);
+  // Login-time MFA
+  const [showMfaDialog, setShowMfaDialog] = useState(false);
+  const [mfaCode, setMfaCode] = useState("");
+  const [mfaFactorId, setMfaFactorId] = useState<string | null>(null);
+  const [mfaChallengeId, setMfaChallengeId] = useState<string | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
   const { user, signIn, signUp } = useAuth();
@@ -59,7 +67,18 @@ export default function Auth() {
       if (error) throw error;
 
       if (data) {
-        setQrCode(data.totp.qr_code);
+        // Save factor info
+        setEnrollFactorId(data.id);
+        setEnrollSecret((data as any).totp?.secret || null);
+        setEnrollUri((data as any).totp?.uri || null);
+
+        // Prepare QR code for rendering
+        const rawQr = (data as any).totp?.qr_code || '';
+        const isDataUrl = typeof rawQr === 'string' && rawQr.startsWith('data:');
+        const isSvg = typeof rawQr === 'string' && rawQr.trim().startsWith('<svg');
+        const qrSrc = isDataUrl ? rawQr : isSvg ? `data:image/svg+xml;utf8,${encodeURIComponent(rawQr)}` : '';
+        setQrCode(qrSrc);
+
         setShow2FADialog(true);
       }
     } catch (error: any) {
@@ -73,18 +92,18 @@ export default function Auth() {
 
   const verify2FA = async () => {
     try {
-      const factors = await supabase.auth.mfa.listFactors();
-      if (!factors.data?.totp || factors.data.totp.length === 0) {
-        throw new Error("Kein 2FA-Faktor gefunden");
+      // Prefer the factor created during enrollment
+      let factorId = enrollFactorId;
+      if (!factorId) {
+        const factors = await supabase.auth.mfa.listFactors();
+        factorId = factors.data?.totp?.[0]?.id || null;
       }
-
-      const factorId = factors.data.totp[0].id;
+      if (!factorId) throw new Error("Kein 2FA-Faktor gefunden");
 
       // Challenge the factor first
       const { data: challengeData, error: challengeError } = await supabase.auth.mfa.challenge({
         factorId
       });
-
       if (challengeError) throw challengeError;
 
       // Then verify with the challenge ID
@@ -103,12 +122,35 @@ export default function Auth() {
 
       setShow2FADialog(false);
       setVerificationCode("");
+      setEnrollFactorId(null);
+      setEnrollSecret(null);
+      setEnrollUri(null);
     } catch (error: any) {
       toast({
         title: "Fehler",
         description: "Verifizierung fehlgeschlagen: " + error.message,
         variant: "destructive",
       });
+    }
+  };
+
+  const handleMfaVerify = async () => {
+    try {
+      if (!mfaFactorId || !mfaChallengeId) throw new Error('MFA nicht vorbereitet');
+      const { error } = await supabase.auth.mfa.verify({
+        factorId: mfaFactorId,
+        challengeId: mfaChallengeId,
+        code: mfaCode,
+      });
+      if (error) throw error;
+      setShowMfaDialog(false);
+      setMfaCode('');
+      setMfaChallengeId(null);
+      setMfaFactorId(null);
+      toast({ title: '2FA bestätigt', description: 'Anmeldung verifiziert' });
+      navigate('/');
+    } catch (error: any) {
+      toast({ title: 'Fehler', description: error.message, variant: 'destructive' });
     }
   };
 
@@ -173,6 +215,24 @@ export default function Auth() {
       });
 
       if (mode === "login") {
+        // Check if MFA challenge is required
+        const { data: aalData, error: aalError } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+        if (!aalError && aalData) {
+          if (aalData.currentLevel === 'aal1' && aalData.nextLevel === 'aal2') {
+            // Prepare a challenge for the first TOTP factor
+            const factors = await supabase.auth.mfa.listFactors();
+            const totp = factors.data?.totp?.[0];
+            if (!totp) {
+              throw new Error('Kein TOTP-Faktor gefunden. Bitte 2FA zuerst einrichten.');
+            }
+            const { data: challenge, error: challengeErr } = await supabase.auth.mfa.challenge({ factorId: totp.id });
+            if (challengeErr) throw challengeErr;
+            setMfaFactorId(totp.id);
+            setMfaChallengeId(challenge.id);
+            setShowMfaDialog(true);
+            return; // Wait for user to enter code
+          }
+        }
         navigate("/");
       }
     } catch (error: any) {
