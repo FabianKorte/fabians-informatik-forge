@@ -4,7 +4,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Shield, User, Trash2, Info, Key } from "lucide-react";
+import { Loader2, Shield, User, Trash2, Info, Key, ShieldOff } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -152,6 +152,27 @@ export const AdminUsers = () => {
     }
   };
 
+  const handleRemove2FA = async (userId: string, username: string) => {
+    try {
+      const { data, error } = await supabase.functions.invoke('remove-user-2fa', {
+        body: { userId }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Erfolgreich",
+        description: `2FA für "${username}" wurde entfernt`,
+      });
+    } catch (error: any) {
+      toast({
+        title: "Fehler",
+        description: "2FA konnte nicht entfernt werden: " + error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleDeleteUser = async (userId: string, username: string) => {
     try {
       // Delete user profile (cascade will handle related data)
@@ -259,6 +280,15 @@ export const AdminUsers = () => {
                 >
                   <Key className="w-4 h-4 mr-2" />
                   <span className="hidden sm:inline">Passwort</span>
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleRemove2FA(user.id, user.username)}
+                >
+                  <ShieldOff className="w-4 h-4 mr-2" />
+                  <span className="hidden sm:inline">2FA entfernen</span>
                 </Button>
 
                 <Button

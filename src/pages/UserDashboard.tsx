@@ -294,11 +294,8 @@ export default function UserDashboard() {
 
   const setup2FA = async () => {
     try {
-      // Check if 2FA is already active
-      const { data: existingData } = await supabase.auth.mfa.listFactors();
-      const existing = existingData?.totp?.[0];
-      
-      if (existing && existing.status === 'verified') {
+      // Check if 2FA is already active - don't show dialog
+      if (has2FA) {
         toast({
           title: '2FA bereits aktiv',
           description: 'Du hast bereits 2FA eingerichtet.',
@@ -315,15 +312,6 @@ export default function UserDashboard() {
       };
 
       let { data, error } = await enrollWithUniqueName();
-
-      if (error && /already exists/i.test(error.message)) {
-        if (existing?.id) {
-          await supabase.auth.mfa.unenroll({ factorId: existing.id });
-          const retried = await enrollWithUniqueName();
-          data = retried.data;
-          error = retried.error as any;
-        }
-      }
 
       if (error) throw error;
 
