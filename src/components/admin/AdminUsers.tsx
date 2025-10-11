@@ -74,8 +74,14 @@ export const AdminUsers = () => {
       try {
         const userIds = (profiles || []).map(p => p.id);
         console.log('Fetching 2FA status for users:', userIds);
+
+        // Ensure Authorization header is sent (some environments require explicit header)
+        const { data: sessionData } = await supabase.auth.getSession();
+        const accessToken = sessionData.session?.access_token;
+
         const { data: statusData, error: statusError } = await supabase.functions.invoke('get-user-2fa-status', {
-          body: { userIds }
+          body: { userIds },
+          headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined,
         });
         console.log('2FA status response:', statusData, statusError);
         if (statusError) {
@@ -87,6 +93,8 @@ export const AdminUsers = () => {
         }
         if (statusData?.statusMap) {
           statusMap = statusData.statusMap;
+        } else {
+          console.warn('No statusMap in response from get-user-2fa-status');
         }
       } catch (err) {
         console.error("Could not fetch 2FA status:", err);
@@ -201,8 +209,12 @@ export const AdminUsers = () => {
 
   const handleRemove2FA = async (userId: string, username: string) => {
     try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const accessToken = sessionData.session?.access_token;
+
       const { data, error } = await supabase.functions.invoke('remove-user-2fa', {
-        body: { userId }
+        body: { userId },
+        headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined,
       });
 
       if (error) throw error;
