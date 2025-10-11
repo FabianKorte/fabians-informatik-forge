@@ -271,7 +271,7 @@ export default function UserDashboard() {
             <h1 className="text-2xl font-bold">Mein Dashboard</h1>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" onClick={() => navigate("/auth")}>
+            <Button variant="outline" onClick={() => navigate("/auth?mfa=1")}>
               <Shield className="w-4 h-4 mr-2" />
               <span className="hidden sm:inline">2FA</span>
             </Button>
