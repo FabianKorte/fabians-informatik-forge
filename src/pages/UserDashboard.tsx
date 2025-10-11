@@ -238,6 +238,7 @@ export default function UserDashboard() {
   const { toast } = useToast();
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [username, setUsername] = useState<string>("");
+  const [has2FA, setHas2FA] = useState(false);
   
   // 2FA Dialog state
   const [show2FADialog, setShow2FADialog] = useState(false);
@@ -252,6 +253,13 @@ export default function UserDashboard() {
       navigate("/auth");
       return;
     }
+
+    // Check 2FA status
+    const check2FAStatus = async () => {
+      const { data: factors } = await supabase.auth.mfa.listFactors();
+      const totpFactor = factors?.totp?.[0];
+      setHas2FA(totpFactor?.status === 'verified');
+    };
 
     // Fetch user profile
     const fetchProfile = async () => {
@@ -279,22 +287,32 @@ export default function UserDashboard() {
       }
     };
 
+    check2FAStatus();
     fetchProfile();
     fetchSuggestions();
   }, [user, navigate]);
 
   const setup2FA = async () => {
-    const enrollWithUniqueName = async () => {
-      const friendly = `FK Authenticator ${new Date().toISOString().slice(0, 19).replace('T',' ')}`;
-      return await supabase.auth.mfa.enroll({
-        factorType: 'totp',
-        friendlyName: friendly,
-      });
-    };
-
     try {
+      // Check if 2FA is already active
       const { data: existingData } = await supabase.auth.mfa.listFactors();
       const existing = existingData?.totp?.[0];
+      
+      if (existing && existing.status === 'verified') {
+        toast({
+          title: '2FA bereits aktiv',
+          description: 'Du hast bereits 2FA eingerichtet.',
+        });
+        return;
+      }
+
+      const enrollWithUniqueName = async () => {
+        const friendly = `FK Authenticator ${new Date().toISOString().slice(0, 19).replace('T',' ')}`;
+        return await supabase.auth.mfa.enroll({
+          factorType: 'totp',
+          friendlyName: friendly,
+        });
+      };
 
       let { data, error } = await enrollWithUniqueName();
 
@@ -352,6 +370,38 @@ export default function UserDashboard() {
     }
   };
 
+  const disable2FA = async () => {
+    try {
+      const { data: factors } = await supabase.auth.mfa.listFactors();
+      const totpFactor = factors?.totp?.[0];
+      
+      if (!totpFactor) {
+        toast({
+          title: 'Keine 2FA vorhanden',
+          description: '2FA ist nicht aktiviert',
+        });
+        return;
+      }
+
+      const { error } = await supabase.auth.mfa.unenroll({ factorId: totpFactor.id });
+      
+      if (error) throw error;
+
+      toast({
+        title: 'Erfolgreich',
+        description: '2FA wurde deaktiviert',
+      });
+      
+      setHas2FA(false);
+    } catch (error: any) {
+      toast({
+        title: 'Fehler',
+        description: 'Fehler beim Deaktivieren: ' + error.message,
+        variant: 'destructive',
+      });
+    }
+  };
+
   const verify2FA = async () => {
     try {
       let factorId = enrollFactorId;
@@ -385,6 +435,7 @@ export default function UserDashboard() {
       setEnrollSecret(null);
       setEnrollUri(null);
       setQrCode("");
+      setHas2FA(true);
     } catch (error: any) {
       toast({
         title: "Fehler",
@@ -402,10 +453,19 @@ export default function UserDashboard() {
             <h1 className="text-2xl font-bold">Mein Dashboard</h1>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" onClick={setup2FA}>
-              <Shield className="w-4 h-4 mr-2" />
-              <span className="hidden sm:inline">2FA</span>
-            </Button>
+            {has2FA ? (
+              <Button variant="destructive" onClick={disable2FA}>
+                <Shield className="w-4 h-4 mr-2" />
+                <span className="hidden sm:inline">2FA deaktivieren</span>
+                <span className="sm:hidden">2FA aus</span>
+              </Button>
+            ) : (
+              <Button variant="outline" onClick={setup2FA}>
+                <Shield className="w-4 h-4 mr-2" />
+                <span className="hidden sm:inline">2FA einrichten</span>
+                <span className="sm:hidden">2FA</span>
+              </Button>
+            )}
             {isAdmin && (
               <Button variant="default" onClick={() => navigate("/admin")}>
                 <Settings className="w-4 h-4 mr-2" />

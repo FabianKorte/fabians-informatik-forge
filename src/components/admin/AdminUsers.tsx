@@ -192,6 +192,12 @@ export const AdminUsers = () => {
         <p className="text-sm text-muted-foreground">
           Verwalte Benutzer und deren Admin-Rechte
         </p>
+        <div className="mt-2 p-3 bg-muted/50 rounded-md border">
+          <p className="text-xs text-muted-foreground flex items-center gap-2">
+            <Shield className="w-3 h-3" />
+            Hinweis: Benutzer können ihre 2FA selbst im Dashboard einrichten und deaktivieren
+          </p>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-4">
