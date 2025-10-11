@@ -10,6 +10,7 @@ import Progress from "./pages/Progress";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import UserDashboard from "./pages/UserDashboard";
+import Profile from "./pages/Profile";
 import { AIChatbot } from "@/components/AIChatbot";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ProtectedRoute } from "@/components/admin/ProtectedRoute";
@@ -37,6 +38,7 @@ const App = () => (
               } 
             />
             <Route path="/dashboard" element={<UserDashboard />} />
+            <Route path="/profile" element={<Profile />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
