@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, BookOpen, Lightbulb, TrendingUp, Shield, Settings, LogOut } from "lucide-react";
+import { ArrowLeft, BookOpen, Lightbulb, TrendingUp, Shield, Settings, LogOut, Copy as CopyIcon, ExternalLink } from "lucide-react";
 import { SimpleLearningContentForm } from "@/components/user/SimpleLearningContentForm";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -20,6 +20,17 @@ import {
   Clock,
   Target
 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import QRCode from "qrcode";
 
 // Helper function to get progress from cookie
 const getProgressFromCookie = () => {
@@ -224,8 +235,17 @@ const ProgressView = ({ userId }: { userId?: string }) => {
 export default function UserDashboard() {
   const navigate = useNavigate();
   const { user, isAdmin, signOut } = useAuth();
+  const { toast } = useToast();
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [username, setUsername] = useState<string>("");
+  
+  // 2FA Dialog state
+  const [show2FADialog, setShow2FADialog] = useState(false);
+  const [qrCode, setQrCode] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
+  const [enrollFactorId, setEnrollFactorId] = useState<string | null>(null);
+  const [enrollSecret, setEnrollSecret] = useState<string | null>(null);
+  const [enrollUri, setEnrollUri] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) {
@@ -263,6 +283,117 @@ export default function UserDashboard() {
     fetchSuggestions();
   }, [user, navigate]);
 
+  const setup2FA = async () => {
+    const enrollWithUniqueName = async () => {
+      const friendly = `FK Authenticator ${new Date().toISOString().slice(0, 19).replace('T',' ')}`;
+      return await supabase.auth.mfa.enroll({
+        factorType: 'totp',
+        friendlyName: friendly,
+      });
+    };
+
+    try {
+      const { data: existingData } = await supabase.auth.mfa.listFactors();
+      const existing = existingData?.totp?.[0];
+
+      let { data, error } = await enrollWithUniqueName();
+
+      if (error && /already exists/i.test(error.message)) {
+        if (existing?.id) {
+          await supabase.auth.mfa.unenroll({ factorId: existing.id });
+          const retried = await enrollWithUniqueName();
+          data = retried.data;
+          error = retried.error as any;
+        }
+      }
+
+      if (error) throw error;
+
+      if (data) {
+        setEnrollFactorId(data.id);
+        const secret = (data as any).totp?.secret || null;
+        let uri = (data as any).totp?.uri || null;
+        
+        if (secret && uri && user?.email) {
+          uri = `otpauth://totp/FK%20Lernplattform:${encodeURIComponent(user.email)}?secret=${secret}&issuer=FK%20Lernplattform&algorithm=SHA1&digits=6&period=30`;
+        }
+        
+        setEnrollSecret(secret);
+        setEnrollUri(uri);
+
+        let qrSrc = '';
+        try {
+          if (uri) {
+            qrSrc = await QRCode.toDataURL(uri, {
+              width: 256,
+              margin: 2,
+              color: { dark: '#000000', light: '#ffffff' },
+              errorCorrectionLevel: 'M',
+            });
+          }
+        } catch {}
+
+        if (!qrSrc) {
+          const rawQr = (data as any).totp?.qr_code || '';
+          const isDataUrl = typeof rawQr === 'string' && rawQr.startsWith('data:');
+          const isSvg = typeof rawQr === 'string' && rawQr.trim().startsWith('<svg');
+          qrSrc = isDataUrl ? rawQr : isSvg ? `data:image/svg+xml;utf8,${encodeURIComponent(rawQr)}` : '';
+        }
+
+        setQrCode(qrSrc);
+        setShow2FADialog(true);
+      }
+    } catch (error: any) {
+      toast({
+        title: 'Fehler',
+        description: '2FA konnte nicht eingerichtet werden: ' + error.message,
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const verify2FA = async () => {
+    try {
+      let factorId = enrollFactorId;
+      if (!factorId) {
+        const factors = await supabase.auth.mfa.listFactors();
+        factorId = factors.data?.totp?.[0]?.id || null;
+      }
+      if (!factorId) throw new Error("Kein 2FA-Faktor gefunden");
+
+      const { data: challengeData, error: challengeError } = await supabase.auth.mfa.challenge({
+        factorId
+      });
+      if (challengeError) throw challengeError;
+
+      const { error } = await supabase.auth.mfa.verify({
+        factorId,
+        challengeId: challengeData.id,
+        code: verificationCode,
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Erfolgreich",
+        description: "2FA wurde erfolgreich aktiviert",
+      });
+
+      setShow2FADialog(false);
+      setVerificationCode("");
+      setEnrollFactorId(null);
+      setEnrollSecret(null);
+      setEnrollUri(null);
+      setQrCode("");
+    } catch (error: any) {
+      toast({
+        title: "Fehler",
+        description: "Verifizierung fehlgeschlagen: " + error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -271,7 +402,7 @@ export default function UserDashboard() {
             <h1 className="text-2xl font-bold">Mein Dashboard</h1>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" onClick={() => navigate("/auth?mfa=1")}>
+            <Button variant="outline" onClick={setup2FA}>
               <Shield className="w-4 h-4 mr-2" />
               <span className="hidden sm:inline">2FA</span>
             </Button>
@@ -391,6 +522,89 @@ export default function UserDashboard() {
           </TabsContent>
         </Tabs>
       </main>
+
+      {/* 2FA Setup Dialog */}
+      <Dialog open={show2FADialog} onOpenChange={setShow2FADialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>2FA einrichten</DialogTitle>
+            <DialogDescription>
+              Scanne den QR‑Code mit deiner Authenticator‑App (z. B. Authy, Google Authenticator) oder füge den Code manuell hinzu.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            {qrCode && (
+              <div className="flex justify-center">
+                <div className="p-3 bg-white rounded-md border">
+                  <img src={qrCode} alt="2FA QR Code" className="w-56 h-56 object-contain" />
+                </div>
+              </div>
+            )}
+
+            {enrollUri && (
+              <div className="flex flex-col sm:flex-row gap-2">
+                <Button asChild variant="outline" className="w-full sm:w-auto">
+                  <a href={enrollUri}>
+                    <ExternalLink className="w-4 h-4 mr-2" /> In Auth‑App öffnen
+                  </a>
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full sm:w-auto"
+                  onClick={async () => {
+                    try {
+                      await navigator.clipboard.writeText(enrollUri);
+                      toast({ title: 'Kopiert', description: 'otpauth Link kopiert' });
+                    } catch {}
+                  }}
+                >
+                  <CopyIcon className="w-4 h-4 mr-2" /> Link kopieren
+                </Button>
+              </div>
+            )}
+
+            {enrollSecret && (
+              <div className="space-y-1">
+                <Label>Manueller Code (Secret)</Label>
+                <div className="flex items-center gap-2">
+                  <code className="px-2 py-1 rounded bg-muted text-sm break-all flex-1">{enrollSecret}</code>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={async () => {
+                      try {
+                        await navigator.clipboard.writeText(enrollSecret);
+                        toast({ title: 'Kopiert', description: 'Secret kopiert' });
+                      } catch {}
+                    }}
+                  >
+                    <CopyIcon className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            <div className="space-y-2">
+              <Label htmlFor="verification-code">Verifizierungscode</Label>
+              <Input
+                id="verification-code"
+                placeholder="6-stelliger Code"
+                value={verificationCode}
+                onChange={(e) => setVerificationCode(e.target.value)}
+                maxLength={6}
+              />
+            </div>
+            <Button onClick={verify2FA} className="w-full">
+              Verifizieren
+            </Button>
+            <p className="text-xs text-muted-foreground">
+              Tipp: Wenn Scannen nicht funktioniert, nutze „In Auth‑App öffnen" (mobil) oder füge den „Manueller Code (Secret)" in deiner App hinzu.
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

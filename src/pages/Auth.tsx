@@ -54,18 +54,10 @@ export default function Auth() {
   const { user, signIn, signUp } = useAuth();
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const wantsMfa = params.get("mfa") === "1";
-    if (user) {
-      if (wantsMfa) {
-        if (!show2FADialog) {
-          setup2FA();
-        }
-      } else {
-        navigate("/");
-      }
+    if (user && !show2FADialog) {
+      navigate("/");
     }
-  }, [user, navigate, show2FADialog]);
+  }, [user, navigate]);
 
   const setup2FA = async () => {
     const enrollWithUniqueName = async () => {
