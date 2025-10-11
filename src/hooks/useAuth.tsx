@@ -7,7 +7,7 @@ interface AuthContextType {
   session: Session | null;
   isAdmin: boolean;
   isLoading: boolean;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
+  signIn: (email: string, password: string, rememberMe?: boolean) => Promise<{ error: any }>;
   signUp: (email: string, password: string, username?: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
 }
@@ -63,11 +63,34 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setIsAdmin(!!data);
   };
 
-  const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
+  const signIn = async (email: string, password: string, rememberMe = true) => {
+    // Update storage based on remember me preference
+    const storage = rememberMe ? localStorage : sessionStorage;
+    
+    // Create a new client with the appropriate storage
+    const { createClient } = await import('@supabase/supabase-js');
+    const tempClient = createClient(
+      'https://bjjxfcpxnoivjkplxktw.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqanhmY3B4bm9pdmprcGx4a3R3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg2OTMyMzEsImV4cCI6MjA3NDI2OTIzMX0.Jfx5Hj3mUSAtDopLwXL1NNgA1In2zyahaM7AGTEby74',
+      {
+        auth: {
+          storage,
+          persistSession: rememberMe,
+          autoRefreshToken: rememberMe,
+        }
+      }
+    );
+    
+    const { error } = await tempClient.auth.signInWithPassword({
       email,
       password,
     });
+    
+    // Sync the main client
+    if (!error) {
+      await supabase.auth.getSession();
+    }
+    
     return { error };
   };
 

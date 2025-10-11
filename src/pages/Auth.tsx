@@ -49,6 +49,7 @@ export default function Auth() {
   const [mfaCode, setMfaCode] = useState("");
   const [mfaFactorId, setMfaFactorId] = useState<string | null>(null);
   const [mfaChallengeId, setMfaChallengeId] = useState<string | null>(null);
+  const [rememberMe, setRememberMe] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
   const { user, signIn, signUp } = useAuth();
@@ -229,7 +230,7 @@ export default function Auth() {
 
     try {
       if (mode === "login") {
-        const { error } = await signIn(email, password);
+        const { error } = await signIn(email, password, rememberMe);
         if (error) {
           if (error.message.includes("Invalid login credentials")) {
             throw new Error("Ungültige Anmeldedaten");
@@ -357,6 +358,19 @@ export default function Auth() {
                       )}
                     </Button>
                   </div>
+                </div>
+                
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="remember-me"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    className="w-4 h-4 rounded border-input bg-background"
+                  />
+                  <Label htmlFor="remember-me" className="text-sm font-normal cursor-pointer">
+                    Angemeldet bleiben
+                  </Label>
                 </div>
                 
                 <Button type="submit" className="w-full" disabled={isLoading}>
