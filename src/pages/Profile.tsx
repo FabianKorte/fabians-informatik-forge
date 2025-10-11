@@ -59,10 +59,14 @@ const Profile = () => {
     try {
       setIsLoading(true);
 
-      // Check 2FA status (look for any verified TOTP factor)
-      const { data: factors } = await supabase.auth.mfa.listFactors();
-      const hasVerifiedTotp = Boolean(factors?.totp?.some((f: any) => f.status === 'verified'));
-      setHas2FA(hasVerifiedTotp);
+      // Check 2FA status (any verified/enrolled TOTP factor or current AAL2)
+      const [{ data: factors }, { data: aal }] = await Promise.all([
+        supabase.auth.mfa.listFactors(),
+        supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+      ]);
+      const hasTotp = Boolean(factors?.totp?.some((f: any) => f.status && f.status.toLowerCase() !== 'unverified'));
+      const isAal2 = aal?.currentLevel === 'aal2';
+      setHas2FA(hasTotp || isAal2);
 
       // Fetch profile
       const { data, error } = await supabase
