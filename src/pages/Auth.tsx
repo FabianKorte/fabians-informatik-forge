@@ -97,7 +97,14 @@ export default function Auth() {
       if (data) {
         setEnrollFactorId(data.id);
         const secret = (data as any).totp?.secret || null;
-        const uri = (data as any).totp?.uri || null;
+        let uri = (data as any).totp?.uri || null;
+        
+        // Custom otpauth URI with proper issuer and account name
+        if (secret && uri) {
+          const userEmail = user?.email || 'user';
+          uri = `otpauth://totp/FK%20Lernplattform:${encodeURIComponent(userEmail)}?secret=${secret}&issuer=FK%20Lernplattform&algorithm=SHA1&digits=6&period=30`;
+        }
+        
         setEnrollSecret(secret);
         setEnrollUri(uri);
 
