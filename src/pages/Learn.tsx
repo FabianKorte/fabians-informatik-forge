@@ -110,25 +110,25 @@ const LearnPage = () => {
                   </p>
                 </Card>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                   {/* Interactive Training */}
                   {interactiveTasks.length > 0 && (
-                    <div className="md:col-span-3 mb-6">
+                    <div className="md:col-span-3 mb-4 md:mb-6">
                       <GradientShadowCard>
                         <Card 
-                          className="cursor-pointer p-8 text-center hover:scale-[1.02] transition-transform bg-gradient-to-br from-primary/5 to-accent/5"
+                          className="cursor-pointer p-4 sm:p-6 md:p-8 hover:scale-[1.02] transition-transform bg-gradient-to-br from-primary/5 to-accent/5"
                           onClick={() => setSelectedMethod('interactive')}
                         >
-                          <div className="flex items-center justify-center gap-6">
-                            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
-                              <Zap className="w-10 h-10 text-primary animate-pulse" />
+                          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+                            <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center shrink-0">
+                              <Zap className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-primary animate-pulse" />
                             </div>
-                            <div className="text-left">
-                              <h3 className="text-2xl font-bold mb-2">🚀 Interaktives Training</h3>
-                              <p className="text-muted-foreground leading-relaxed">
+                            <div className="flex-1 min-w-0">
+                              <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-1 sm:mb-2">🚀 Interaktives Training</h3>
+                              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
                                 Spannende, praxisnahe Aufgaben mit Hilfsmitteln, Tipps und Gamification-Elementen
                               </p>
-                              <div className="flex gap-2 mt-3">
+                              <div className="flex flex-wrap gap-2 mt-2 sm:mt-3">
                                 <span className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">
                                   {interactiveTasks.length} Aufgaben
                                 </span>
@@ -140,9 +140,10 @@ const LearnPage = () => {
                                 </span>
                               </div>
                             </div>
-                            <Button size="lg" className="ml-auto">
-                              <Zap className="w-5 h-5 mr-2" />
-                              Jetzt starten
+                            <Button size="default" className="w-full sm:w-auto sm:ml-auto shrink-0">
+                              <Zap className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                              <span className="hidden sm:inline">Jetzt starten</span>
+                              <span className="sm:hidden">Starten</span>
                             </Button>
                           </div>
                         </Card>
@@ -153,19 +154,19 @@ const LearnPage = () => {
                   {/* Flashcards */}
                   <GradientShadowCard>
                     <Card 
-                      className="cursor-pointer p-8 text-center h-full flex flex-col justify-between hover:scale-105 transition-transform"
+                      className="cursor-pointer p-4 sm:p-6 md:p-8 text-center h-full flex flex-col justify-between hover:scale-105 transition-transform"
                       onClick={() => setSelectedMethod('flashcards')}
                     >
                       <div>
-                        <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-success/20 to-success/10 flex items-center justify-center">
-                          <span className="text-2xl">🃏</span>
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto mb-3 md:mb-4 rounded-2xl bg-gradient-to-br from-success/20 to-success/10 flex items-center justify-center">
+                          <span className="text-xl sm:text-2xl">🃏</span>
                         </div>
-                        <h3 className="text-xl font-bold mb-2">Karteikarten</h3>
-                        <p className="text-muted-foreground text-sm leading-relaxed">
+                        <h3 className="text-base sm:text-lg md:text-xl font-bold mb-2">Karteikarten</h3>
+                        <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">
                           Klassisches Lernen mit Frage-Antwort-Karten für effektives Memorieren
                         </p>
                       </div>
-                      <Button variant="outline" className="w-full mt-6" size="lg">
+                      <Button variant="outline" className="w-full mt-4 sm:mt-6" size="default">
                         Karteikarten lernen
                       </Button>
                     </Card>
@@ -174,19 +175,19 @@ const LearnPage = () => {
                   {/* Quiz */}
                   <GradientShadowCard>
                     <Card 
-                      className="cursor-pointer p-8 text-center h-full flex flex-col justify-between hover:scale-105 transition-transform"
+                      className="cursor-pointer p-4 sm:p-6 md:p-8 text-center h-full flex flex-col justify-between hover:scale-105 transition-transform"
                       onClick={() => setSelectedMethod('quiz')}
                     >
                       <div>
-                        <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-warning/20 to-warning/10 flex items-center justify-center">
-                          <span className="text-2xl">❓</span>
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto mb-3 md:mb-4 rounded-2xl bg-gradient-to-br from-warning/20 to-warning/10 flex items-center justify-center">
+                          <span className="text-xl sm:text-2xl">❓</span>
                         </div>
-                        <h3 className="text-xl font-bold mb-2">Quiz</h3>
-                        <p className="text-muted-foreground text-sm leading-relaxed">
+                        <h3 className="text-base sm:text-lg md:text-xl font-bold mb-2">Quiz</h3>
+                        <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">
                           Multiple-Choice-Fragen zum Testen und Vertiefen deines Wissens
                         </p>
                       </div>
-                      <Button variant="outline" className="w-full mt-6" size="lg">
+                      <Button variant="outline" className="w-full mt-4 sm:mt-6" size="default">
                         Quiz starten
                       </Button>
                     </Card>
@@ -196,22 +197,23 @@ const LearnPage = () => {
                   <div className="md:col-span-3">
                     <GradientShadowCard>
                       <Card 
-                        className="cursor-pointer p-8 text-center hover:scale-[1.02] transition-transform"
+                        className="cursor-pointer p-4 sm:p-6 md:p-8 hover:scale-[1.02] transition-transform"
                         onClick={() => setSelectedMethod('focus')}
                       >
-                        <div className="flex items-center justify-center gap-6">
-                          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-destructive/20 to-primary/20 flex items-center justify-center">
-                            <Target className="w-10 h-10 text-primary" />
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+                          <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-destructive/20 to-primary/20 flex items-center justify-center shrink-0">
+                            <Target className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-primary" />
                           </div>
-                          <div className="text-left">
-                            <h3 className="text-2xl font-bold mb-2">Schwerpunkt-Training</h3>
-                            <p className="text-muted-foreground leading-relaxed">
+                          <div className="flex-1 min-w-0">
+                            <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-1 sm:mb-2">Schwerpunkt-Training</h3>
+                            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
                               Konzentriere dich auf deine schwierigsten Themen mit personalisiertem Training
                             </p>
                           </div>
-                          <Button size="lg" className="ml-auto">
-                            <Brain className="w-5 h-5 mr-2" />
-                            Schwerpunkte trainieren
+                          <Button size="default" className="w-full sm:w-auto sm:ml-auto shrink-0">
+                            <Brain className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                            <span className="hidden sm:inline">Schwerpunkte trainieren</span>
+                            <span className="sm:hidden">Training</span>
                           </Button>
                         </div>
                       </Card>

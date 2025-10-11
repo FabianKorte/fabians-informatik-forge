@@ -21,13 +21,30 @@ import {
   Target
 } from "lucide-react";
 
+// Helper function to get progress from cookie
+const getProgressFromCookie = () => {
+  const cookie = document.cookie
+    .split('; ')
+    .find(row => row.startsWith('ihk_learn_progress='));
+  
+  if (cookie) {
+    try {
+      return JSON.parse(decodeURIComponent(cookie.split('=')[1]));
+    } catch (e) {
+      return {};
+    }
+  }
+  return {};
+};
+
 const ProgressView = ({ userId }: { userId?: string }) => {
   const [categoryStats, setCategoryStats] = useState<any[]>([]);
-  const { getOverallProgress } = useProgress("", "", 0);
-  const overallStats = getOverallProgress();
+  const [overallStats, setOverallStats] = useState({ totalCategories: 0, totalModules: 0 });
 
   useEffect(() => {
     const loadProgress = async () => {
+      const progressData = getProgressFromCookie();
+      
       const stats = await Promise.all(
         categories.map(async (category) => {
           const modules = await getModulesForCategory(category.id);
@@ -36,8 +53,7 @@ const ProgressView = ({ userId }: { userId?: string }) => {
           let difficultItems = 0;
 
           modules.forEach((module, moduleIndex) => {
-            const progressHook = useProgress(category.id, module.type, moduleIndex);
-            const progress = progressHook.progressData;
+            const progress = progressData[category.id]?.[module.type]?.[moduleIndex.toString()] || {};
 
             switch (module.type) {
               case "flashcards":
@@ -79,6 +95,10 @@ const ProgressView = ({ userId }: { userId?: string }) => {
         .sort((a, b) => b.completionRate - a.completionRate);
       
       setCategoryStats(filteredStats);
+      setOverallStats({
+        totalCategories: Object.keys(progressData).length,
+        totalModules: filteredStats.length,
+      });
     };
 
     loadProgress();
@@ -282,20 +302,21 @@ export default function UserDashboard() {
         </div>
 
         <Tabs defaultValue="suggest" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 gap-2">
-            <TabsTrigger value="suggest" className="text-xs sm:text-sm">
-              <Lightbulb className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+          <TabsList className="grid w-full grid-cols-3 gap-1 sm:gap-2 h-auto">
+            <TabsTrigger value="suggest" className="text-xs sm:text-sm px-2 py-2">
+              <Lightbulb className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
               <span className="hidden sm:inline">Inhalte vorschlagen</span>
-              <span className="sm:hidden">Vorschlagen</span>
+              <span className="sm:hidden">Vorschlag</span>
             </TabsTrigger>
-            <TabsTrigger value="my-suggestions" className="text-xs sm:text-sm">
-              <BookOpen className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+            <TabsTrigger value="my-suggestions" className="text-xs sm:text-sm px-2 py-2">
+              <BookOpen className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
               <span className="hidden sm:inline">Meine Vorschläge</span>
-              <span className="sm:hidden">Vorschläge</span>
+              <span className="sm:hidden">Meine</span>
             </TabsTrigger>
-            <TabsTrigger value="progress" className="text-xs sm:text-sm">
-              <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-              Fortschritt
+            <TabsTrigger value="progress" className="text-xs sm:text-sm px-2 py-2">
+              <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
+              <span className="hidden sm:inline">Fortschritt</span>
+              <span className="sm:hidden">Progress</span>
             </TabsTrigger>
           </TabsList>
 

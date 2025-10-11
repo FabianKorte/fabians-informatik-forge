@@ -152,6 +152,31 @@ export const AdminUsers = () => {
     }
   };
 
+  const handleDeleteUser = async (userId: string, username: string) => {
+    try {
+      // Delete user profile (cascade will handle related data)
+      const { error } = await supabase
+        .from('profiles')
+        .delete()
+        .eq('id', userId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Erfolgreich",
+        description: `Benutzer "${username}" wurde gelöscht`,
+      });
+
+      fetchUsers();
+    } catch (error: any) {
+      toast({
+        title: "Fehler",
+        description: "Benutzer konnte nicht gelöscht werden: " + error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-8">
@@ -199,7 +224,7 @@ export const AdminUsers = () => {
                   <AlertDialogTrigger asChild>
                     <Button variant="outline" size="sm">
                       <Info className="w-4 h-4 mr-2" />
-                      Details
+                      <span className="hidden sm:inline">Details</span>
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
@@ -227,7 +252,7 @@ export const AdminUsers = () => {
                   onClick={() => handlePasswordReset(user.email)}
                 >
                   <Key className="w-4 h-4 mr-2" />
-                  Passwort zurücksetzen
+                  <span className="hidden sm:inline">Passwort</span>
                 </Button>
 
                 <Button
@@ -236,8 +261,35 @@ export const AdminUsers = () => {
                   onClick={() => toggleAdminRole(user.id, user.is_admin)}
                 >
                   <Shield className="w-4 h-4 mr-2" />
-                  {user.is_admin ? "Admin entfernen" : "Zu Admin machen"}
+                  <span className="hidden sm:inline">{user.is_admin ? "Admin entfernen" : "Zu Admin"}</span>
                 </Button>
+
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="destructive" size="sm">
+                      <Trash2 className="w-4 h-4 sm:mr-2" />
+                      <span className="hidden sm:inline">Löschen</span>
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Benutzer wirklich löschen?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Diese Aktion kann nicht rückgängig gemacht werden. Der Benutzer "{user.username}" 
+                        und alle zugehörigen Daten werden permanent gelöscht.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => handleDeleteUser(user.id, user.username)}
+                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                      >
+                        Endgültig löschen
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             </div>
           </Card>
