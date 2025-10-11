@@ -61,7 +61,11 @@ export const AdminUsers = () => {
       // Fetch emails from edge function
       let emailMap: Record<string, string> = {};
       try {
-        const { data: emailData, error: emailError } = await supabase.functions.invoke('get-user-emails');
+        const { data: sessionDataEmail } = await supabase.auth.getSession();
+        const accessTokenEmail = sessionDataEmail.session?.access_token;
+        const { data: emailData, error: emailError } = await supabase.functions.invoke('get-user-emails', {
+          headers: accessTokenEmail ? { Authorization: `Bearer ${accessTokenEmail}` } : undefined,
+        });
         if (!emailError && emailData?.emailMap) {
           emailMap = emailData.emailMap;
         }
