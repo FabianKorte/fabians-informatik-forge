@@ -23,6 +23,14 @@ interface UserWithRole {
   username: string;
   created_at: string;
   is_admin: boolean;
+  has2FA?: boolean;
+  factorCount?: number;
+  factors?: Array<{
+    id: string;
+    friendlyName: string;
+    createdAt: string;
+    status: string;
+  }>;
 }
 
 export const AdminUsers = () => {
@@ -58,16 +66,34 @@ export const AdminUsers = () => {
         console.error("Could not fetch emails:", err);
       }
 
+      // Fetch 2FA status for all users
+      let statusMap: Record<string, { has2FA: boolean, factorCount: number, factors: any[] }> = {};
+      try {
+        const userIds = (profiles || []).map(p => p.id);
+        const { data: statusData, error: statusError } = await supabase.functions.invoke('get-user-2fa-status', {
+          body: { userIds }
+        });
+        if (!statusError && statusData?.statusMap) {
+          statusMap = statusData.statusMap;
+        }
+      } catch (err) {
+        console.error("Could not fetch 2FA status:", err);
+      }
+
       // Combine data
       const usersWithRoles: UserWithRole[] = (profiles || []).map(profile => {
         const userRole = roles?.find(r => r.user_id === profile.id);
+        const status = statusMap[profile.id] || { has2FA: false, factorCount: 0, factors: [] };
         
         return {
           id: profile.id,
           email: emailMap[profile.id] || 'Nicht verfügbar',
           username: profile.username,
           created_at: profile.created_at,
-          is_admin: userRole?.role === 'admin'
+          is_admin: userRole?.role === 'admin',
+          has2FA: status.has2FA,
+          factorCount: status.factorCount,
+          factors: status.factors
         };
       });
 
@@ -264,6 +290,18 @@ export const AdminUsers = () => {
                           <p><strong>User ID:</strong> {user.id}</p>
                           <p><strong>Registriert am:</strong> {new Date(user.created_at).toLocaleString('de-DE')}</p>
                           <p><strong>Rolle:</strong> {user.is_admin ? 'Administrator' : 'Benutzer'}</p>
+                          <p><strong>2FA Status:</strong> {user.has2FA ? `Aktiv (${user.factorCount} Faktor${user.factorCount !== 1 ? 'en' : ''})` : 'Nicht aktiv'}</p>
+                          {user.has2FA && user.factors && user.factors.length > 0 && (
+                            <div className="mt-2 p-2 bg-muted rounded">
+                              <p className="text-xs font-semibold mb-1">2FA Details:</p>
+                              {user.factors.map((factor, idx) => (
+                                <div key={factor.id} className="text-xs space-y-0.5 mb-1">
+                                  <p><strong>Faktor {idx + 1}:</strong> {factor.friendlyName}</p>
+                                  <p><strong>Erstellt:</strong> {new Date(factor.createdAt).toLocaleString('de-DE')}</p>
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       </AlertDialogDescription>
                     </AlertDialogHeader>
@@ -282,14 +320,16 @@ export const AdminUsers = () => {
                   <span className="hidden sm:inline">Passwort</span>
                 </Button>
 
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleRemove2FA(user.id, user.username)}
-                >
-                  <ShieldOff className="w-4 h-4 mr-2" />
-                  <span className="hidden sm:inline">2FA entfernen</span>
-                </Button>
+                {user.has2FA && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleRemove2FA(user.id, user.username)}
+                  >
+                    <ShieldOff className="w-4 h-4 mr-2" />
+                    <span className="hidden sm:inline">2FA entfernen</span>
+                  </Button>
+                )}
 
                 <Button
                   variant={user.is_admin ? "destructive" : "default"}
