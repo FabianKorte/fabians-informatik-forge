@@ -241,7 +241,7 @@ export default function UserDashboard() {
         .from('profiles')
         .select('username')
         .eq('id', user.id)
-        .single();
+        .maybeSingle();
       
       if (data) {
         setUsername(data.username);

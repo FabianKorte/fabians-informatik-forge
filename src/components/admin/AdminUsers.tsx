@@ -4,7 +4,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Shield, User, Trash2, Info, Key, ShieldOff } from "lucide-react";
+import { Loader2, Shield, User, Trash2, Info, Key, ShieldOff, ShieldCheck } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,6 +24,8 @@ interface UserWithRole {
   username: string;
   created_at: string;
   is_admin: boolean;
+  avatar_url?: string;
+  bio?: string;
   has2FA?: boolean;
   factorCount?: number;
   factors?: Array<{
@@ -41,10 +44,10 @@ export const AdminUsers = () => {
 
   const fetchUsers = async () => {
     try {
-      // Get all profiles with their usernames
+      // Get all profiles with their usernames and avatars
       const { data: profiles, error: profilesError } = await supabase
         .from('profiles')
-        .select('id, username, created_at');
+        .select('id, username, created_at, avatar_url, bio');
 
       if (profilesError) throw profilesError;
 
@@ -70,9 +73,11 @@ export const AdminUsers = () => {
       let statusMap: Record<string, { has2FA: boolean, factorCount: number, factors: any[] }> = {};
       try {
         const userIds = (profiles || []).map(p => p.id);
+        console.log('Fetching 2FA status for users:', userIds);
         const { data: statusData, error: statusError } = await supabase.functions.invoke('get-user-2fa-status', {
           body: { userIds }
         });
+        console.log('2FA status response:', statusData, statusError);
         if (!statusError && statusData?.statusMap) {
           statusMap = statusData.statusMap;
         }
@@ -85,11 +90,15 @@ export const AdminUsers = () => {
         const userRole = roles?.find(r => r.user_id === profile.id);
         const status = statusMap[profile.id] || { has2FA: false, factorCount: 0, factors: [] };
         
+        console.log(`User ${profile.username} (${profile.id}) - 2FA status:`, status);
+        
         return {
           id: profile.id,
           email: emailMap[profile.id] || 'Nicht verfügbar',
           username: profile.username,
           created_at: profile.created_at,
+          avatar_url: profile.avatar_url,
+          bio: profile.bio,
           is_admin: userRole?.role === 'admin',
           has2FA: status.has2FA,
           factorCount: status.factorCount,
@@ -190,6 +199,9 @@ export const AdminUsers = () => {
         title: "Erfolgreich",
         description: `2FA für "${username}" wurde entfernt`,
       });
+      
+      // Refresh users to update UI
+      fetchUsers();
     } catch (error: any) {
       toast({
         title: "Fehler",
@@ -252,9 +264,12 @@ export const AdminUsers = () => {
           <Card key={user.id} className="p-4">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
               <div className="flex items-center gap-3 min-w-0">
-                <div className="p-2 bg-muted rounded-full shrink-0">
-                  <User className="w-4 h-4" />
-                </div>
+                <Avatar className="w-10 h-10 shrink-0">
+                  <AvatarImage src={user.avatar_url || undefined} alt={user.username} />
+                  <AvatarFallback>
+                    {user.username.substring(0, 2).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 flex-wrap">
                     <p className="font-medium truncate">{user.username}</p>
@@ -262,6 +277,12 @@ export const AdminUsers = () => {
                       <Badge variant="default" className="flex items-center gap-1 shrink-0">
                         <Shield className="w-3 h-3" />
                         Admin
+                      </Badge>
+                    )}
+                    {user.has2FA && (
+                      <Badge variant="secondary" className="flex items-center gap-1 shrink-0">
+                        <ShieldCheck className="w-3 h-3" />
+                        2FA
                       </Badge>
                     )}
                   </div>

@@ -69,7 +69,7 @@ const Profile = () => {
         .from("profiles")
         .select("username, bio, avatar_url")
         .eq("id", user!.id)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
 

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/useAuth";
-import { LogOut, BookOpen, MapPin, MessageSquare, Home, FileText } from "lucide-react";
+import { LogOut, BookOpen, MapPin, MessageSquare, Home, FileText, Users } from "lucide-react";
 import { AdminLearningContent } from "@/components/admin/AdminLearningContent";
 import { AdminRoadmap } from "@/components/admin/AdminRoadmap";
 import { AdminFeedbacks } from "@/components/admin/AdminFeedbacks";
@@ -74,7 +74,7 @@ export default function Admin() {
                   <span className="sm:hidden">Feed</span>
                 </TabsTrigger>
                 <TabsTrigger value="users" className="text-xs lg:text-sm">
-                  <Home className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
+                  <Users className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
                   <span className="hidden sm:inline">Benutzer</span>
                   <span className="sm:hidden">User</span>
                 </TabsTrigger>
