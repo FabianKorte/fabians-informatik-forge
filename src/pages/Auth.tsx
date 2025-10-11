@@ -68,22 +68,39 @@ export default function Auth() {
   }, [user, navigate, show2FADialog]);
 
   const setup2FA = async () => {
-    try {
-      const { data, error } = await supabase.auth.mfa.enroll({
+    const enrollWithUniqueName = async () => {
+      const friendly = `FK Authenticator ${new Date().toISOString().slice(0, 19).replace('T',' ')}`;
+      return await supabase.auth.mfa.enroll({
         factorType: 'totp',
+        friendlyName: friendly,
       });
+    };
+
+    try {
+      // Check for existing factor to avoid "friendly name exists" conflicts
+      const { data: existingData } = await supabase.auth.mfa.listFactors();
+      const existing = existingData?.totp?.[0];
+
+      let { data, error } = await enrollWithUniqueName();
+
+      if (error && /already exists/i.test(error.message)) {
+        if (existing?.id) {
+          await supabase.auth.mfa.unenroll({ factorId: existing.id });
+          const retried = await enrollWithUniqueName();
+          data = retried.data;
+          error = retried.error as any;
+        }
+      }
 
       if (error) throw error;
 
       if (data) {
-        // Save factor info
         setEnrollFactorId(data.id);
         const secret = (data as any).totp?.secret || null;
         const uri = (data as any).totp?.uri || null;
         setEnrollSecret(secret);
         setEnrollUri(uri);
 
-        // Prefer a high-contrast PNG from the otpauth URI for better scanner support
         let qrSrc = '';
         try {
           if (uri) {
@@ -97,7 +114,6 @@ export default function Auth() {
         } catch {}
 
         if (!qrSrc) {
-          // Fallback to server-provided QR (SVG/Data URL)
           const rawQr = (data as any).totp?.qr_code || '';
           const isDataUrl = typeof rawQr === 'string' && rawQr.startsWith('data:');
           const isSvg = typeof rawQr === 'string' && rawQr.trim().startsWith('<svg');
@@ -109,9 +125,9 @@ export default function Auth() {
       }
     } catch (error: any) {
       toast({
-        title: "Fehler",
-        description: "2FA konnte nicht eingerichtet werden: " + error.message,
-        variant: "destructive",
+        title: 'Fehler',
+        description: '2FA konnte nicht eingerichtet werden: ' + error.message,
+        variant: 'destructive',
       });
     }
   };
