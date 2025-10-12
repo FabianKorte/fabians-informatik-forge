@@ -55,10 +55,10 @@ export default function Auth() {
   const { user, signIn, signUp } = useAuth();
 
   useEffect(() => {
-    if (user && !show2FADialog) {
+    if (user && !show2FADialog && !showMfaDialog) {
       navigate("/");
     }
-  }, [user, navigate]);
+  }, [user, show2FADialog, showMfaDialog, navigate]);
 
   const setup2FA = async () => {
     const enrollWithUniqueName = async () => {
@@ -272,6 +272,7 @@ export default function Auth() {
             setMfaFactorId(totp.id);
             setMfaChallengeId(challenge.id);
             setShowMfaDialog(true);
+            toast({ title: '2FA erforderlich', description: 'Bitte gib den 6-stelligen Code aus deiner Authenticator-App ein.' });
             return; // Wait for user to enter code
           }
         }
@@ -567,6 +568,32 @@ export default function Auth() {
               <p className="text-xs text-muted-foreground">
                 Tipp: Wenn Scannen nicht funktioniert, nutze „In Auth‑App öffnen“ (mobil) oder füge den „Manueller Code (Secret)“ in deiner App hinzu.
               </p>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={showMfaDialog} onOpenChange={setShowMfaDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>2FA bestätigen</DialogTitle>
+              <DialogDescription>
+                Bitte gib den 6-stelligen Code aus deiner Authenticator‑App ein, um die Anmeldung abzuschließen.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="mfa-code">2FA‑Code</Label>
+                <Input
+                  id="mfa-code"
+                  placeholder="123456"
+                  value={mfaCode}
+                  onChange={(e) => setMfaCode(e.target.value)}
+                  maxLength={6}
+                />
+              </div>
+              <Button onClick={handleMfaVerify} className="w-full">
+                Bestätigen
+              </Button>
             </div>
           </DialogContent>
         </Dialog>
