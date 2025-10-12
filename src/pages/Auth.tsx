@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -53,6 +53,34 @@ export default function Auth() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { user, signIn, signUp } = useAuth();
+  const location = useLocation();
+  const [autoMfaTriggered, setAutoMfaTriggered] = useState(false);
+
+  useEffect(() => {
+    if (user && !autoMfaTriggered) {
+      const params = new URLSearchParams(location.search);
+      if (params.get("requireMfa") === "1") {
+        (async () => {
+          try {
+            const { data: aalData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+            if ((aalData?.currentLevel || '').toLowerCase() === 'aal2') return;
+            const factors = await supabase.auth.mfa.listFactors();
+            const totp = factors.data?.totp?.[0];
+            if (totp) {
+              const { data: challenge, error: challengeErr } = await supabase.auth.mfa.challenge({ factorId: totp.id });
+              if (!challengeErr) {
+                setMfaFactorId(totp.id);
+                setMfaChallengeId(challenge.id);
+                setShowMfaDialog(true);
+                toast({ title: '2FA erforderlich', description: 'Bitte gib den 6-stelligen Code ein.' });
+                setAutoMfaTriggered(true);
+              }
+            }
+          } catch {}
+        })();
+      }
+    }
+  }, [user, location.search, autoMfaTriggered]);
 
   useEffect(() => {
     if (user && !show2FADialog && !showMfaDialog) {
@@ -257,16 +285,12 @@ export default function Auth() {
       });
 
       if (mode === "login") {
-        // Check if MFA challenge is required
-        const { data: aalData, error: aalError } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
-        if (!aalError && aalData) {
-          if (aalData.currentLevel === 'aal1' && aalData.nextLevel === 'aal2') {
-            // Prepare a challenge for the first TOTP factor
-            const factors = await supabase.auth.mfa.listFactors();
-            const totp = factors.data?.totp?.[0];
-            if (!totp) {
-              throw new Error('Kein TOTP-Faktor gefunden. Bitte 2FA zuerst einrichten.');
-            }
+        // If user has a TOTP factor but session is not AAL2, force a challenge
+        const factors = await supabase.auth.mfa.listFactors();
+        const totp = factors.data?.totp?.[0];
+        if (totp) {
+          const { data: aalData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+          if ((aalData?.currentLevel || '').toLowerCase() !== 'aal2') {
             const { data: challenge, error: challengeErr } = await supabase.auth.mfa.challenge({ factorId: totp.id });
             if (challengeErr) throw challengeErr;
             setMfaFactorId(totp.id);
@@ -277,7 +301,6 @@ export default function Auth() {
           }
         }
         navigate("/");
-      }
     } catch (error: any) {
       toast({
         title: "Fehler",

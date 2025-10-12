@@ -304,23 +304,20 @@ export default function UserDashboard() {
         </div>
 
         <Tabs defaultValue="suggest" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 gap-1 sm:gap-2 h-auto">
-            <TabsTrigger value="suggest" className="text-xs sm:text-sm px-2 py-2">
-              <Lightbulb className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
-              <span className="hidden sm:inline">Inhalte vorschlagen</span>
-              <span className="sm:hidden">Vorschlag</span>
-            </TabsTrigger>
-            <TabsTrigger value="my-suggestions" className="text-xs sm:text-sm px-2 py-2">
-              <BookOpen className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
-              <span className="hidden sm:inline">Meine Vorschläge</span>
-              <span className="sm:hidden">Meine</span>
-            </TabsTrigger>
-            <TabsTrigger value="progress" className="text-xs sm:text-sm px-2 py-2">
-              <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
-              <span className="hidden sm:inline">Fortschritt</span>
-              <span className="sm:hidden">Progress</span>
-            </TabsTrigger>
-          </TabsList>
+        <TabsList className="grid w-full grid-cols-3 gap-1 sm:gap-2 h-auto">
+          <TabsTrigger value="suggest" className="text-sm px-2 py-2 whitespace-normal">
+            <Lightbulb className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
+            <span>Inhalte vorschlagen</span>
+          </TabsTrigger>
+          <TabsTrigger value="my-suggestions" className="text-sm px-2 py-2 whitespace-normal">
+            <BookOpen className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
+            <span>Meine Vorschläge</span>
+          </TabsTrigger>
+          <TabsTrigger value="progress" className="text-sm px-2 py-2 whitespace-normal">
+            <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
+            <span>Fortschritt</span>
+          </TabsTrigger>
+        </TabsList>
 
           <TabsContent value="suggest">
             <SimpleLearningContentForm />

@@ -1,11 +1,36 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isAdmin, isLoading } = useAuth();
+  const [checkingMfa, setCheckingMfa] = useState(true);
+  const [needsMfa, setNeedsMfa] = useState(false);
 
-  if (isLoading) {
+  useEffect(() => {
+    const run = async () => {
+      try {
+        if (user && isAdmin) {
+          const [{ data: aal }, { data: factors }] = await Promise.all([
+            supabase.auth.mfa.getAuthenticatorAssuranceLevel(),
+            supabase.auth.mfa.listFactors(),
+          ]);
+          const hasTotp = (factors?.totp || []).length > 0;
+          const isAal2 = (aal?.currentLevel || '').toLowerCase() === 'aal2';
+          setNeedsMfa(hasTotp && !isAal2);
+        } else {
+          setNeedsMfa(false);
+        }
+      } finally {
+        setCheckingMfa(false);
+      }
+    };
+    run();
+  }, [user, isAdmin]);
+
+  if (isLoading || checkingMfa) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -28,5 +53,9 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     );
   }
 
-  return <>{children}</>;
+  if (needsMfa) {
+    return <Navigate to="/auth?requireMfa=1" replace />;
+  }
+
+  return <>{children}</>; 
 };
