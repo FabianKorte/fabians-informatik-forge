@@ -23,7 +23,7 @@ export const Hero = ({
   const accuracy = answeredQuestions > 0 ? (correctAnswers / answeredQuestions) * 100 : 0;
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-background to-muted/30">
+    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-background to-muted/30 view-transition-hero">
       {/* Subtle floating elements */}
       <div className="absolute top-1/4 left-1/4 w-2 h-2 rounded-full bg-accent/30 animate-float" />
       <div className="absolute top-1/3 right-1/3 w-1 h-1 rounded-full bg-primary/20 animate-float" style={{ animationDelay: '2s' }} />
@@ -32,7 +32,7 @@ export const Hero = ({
       {/* Main content */}
       <div className="relative z-10 text-center max-w-4xl mx-auto px-6 py-20">
         {/* Logo */}
-        <div className="mb-8 animate-fade-in">
+        <div className="mb-8 animate-fade-in view-transition-logo">
           <img 
             src={logo} 
             alt="Fabian Korte - Fachinformatiker" 

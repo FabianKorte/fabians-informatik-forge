@@ -181,6 +181,69 @@ All colors MUST be HSL.
   html {
     scroll-behavior: smooth;
   }
+
+  /* Enable View Transitions API for smooth page transitions */
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+/* View Transitions API Customization */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(root) {
+  animation-name: fade-out-scale;
+}
+
+::view-transition-new(root) {
+  animation-name: fade-in-scale;
+}
+
+@keyframes fade-out-scale {
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+@keyframes fade-in-scale {
+  from {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+}
+
+/* View Transition for specific elements */
+.view-transition-card {
+  view-transition-name: card-transition;
+}
+
+.view-transition-hero {
+  view-transition-name: hero-transition;
+}
+
+.view-transition-logo {
+  view-transition-name: logo-transition;
+}
+
+::view-transition-old(card-transition),
+::view-transition-new(card-transition) {
+  animation-duration: 0.4s;
+}
+
+::view-transition-old(hero-transition),
+::view-transition-new(hero-transition) {
+  animation-duration: 0.6s;
+}
+
+::view-transition-old(logo-transition),
+::view-transition-new(logo-transition) {
+  animation-duration: 0.7s;
+  animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 /* Apple-inspired utility classes */

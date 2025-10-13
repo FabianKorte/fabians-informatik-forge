@@ -26,7 +26,7 @@ export const CategoryCard = ({
   const progress = totalElements > 0 ? (completedElements / totalElements) * 100 : 0;
 
   return (
-    <GradientShadowCard>
+    <GradientShadowCard className="view-transition-card">
       <Card className="group cursor-pointer p-8 h-full flex flex-col">
       <div className="flex items-start gap-4 mb-6">
         <div className="p-2.5 rounded-lg bg-accent/5 border border-accent/10">
