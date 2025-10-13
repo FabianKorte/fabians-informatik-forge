@@ -23,6 +23,7 @@ const Index = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [allModules, setAllModules] = useState<Record<string, LearnModule[]>>({});
   const [isLoading, setIsLoading] = useState(true);
+  const [showContent, setShowContent] = useState(false);
   const navigate = useNavigate();
   const { user, isAdmin } = useAuth();
 
@@ -112,13 +113,16 @@ const Index = () => {
   const handleFeedbackSubmitted = () => setFeedbackRefreshTrigger(prev => prev + 1);
 
   if (isLoading) {
-    return <LoadingScreen />;
+    return <LoadingScreen onComplete={() => {
+      setIsLoading(false);
+      setTimeout(() => setShowContent(true), 100);
+    }} />;
   }
 
   return (
     <div className="min-h-screen bg-background">
       {/* Floating Action Buttons */}
-      <div className="fixed top-6 right-6 z-50 flex flex-col gap-3">
+      <div className={`fixed top-6 right-6 z-50 flex flex-col gap-3 transition-all duration-700 ${showContent ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}>
         {user && (
           <Button
             variant="outline"
@@ -165,16 +169,18 @@ const Index = () => {
         </RoadmapModal>
       </div>
 
-      <Hero
-        totalQuestions={stats.totalQuestions}
-        answeredQuestions={stats.answeredQuestions}
-        correctAnswers={stats.correctAnswers}
-        onStartLearning={handleStartLearning}
-        onShowProgress={handleShowProgress}
-      />
+      <div className={`transition-all duration-700 delay-100 ${showContent ? 'opacity-100' : 'opacity-0'}`}>
+        <Hero
+          totalQuestions={stats.totalQuestions}
+          answeredQuestions={stats.answeredQuestions}
+          correctAnswers={stats.correctAnswers}
+          onStartLearning={handleStartLearning}
+          onShowProgress={handleShowProgress}
+        />
+      </div>
 
       {randomTrainingCategory && (
-        <section className="py-12 px-6 bg-gradient-to-br from-violet-500/10 via-fuchsia-500/10 to-purple-500/10">
+        <section className={`py-12 px-6 bg-gradient-to-br from-violet-500/10 via-fuchsia-500/10 to-purple-500/10 transition-all duration-700 delay-300 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-8">
               <div className="inline-flex items-center gap-2 mb-4">
@@ -203,7 +209,7 @@ const Index = () => {
         </section>
       )}
 
-      <section id="categories-section" className="py-20 px-6 bg-background">
+      <section id="categories-section" className={`py-20 px-6 bg-background transition-all duration-700 delay-500 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-medium text-foreground mb-4">Lernkategorien</h2>
@@ -263,7 +269,7 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="py-20 px-6 bg-muted/30">
+      <section className={`py-20 px-6 bg-muted/30 transition-all duration-700 delay-700 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-medium text-foreground mb-4">Feedback</h2>
@@ -283,7 +289,7 @@ const Index = () => {
         </div>
       </section>
 
-      <footer className="py-12 px-6 border-t border-border bg-background">
+      <footer className={`py-12 px-6 border-t border-border bg-background transition-all duration-700 delay-1000 ${showContent ? 'opacity-100' : 'opacity-0'}`}>
         <div className="max-w-4xl mx-auto text-center">
           <div className="mb-6">
             <img 
