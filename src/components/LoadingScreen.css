@@ -27,12 +27,12 @@
 .loading-screen--intro .logo-animation {
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(1.5);
+  transform: translate(-50%, -50%) scale(2.5);
   opacity: 1;
 }
 
 .loading-screen--intro .logo-animation__image {
-  width: 200px;
+  width: 300px;
   height: auto;
   filter: drop-shadow(0 10px 40px hsl(var(--accent) / 0.5));
 }
