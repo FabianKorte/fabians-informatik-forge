@@ -301,6 +301,7 @@ export default function Auth() {
           }
         }
         navigate("/");
+      }
     } catch (error: any) {
       toast({
         title: "Fehler",
