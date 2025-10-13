@@ -115,7 +115,7 @@ const Index = () => {
   if (isLoading) {
     return <LoadingScreen onComplete={() => {
       setIsLoading(false);
-      setTimeout(() => setShowContent(true), 100);
+      setShowContent(true);
     }} />;
   }
 
