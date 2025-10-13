@@ -6,6 +6,7 @@ import { SearchBar } from "@/components/SearchBar";
 import { FeedbackForm } from "@/components/feedback/FeedbackForm";
 import { FeedbackList } from "@/components/feedback/FeedbackList";
 import { RoadmapModal } from "@/components/RoadmapModal";
+import { LoadingScreen } from "@/components/LoadingScreen";
 import { Button } from "@/components/ui/button";
 import { seedDatabase } from "@/lib/seedDatabase";
 import { useAuth } from "@/hooks/useAuth";
@@ -111,14 +112,7 @@ const Index = () => {
   const handleFeedbackSubmitted = () => setFeedbackRefreshTrigger(prev => prev + 1);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Lade Lerninhalte...</p>
-        </div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   return (
