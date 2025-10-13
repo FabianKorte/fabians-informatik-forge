@@ -112,15 +112,11 @@ const Index = () => {
   const handleCategoryStart = (categoryId: string) => navigate(`/learn/${categoryId}`);
   const handleFeedbackSubmitted = () => setFeedbackRefreshTrigger(prev => prev + 1);
 
-  if (isLoading) {
-    return <LoadingScreen onComplete={() => {
-      setIsLoading(false);
-      setShowContent(true);
-    }} />;
-  }
-
   return (
     <div className="min-h-screen bg-background">
+      {isLoading && (
+        <LoadingScreen onComplete={() => { setIsLoading(false); setShowContent(true); }} />
+      )}
       {/* Floating Action Buttons */}
       <div className={`fixed top-6 right-6 z-50 flex flex-col gap-3 transition-all duration-700 ${showContent ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}>
         {user && (

@@ -37,6 +37,7 @@ export const Hero = ({
             src={logo} 
             alt="Fabian Korte - Fachinformatiker" 
             className="mx-auto h-32 md:h-40 w-auto object-contain"
+            data-hero-logo
           />
         </div>
 
