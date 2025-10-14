@@ -27,7 +27,7 @@ const Chat = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -55,20 +55,31 @@ const Chat = () => {
         return;
       }
 
-      const messagesWithProfiles = await Promise.all(
-        (messagesData || []).map(async (msg) => {
-          const { data: profileData } = await supabase
-            .from('profiles')
-            .select('username, avatar_url')
-            .eq('id', msg.user_id)
-            .single();
+      if (!messagesData || messagesData.length === 0) {
+        setMessages([]);
+        setIsLoading(false);
+        return;
+      }
 
-          return {
-            ...msg,
-            profiles: profileData || undefined,
-          };
-        })
+      // Hole alle User IDs
+      const userIds = [...new Set(messagesData.map(msg => msg.user_id))];
+      
+      // Hole alle Profile in einer Abfrage
+      const { data: profilesData } = await supabase
+        .from('profiles')
+        .select('id, username, avatar_url')
+        .in('id', userIds);
+
+      // Erstelle eine Map für schnellen Zugriff
+      const profilesMap = new Map(
+        (profilesData || []).map(profile => [profile.id, profile])
       );
+
+      // Verknüpfe Nachrichten mit Profilen
+      const messagesWithProfiles = messagesData.map(msg => ({
+        ...msg,
+        profiles: profilesMap.get(msg.user_id),
+      }));
 
       setMessages(messagesWithProfiles as ChatMessage[]);
       setIsLoading(false);
@@ -108,9 +119,7 @@ const Chat = () => {
   }, [user, toast]);
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   const handleSendMessage = async (e: React.FormEvent) => {
@@ -152,47 +161,54 @@ const Chat = () => {
           <h1 className="text-2xl font-bold">Community Chat</h1>
         </div>
 
-        <ScrollArea className="flex-1 border rounded-lg p-4 mb-4" ref={scrollRef}>
+        <ScrollArea className="flex-1 border rounded-lg p-4 mb-4">
           <div className="space-y-4">
-            {messages.map((msg) => (
-              <div
-                key={msg.id}
-                className={`flex gap-3 ${
-                  msg.user_id === user?.id ? 'flex-row-reverse' : 'flex-row'
-                }`}
-              >
-                <Avatar className="h-10 w-10 shrink-0">
-                  <AvatarImage src={msg.profiles?.avatar_url || undefined} />
-                  <AvatarFallback>
-                    {msg.profiles?.username?.charAt(0).toUpperCase() || 'U'}
-                  </AvatarFallback>
-                </Avatar>
+            {messages.length === 0 ? (
+              <div className="text-center text-muted-foreground py-8">
+                Keine Nachrichten vorhanden. Schreibe die erste Nachricht!
+              </div>
+            ) : (
+              messages.map((msg) => (
                 <div
-                  className={`flex flex-col ${
-                    msg.user_id === user?.id ? 'items-end' : 'items-start'
+                  key={msg.id}
+                  className={`flex gap-3 ${
+                    msg.user_id === user?.id ? 'flex-row-reverse' : 'flex-row'
                   }`}
                 >
-                  <span className="text-xs text-muted-foreground mb-1">
-                    {msg.profiles?.username || 'Unbekannt'}
-                  </span>
+                  <Avatar className="h-10 w-10 shrink-0">
+                    <AvatarImage src={msg.profiles?.avatar_url || undefined} />
+                    <AvatarFallback>
+                      {msg.profiles?.username?.charAt(0).toUpperCase() || 'U'}
+                    </AvatarFallback>
+                  </Avatar>
                   <div
-                    className={`rounded-lg px-4 py-2 max-w-md ${
-                      msg.user_id === user?.id
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-muted'
+                    className={`flex flex-col ${
+                      msg.user_id === user?.id ? 'items-end' : 'items-start'
                     }`}
                   >
-                    <p className="text-sm break-words">{msg.message}</p>
+                    <span className="text-xs text-muted-foreground mb-1">
+                      {msg.profiles?.username || 'Unbekannt'}
+                    </span>
+                    <div
+                      className={`rounded-lg px-4 py-2 max-w-md ${
+                        msg.user_id === user?.id
+                          ? 'bg-primary text-primary-foreground'
+                          : 'bg-muted'
+                      }`}
+                    >
+                      <p className="text-sm break-words">{msg.message}</p>
+                    </div>
+                    <span className="text-xs text-muted-foreground mt-1">
+                      {new Date(msg.created_at).toLocaleTimeString('de-DE', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </span>
                   </div>
-                  <span className="text-xs text-muted-foreground mt-1">
-                    {new Date(msg.created_at).toLocaleTimeString('de-DE', {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </span>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
+            <div ref={messagesEndRef} />
           </div>
         </ScrollArea>
 
