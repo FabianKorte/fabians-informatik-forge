@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, BookOpen, Lightbulb, TrendingUp, Settings, LogOut, User } from "lucide-react";
+import { ArrowLeft, BookOpen, Lightbulb, TrendingUp, Settings, LogOut, User, MessageCircle } from "lucide-react";
 import { SimpleLearningContentForm } from "@/components/user/SimpleLearningContentForm";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -273,6 +273,14 @@ export default function UserDashboard() {
             <h1 className="text-2xl font-bold">Mein Dashboard</h1>
           </div>
           <div className="flex gap-2">
+            <Button variant="default" onClick={() => navigate("/")}>
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              <span className="hidden sm:inline">Startseite</span>
+            </Button>
+            <Button variant="outline" onClick={() => navigate("/chat")}>
+              <MessageCircle className="w-4 h-4 mr-2" />
+              <span className="hidden sm:inline">Chat</span>
+            </Button>
             <Button variant="outline" onClick={() => navigate("/profile")}>
               <User className="w-4 h-4 mr-2" />
               <span className="hidden sm:inline">Profil</span>
@@ -286,10 +294,6 @@ export default function UserDashboard() {
             <Button variant="outline" onClick={() => signOut()}>
               <LogOut className="w-4 h-4 mr-2" />
               <span className="hidden sm:inline">Abmelden</span>
-            </Button>
-            <Button variant="outline" onClick={() => navigate("/")}>
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              <span className="hidden sm:inline">Startseite</span>
             </Button>
           </div>
         </div>

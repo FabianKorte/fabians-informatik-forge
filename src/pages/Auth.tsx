@@ -284,24 +284,49 @@ export default function Auth() {
         duration: 8000,
       });
 
-      if (mode === "login") {
-        // If user has a TOTP factor but session is not AAL2, force a challenge
-        const factors = await supabase.auth.mfa.listFactors();
-        const totp = factors.data?.totp?.[0];
-        if (totp) {
-          const { data: aalData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
-          if ((aalData?.currentLevel || '').toLowerCase() !== 'aal2') {
-            const { data: challenge, error: challengeErr } = await supabase.auth.mfa.challenge({ factorId: totp.id });
-            if (challengeErr) throw challengeErr;
-            setMfaFactorId(totp.id);
-            setMfaChallengeId(challenge.id);
-            setShowMfaDialog(true);
-            toast({ title: '2FA erforderlich', description: 'Bitte gib den 6-stelligen Code aus deiner Authenticator-App ein.' });
-            return; // Wait for user to enter code
-          }
-        }
-        navigate("/");
+      // After successful login/signup, redirect appropriately
+      if (mode === "signup") {
+        // For signup, just show the success message - email confirmation is required
+        return;
       }
+      
+      // For login: Check for MFA requirement
+      const factors = await supabase.auth.mfa.listFactors();
+      const totp = factors.data?.totp?.[0];
+      
+      if (totp) {
+        // User has 2FA enabled - check current assurance level
+        const { data: aalData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+        const currentLevel = (aalData?.currentLevel || '').toLowerCase();
+        
+        if (currentLevel !== 'aal2') {
+          // Need to challenge for 2FA
+          const { data: challenge, error: challengeErr } = await supabase.auth.mfa.challenge({ 
+            factorId: totp.id 
+          });
+          
+          if (challengeErr) {
+            console.error('MFA challenge error:', challengeErr);
+            throw challengeErr;
+          }
+          
+          setMfaFactorId(totp.id);
+          setMfaChallengeId(challenge.id);
+          setShowMfaDialog(true);
+          
+          toast({ 
+            title: '2FA erforderlich', 
+            description: 'Bitte gib den 6-stelligen Code aus deiner Authenticator-App ein.',
+            duration: 5000,
+          });
+          
+          setIsLoading(false);
+          return; // Don't navigate yet - wait for MFA verification
+        }
+      }
+      
+      // No MFA required or already verified - proceed to home
+      navigate("/");
     } catch (error: any) {
       toast({
         title: "Fehler",
