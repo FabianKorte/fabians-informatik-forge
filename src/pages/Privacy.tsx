@@ -195,15 +195,7 @@ export default function Privacy() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold mb-3">9. Kontakt</h2>
-              <p className="mb-4">
-                Bei Fragen zum Datenschutz oder zur Ausübung Ihrer Rechte wenden Sie sich bitte an die im Impressum 
-                genannte Kontaktadresse.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-xl font-semibold mb-3">10. Änderungen dieser Datenschutzerklärung</h2>
+              <h2 className="text-xl font-semibold mb-3">9. Änderungen dieser Datenschutzerklärung</h2>
               <p className="mb-4">
                 Wir behalten uns vor, diese Datenschutzerklärung anzupassen, damit sie stets den aktuellen rechtlichen 
                 Anforderungen entspricht oder um Änderungen unserer Leistungen in der Datenschutzerklärung umzusetzen. 
