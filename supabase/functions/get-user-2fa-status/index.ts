@@ -74,12 +74,12 @@ Deno.serve(async (req) => {
         }
 
         const totpFactors = factors?.totp || []
-        const consideredFactors = totpFactors.filter((f: any) => f.status !== 'unverified')
+        const verifiedFactors = totpFactors.filter((f: any) => f.status === 'verified')
         
         statusMap[userId] = {
-          has2FA: (consideredFactors.length > 0) || (totpFactors.length > 0),
-          factorCount: consideredFactors.length || totpFactors.length,
-          factors: (consideredFactors.length ? consideredFactors : totpFactors).map((f: any) => ({
+          has2FA: verifiedFactors.length > 0,
+          factorCount: verifiedFactors.length,
+          factors: verifiedFactors.map((f: any) => ({
             id: f.id,
             friendlyName: f.friendly_name,
             createdAt: f.created_at,

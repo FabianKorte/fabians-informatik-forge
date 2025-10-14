@@ -176,9 +176,8 @@ const Chat = () => {
                   }`}
                 >
                   <Avatar className="h-10 w-10 shrink-0">
-                    <AvatarImage src={msg.profiles?.avatar_url || undefined} />
                     <AvatarFallback>
-                      {msg.profiles?.username?.charAt(0).toUpperCase() || 'U'}
+                      {(msg.profiles?.username?.[0]?.toUpperCase()) ?? 'U'}
                     </AvatarFallback>
                   </Avatar>
                   <div

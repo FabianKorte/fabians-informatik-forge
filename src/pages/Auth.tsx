@@ -83,10 +83,12 @@ export default function Auth() {
   }, [user, location.search, autoMfaTriggered]);
 
   useEffect(() => {
-    if (user && !show2FADialog && !showMfaDialog) {
+    const params = new URLSearchParams(location.search);
+    const requireMfa = params.get("requireMfa") === "1";
+    if (user && !requireMfa && !show2FADialog && !showMfaDialog) {
       navigate("/");
     }
-  }, [user, show2FADialog, showMfaDialog, navigate]);
+  }, [user, show2FADialog, showMfaDialog, navigate, location.search]);
 
   const setup2FA = async () => {
     const enrollWithUniqueName = async () => {
