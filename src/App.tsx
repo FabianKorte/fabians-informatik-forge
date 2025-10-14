@@ -12,6 +12,7 @@ import Admin from "./pages/Admin";
 import UserDashboard from "./pages/UserDashboard";
 import Profile from "./pages/Profile";
 import Privacy from "./pages/Privacy";
+import Chat from "./pages/Chat";
 import { AIChatbot } from "@/components/AIChatbot";
 import { AuthProvider } from "@/hooks/useAuth";
 import { useViewTransition } from "@/hooks/useViewTransition";
@@ -42,6 +43,7 @@ const AppRoutes = () => {
           <Route path="/dashboard" element={<UserDashboard />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/privacy" element={<Privacy />} />
+          <Route path="/chat" element={<Chat />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
