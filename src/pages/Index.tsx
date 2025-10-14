@@ -23,6 +23,7 @@ const Index = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [allModules, setAllModules] = useState<Record<string, LearnModule[]>>({});
   const [isLoading, setIsLoading] = useState(true);
+  const [splashActive, setSplashActive] = useState(true);
   const [showContent, setShowContent] = useState(false);
   const navigate = useNavigate();
   const { user, isAdmin } = useAuth();
@@ -53,6 +54,23 @@ const Index = () => {
     initializeData();
     return () => { mounted = false; };
   }, []);
+
+  // Failsafe: ensure splash overlay hides quickly
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setSplashActive(false);
+      setShowContent(true);
+    }, 1200);
+    return () => clearTimeout(t);
+  }, []);
+
+  // Hide splash as soon as data finished loading
+  useEffect(() => {
+    if (!isLoading) {
+      setSplashActive(false);
+      setShowContent(true);
+    }
+  }, [isLoading]);
 
   const countElements = useMemo(() => (modules: LearnModule[]) => {
     if (!modules || modules.length === 0) return 0;
@@ -114,8 +132,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {isLoading && (
-        <LoadingScreen onComplete={() => { setIsLoading(false); setShowContent(true); }} />
+      {splashActive && (
+        <LoadingScreen onComplete={() => { setSplashActive(false); setShowContent(true); }} />
       )}
       {/* Floating Action Buttons */}
       <div className={`fixed top-6 right-6 z-50 flex flex-col gap-3 transition-all duration-700 ${showContent ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}>
