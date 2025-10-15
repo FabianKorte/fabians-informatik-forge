@@ -56,31 +56,12 @@ export default function Auth() {
   const location = useLocation();
   const [autoMfaTriggered, setAutoMfaTriggered] = useState(false);
 
+  // Remove auto MFA trigger from query param - it should only happen during login flow
   useEffect(() => {
     if (user && !autoMfaTriggered) {
-      const params = new URLSearchParams(location.search);
-      if (params.get("requireMfa") === "1") {
-        (async () => {
-          try {
-            const { data: aalData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
-            if ((aalData?.currentLevel || '').toLowerCase() === 'aal2') return;
-            const factors = await supabase.auth.mfa.listFactors();
-            const totp = factors.data?.totp?.[0];
-            if (totp) {
-              const { data: challenge, error: challengeErr } = await supabase.auth.mfa.challenge({ factorId: totp.id });
-              if (!challengeErr) {
-                setMfaFactorId(totp.id);
-                setMfaChallengeId(challenge.id);
-                setShowMfaDialog(true);
-                toast({ title: '2FA erforderlich', description: 'Bitte gib den 6-stelligen Code ein.' });
-                setAutoMfaTriggered(true);
-              }
-            }
-          } catch {}
-        })();
-      }
+      setAutoMfaTriggered(true);
     }
-  }, [user, location.search, autoMfaTriggered]);
+  }, [user, autoMfaTriggered]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);

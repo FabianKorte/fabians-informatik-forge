@@ -49,7 +49,17 @@ Deno.serve(async (req) => {
     }
 
     // Get all user IDs from request
-    const { userIds } = await req.json()
+    const body = await req.text()
+    let userIds: string[] = []
+    
+    if (body && body.trim()) {
+      try {
+        const parsed = JSON.parse(body)
+        userIds = parsed.userIds || []
+      } catch (e) {
+        console.error('JSON parse error:', e)
+      }
+    }
 
     if (!userIds || !Array.isArray(userIds)) {
       return new Response(

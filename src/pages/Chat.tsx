@@ -177,7 +177,7 @@ const Chat = () => {
                 >
                   <Avatar className="h-10 w-10 shrink-0">
                     <AvatarFallback>
-                      {(msg.profiles?.username?.[0]?.toUpperCase()) ?? 'U'}
+                      {msg.profiles?.username ? msg.profiles.username.charAt(0).toUpperCase() : 'U'}
                     </AvatarFallback>
                   </Avatar>
                   <div
