@@ -85,7 +85,10 @@ export const AdminUsers = () => {
 
         const { data: statusData, error: statusError } = await supabase.functions.invoke('get-user-2fa-status', {
           body: { userIds },
-          headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined,
+          headers: {
+            ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+            'Content-Type': 'application/json',
+          },
         });
         console.log('2FA status response:', statusData, statusError);
         if (statusError) {

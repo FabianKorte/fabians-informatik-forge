@@ -208,10 +208,26 @@ export default function Auth() {
 
   const handleMfaVerify = async () => {
     try {
-      if (!mfaFactorId || !mfaChallengeId) throw new Error('MFA nicht vorbereitet');
+      // Ensure factor and challenge exist
+      let factorId = mfaFactorId;
+      if (!factorId) {
+        const factors = await supabase.auth.mfa.listFactors();
+        factorId = factors.data?.totp?.[0]?.id || null;
+        setMfaFactorId(factorId);
+      }
+      if (!factorId) throw new Error('Kein MFA‑Faktor gefunden');
+
+      let challengeId = mfaChallengeId;
+      if (!challengeId) {
+        const { data: ch, error: chErr } = await supabase.auth.mfa.challenge({ factorId });
+        if (chErr) throw chErr;
+        challengeId = ch.id;
+        setMfaChallengeId(challengeId);
+      }
+
       const { error } = await supabase.auth.mfa.verify({
-        factorId: mfaFactorId,
-        challengeId: mfaChallengeId,
+        factorId,
+        challengeId,
         code: mfaCode,
       });
       if (error) throw error;
