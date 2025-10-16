@@ -50,6 +50,7 @@ export default function Auth() {
   const [mfaFactorId, setMfaFactorId] = useState<string | null>(null);
   const [mfaChallengeId, setMfaChallengeId] = useState<string | null>(null);
   const [rememberMe, setRememberMe] = useState(true);
+  const [suppressAutoRedirect, setSuppressAutoRedirect] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
   const { user, signIn, signUp } = useAuth();
@@ -67,9 +68,10 @@ export default function Auth() {
     const params = new URLSearchParams(location.search);
     const requireMfa = params.get("requireMfa") === "1";
     if (user && !requireMfa && !show2FADialog && !showMfaDialog) {
+      if (suppressAutoRedirect) return;
       navigate("/");
     }
-  }, [user, show2FADialog, showMfaDialog, navigate, location.search]);
+  }, [user, show2FADialog, showMfaDialog, navigate, location.search, suppressAutoRedirect]);
 
   const setup2FA = async () => {
     const enrollWithUniqueName = async () => {
@@ -217,6 +219,7 @@ export default function Auth() {
       setMfaChallengeId(null);
       setMfaFactorId(null);
       toast({ title: '2FA bestätigt', description: 'Anmeldung verifiziert' });
+      setSuppressAutoRedirect(false);
       navigate('/');
     } catch (error: any) {
       toast({ title: 'Fehler', description: error.message, variant: 'destructive' });
@@ -254,6 +257,7 @@ export default function Auth() {
     }
 
     setIsLoading(true);
+    if (mode === "login") setSuppressAutoRedirect(true);
 
     try {
       if (mode === "login") {
@@ -325,6 +329,7 @@ export default function Auth() {
       }
       
       // No MFA required or already verified - proceed to home
+      setSuppressAutoRedirect(false);
       navigate("/");
     } catch (error: any) {
       toast({
@@ -333,6 +338,7 @@ export default function Auth() {
         variant: "destructive",
         duration: 5000,
       });
+      setSuppressAutoRedirect(false);
     } finally {
       setIsLoading(false);
     }
