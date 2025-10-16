@@ -38,6 +38,9 @@ export const AdminLearningContent = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [editingModule, setEditingModule] = useState<LearnModule | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortKey, setSortKey] = useState<'category' | 'type' | 'title'>('category');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const { toast } = useToast();
 
   useEffect(() => {
@@ -218,6 +221,26 @@ export const AdminLearningContent = () => {
     return <Badge variant={config.variant}>{config.label}</Badge>;
   };
 
+  const displayModules = useMemo(() => {
+    const getCatTitle = (id: string) => categories.find(c => c.id === id)?.title || id;
+    let list = [...modules];
+    const q = searchQuery.trim().toLowerCase();
+    if (q) {
+      list = list.filter((m) =>
+        m.title.toLowerCase().includes(q) ||
+        getCatTitle(m.category_id).toLowerCase().includes(q) ||
+        m.type.toLowerCase().includes(q)
+      );
+    }
+    list.sort((a, b) => {
+      const aVal = sortKey === 'category' ? getCatTitle(a.category_id) : sortKey === 'type' ? a.type : a.title;
+      const bVal = sortKey === 'category' ? getCatTitle(b.category_id) : sortKey === 'type' ? b.type : b.title;
+      const cmp = aVal.localeCompare(bVal, 'de', { sensitivity: 'base' });
+      return sortOrder === 'asc' ? cmp : -cmp;
+    });
+    return list;
+  }, [modules, categories, searchQuery, sortKey, sortOrder]);
+
   return (
     <Tabs defaultValue="overview" className="space-y-6">
       <TabsList>
@@ -232,10 +255,29 @@ export const AdminLearningContent = () => {
           <CardHeader>
             <CardTitle>Lerninhalte Übersicht</CardTitle>
             <CardDescription>
-              Alle vorhandenen Lernmodule ({modules.length} gesamt)
+              Sichtbar: {displayModules.length} · Gesamt: {modules.length}
             </CardDescription>
           </CardHeader>
           <CardContent>
+            <div className="flex flex-col sm:flex-row gap-2 mb-4 items-stretch sm:items-center">
+              <Input
+                placeholder="Suche nach Titel, Kategorie, Typ"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="sm:max-w-xs"
+              />
+              <Select value={sortKey} onValueChange={(v) => setSortKey(v as 'category' | 'type' | 'title')}>
+                <SelectTrigger className="w-[180px]"><SelectValue placeholder="Sortieren nach" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="category">Kategorie</SelectItem>
+                  <SelectItem value="type">Typ</SelectItem>
+                  <SelectItem value="title">Titel</SelectItem>
+                </SelectContent>
+              </Select>
+              <Button type="button" variant="outline" onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}>
+                {sortOrder === 'asc' ? 'Aufsteigend' : 'Absteigend'}
+              </Button>
+            </div>
             <Table>
               <TableHeader>
                 <TableRow>
@@ -247,14 +289,14 @@ export const AdminLearningContent = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {modules.length === 0 ? (
+                {displayModules.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={5} className="text-center text-muted-foreground">
                       Keine Lerninhalte vorhanden
                     </TableCell>
                   </TableRow>
                 ) : (
-                  modules.map((module) => (
+                  displayModules.map((module) => (
                     <TableRow key={module.id}>
                       <TableCell className="font-medium">
                         {categories.find(c => c.id === module.category_id)?.title || module.category_id}
@@ -296,7 +338,7 @@ export const AdminLearningContent = () => {
                       </TableCell>
                     </TableRow>
                   ))
-                )}
+                )
               </TableBody>
             </Table>
           </CardContent>

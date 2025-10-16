@@ -82,6 +82,7 @@ export const AdminUsers = () => {
         // Ensure Authorization header is sent (some environments require explicit header)
         const { data: sessionData } = await supabase.auth.getSession();
         const accessToken = sessionData.session?.access_token;
+        const currentUserId = sessionData.session?.user?.id;
 
         const { data: statusData, error: statusError } = await supabase.functions.invoke('get-user-2fa-status', {
           body: { userIds },
@@ -102,6 +103,26 @@ export const AdminUsers = () => {
           statusMap = statusData.statusMap;
         } else {
           console.warn('No statusMap in response from get-user-2fa-status');
+        }
+
+        // Fallback: falls der eigene Nutzer nicht im statusMap ist, lokale Factors prüfen
+        if (currentUserId && !statusMap[currentUserId]) {
+          try {
+            const factors = await supabase.auth.mfa.listFactors();
+            const verified = (factors.data?.totp || []).filter((f: any) => f.status === 'verified');
+            statusMap[currentUserId] = {
+              has2FA: verified.length > 0,
+              factorCount: verified.length,
+              factors: verified.map((f: any) => ({
+                id: f.id,
+                friendlyName: (f as any).friendly_name,
+                createdAt: (f as any).created_at,
+                status: f.status,
+              })),
+            };
+          } catch (e) {
+            console.warn('Fallback MFA check failed:', e);
+          }
         }
       } catch (err) {
         console.error("Could not fetch 2FA status:", err);
