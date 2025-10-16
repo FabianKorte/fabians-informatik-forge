@@ -338,7 +338,7 @@ export const AdminLearningContent = () => {
                       </TableCell>
                     </TableRow>
                   ))
-                )
+                )}
               </TableBody>
             </Table>
           </CardContent>
