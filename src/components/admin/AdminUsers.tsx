@@ -168,6 +168,14 @@ export const AdminUsers = () => {
 
   useEffect(() => {
     fetchUsers();
+    
+    const handleRefresh = () => {
+      console.log('2FA status changed, refreshing users...');
+      fetchUsers();
+    };
+    
+    window.addEventListener('2fa-status-changed', handleRefresh);
+    return () => window.removeEventListener('2fa-status-changed', handleRefresh);
   }, []);
 
   const toggleAdminRole = async (userId: string, currentlyAdmin: boolean) => {
@@ -254,6 +262,7 @@ export const AdminUsers = () => {
       
       // Refresh users to update UI
       fetchUsers();
+      window.dispatchEvent(new CustomEvent('2fa-status-changed'));
     } catch (error: any) {
       toast({
         title: "Fehler",

@@ -11,7 +11,8 @@ import { Badge } from "@/components/ui/badge";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Plus, Pencil, Trash2, Eye } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2, Eye, ArrowUpDown, ArrowUp, ArrowDown, Download } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface LearnModule {
   id: string;
@@ -39,14 +40,26 @@ export const AdminLearningContent = () => {
   const [content, setContent] = useState("");
   const [editingModule, setEditingModule] = useState<LearnModule | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [sortKey, setSortKey] = useState<'category' | 'type' | 'title'>('category');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const itemsPerPage = 20;
   const { toast } = useToast();
 
   useEffect(() => {
     loadModules();
     loadCategories();
   }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+      setCurrentPage(1);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   const loadModules = async () => {
     const { data, error } = await supabase
@@ -125,7 +138,68 @@ export const AdminLearningContent = () => {
       description: "Lerninhalt wurde gelöscht",
     });
 
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
     loadModules();
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedIds.size === 0) return;
+    
+    const { error } = await supabase
+      .from('learn_modules')
+      .delete()
+      .in('id', Array.from(selectedIds));
+
+    if (error) {
+      toast({
+        title: "Fehler",
+        description: "Konnte Lerninhalte nicht löschen",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    toast({
+      title: "Erfolg",
+      description: `${selectedIds.size} Lerninhalte wurden gelöscht`,
+    });
+
+    setSelectedIds(new Set());
+    loadModules();
+  };
+
+  const handleExport = () => {
+    const selected = modules.filter(m => selectedIds.has(m.id));
+    const json = JSON.stringify(selected, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `lerninhalte-export-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const toggleSort = (key: 'category' | 'type' | 'title') => {
+    if (sortKey === key) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortKey(key);
+      setSortOrder('asc');
+    }
+    setCurrentPage(1);
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedIds.size === displayModules.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(displayModules.map(m => m.id)));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -224,7 +298,7 @@ export const AdminLearningContent = () => {
   const displayModules = useMemo(() => {
     const getCatTitle = (id: string) => categories.find(c => c.id === id)?.title || id;
     let list = [...modules];
-    const q = searchQuery.trim().toLowerCase();
+    const q = debouncedSearch.trim().toLowerCase();
     if (q) {
       list = list.filter((m) =>
         m.title.toLowerCase().includes(q) ||
@@ -239,7 +313,19 @@ export const AdminLearningContent = () => {
       return sortOrder === 'asc' ? cmp : -cmp;
     });
     return list;
-  }, [modules, categories, searchQuery, sortKey, sortOrder]);
+  }, [modules, categories, debouncedSearch, sortKey, sortOrder]);
+
+  const paginatedModules = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return displayModules.slice(start, start + itemsPerPage);
+  }, [displayModules, currentPage]);
+
+  const totalPages = Math.ceil(displayModules.length / itemsPerPage);
+
+  const getSortIcon = (key: 'category' | 'type' | 'title') => {
+    if (sortKey !== key) return <ArrowUpDown className="w-4 h-4 ml-1 opacity-30" />;
+    return sortOrder === 'asc' ? <ArrowUp className="w-4 h-4 ml-1" /> : <ArrowDown className="w-4 h-4 ml-1" />;
+  };
 
   return (
     <Tabs defaultValue="overview" className="space-y-6">
@@ -255,92 +341,184 @@ export const AdminLearningContent = () => {
           <CardHeader>
             <CardTitle>Lerninhalte Übersicht</CardTitle>
             <CardDescription>
-              Sichtbar: {displayModules.length} · Gesamt: {modules.length}
+              Seite {currentPage} von {totalPages || 1} · Sichtbar: {displayModules.length} · Gesamt: {modules.length}
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col sm:flex-row gap-2 mb-4 items-stretch sm:items-center">
-              <Input
-                placeholder="Suche nach Titel, Kategorie, Typ"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="sm:max-w-xs"
-              />
-              <Select value={sortKey} onValueChange={(v) => setSortKey(v as 'category' | 'type' | 'title')}>
-                <SelectTrigger className="w-[180px]"><SelectValue placeholder="Sortieren nach" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="category">Kategorie</SelectItem>
-                  <SelectItem value="type">Typ</SelectItem>
-                  <SelectItem value="title">Titel</SelectItem>
-                </SelectContent>
-              </Select>
-              <Button type="button" variant="outline" onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}>
-                {sortOrder === 'asc' ? 'Aufsteigend' : 'Absteigend'}
-              </Button>
-            </div>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Kategorie</TableHead>
-                  <TableHead>Titel</TableHead>
-                  <TableHead>Typ</TableHead>
-                  <TableHead>Reihenfolge</TableHead>
-                  <TableHead className="text-right">Aktionen</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {displayModules.length === 0 ? (
+            <div className="space-y-4">
+              <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center">
+                <Input
+                  placeholder="Suche nach Titel, Kategorie, Typ..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="sm:max-w-xs"
+                />
+                {selectedIds.size > 0 && (
+                  <div className="flex gap-2">
+                    <Badge variant="secondary">{selectedIds.size} ausgewählt</Badge>
+                    <Button size="sm" variant="outline" onClick={handleExport}>
+                      <Download className="w-4 h-4 mr-2" />
+                      Exportieren
+                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button size="sm" variant="destructive">
+                          <Trash2 className="w-4 h-4 mr-2" />
+                          Löschen
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Ausgewählte Lerninhalte löschen?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Möchtest du {selectedIds.size} Lerninhalt(e) wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                          <AlertDialogAction onClick={handleBulkDelete}>
+                            Löschen
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
+                )}
+              </div>
+              <Table>
+                <TableHeader>
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center text-muted-foreground">
-                      Keine Lerninhalte vorhanden
-                    </TableCell>
+                    <TableHead className="w-12">
+                      <Checkbox
+                        checked={selectedIds.size === paginatedModules.length && paginatedModules.length > 0}
+                        onCheckedChange={toggleSelectAll}
+                      />
+                    </TableHead>
+                    <TableHead 
+                      className="cursor-pointer hover:bg-muted/50 select-none"
+                      onClick={() => toggleSort('category')}
+                    >
+                      <div className="flex items-center">
+                        Kategorie
+                        {getSortIcon('category')}
+                      </div>
+                    </TableHead>
+                    <TableHead 
+                      className="cursor-pointer hover:bg-muted/50 select-none"
+                      onClick={() => toggleSort('title')}
+                    >
+                      <div className="flex items-center">
+                        Titel
+                        {getSortIcon('title')}
+                      </div>
+                    </TableHead>
+                    <TableHead 
+                      className="cursor-pointer hover:bg-muted/50 select-none"
+                      onClick={() => toggleSort('type')}
+                    >
+                      <div className="flex items-center">
+                        Typ
+                        {getSortIcon('type')}
+                      </div>
+                    </TableHead>
+                    <TableHead>Reihenfolge</TableHead>
+                    <TableHead className="text-right">Aktionen</TableHead>
                   </TableRow>
-                ) : (
-                  displayModules.map((module) => (
-                    <TableRow key={module.id}>
-                      <TableCell className="font-medium">
-                        {categories.find(c => c.id === module.category_id)?.title || module.category_id}
-                      </TableCell>
-                      <TableCell>{module.title}</TableCell>
-                      <TableCell>{getModuleTypeBadge(module.type)}</TableCell>
-                      <TableCell>{module.order_index}</TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleEdit(module)}
-                          >
-                            <Pencil className="w-4 h-4" />
-                          </Button>
-                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <Button variant="ghost" size="sm">
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>Lerninhalt löschen?</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  Möchtest du "{module.title}" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel>Abbrechen</AlertDialogCancel>
-                                <AlertDialogAction onClick={() => handleDelete(module.id)}>
-                                  Löschen
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
-                        </div>
+                </TableHeader>
+                <TableBody>
+                  {paginatedModules.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center text-muted-foreground">
+                        {debouncedSearch ? 'Keine Lerninhalte gefunden' : 'Keine Lerninhalte vorhanden'}
                       </TableCell>
                     </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
+                  ) : (
+                    paginatedModules.map((module) => (
+                      <TableRow key={module.id}>
+                        <TableCell>
+                          <Checkbox
+                            checked={selectedIds.has(module.id)}
+                            onCheckedChange={(checked) => {
+                              setSelectedIds(prev => {
+                                const next = new Set(prev);
+                                if (checked) {
+                                  next.add(module.id);
+                                } else {
+                                  next.delete(module.id);
+                                }
+                                return next;
+                              });
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell className="font-medium">
+                          {categories.find(c => c.id === module.category_id)?.title || module.category_id}
+                        </TableCell>
+                        <TableCell>{module.title}</TableCell>
+                        <TableCell>{getModuleTypeBadge(module.type)}</TableCell>
+                        <TableCell>{module.order_index}</TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex justify-end gap-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleEdit(module)}
+                            >
+                              <Pencil className="w-4 h-4" />
+                            </Button>
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button variant="ghost" size="sm">
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Lerninhalt löschen?</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    Möchtest du "{module.title}" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                                  <AlertDialogAction onClick={() => handleDelete(module.id)}>
+                                    Löschen
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+              
+              {totalPages > 1 && (
+                <div className="flex items-center justify-between pt-4">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                  >
+                    Zurück
+                  </Button>
+                  <div className="text-sm text-muted-foreground">
+                    Seite {currentPage} von {totalPages}
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                  >
+                    Weiter
+                  </Button>
+                </div>
+              )}
+            </div>
           </CardContent>
         </Card>
       </TabsContent>

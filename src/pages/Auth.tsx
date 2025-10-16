@@ -180,6 +180,9 @@ export default function Auth() {
       setEnrollFactorId(null);
       setEnrollSecret(null);
       setEnrollUri(null);
+      
+      // Trigger refresh for admin views
+      window.dispatchEvent(new CustomEvent('2fa-status-changed'));
     } catch (error: any) {
       toast({
         title: "Fehler",
