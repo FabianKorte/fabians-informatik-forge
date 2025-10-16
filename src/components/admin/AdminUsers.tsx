@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Shield, User, Trash2, Info, Key, ShieldOff, ShieldCheck } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { logAuditAction } from "@/lib/auditLog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -189,6 +190,13 @@ export const AdminUsers = () => {
           .eq('role', 'admin');
 
         if (error) throw error;
+        
+        await logAuditAction({
+          action: 'user_role_revoked',
+          entity_type: 'user_role',
+          entity_id: userId,
+          details: { role: 'admin' }
+        });
       } else {
         // Add admin role
         const { error } = await supabase
@@ -196,6 +204,13 @@ export const AdminUsers = () => {
           .insert({ user_id: userId, role: 'admin' });
 
         if (error) throw error;
+        
+        await logAuditAction({
+          action: 'user_role_granted',
+          entity_type: 'user_role',
+          entity_id: userId,
+          details: { role: 'admin' }
+        });
       }
 
       toast({
@@ -215,7 +230,7 @@ export const AdminUsers = () => {
     }
   };
 
-  const handlePasswordReset = async (email: string) => {
+  const handlePasswordReset = async (email: string, userId: string) => {
     if (!email || email === 'Unbekannt') {
       toast({
         title: "Fehler",
@@ -236,6 +251,13 @@ export const AdminUsers = () => {
         variant: "destructive",
       });
     } else {
+      await logAuditAction({
+        action: 'password_reset_sent',
+        entity_type: 'auth',
+        entity_id: userId,
+        details: { email }
+      });
+      
       toast({
         title: "Erfolgreich",
         description: "Passwort-Reset-E-Mail wurde gesendet",
@@ -254,6 +276,13 @@ export const AdminUsers = () => {
       });
 
       if (error) throw error;
+
+      await logAuditAction({
+        action: 'user_2fa_removed',
+        entity_type: 'user',
+        entity_id: userId,
+        details: { username }
+      });
 
       toast({
         title: "Erfolgreich",
@@ -281,6 +310,13 @@ export const AdminUsers = () => {
         .eq('id', userId);
 
       if (error) throw error;
+
+      await logAuditAction({
+        action: 'user_deleted',
+        entity_type: 'user',
+        entity_id: userId,
+        details: { username }
+      });
 
       toast({
         title: "Erfolgreich",
@@ -396,7 +432,7 @@ export const AdminUsers = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => handlePasswordReset(user.email)}
+                  onClick={() => handlePasswordReset(user.email, user.id)}
                 >
                   <Key className="w-4 h-4 mr-2" />
                   <span className="hidden sm:inline">Passwort</span>

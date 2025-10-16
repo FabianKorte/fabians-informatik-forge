@@ -4,13 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/useAuth";
-import { LogOut, BookOpen, MapPin, MessageSquare, Home, FileText, Users } from "lucide-react";
+import { LogOut, BookOpen, MapPin, MessageSquare, Home, FileText, Users, Shield } from "lucide-react";
 import { AdminLearningContent } from "@/components/admin/AdminLearningContent";
 import { AdminRoadmap } from "@/components/admin/AdminRoadmap";
 import { AdminFeedbacks } from "@/components/admin/AdminFeedbacks";
 import { AdminUsers } from "@/components/admin/AdminUsers";
 import { AdminSuggestions } from "@/components/admin/AdminSuggestions";
 import { AdminNotes } from "@/components/admin/AdminNotes";
+import { AdminAuditLogs } from "@/components/admin/AdminAuditLogs";
 
 export default function Admin() {
   const { signOut } = useAuth();
@@ -52,7 +53,7 @@ export default function Admin() {
           </CardHeader>
           <CardContent>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 gap-1">
+              <TabsList className="grid w-full grid-cols-3 lg:grid-cols-7 gap-1">
                 <TabsTrigger value="learning" className="text-xs lg:text-sm">
                   <BookOpen className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
                   <span className="hidden sm:inline">Lerninhalte</span>
@@ -83,6 +84,11 @@ export default function Admin() {
                   <span className="hidden sm:inline">Notizen</span>
                   <span className="sm:hidden">Note</span>
                 </TabsTrigger>
+                <TabsTrigger value="audit" className="text-xs lg:text-sm">
+                  <Shield className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
+                  <span className="hidden sm:inline">Audit-Log</span>
+                  <span className="sm:hidden">Audit</span>
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="learning" className="mt-6">
@@ -107,6 +113,10 @@ export default function Admin() {
 
               <TabsContent value="notes" className="mt-6">
                 <AdminNotes />
+              </TabsContent>
+
+              <TabsContent value="audit" className="mt-6">
+                <AdminAuditLogs />
               </TabsContent>
             </Tabs>
           </CardContent>

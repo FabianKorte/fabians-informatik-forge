@@ -13,6 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2, Plus, Pencil, Trash2, Eye, ArrowUpDown, ArrowUp, ArrowDown, Download } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { logAuditAction } from "@/lib/auditLog";
 
 interface LearnModule {
   id: string;
@@ -119,6 +120,8 @@ export const AdminLearningContent = () => {
   };
 
   const handleDelete = async (id: string) => {
+    const module = modules.find(m => m.id === id);
+    
     const { error } = await supabase
       .from('learn_modules')
       .delete()
@@ -132,6 +135,13 @@ export const AdminLearningContent = () => {
       });
       return;
     }
+
+    await logAuditAction({
+      action: 'learning_content_deleted',
+      entity_type: 'learn_module',
+      entity_id: id,
+      details: { title: module?.title, type: module?.type }
+    });
 
     toast({
       title: "Erfolg",
@@ -149,6 +159,8 @@ export const AdminLearningContent = () => {
   const handleBulkDelete = async () => {
     if (selectedIds.size === 0) return;
     
+    const deletedModules = modules.filter(m => selectedIds.has(m.id));
+    
     const { error } = await supabase
       .from('learn_modules')
       .delete()
@@ -162,6 +174,15 @@ export const AdminLearningContent = () => {
       });
       return;
     }
+
+    await logAuditAction({
+      action: 'learning_content_bulk_deleted',
+      entity_type: 'learn_module',
+      details: { 
+        count: selectedIds.size,
+        titles: deletedModules.map(m => m.title)
+      }
+    });
 
     toast({
       title: "Erfolg",
@@ -243,12 +264,19 @@ export const AdminLearningContent = () => {
 
         if (error) throw error;
 
+        await logAuditAction({
+          action: 'learning_content_updated',
+          entity_type: 'learn_module',
+          entity_id: editingModule.id,
+          details: { title, type: moduleType, category: categoryId }
+        });
+
         toast({
           title: "Erfolg",
           description: "Lerninhalt wurde aktualisiert",
         });
       } else {
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from('learn_modules')
           .insert([{
             category_id: categoryId,
@@ -256,9 +284,18 @@ export const AdminLearningContent = () => {
             title: title,
             content: contentJson,
             order_index: 0
-          }]);
+          }])
+          .select()
+          .single();
 
         if (error) throw error;
+
+        await logAuditAction({
+          action: 'learning_content_created',
+          entity_type: 'learn_module',
+          entity_id: data?.id,
+          details: { title, type: moduleType, category: categoryId }
+        });
 
         toast({
           title: "Erfolg",
