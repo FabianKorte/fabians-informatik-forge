@@ -10,10 +10,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { Loader2, Plus, Pencil, Trash2, Eye, ArrowUpDown, ArrowUp, ArrowDown, Download } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { logAuditAction } from "@/lib/auditLog";
+import { useLearningModules } from "@/hooks/useLearningModules";
+import { useCategories } from "@/hooks/useCategories";
 
 interface LearnModule {
   id: string;
@@ -32,9 +32,8 @@ interface Category {
 }
 
 export const AdminLearningContent = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [modules, setModules] = useState<LearnModule[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const { modules, isLoading, createModule, updateModule, deleteModule, bulkDelete } = useLearningModules();
+  const { categories } = useCategories();
   const [categoryId, setCategoryId] = useState("");
   const [moduleType, setModuleType] = useState("");
   const [title, setTitle] = useState("");
@@ -50,54 +49,12 @@ export const AdminLearningContent = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    loadModules();
-    loadCategories();
-  }, []);
-
-  useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchQuery);
       setCurrentPage(1);
     }, 300);
     return () => clearTimeout(timer);
   }, [searchQuery]);
-
-  const loadModules = async () => {
-    const { data, error } = await supabase
-      .from('learn_modules')
-      .select('*')
-      .order('category_id', { ascending: true })
-      .order('order_index', { ascending: true });
-
-    if (error) {
-      toast({
-        title: "Fehler",
-        description: "Konnte Lerninhalte nicht laden",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setModules(data || []);
-  };
-
-  const loadCategories = async () => {
-    const { data, error } = await supabase
-      .from('categories')
-      .select('id, title')
-      .order('id');
-
-    if (error) {
-      toast({
-        title: "Fehler",
-        description: "Konnte Kategorien nicht laden",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setCategories(data || []);
-  };
 
   const handleEdit = (module: LearnModule) => {
     setEditingModule(module);
@@ -120,77 +77,18 @@ export const AdminLearningContent = () => {
   };
 
   const handleDelete = async (id: string) => {
-    const module = modules.find(m => m.id === id);
-    
-    const { error } = await supabase
-      .from('learn_modules')
-      .delete()
-      .eq('id', id);
-
-    if (error) {
-      toast({
-        title: "Fehler",
-        description: "Konnte Lerninhalt nicht löschen",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    await logAuditAction({
-      action: 'learning_content_deleted',
-      entity_type: 'learn_module',
-      entity_id: id,
-      details: { title: module?.title, type: module?.type }
-    });
-
-    toast({
-      title: "Erfolg",
-      description: "Lerninhalt wurde gelöscht",
-    });
-
+    await deleteModule.mutateAsync(id);
     setSelectedIds(prev => {
       const next = new Set(prev);
       next.delete(id);
       return next;
     });
-    loadModules();
   };
 
   const handleBulkDelete = async () => {
     if (selectedIds.size === 0) return;
-    
-    const deletedModules = modules.filter(m => selectedIds.has(m.id));
-    
-    const { error } = await supabase
-      .from('learn_modules')
-      .delete()
-      .in('id', Array.from(selectedIds));
-
-    if (error) {
-      toast({
-        title: "Fehler",
-        description: "Konnte Lerninhalte nicht löschen",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    await logAuditAction({
-      action: 'learning_content_bulk_deleted',
-      entity_type: 'learn_module',
-      details: { 
-        count: selectedIds.size,
-        titles: deletedModules.map(m => m.title)
-      }
-    });
-
-    toast({
-      title: "Erfolg",
-      description: `${selectedIds.size} Lerninhalte wurden gelöscht`,
-    });
-
+    await bulkDelete.mutateAsync(Array.from(selectedIds));
     setSelectedIds(new Set());
-    loadModules();
   };
 
   const handleExport = () => {
@@ -235,84 +133,42 @@ export const AdminLearningContent = () => {
       return;
     }
 
-    setIsLoading(true);
-
     try {
-      let contentJson;
-      try {
-        contentJson = JSON.parse(content);
-      } catch {
+      const contentJson = JSON.parse(content);
+      
+      if (editingModule) {
+        await updateModule.mutateAsync({
+          id: editingModule.id,
+          category_id: categoryId,
+          type: moduleType,
+          title: title,
+          content: contentJson,
+        });
+      } else {
+        await createModule.mutateAsync({
+          category_id: categoryId,
+          type: moduleType,
+          title: title,
+          content: contentJson,
+          order_index: 0
+        });
+      }
+
+      handleCancelEdit();
+    } catch (error: any) {
+      if (error instanceof SyntaxError) {
         toast({
           title: "Fehler",
           description: "Content muss ein gültiges JSON-Objekt sein",
           variant: "destructive",
         });
-        setIsLoading(false);
-        return;
-      }
-
-      if (editingModule) {
-        const { error } = await supabase
-          .from('learn_modules')
-          .update({
-            category_id: categoryId,
-            type: moduleType,
-            title: title,
-            content: contentJson,
-          })
-          .eq('id', editingModule.id);
-
-        if (error) throw error;
-
-        await logAuditAction({
-          action: 'learning_content_updated',
-          entity_type: 'learn_module',
-          entity_id: editingModule.id,
-          details: { title, type: moduleType, category: categoryId }
-        });
-
-        toast({
-          title: "Erfolg",
-          description: "Lerninhalt wurde aktualisiert",
-        });
       } else {
-        const { data, error } = await supabase
-          .from('learn_modules')
-          .insert([{
-            category_id: categoryId,
-            type: moduleType,
-            title: title,
-            content: contentJson,
-            order_index: 0
-          }])
-          .select()
-          .single();
-
-        if (error) throw error;
-
-        await logAuditAction({
-          action: 'learning_content_created',
-          entity_type: 'learn_module',
-          entity_id: data?.id,
-          details: { title, type: moduleType, category: categoryId }
-        });
-
         toast({
-          title: "Erfolg",
-          description: "Lerninhalt wurde hinzugefügt",
+          title: "Fehler",
+          description: error.message || "Konnte Lerninhalt nicht speichern",
+          variant: "destructive",
         });
       }
-
-      handleCancelEdit();
-      loadModules();
-    } catch (error: any) {
-      toast({
-        title: "Fehler",
-        description: error.message || "Konnte Lerninhalt nicht hinzufügen",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
     }
   };
 
