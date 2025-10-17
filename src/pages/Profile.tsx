@@ -260,8 +260,16 @@ const Profile = () => {
         throw new Error("Kein Faktor gefunden");
       }
 
-      const { error } = await supabase.auth.mfa.challengeAndVerify({
+      // Challenge the factor first
+      const { data: challengeData, error: challengeError } = await supabase.auth.mfa.challenge({
+        factorId
+      });
+      if (challengeError) throw challengeError;
+
+      // Then verify with the challenge ID
+      const { error } = await supabase.auth.mfa.verify({
         factorId,
+        challengeId: challengeData.id,
         code: verificationCode,
       });
 
@@ -279,6 +287,9 @@ const Profile = () => {
       setEnrollUri(null);
       setQrCode("");
       setHas2FA(true);
+      
+      // Trigger refresh for admin views
+      window.dispatchEvent(new CustomEvent('2fa-status-changed'));
     } catch (error: any) {
       toast({
         title: "Fehler",

@@ -1,6 +1,7 @@
-import { useState, useEffect, createContext, useContext } from 'react';
+import { useState, useEffect, createContext, useContext, useRef } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 interface AuthContextType {
   user: User | null;
@@ -19,6 +20,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
+  const adminCheckCache = useRef<{ userId: string; isAdmin: boolean; timestamp: number } | null>(null);
+  const SESSION_TIMEOUT_MS = 24 * 60 * 60 * 1000; // 24 hours
 
   useEffect(() => {
     // Set up auth state listener
@@ -27,6 +31,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setSession(session);
         setUser(session?.user ?? null);
         
+        // Check session timeout
+        if (session) {
+          checkSessionTimeout(session);
+        }
+        
         // Check admin status after state update
         if (session?.user) {
           setTimeout(() => {
@@ -34,6 +43,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           }, 0);
         } else {
           setIsAdmin(false);
+          adminCheckCache.current = null;
         }
       }
     );
@@ -43,16 +53,55 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setSession(session);
       setUser(session?.user ?? null);
       
-      if (session?.user) {
-        checkAdminStatus(session.user.id);
+      if (session) {
+        checkSessionTimeout(session);
+        if (session.user) {
+          checkAdminStatus(session.user.id);
+        }
       }
       setIsLoading(false);
     });
 
-    return () => subscription.unsubscribe();
+    // Set up periodic session timeout check (every 5 minutes)
+    const timeoutCheckInterval = setInterval(() => {
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (session) {
+          checkSessionTimeout(session);
+        }
+      });
+    }, 5 * 60 * 1000);
+
+    return () => {
+      subscription.unsubscribe();
+      clearInterval(timeoutCheckInterval);
+    };
   }, []);
 
+  const checkSessionTimeout = (session: Session) => {
+    const sessionCreatedAt = new Date(session.user.created_at).getTime();
+    const now = Date.now();
+    
+    if (now - sessionCreatedAt > SESSION_TIMEOUT_MS) {
+      toast({
+        title: 'Session abgelaufen',
+        description: 'Deine Sitzung ist abgelaufen. Bitte melde dich erneut an.',
+        variant: 'destructive',
+        duration: 5000,
+      });
+      signOut();
+    }
+  };
+
   const checkAdminStatus = async (userId: string) => {
+    // Check cache first (valid for 5 minutes)
+    const now = Date.now();
+    if (adminCheckCache.current && 
+        adminCheckCache.current.userId === userId && 
+        now - adminCheckCache.current.timestamp < 5 * 60 * 1000) {
+      setIsAdmin(adminCheckCache.current.isAdmin);
+      return;
+    }
+    
     const { data } = await supabase
       .from('user_roles')
       .select('role')
@@ -60,7 +109,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       .eq('role', 'admin')
       .maybeSingle();
     
-    setIsAdmin(!!data);
+    const isAdminUser = !!data;
+    setIsAdmin(isAdminUser);
+    
+    // Update cache
+    adminCheckCache.current = {
+      userId,
+      isAdmin: isAdminUser,
+      timestamp: now,
+    };
   };
 
   const signIn = async (email: string, password: string, rememberMe = true) => {

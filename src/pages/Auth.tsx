@@ -11,6 +11,7 @@ import { Loader2, LogIn, UserPlus, Eye, EyeOff, Shield, Copy as CopyIcon, Extern
 import { z } from "zod";
 import { ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { checkRateLimit, recordLoginAttempt, clearLoginAttempts } from "@/lib/rateLimit";
 import {
   Dialog,
   DialogContent,
@@ -264,13 +265,32 @@ export default function Auth() {
 
     try {
       if (mode === "login") {
+        // Check rate limit before attempting login
+        const rateLimitCheck = checkRateLimit(email);
+        if (!rateLimitCheck.allowed) {
+          const resetTime = rateLimitCheck.resetTime || Date.now();
+          const minutesLeft = Math.ceil((resetTime - Date.now()) / 60000);
+          throw new Error(
+            `Zu viele fehlgeschlagene Login-Versuche. Bitte versuche es in ${minutesLeft} Minuten erneut.`
+          );
+        }
+        
         const { error } = await signIn(email, password, rememberMe);
         if (error) {
+          // Record failed attempt
+          recordLoginAttempt(email);
+          
           if (error.message.includes("Invalid login credentials")) {
-            throw new Error("Ungültige Anmeldedaten");
+            const remaining = rateLimitCheck.remainingAttempts - 1;
+            throw new Error(
+              `Ungültige Anmeldedaten. ${remaining > 0 ? `Noch ${remaining} Versuche übrig.` : ''}`
+            );
           }
           throw error;
         }
+        
+        // Clear login attempts on successful login
+        clearLoginAttempts(email);
       } else {
         // Sign up with username in metadata
         const { error } = await signUp(email, password, username);
