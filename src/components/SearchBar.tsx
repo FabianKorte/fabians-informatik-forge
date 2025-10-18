@@ -26,7 +26,7 @@ export const SearchBar = ({
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <div className="w-full max-w-2xl mx-auto" role="search">
       <div className={`
         relative flex items-center gap-3 p-4 rounded-2xl 
         transition-all duration-300 
@@ -37,19 +37,23 @@ export const SearchBar = ({
       `}>
         
         {/* Search icon */}
-        <Search className={`
-          w-5 h-5 transition-colors duration-200
-          ${isFocused ? 'text-accent' : 'text-muted-foreground'}
-        `} />
+        <Search 
+          className={`
+            w-5 h-5 transition-colors duration-200
+            ${isFocused ? 'text-accent' : 'text-muted-foreground'}
+          `}
+          aria-hidden="true"
+        />
 
         {/* Input field */}
         <Input
-          type="text"
+          type="search"
           value={query}
           onChange={(e) => handleSearch(e.target.value)}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           placeholder={placeholder}
+          aria-label="Suchfeld für Kategorien"
           className={`
             flex-1 border-none bg-transparent text-foreground
             placeholder:text-muted-foreground focus:ring-0 focus:outline-none
@@ -63,16 +67,17 @@ export const SearchBar = ({
             onClick={clearSearch}
             variant="ghost"
             size="icon"
+            aria-label="Suche zurücksetzen"
             className="h-8 w-8 text-muted-foreground hover:text-foreground transition-colors"
           >
-            <X className="w-4 h-4" />
+            <X className="w-4 h-4" aria-hidden="true" />
           </Button>
         )}
       </div>
 
       {/* Search results indicator */}
       {query && (
-        <div className="mt-2 text-center">
+        <div className="mt-2 text-center" role="status" aria-live="polite">
           <p className="text-sm text-muted-foreground">
             Suche nach "{query}"...
           </p>

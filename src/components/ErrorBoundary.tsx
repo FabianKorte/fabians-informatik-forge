@@ -2,6 +2,7 @@ import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { errorTracker } from '@/lib/errorTracking';
 
 interface Props {
   children: ReactNode;
@@ -26,6 +27,10 @@ export class ErrorBoundary extends Component<Props, State> {
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('Error caught by boundary:', error, errorInfo);
+    
+    // Track error
+    errorTracker.logError(error, { componentStack: errorInfo.componentStack });
+    
     this.setState({
       error,
       errorInfo,
@@ -40,11 +45,18 @@ export class ErrorBoundary extends Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-background p-4">
+        <div 
+          className="min-h-screen flex items-center justify-center bg-background p-4"
+          role="alert"
+          aria-live="assertive"
+        >
           <Card className="max-w-lg w-full">
             <CardHeader>
               <div className="flex items-center gap-2">
-                <AlertTriangle className="w-6 h-6 text-destructive" />
+                <AlertTriangle 
+                  className="w-6 h-6 text-destructive" 
+                  aria-hidden="true"
+                />
                 <CardTitle>Etwas ist schiefgelaufen</CardTitle>
               </div>
               <CardDescription>
@@ -60,13 +72,18 @@ export class ErrorBoundary extends Component<Props, State> {
                 </div>
               )}
               <div className="flex gap-2">
-                <Button onClick={this.handleReset} className="flex-1">
+                <Button 
+                  onClick={this.handleReset} 
+                  className="flex-1"
+                  aria-label="Zur Startseite zurückkehren"
+                >
                   Zur Startseite
                 </Button>
                 <Button 
                   variant="outline" 
                   onClick={() => window.location.reload()}
                   className="flex-1"
+                  aria-label="Seite neu laden"
                 >
                   Seite neu laden
                 </Button>

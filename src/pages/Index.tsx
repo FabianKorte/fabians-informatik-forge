@@ -12,6 +12,7 @@ import { seedDatabase } from "@/lib/seedDatabase";
 import { useAuth } from "@/hooks/useAuth";
 import { getCategoriesFromDatabase } from "@/lib/categoryUtils";
 import { getAllModules } from "@/lib/learnContentUtils";
+import { useKeyboardNavigation } from "@/hooks/useKeyboardNavigation";
 import type { Category } from "@/data/categories";
 import { Download, MapPin, Sparkles } from "lucide-react";
 import logo from "@/assets/logo.png";
@@ -130,11 +131,42 @@ const Index = () => {
   const handleCategoryStart = (categoryId: string) => navigate(`/learn/${categoryId}`);
   const handleFeedbackSubmitted = () => setFeedbackRefreshTrigger(prev => prev + 1);
 
+  // Keyboard shortcuts
+  useKeyboardNavigation([
+    {
+      key: 's',
+      ctrlKey: true,
+      callback: () => document.querySelector<HTMLInputElement>('input[type="search"]')?.focus(),
+      description: 'Suche fokussieren',
+    },
+    {
+      key: 'h',
+      ctrlKey: true,
+      callback: () => navigate('/'),
+      description: 'Zur Startseite',
+    },
+    {
+      key: 'd',
+      ctrlKey: true,
+      callback: () => user ? navigate('/dashboard') : navigate('/auth'),
+      description: 'Zum Dashboard',
+    },
+  ]);
+
   return (
-    <div className="min-h-screen bg-background">
-      {splashActive && (
-        <LoadingScreen onComplete={() => { setSplashActive(false); setShowContent(true); }} />
-      )}
+    <>
+      {/* Skip to main content link */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md"
+      >
+        Zum Hauptinhalt springen
+      </a>
+      
+      <div className="min-h-screen bg-background">
+        {splashActive && (
+          <LoadingScreen onComplete={() => { setSplashActive(false); setShowContent(true); }} />
+        )}
       {/* Floating Action Buttons */}
       <div className={`fixed top-6 right-6 z-50 flex flex-col gap-3 transition-all duration-700 ${showContent ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}>
         {user && (
@@ -224,6 +256,11 @@ const Index = () => {
       )}
 
       <section id="categories-section" className={`py-20 px-6 bg-background transition-all duration-700 delay-500 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <main 
+          id="main-content"
+          tabIndex={-1}
+          aria-label="Hauptinhalt"
+        >
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-medium text-foreground mb-4">Lernkategorien</h2>
@@ -281,6 +318,7 @@ const Index = () => {
             </div>
           )}
         </div>
+        </main>
       </section>
 
       <section className={`py-20 px-6 bg-muted/30 transition-all duration-700 delay-700 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
@@ -315,13 +353,13 @@ const Index = () => {
           <p className="text-sm text-muted-foreground mb-6">
             Vorbereitung auf die IHK IT-Prüfungen.
           </p>
-          
           <p className="text-xs text-muted-foreground">
             © 2025 Fabian Korte. Alle Rechte vorbehalten.
           </p>
         </div>
       </footer>
-    </div>
+      </div>
+    </>
   );
 };
 
