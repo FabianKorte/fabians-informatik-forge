@@ -12,6 +12,7 @@ import { z } from "zod";
 import { ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { checkRateLimit, recordLoginAttempt, clearLoginAttempts } from "@/lib/rateLimit";
+import { checkServerRateLimit, recordServerLoginAttempt, clearServerLoginAttempts } from "@/lib/serverRateLimit";
 import { PasswordInput } from "@/components/auth/PasswordInput";
 import { TwoFactorSetupDialog } from "@/components/auth/TwoFactorSetupDialog";
 import { MFAVerificationDialog } from "@/components/auth/MFAVerificationDialog";
@@ -188,8 +189,15 @@ export default function Auth() {
 
     try {
       if (mode === "login") {
-        // Check rate limit before attempting login
-        const rateLimitCheck = checkRateLimit(email);
+        // Check both client and server-side rate limits
+        const [clientCheck, serverCheck] = await Promise.all([
+          Promise.resolve(checkRateLimit(email)),
+          checkServerRateLimit(email)
+        ]);
+        
+        // Use server-side check as primary, fallback to client-side
+        const rateLimitCheck = serverCheck.allowed !== undefined ? serverCheck : clientCheck;
+        
         if (!rateLimitCheck.allowed) {
           const resetTime = rateLimitCheck.resetTime || Date.now();
           const minutesLeft = Math.ceil((resetTime - Date.now()) / 60000);
@@ -200,8 +208,9 @@ export default function Auth() {
         
         const { error } = await signIn(email, password, rememberMe);
         if (error) {
-          // Record failed attempt
+          // Record failed attempt both client and server-side
           recordLoginAttempt(email);
+          await recordServerLoginAttempt(email);
           
           if (error.message.includes("Invalid login credentials")) {
             const remaining = rateLimitCheck.remainingAttempts - 1;
@@ -214,6 +223,7 @@ export default function Auth() {
         
         // Clear login attempts on successful login
         clearLoginAttempts(email);
+        await clearServerLoginAttempts(email);
       } else {
         // Sign up with username in metadata
         const { error } = await signUp(email, password, username);

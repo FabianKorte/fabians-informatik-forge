@@ -102,6 +102,28 @@ const Profile = () => {
   const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      // Validate file type
+      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+      if (!validTypes.includes(file.type)) {
+        toast({
+          title: 'Ungültiger Dateityp',
+          description: 'Bitte lade nur JPG, PNG, WEBP oder GIF Bilder hoch.',
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      // Validate file size (5MB max)
+      const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+      if (file.size > maxSize) {
+        toast({
+          title: 'Datei zu groß',
+          description: 'Das Bild darf maximal 5MB groß sein.',
+          variant: 'destructive',
+        });
+        return;
+      }
+
       uploadAvatar.mutate(file);
     }
   };
@@ -234,7 +256,7 @@ const Profile = () => {
                   <input
                     id="avatar-upload"
                     type="file"
-                    accept="image/*"
+                    accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
                     className="hidden"
                     onChange={handleAvatarUpload}
                   />

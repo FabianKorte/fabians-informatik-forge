@@ -87,33 +87,75 @@ const Chat = () => {
 
     fetchMessages();
 
-    const channel = supabase
-      .channel('chat-messages')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'chat_messages',
-        },
-        async (payload) => {
-          const { data: profileData } = await supabase
-            .from('profiles')
-            .select('username, avatar_url')
-            .eq('id', payload.new.user_id)
-            .single();
+    let reconnectAttempts = 0;
+    const maxReconnectAttempts = 5;
+    let reconnectTimeout: NodeJS.Timeout;
+    
+    const setupChannel = () => {
+      const channel = supabase
+        .channel('chat-messages', {
+          config: {
+            broadcast: { self: true },
+            presence: { key: user?.id }
+          }
+        })
+        .on(
+          'postgres_changes',
+          {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'chat_messages',
+          },
+          async (payload) => {
+            try {
+              const { data: profileData } = await supabase
+                .from('profiles')
+                .select('username, avatar_url')
+                .eq('id', payload.new.user_id)
+                .single();
 
-          const newMsg = {
-            ...payload.new,
-            profiles: profileData,
-          } as ChatMessage;
+              const newMsg = {
+                ...payload.new,
+                profiles: profileData,
+              } as ChatMessage;
 
-          setMessages((prev) => [...prev, newMsg]);
-        }
-      )
-      .subscribe();
+              setMessages((prev) => [...prev, newMsg]);
+            } catch (error) {
+              console.error('Error processing realtime message:', error);
+            }
+          }
+        )
+        .subscribe((status) => {
+          if (status === 'CHANNEL_ERROR') {
+            console.error('Realtime channel error, attempting reconnect...');
+            
+            if (reconnectAttempts < maxReconnectAttempts) {
+              reconnectAttempts++;
+              reconnectTimeout = setTimeout(() => {
+                console.log(`Reconnect attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
+                supabase.removeChannel(channel);
+                setupChannel();
+              }, Math.min(1000 * Math.pow(2, reconnectAttempts), 30000));
+            } else {
+              toast({
+                title: 'Verbindungsfehler',
+                description: 'Die Verbindung zum Chat konnte nicht wiederhergestellt werden.',
+                variant: 'destructive',
+              });
+            }
+          } else if (status === 'SUBSCRIBED') {
+            reconnectAttempts = 0;
+            console.log('Realtime channel connected');
+          }
+        });
+      
+      return channel;
+    };
+
+    const channel = setupChannel();
 
     return () => {
+      clearTimeout(reconnectTimeout);
       supabase.removeChannel(channel);
     };
   }, [user, toast]);

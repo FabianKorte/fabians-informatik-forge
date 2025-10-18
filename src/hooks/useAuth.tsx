@@ -71,11 +71,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
     }, 5 * 60 * 1000);
 
+    // Listen for role changes to invalidate admin cache
+    const handleRoleChange = () => {
+      adminCheckCache.current = null;
+      if (user?.id) {
+        checkAdminStatus(user.id);
+      }
+    };
+
+    window.addEventListener('user-role-changed', handleRoleChange);
+
     return () => {
       subscription.unsubscribe();
       clearInterval(timeoutCheckInterval);
+      window.removeEventListener('user-role-changed', handleRoleChange);
     };
-  }, []);
+  }, [user?.id]);
 
   const checkSessionTimeout = (session: Session) => {
     // Use the session's expires_at timestamp instead of user creation date
