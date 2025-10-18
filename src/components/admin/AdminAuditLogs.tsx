@@ -4,7 +4,9 @@ import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Shield, User, FileText, Trash2, Key } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Loader2, Shield, User, FileText, Trash2, Key, Download } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 
@@ -124,12 +126,39 @@ export const AdminAuditLogs = () => {
     return true;
   });
 
+  const handleExport = () => {
+    const csv = [
+      ['Zeit', 'Admin', 'Aktion', 'Entität', 'Details'].join(','),
+      ...filteredLogs.map(log => [
+        new Date(log.created_at).toLocaleString('de-DE'),
+        profiles[log.user_id]?.username || 'Unbekannt',
+        log.action,
+        log.entity_type,
+        JSON.stringify(log.details)
+      ].join(','))
+    ].join('\n');
+
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `audit-logs-${new Date().toISOString()}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+
+    toast({
+      title: 'Export erfolgreich',
+      description: 'Audit-Logs wurden als CSV exportiert',
+    });
+  };
+
   const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-8">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      <div className="space-y-4">
+        <Skeleton className="h-12 w-full" />
+        <Skeleton className="h-64 w-full" />
       </div>
     );
   }
@@ -138,10 +167,18 @@ export const AdminAuditLogs = () => {
     <div className="space-y-4">
       <Card>
         <CardHeader>
-          <CardTitle>Audit-Protokoll</CardTitle>
-          <CardDescription>
-            Protokoll aller Admin-Aktionen ({filteredLogs.length} von {logs.length})
-          </CardDescription>
+          <div className="flex items-start justify-between">
+            <div>
+              <CardTitle>Audit-Protokoll</CardTitle>
+              <CardDescription>
+                Protokoll aller Admin-Aktionen ({filteredLogs.length} von {logs.length})
+              </CardDescription>
+            </div>
+            <Button variant="outline" size="sm" onClick={handleExport}>
+              <Download className="w-4 h-4 mr-2" />
+              Exportieren
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col sm:flex-row gap-2 mb-4">

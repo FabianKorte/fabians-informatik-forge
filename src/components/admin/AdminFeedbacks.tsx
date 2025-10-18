@@ -3,9 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Trash2, RefreshCw, Circle } from "lucide-react";
+import { Loader2, Trash2, RefreshCw, Circle, CheckSquare } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
 
@@ -24,6 +26,7 @@ export const AdminFeedbacks = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const { toast } = useToast();
 
   const fetchFeedbacks = async () => {
@@ -106,12 +109,59 @@ export const AdminFeedbacks = () => {
     }
   };
 
+  const handleBulkDelete = async () => {
+    if (selectedIds.size === 0) return;
+    
+    if (!confirm(`Möchtest du ${selectedIds.size} Feedbacks wirklich löschen?`)) return;
+
+    const { error } = await supabase
+      .from('feedbacks')
+      .delete()
+      .in('id', Array.from(selectedIds));
+
+    if (error) {
+      toast({
+        title: "Fehler",
+        description: "Konnte Feedbacks nicht löschen",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Erfolg",
+        description: `${selectedIds.size} Feedbacks wurden gelöscht`,
+      });
+      setSelectedIds(new Set());
+      fetchFeedbacks();
+    }
+  };
+
+  const toggleSelection = (id: string) => {
+    const newSelection = new Set(selectedIds);
+    if (newSelection.has(id)) {
+      newSelection.delete(id);
+    } else {
+      newSelection.add(id);
+    }
+    setSelectedIds(newSelection);
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedIds.size === feedbacks.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(feedbacks.map(f => f.id)));
+    }
+  };
+
   const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
   if (isLoading) {
     return (
-      <div className="flex justify-center py-8">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      <div className="space-y-4">
+        <Skeleton className="h-12 w-full" />
+        <Skeleton className="h-32 w-full" />
+        <Skeleton className="h-32 w-full" />
+        <Skeleton className="h-32 w-full" />
       </div>
     );
   }
@@ -123,12 +173,21 @@ export const AdminFeedbacks = () => {
           <h3 className="text-lg font-semibold mb-2">Feedbacks verwalten</h3>
           <p className="text-sm text-muted-foreground">
             {feedbacks.length} {feedbacks.length === 1 ? "Feedback" : "Feedbacks"} vorhanden
+            {selectedIds.size > 0 && ` (${selectedIds.size} ausgewählt)`}
           </p>
         </div>
-        <Button variant="outline" onClick={fetchFeedbacks}>
-          <RefreshCw className="w-4 h-4 mr-2" />
-          Aktualisieren
-        </Button>
+        <div className="flex gap-2">
+          {selectedIds.size > 0 && (
+            <Button variant="destructive" onClick={handleBulkDelete}>
+              <Trash2 className="w-4 h-4 mr-2" />
+              {selectedIds.size} löschen
+            </Button>
+          )}
+          <Button variant="outline" onClick={fetchFeedbacks}>
+            <RefreshCw className="w-4 h-4 mr-2" />
+            Aktualisieren
+          </Button>
+        </div>
       </div>
 
       {feedbacks.length === 0 ? (
@@ -137,10 +196,24 @@ export const AdminFeedbacks = () => {
         </Card>
       ) : (
         <div className="space-y-4">
+          {feedbacks.length > 0 && (
+            <div className="flex items-center gap-2 pb-2 border-b">
+              <Checkbox
+                checked={selectedIds.size === feedbacks.length}
+                onCheckedChange={toggleSelectAll}
+              />
+              <span className="text-sm text-muted-foreground">Alle auswählen</span>
+            </div>
+          )}
           {feedbacks.map((feedback) => (
             <Card key={feedback.id} className="p-4">
               <div className="flex items-start justify-between gap-4">
-                <div className="flex-1">
+                <div className="flex items-start gap-3 flex-1">
+                  <Checkbox
+                    checked={selectedIds.has(feedback.id)}
+                    onCheckedChange={() => toggleSelection(feedback.id)}
+                  />
+                  <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="font-semibold">{feedback.name}</span>
                     <Badge variant={
@@ -171,15 +244,16 @@ export const AdminFeedbacks = () => {
                       <SelectItem value="resolved">Erledigt</SelectItem>
                     </SelectContent>
                   </Select>
+                  </div>
                 </div>
-                <Button 
-                  size="sm" 
-                  variant="destructive" 
-                  onClick={() => handleDelete(feedback.id)}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </div>
+                  <Button 
+                    size="sm" 
+                    variant="destructive" 
+                    onClick={() => handleDelete(feedback.id)}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
             </Card>
           ))}
         </div>

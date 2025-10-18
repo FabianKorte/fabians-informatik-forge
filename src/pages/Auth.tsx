@@ -15,6 +15,7 @@ import { checkRateLimit, recordLoginAttempt, clearLoginAttempts } from "@/lib/ra
 import { PasswordInput } from "@/components/auth/PasswordInput";
 import { TwoFactorSetupDialog } from "@/components/auth/TwoFactorSetupDialog";
 import { MFAVerificationDialog } from "@/components/auth/MFAVerificationDialog";
+import { PasswordResetDialog } from "@/components/auth/PasswordResetDialog";
 import { use2FA } from "@/hooks/use2FA";
 import {
   Dialog,
@@ -299,7 +300,10 @@ export default function Auth() {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="login-password">Passwort</Label>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="login-password">Passwort</Label>
+                    <PasswordResetDialog />
+                  </div>
                   <PasswordInput
                     id="login-password"
                     value={password}
@@ -377,6 +381,7 @@ export default function Auth() {
                     onChange={setPassword}
                     disabled={isLoading}
                     required
+                    showStrength
                   />
                   <p className="text-xs text-muted-foreground">
                     Mind. 8 Zeichen, 1 Großbuchstabe, 1 Zahl, 1 Sonderzeichen

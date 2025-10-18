@@ -22,6 +22,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { TwoFactorSetupDialog } from "@/components/auth/TwoFactorSetupDialog";
+import { EmailChangeDialog } from "@/components/profile/EmailChangeDialog";
 import { use2FA } from "@/hooks/use2FA";
 import { useProfile } from "@/hooks/useProfile";
 
@@ -246,10 +247,10 @@ const Profile = () => {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label>E-Mail-Adresse</Label>
-                <Input value={user?.email || ""} disabled />
-                <p className="text-xs text-muted-foreground">
-                  E-Mail kann derzeit nicht geändert werden
-                </p>
+                <div className="flex gap-2">
+                  <Input value={user?.email || ""} disabled className="flex-1" />
+                  <EmailChangeDialog />
+                </div>
               </div>
 
               <div className="border-t pt-4">
