@@ -114,10 +114,11 @@ export const AdminSuggestions = () => {
       }
 
       toast({
-        title: "Erfolgreich",
+        title: "✓ Erfolgreich",
         description: status === 'approved' 
           ? "Vorschlag wurde genehmigt und hinzugefügt"
           : "Vorschlag wurde abgelehnt",
+        className: "animate-fade-in",
       });
 
       setAdminNotes("");

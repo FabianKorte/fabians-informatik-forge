@@ -9,6 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Loader2, Shield, User, FileText, Trash2, Key, Download } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { useDebounce } from "@/hooks/useDebounce";
 
 interface AuditLog {
   id: string;
@@ -36,6 +37,9 @@ export const AdminAuditLogs = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const { toast } = useToast();
+  
+  // Debounce filter values
+  const debouncedFilterUser = useDebounce(filterUser, 500);
 
   const loadLogs = async () => {
     setIsLoading(true);
@@ -128,7 +132,7 @@ export const AdminAuditLogs = () => {
 
   const filteredLogs = logs.filter(log => {
     if (filterAction !== "all" && log.action !== filterAction) return false;
-    if (filterUser && !profiles[log.user_id]?.username.toLowerCase().includes(filterUser.toLowerCase())) return false;
+    if (debouncedFilterUser && !profiles[log.user_id]?.username.toLowerCase().includes(debouncedFilterUser.toLowerCase())) return false;
     return true;
   });
 
@@ -153,8 +157,9 @@ export const AdminAuditLogs = () => {
     window.URL.revokeObjectURL(url);
 
     toast({
-      title: 'Export erfolgreich',
+      title: '✓ Export erfolgreich',
       description: 'Audit-Logs wurden als CSV exportiert',
+      className: 'animate-fade-in',
     });
   };
 

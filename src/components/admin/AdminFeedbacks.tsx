@@ -10,6 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
+import { useDebounce } from "@/hooks/useDebounce";
 
 interface Feedback {
   id: string;
@@ -88,8 +89,9 @@ export const AdminFeedbacks = () => {
       });
     } else {
       toast({
-        title: "Erfolg",
+        title: "✓ Erfolg",
         description: "Feedback wurde gelöscht",
+        className: "animate-fade-in",
       });
       fetchFeedbacks();
     }
@@ -109,8 +111,9 @@ export const AdminFeedbacks = () => {
       });
     } else {
       toast({
-        title: "Erfolg",
+        title: "✓ Erfolg",
         description: "Status wurde aktualisiert",
+        className: "animate-fade-in",
       });
       fetchFeedbacks();
     }
@@ -134,8 +137,9 @@ export const AdminFeedbacks = () => {
       });
     } else {
       toast({
-        title: "Erfolg",
+        title: "✓ Erfolg",
         description: `${selectedIds.size} Feedbacks wurden gelöscht`,
+        className: "animate-fade-in",
       });
       setSelectedIds(new Set());
       fetchFeedbacks();

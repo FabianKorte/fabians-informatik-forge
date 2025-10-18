@@ -76,8 +76,9 @@ export const AdminRoadmap = () => {
         if (error) throw error;
 
         toast({
-          title: "Erfolg",
+          title: "✓ Erfolg",
           description: "Roadmap-Item wurde aktualisiert",
+          className: "animate-fade-in",
         });
       } else {
         const { error } = await supabase
@@ -90,8 +91,9 @@ export const AdminRoadmap = () => {
         if (error) throw error;
 
         toast({
-          title: "Erfolg",
+          title: "✓ Erfolg",
           description: "Roadmap-Item wurde hinzugefügt",
+          className: "animate-fade-in",
         });
       }
 
@@ -144,8 +146,9 @@ export const AdminRoadmap = () => {
       });
     } else {
       toast({
-        title: "Erfolg",
+        title: "✓ Erfolg",
         description: "Item wurde gelöscht",
+        className: "animate-fade-in",
       });
       fetchRoadmapItems();
     }

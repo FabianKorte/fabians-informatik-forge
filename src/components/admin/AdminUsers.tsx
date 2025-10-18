@@ -214,10 +214,11 @@ export const AdminUsers = () => {
       }
 
       toast({
-        title: "Erfolgreich",
+        title: "✓ Erfolgreich",
         description: currentlyAdmin 
           ? "Admin-Rechte wurden entzogen"
           : "Admin-Rechte wurden vergeben",
+        className: "animate-fade-in",
       });
 
       fetchUsers();
@@ -259,8 +260,9 @@ export const AdminUsers = () => {
       });
       
       toast({
-        title: "Erfolgreich",
+        title: "✓ Erfolgreich",
         description: "Passwort-Reset-E-Mail wurde gesendet",
+        className: "animate-fade-in",
       });
     }
   };
@@ -285,8 +287,9 @@ export const AdminUsers = () => {
       });
 
       toast({
-        title: "Erfolgreich",
+        title: "✓ Erfolgreich",
         description: `2FA für "${username}" wurde entfernt`,
+        className: "animate-fade-in",
       });
       
       // Refresh users to update UI
@@ -319,8 +322,9 @@ export const AdminUsers = () => {
       });
 
       toast({
-        title: "Erfolgreich",
+        title: "✓ Erfolgreich",
         description: `Benutzer "${username}" wurde gelöscht`,
+        className: "animate-fade-in",
       });
 
       fetchUsers();

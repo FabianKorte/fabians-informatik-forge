@@ -236,11 +236,12 @@ export default function Auth() {
       }
 
       toast({
-        title: mode === "login" ? "Anmeldung erfolgreich" : "Registrierung erfolgreich",
+        title: mode === "login" ? "✓ Anmeldung erfolgreich" : "✓ Registrierung erfolgreich",
         description: mode === "login" 
           ? "Willkommen zurück!" 
           : "Dein Account wurde erstellt! Bitte bestätige deine E-Mail-Adresse.",
         duration: 8000,
+        className: "animate-fade-in",
       });
 
       // After successful login/signup, redirect appropriately

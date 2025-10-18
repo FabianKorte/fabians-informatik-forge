@@ -181,8 +181,9 @@ const Profile = () => {
       if (error) throw error;
 
       toast({
-        title: 'Erfolgreich',
+        title: '✓ Erfolgreich',
         description: '2FA wurde deaktiviert',
+        className: 'animate-fade-in',
       });
       
       setHas2FA(false);

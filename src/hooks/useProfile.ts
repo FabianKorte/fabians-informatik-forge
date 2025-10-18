@@ -56,15 +56,38 @@ export const useProfile = (userId: string | undefined) => {
         .eq('id', userId);
 
       if (error) throw error;
+      return sanitizedUpdates;
+    },
+    onMutate: async (updates) => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ['profile', userId] });
+      
+      // Snapshot previous value
+      const previousProfile = queryClient.getQueryData<ProfileData>(['profile', userId]);
+      
+      // Optimistically update
+      if (previousProfile) {
+        queryClient.setQueryData<ProfileData>(['profile', userId], {
+          ...previousProfile,
+          ...updates,
+        });
+      }
+      
+      return { previousProfile };
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profile', userId] });
       toast({
-        title: 'Erfolgreich',
+        title: '✓ Erfolgreich',
         description: 'Profil wurde aktualisiert',
+        className: 'animate-fade-in',
       });
     },
-    onError: (error: any) => {
+    onError: (error: any, _, context) => {
+      // Rollback on error
+      if (context?.previousProfile) {
+        queryClient.setQueryData(['profile', userId], context.previousProfile);
+      }
       toast({
         title: 'Fehler',
         description: 'Profil konnte nicht gespeichert werden: ' + error.message,
@@ -109,14 +132,46 @@ export const useProfile = (userId: string | undefined) => {
 
       return newAvatarUrl;
     },
-    onSuccess: () => {
+    onMutate: async (file: File) => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ['profile', userId] });
+      
+      // Snapshot previous value
+      const previousProfile = queryClient.getQueryData<ProfileData>(['profile', userId]);
+      
+      // Create temporary preview URL
+      const previewUrl = URL.createObjectURL(file);
+      
+      // Optimistically update with preview
+      if (previousProfile) {
+        queryClient.setQueryData<ProfileData>(['profile', userId], {
+          ...previousProfile,
+          avatar_url: previewUrl,
+        });
+      }
+      
+      return { previousProfile, previewUrl };
+    },
+    onSuccess: (newAvatarUrl, _, context) => {
+      // Revoke preview URL
+      if (context?.previewUrl) {
+        URL.revokeObjectURL(context.previewUrl);
+      }
       queryClient.invalidateQueries({ queryKey: ['profile', userId] });
       toast({
-        title: 'Erfolgreich',
+        title: '✓ Erfolgreich',
         description: 'Profilbild wurde aktualisiert',
+        className: 'animate-fade-in',
       });
     },
-    onError: (error: any) => {
+    onError: (error: any, _, context) => {
+      // Rollback on error and revoke preview URL
+      if (context?.previousProfile) {
+        queryClient.setQueryData(['profile', userId], context.previousProfile);
+      }
+      if (context?.previewUrl) {
+        URL.revokeObjectURL(context.previewUrl);
+      }
       toast({
         title: 'Fehler',
         description: error.message,

@@ -78,8 +78,9 @@ export const AdminNotes = () => {
       });
     } else {
       toast({
-        title: "Erfolg",
+        title: "✓ Erfolg",
         description: "Notiz wurde erstellt",
+        className: "animate-fade-in",
       });
       setNewNote({ title: "", content: "" });
       setIsCreating(false);
@@ -113,8 +114,9 @@ export const AdminNotes = () => {
       });
     } else {
       toast({
-        title: "Erfolg",
+        title: "✓ Erfolg",
         description: "Notiz wurde aktualisiert",
+        className: "animate-fade-in",
       });
       setEditingId(null);
       fetchNotes();
@@ -137,8 +139,9 @@ export const AdminNotes = () => {
       });
     } else {
       toast({
-        title: "Erfolg",
+        title: "✓ Erfolg",
         description: "Notiz wurde gelöscht",
+        className: "animate-fade-in",
       });
       fetchNotes();
     }
