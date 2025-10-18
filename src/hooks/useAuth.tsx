@@ -78,10 +78,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const checkSessionTimeout = (session: Session) => {
-    const sessionCreatedAt = new Date(session.user.created_at).getTime();
+    // Use the session's expires_at timestamp instead of user creation date
+    const expiresAt = session.expires_at ? session.expires_at * 1000 : null;
     const now = Date.now();
     
-    if (now - sessionCreatedAt > SESSION_TIMEOUT_MS) {
+    if (!expiresAt) return;
+    
+    // Check if session is expired or will expire in next minute
+    if (expiresAt - now < 60000) {
       toast({
         title: 'Session abgelaufen',
         description: 'Deine Sitzung ist abgelaufen. Bitte melde dich erneut an.',
@@ -89,6 +93,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         duration: 5000,
       });
       signOut();
+      return;
+    }
+    
+    // Warn if session expires in less than 5 minutes
+    if (expiresAt - now < 5 * 60 * 1000 && expiresAt - now > 4 * 60 * 1000) {
+      toast({
+        title: 'Session läuft bald ab',
+        description: 'Deine Sitzung läuft in wenigen Minuten ab.',
+        duration: 4000,
+      });
     }
   };
 

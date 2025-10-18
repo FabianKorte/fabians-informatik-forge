@@ -24,6 +24,7 @@ import {
 import { TwoFactorSetupDialog } from "@/components/auth/TwoFactorSetupDialog";
 import { EmailChangeDialog } from "@/components/profile/EmailChangeDialog";
 import { use2FA } from "@/hooks/use2FA";
+import { use2FABackup } from "@/hooks/use2FABackup";
 import { useProfile } from "@/hooks/useProfile";
 
 const Profile = () => {
@@ -35,6 +36,7 @@ const Profile = () => {
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
   const [has2FA, setHas2FA] = useState(false);
+  const [remainingBackupCodes, setRemainingBackupCodes] = useState(0);
 
   const {
     show2FADialog,
@@ -48,13 +50,28 @@ const Profile = () => {
     verify2FA,
   } = use2FA();
 
+  const {
+    backupCodes,
+    isGenerating: isGeneratingBackup,
+    generateBackupCodes,
+    getRemainingBackupCodes,
+    downloadBackupCodes,
+  } = use2FABackup();
+
   useEffect(() => {
     if (!user) {
       navigate("/auth");
       return;
     }
     check2FAStatus();
+    updateBackupCodeCount();
   }, [user, navigate]);
+
+  const updateBackupCodeCount = async () => {
+    if (!user?.id) return;
+    const count = await getRemainingBackupCodes(user.id);
+    setRemainingBackupCodes(count);
+  };
 
   useEffect(() => {
     if (profile) {
@@ -104,7 +121,24 @@ const Profile = () => {
     const success = await verify2FA();
     if (success) {
       setHas2FA(true);
+      // Generate backup codes after successful 2FA setup
+      if (user?.id) {
+        await generateBackupCodes(user.id);
+        await updateBackupCodeCount();
+      }
     }
+  };
+
+  const handleRegenerateBackupCodes = async () => {
+    if (!user?.id) return;
+    if (!confirm('Möchtest du neue Backup-Codes generieren? Die alten werden ungültig.')) return;
+    
+    await generateBackupCodes(user.id);
+    await updateBackupCodeCount();
+    toast({
+      title: 'Backup-Codes generiert',
+      description: 'Speichere die neuen Backup-Codes an einem sicheren Ort',
+    });
   };
 
   const disable2FA = async () => {
@@ -266,31 +300,56 @@ const Profile = () => {
                 </p>
 
                 {has2FA ? (
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button variant="destructive" className="w-full">
-                        <ShieldOff className="w-4 h-4 mr-2" />
-                        2FA deaktivieren
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>2FA wirklich deaktivieren?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          Dein Konto ist dann weniger gut geschützt. Du kannst 2FA jederzeit wieder aktivieren.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Abbrechen</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={disable2FA}
-                          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  <>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                        <div>
+                          <p className="text-sm font-medium">Backup-Codes</p>
+                          <p className="text-xs text-muted-foreground">
+                            {remainingBackupCodes} von 10 verfügbar
+                          </p>
+                        </div>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={handleRegenerateBackupCodes}
+                          disabled={isGeneratingBackup}
                         >
-                          Deaktivieren
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
+                          {isGeneratingBackup ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            'Neu generieren'
+                          )}
+                        </Button>
+                      </div>
+                      
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="destructive" className="w-full">
+                            <ShieldOff className="w-4 h-4 mr-2" />
+                            2FA deaktivieren
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>2FA wirklich deaktivieren?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Dein Konto ist dann weniger gut geschützt. Du kannst 2FA jederzeit wieder aktivieren.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={disable2FA}
+                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            >
+                              Deaktivieren
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
+                  </>
                 ) : (
                   <Button onClick={handleSetup2FA} className="w-full">
                     <Shield className="w-4 h-4 mr-2" />
@@ -312,6 +371,8 @@ const Profile = () => {
         verificationCode={verificationCode}
         onVerificationCodeChange={setVerificationCode}
         onVerify={handleVerify2FA}
+        backupCodes={backupCodes}
+        onDownloadBackupCodes={() => downloadBackupCodes(backupCodes)}
       />
     </div>
   );

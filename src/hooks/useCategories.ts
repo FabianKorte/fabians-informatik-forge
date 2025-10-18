@@ -9,11 +9,12 @@ interface Category {
 export const useCategories = () => {
   const { data: categories = [], isLoading } = useQuery({
     queryKey: ['categories'],
-    queryFn: async () => {
+    queryFn: async ({ signal }) => {
       const { data, error } = await supabase
         .from('categories')
         .select('id, title')
-        .order('id');
+        .order('id')
+        .abortSignal(signal);
 
       if (error) throw error;
       return data as Category[];

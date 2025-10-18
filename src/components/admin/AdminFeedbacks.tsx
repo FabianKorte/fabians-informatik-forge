@@ -32,33 +32,40 @@ export const AdminFeedbacks = () => {
   const fetchFeedbacks = async () => {
     setIsLoading(true);
     
-    // Get total count
-    const { count } = await supabase
-      .from('feedbacks')
-      .select('*', { count: 'exact', head: true });
+    const abortController = new AbortController();
     
-    setTotalCount(count || 0);
+    try {
+      // Get total count
+      const { count } = await supabase
+        .from('feedbacks')
+        .select('*', { count: 'exact', head: true });
+      
+      setTotalCount(count || 0);
 
-    // Get paginated data
-    const from = (currentPage - 1) * ITEMS_PER_PAGE;
-    const to = from + ITEMS_PER_PAGE - 1;
+      // Get paginated data
+      const from = (currentPage - 1) * ITEMS_PER_PAGE;
+      const to = from + ITEMS_PER_PAGE - 1;
 
-    const { data, error } = await supabase
-      .from('feedbacks')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .range(from, to);
+      const { data, error } = await supabase
+        .from('feedbacks')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .range(from, to)
+        .abortSignal(abortController.signal);
 
-    if (error) {
-      toast({
-        title: "Fehler",
-        description: "Konnte Feedbacks nicht laden",
-        variant: "destructive",
-      });
-    } else {
+      if (error) throw error;
       setFeedbacks(data || []);
+    } catch (error: any) {
+      if (error.name !== 'AbortError') {
+        toast({
+          title: "Fehler",
+          description: "Konnte Feedbacks nicht laden",
+          variant: "destructive",
+        });
+      }
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   useEffect(() => {

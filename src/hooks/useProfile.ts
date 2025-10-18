@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { sanitizeUsername, sanitizeBio } from '@/lib/sanitization';
 
 interface ProfileData {
   username: string;
@@ -14,13 +15,14 @@ export const useProfile = (userId: string | undefined) => {
 
   const { data: profile, isLoading } = useQuery({
     queryKey: ['profile', userId],
-    queryFn: async () => {
+    queryFn: async ({ signal }) => {
       if (!userId) throw new Error('No user ID');
       
       const { data, error } = await supabase
         .from('profiles')
         .select('username, bio, avatar_url')
         .eq('id', userId)
+        .abortSignal(signal)
         .maybeSingle();
 
       if (error) throw error;
@@ -33,9 +35,24 @@ export const useProfile = (userId: string | undefined) => {
     mutationFn: async (updates: Partial<ProfileData>) => {
       if (!userId) throw new Error('No user ID');
       
+      // Sanitize inputs
+      const sanitizedUpdates: Partial<ProfileData> = {};
+      if (updates.username !== undefined) {
+        sanitizedUpdates.username = sanitizeUsername(updates.username);
+        if (!sanitizedUpdates.username || sanitizedUpdates.username.length < 3) {
+          throw new Error('Benutzername muss mindestens 3 Zeichen lang sein');
+        }
+      }
+      if (updates.bio !== undefined) {
+        sanitizedUpdates.bio = sanitizeBio(updates.bio);
+      }
+      if (updates.avatar_url !== undefined) {
+        sanitizedUpdates.avatar_url = updates.avatar_url;
+      }
+      
       const { error } = await supabase
         .from('profiles')
-        .update(updates)
+        .update(sanitizedUpdates)
         .eq('id', userId);
 
       if (error) throw error;

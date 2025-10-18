@@ -28,12 +28,13 @@ export const useLearningModules = () => {
 
   const { data: modules = [], isLoading } = useQuery({
     queryKey: ['learning-modules'],
-    queryFn: async () => {
+    queryFn: async ({ signal }) => {
       const { data, error } = await supabase
         .from('learn_modules')
         .select('*')
         .order('category_id', { ascending: true })
-        .order('order_index', { ascending: true });
+        .order('order_index', { ascending: true })
+        .abortSignal(signal);
 
       if (error) throw error;
       return data as LearnModule[];

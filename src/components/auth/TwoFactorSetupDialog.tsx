@@ -14,6 +14,8 @@ interface TwoFactorSetupDialogProps {
   verificationCode: string;
   onVerificationCodeChange: (code: string) => void;
   onVerify: () => void;
+  backupCodes?: string[];
+  onDownloadBackupCodes?: () => void;
 }
 
 export const TwoFactorSetupDialog = ({
@@ -25,6 +27,8 @@ export const TwoFactorSetupDialog = ({
   verificationCode,
   onVerificationCodeChange,
   onVerify,
+  backupCodes = [],
+  onDownloadBackupCodes,
 }: TwoFactorSetupDialogProps) => {
   const { toast } = useToast();
 
@@ -104,6 +108,32 @@ export const TwoFactorSetupDialog = ({
           <Button onClick={onVerify} className="w-full">
             Verifizieren
           </Button>
+          
+          {backupCodes.length > 0 && (
+            <div className="mt-4 p-4 border rounded-lg bg-muted/50 space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="font-semibold text-sm">Backup-Codes</h4>
+                  <p className="text-xs text-muted-foreground">
+                    Speichere diese Codes sicher! Sie können jeweils einmal als Ersatz für deinen 2FA-Code verwendet werden.
+                  </p>
+                </div>
+                {onDownloadBackupCodes && (
+                  <Button variant="outline" size="sm" onClick={onDownloadBackupCodes}>
+                    Download
+                  </Button>
+                )}
+              </div>
+              <div className="grid grid-cols-2 gap-2 font-mono text-xs">
+                {backupCodes.map((code, i) => (
+                  <div key={i} className="p-2 bg-background rounded border">
+                    {i + 1}. {code}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          
           <p className="text-xs text-muted-foreground">
             Tipp: Wenn Scannen nicht funktioniert, nutze „In Auth‑App öffnen" (mobil) oder füge den „Manueller Code (Secret)" in deiner App hinzu.
           </p>

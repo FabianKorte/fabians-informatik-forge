@@ -39,6 +39,8 @@ export const AdminAuditLogs = () => {
 
   const loadLogs = async () => {
     setIsLoading(true);
+    const abortController = new AbortController();
+    
     try {
       // Get total count
       const { count } = await supabase
@@ -55,7 +57,8 @@ export const AdminAuditLogs = () => {
         .from('audit_logs')
         .select('*')
         .order('created_at', { ascending: false })
-        .range(from, to);
+        .range(from, to)
+        .abortSignal(abortController.signal);
 
       if (logsError) throw logsError;
 
@@ -65,7 +68,8 @@ export const AdminAuditLogs = () => {
         const { data: profilesData } = await supabase
           .from('profiles')
           .select('id, username')
-          .in('id', userIds);
+          .in('id', userIds)
+          .abortSignal(abortController.signal);
 
         const profileMap: Record<string, Profile> = {};
         profilesData?.forEach(p => {
@@ -76,11 +80,13 @@ export const AdminAuditLogs = () => {
 
       setLogs(logsData || []);
     } catch (error: any) {
-      toast({
-        title: "Fehler",
-        description: "Konnte Audit-Logs nicht laden: " + error.message,
-        variant: "destructive",
-      });
+      if (error.name !== 'AbortError') {
+        toast({
+          title: "Fehler",
+          description: "Konnte Audit-Logs nicht laden: " + error.message,
+          variant: "destructive",
+        });
+      }
     } finally {
       setIsLoading(false);
     }

@@ -17,6 +17,7 @@ import { TwoFactorSetupDialog } from "@/components/auth/TwoFactorSetupDialog";
 import { MFAVerificationDialog } from "@/components/auth/MFAVerificationDialog";
 import { PasswordResetDialog } from "@/components/auth/PasswordResetDialog";
 import { use2FA } from "@/hooks/use2FA";
+import { use2FABackup } from "@/hooks/use2FABackup";
 import {
   Dialog,
   DialogContent,
@@ -66,6 +67,8 @@ export default function Auth() {
     setup2FA,
     verify2FA,
   } = use2FA();
+  
+  const { verifyBackupCode } = use2FABackup();
 
   // Remove auto MFA trigger from query param - it should only happen during login flow
   useEffect(() => {
@@ -116,6 +119,35 @@ export default function Auth() {
       toast({ title: '2FA bestätigt', description: 'Anmeldung verifiziert' });
       setSuppressAutoRedirect(false);
       navigate('/');
+    } catch (error: any) {
+      toast({ title: 'Fehler', description: error.message, variant: 'destructive' });
+    }
+  };
+
+  const handleBackupCodeVerify = async (backupCode: string) => {
+    if (!user?.id) return;
+    
+    try {
+      const isValid = await verifyBackupCode(user.id, backupCode);
+      
+      if (isValid) {
+        setShowMfaDialog(false);
+        setMfaCode('');
+        setMfaChallengeId(null);
+        setMfaFactorId(null);
+        toast({ 
+          title: 'Backup-Code akzeptiert', 
+          description: 'Anmeldung erfolgreich. Dieser Code kann nicht mehr verwendet werden.' 
+        });
+        setSuppressAutoRedirect(false);
+        navigate('/');
+      } else {
+        toast({ 
+          title: 'Ungültiger Code', 
+          description: 'Dieser Backup-Code ist ungültig oder wurde bereits verwendet.', 
+          variant: 'destructive' 
+        });
+      }
     } catch (error: any) {
       toast({ title: 'Fehler', description: error.message, variant: 'destructive' });
     }
@@ -506,31 +538,14 @@ export default function Auth() {
           </DialogContent>
         </Dialog>
 
-        <Dialog open={showMfaDialog} onOpenChange={setShowMfaDialog}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>2FA bestätigen</DialogTitle>
-              <DialogDescription>
-                Bitte gib den 6-stelligen Code aus deiner Authenticator‑App ein, um die Anmeldung abzuschließen.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="mfa-code">2FA‑Code</Label>
-                <Input
-                  id="mfa-code"
-                  placeholder="123456"
-                  value={mfaCode}
-                  onChange={(e) => setMfaCode(e.target.value)}
-                  maxLength={6}
-                />
-              </div>
-              <Button onClick={handleMfaVerify} className="w-full">
-                Bestätigen
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <MFAVerificationDialog
+          open={showMfaDialog}
+          onOpenChange={setShowMfaDialog}
+          mfaCode={mfaCode}
+          onMfaCodeChange={setMfaCode}
+          onVerify={handleMfaVerify}
+          onVerifyBackupCode={handleBackupCodeVerify}
+        />
       </div>
     </div>
   );
