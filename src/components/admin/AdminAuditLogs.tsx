@@ -23,22 +23,37 @@ interface Profile {
   username: string;
 }
 
+const ITEMS_PER_PAGE = 50;
+
 export const AdminAuditLogs = () => {
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [profiles, setProfiles] = useState<Record<string, Profile>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [filterAction, setFilterAction] = useState<string>("all");
   const [filterUser, setFilterUser] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
   const { toast } = useToast();
 
   const loadLogs = async () => {
     setIsLoading(true);
     try {
+      // Get total count
+      const { count } = await supabase
+        .from('audit_logs')
+        .select('*', { count: 'exact', head: true });
+      
+      setTotalCount(count || 0);
+
+      // Get paginated data
+      const from = (currentPage - 1) * ITEMS_PER_PAGE;
+      const to = from + ITEMS_PER_PAGE - 1;
+
       const { data: logsData, error: logsError } = await supabase
         .from('audit_logs')
         .select('*')
         .order('created_at', { ascending: false })
-        .limit(100);
+        .range(from, to);
 
       if (logsError) throw logsError;
 
@@ -71,7 +86,7 @@ export const AdminAuditLogs = () => {
 
   useEffect(() => {
     loadLogs();
-  }, []);
+  }, [currentPage]);
 
   const getActionBadge = (action: string) => {
     const variants: Record<string, { label: string; variant: "default" | "secondary" | "destructive" | "outline" }> = {
@@ -108,6 +123,8 @@ export const AdminAuditLogs = () => {
     if (filterUser && !profiles[log.user_id]?.username.toLowerCase().includes(filterUser.toLowerCase())) return false;
     return true;
   });
+
+  const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
   if (isLoading) {
     return (
@@ -200,6 +217,30 @@ export const AdminAuditLogs = () => {
               </TableBody>
             </Table>
           </div>
+
+          {totalPages > 1 && (
+            <div className="flex items-center justify-between mt-4 pt-4 border-t">
+              <p className="text-sm text-muted-foreground">
+                Seite {currentPage} von {totalPages} ({totalCount} gesamt)
+              </p>
+              <div className="flex gap-2">
+                <button
+                  className="px-3 py-1 text-sm border rounded hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                >
+                  Zurück
+                </button>
+                <button
+                  className="px-3 py-1 text-sm border rounded hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                >
+                  Weiter
+                </button>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

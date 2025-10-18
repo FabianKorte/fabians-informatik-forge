@@ -17,17 +17,34 @@ interface Feedback {
   status: string;
 }
 
+const ITEMS_PER_PAGE = 10;
+
 export const AdminFeedbacks = () => {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
   const { toast } = useToast();
 
   const fetchFeedbacks = async () => {
     setIsLoading(true);
+    
+    // Get total count
+    const { count } = await supabase
+      .from('feedbacks')
+      .select('*', { count: 'exact', head: true });
+    
+    setTotalCount(count || 0);
+
+    // Get paginated data
+    const from = (currentPage - 1) * ITEMS_PER_PAGE;
+    const to = from + ITEMS_PER_PAGE - 1;
+
     const { data, error } = await supabase
       .from('feedbacks')
       .select('*')
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .range(from, to);
 
     if (error) {
       toast({
@@ -43,7 +60,7 @@ export const AdminFeedbacks = () => {
 
   useEffect(() => {
     fetchFeedbacks();
-  }, []);
+  }, [currentPage]);
 
   const handleDelete = async (id: string) => {
     if (!confirm("Möchtest du dieses Feedback wirklich löschen?")) return;
@@ -88,6 +105,8 @@ export const AdminFeedbacks = () => {
       fetchFeedbacks();
     }
   };
+
+  const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
   if (isLoading) {
     return (
@@ -163,6 +182,32 @@ export const AdminFeedbacks = () => {
               </div>
             </Card>
           ))}
+        </div>
+      )}
+
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between mt-6">
+          <p className="text-sm text-muted-foreground">
+            Seite {currentPage} von {totalPages} ({totalCount} gesamt)
+          </p>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+            >
+              Zurück
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+            >
+              Weiter
+            </Button>
+          </div>
         </div>
       )}
     </div>

@@ -2,8 +2,21 @@ import { supabase } from "@/integrations/supabase/client";
 import { categories } from "@/data/categories";
 import { learnContent } from "@/data/learn/index";
 
+const SEED_CACHE_KEY = 'db_seed_timestamp';
+const SEED_CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+
 export async function seedDatabase() {
   try {
+    // Check if we've already seeded recently
+    const lastSeedTime = localStorage.getItem(SEED_CACHE_KEY);
+    if (lastSeedTime) {
+      const timeSinceLastSeed = Date.now() - parseInt(lastSeedTime);
+      if (timeSinceLastSeed < SEED_CACHE_DURATION) {
+        console.log('Database already seeded recently, skipping...');
+        return;
+      }
+    }
+
     const categoriesToInsert = categories.map(cat => ({
       id: cat.id,
       title: cat.title,
@@ -87,6 +100,10 @@ export async function seedDatabase() {
         insertedCount += batch.length;
       }
     }
+
+    // Cache the seed timestamp
+    localStorage.setItem(SEED_CACHE_KEY, Date.now().toString());
+    console.log('Database seeding completed successfully');
 
   } catch (error) {
     console.error('Error during database seeding:', error);
