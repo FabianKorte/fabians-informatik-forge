@@ -1,5 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { LearnModule } from "@/types/learn";
+import { logger } from "@/lib/logger";
 
 export async function generateRandomTrainingModules(): Promise<LearnModule[]> {
   const { data: allModules, error } = await supabase
@@ -8,7 +9,7 @@ export async function generateRandomTrainingModules(): Promise<LearnModule[]> {
     .neq('category_id', 'zufallstraining');
 
   if (error || !allModules) {
-    console.error('Error fetching modules for random training:', error);
+    logger.error('Error fetching modules for random training:', error);
     return [];
   }
 

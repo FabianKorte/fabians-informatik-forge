@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { logger } from "@/lib/logger";
 
 interface ProgressData {
   [categoryId: string]: {
@@ -74,7 +75,7 @@ export const useProgress = (categoryId: string, methodType: string, moduleIndex:
         const parsed = JSON.parse(decodeURIComponent(savedProgress));
         setProgressData(parsed);
       } catch (error) {
-        console.warn("Failed to parse progress cookie:", error);
+        logger.warn("Failed to parse progress cookie:", error);
         setProgressData({});
       }
     }

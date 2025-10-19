@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export type AuditAction = 
   | 'user_role_granted'
@@ -29,7 +30,7 @@ export async function logAuditAction(entry: AuditLogEntry) {
     const { data: { user } } = await supabase.auth.getUser();
     
     if (!user) {
-      console.warn('Cannot log audit action: No user authenticated');
+      logger.warn('Cannot log audit action: No user authenticated');
       return { success: false };
     }
 
@@ -44,13 +45,13 @@ export async function logAuditAction(entry: AuditLogEntry) {
       });
 
     if (error) {
-      console.error('Failed to log audit action:', error);
+      logger.error('Failed to log audit action:', error);
       return { success: false, error };
     }
 
     return { success: true };
   } catch (error) {
-    console.error('Audit log error:', error);
+    logger.error('Audit log error:', error);
     return { success: false, error };
   }
 }

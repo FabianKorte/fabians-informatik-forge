@@ -1,6 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { Category } from "@/data/categories";
 import * as Icons from "lucide-react";
+import { logger } from "@/lib/logger";
 
 export async function getCategoriesFromDatabase(): Promise<Category[]> {
   const { data, error } = await supabase
@@ -9,7 +10,7 @@ export async function getCategoriesFromDatabase(): Promise<Category[]> {
     .order('id');
 
   if (error) {
-    console.error('Error fetching categories:', error);
+    logger.error('Error fetching categories:', error);
     return [];
   }
 

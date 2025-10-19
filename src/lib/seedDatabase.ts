@@ -1,6 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { categories } from "@/data/categories";
 import { learnContent } from "@/data/learn/index";
+import { logger } from "@/lib/logger";
 
 const SEED_CACHE_KEY = 'db_seed_timestamp';
 const SEED_CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
@@ -12,7 +13,7 @@ export async function seedDatabase() {
     if (lastSeedTime) {
       const timeSinceLastSeed = Date.now() - parseInt(lastSeedTime);
       if (timeSinceLastSeed < SEED_CACHE_DURATION) {
-        console.log('Database already seeded recently, skipping...');
+        logger.log('Database already seeded recently, skipping...');
         return;
       }
     }
@@ -31,7 +32,7 @@ export async function seedDatabase() {
       .select('id');
 
     if (existingCatsError) {
-      console.error('Error fetching existing categories:', existingCatsError);
+      logger.error('Error fetching existing categories:', existingCatsError);
     }
 
     const existingCatIds = new Set((existingCats || []).map((c: any) => c.id));
@@ -43,7 +44,7 @@ export async function seedDatabase() {
         .insert(newCategories);
 
       if (categoriesError) {
-        console.error('Error seeding categories:', categoriesError);
+        logger.error('Error seeding categories:', categoriesError);
       }
     }
 
@@ -71,7 +72,7 @@ export async function seedDatabase() {
       .select('category_id, type, title');
 
     if (existingModulesKeysError) {
-      console.warn('Could not fetch existing learn_modules keys:', existingModulesKeysError.message);
+      logger.warn('Could not fetch existing learn_modules keys:', existingModulesKeysError.message);
     }
 
     const existingKeySet = new Set(
@@ -95,7 +96,7 @@ export async function seedDatabase() {
         .insert(batch);
 
       if (modulesError) {
-        console.error(`Error seeding batch ${Math.floor(i / batchSize) + 1}:`, modulesError);
+        logger.error(`Error seeding batch ${Math.floor(i / batchSize) + 1}:`, modulesError);
       } else {
         insertedCount += batch.length;
       }
@@ -103,10 +104,10 @@ export async function seedDatabase() {
 
     // Cache the seed timestamp
     localStorage.setItem(SEED_CACHE_KEY, Date.now().toString());
-    console.log('Database seeding completed successfully');
+    logger.log('Database seeding completed successfully');
 
   } catch (error) {
-    console.error('Error during database seeding:', error);
+    logger.error('Error during database seeding:', error);
     throw error;
   }
 }

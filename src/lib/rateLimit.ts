@@ -3,6 +3,8 @@ interface LoginAttempt {
   email: string;
 }
 
+import { logger } from "@/lib/logger";
+
 const MAX_ATTEMPTS = 5;
 const WINDOW_MS = 15 * 60 * 1000; // 15 minutes
 const STORAGE_KEY = 'login_attempts';
@@ -39,7 +41,7 @@ export const checkRateLimit = (email: string): { allowed: boolean; remainingAtte
       remainingAttempts: MAX_ATTEMPTS - emailAttempts.length,
     };
   } catch (error) {
-    console.error('Rate limit check error:', error);
+    logger.error('Rate limit check error:', error);
     // Allow login if there's an error reading from localStorage
     return { allowed: true, remainingAttempts: MAX_ATTEMPTS };
   }
@@ -64,7 +66,7 @@ export const recordLoginAttempt = (email: string): void => {
     
     localStorage.setItem(STORAGE_KEY, JSON.stringify(recentAttempts));
   } catch (error) {
-    console.error('Error recording login attempt:', error);
+    logger.error('Error recording login attempt:', error);
   }
 };
 
@@ -80,6 +82,6 @@ export const clearLoginAttempts = (email: string): void => {
     
     localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
   } catch (error) {
-    console.error('Error clearing login attempts:', error);
+    logger.error('Error clearing login attempts:', error);
   }
 };

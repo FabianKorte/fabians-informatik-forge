@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 
 // Simple hash function for backup codes
 const hashCode = async (code: string): Promise<string> => {
@@ -95,7 +96,7 @@ export const use2FABackup = () => {
 
       return true;
     } catch (error: any) {
-      console.error('Backup code verification error:', error);
+      logger.error('Backup code verification error:', error);
       return false;
     }
   };
@@ -111,7 +112,7 @@ export const use2FABackup = () => {
       if (error) throw error;
       return count || 0;
     } catch (error) {
-      console.error('Error fetching remaining backup codes:', error);
+      logger.error('Error fetching remaining backup codes:', error);
       return 0;
     }
   };

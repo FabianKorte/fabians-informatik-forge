@@ -1,6 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { LearnModule } from "@/types/learn";
 import { generateRandomTrainingModules } from "./randomTrainingUtils";
+import { logger } from "@/lib/logger";
 
 export async function getModulesForCategory(categoryId: string): Promise<LearnModule[]> {
   if (categoryId === 'zufallstraining') {
@@ -14,7 +15,7 @@ export async function getModulesForCategory(categoryId: string): Promise<LearnMo
     .order('order_index');
 
   if (error) {
-    console.error('Error fetching learn modules:', error);
+    logger.error('Error fetching learn modules:', error);
     return [];
   }
 
@@ -28,7 +29,7 @@ export async function getAllModules(): Promise<Record<string, LearnModule[]>> {
     .order('order_index');
 
   if (error) {
-    console.error('Error fetching all learn modules:', error);
+    logger.error('Error fetching all learn modules:', error);
     return {};
   }
 
