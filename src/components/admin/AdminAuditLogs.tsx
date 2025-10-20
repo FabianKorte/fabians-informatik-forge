@@ -6,10 +6,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Loader2, Shield, User, FileText, Trash2, Key, Download } from "lucide-react";
+import { Shield, User, FileText, Key, Download } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks/useDebounce";
+import { useAdminData } from "@/hooks/useAdminData";
 
 interface AuditLog {
   id: string;
@@ -28,77 +29,47 @@ interface Profile {
 
 const ITEMS_PER_PAGE = 50;
 
+/**
+ * AdminAuditLogs Component
+ * Displays audit trail of admin actions with filtering and export
+ */
 export const AdminAuditLogs = () => {
-  const [logs, setLogs] = useState<AuditLog[]>([]);
   const [profiles, setProfiles] = useState<Record<string, Profile>>({});
-  const [isLoading, setIsLoading] = useState(true);
   const [filterAction, setFilterAction] = useState<string>("all");
   const [filterUser, setFilterUser] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalCount, setTotalCount] = useState(0);
   const { toast } = useToast();
   
-  // Debounce filter values
   const debouncedFilterUser = useDebounce(filterUser, 500);
 
-  const loadLogs = async () => {
-    setIsLoading(true);
-    const abortController = new AbortController();
-    
-    try {
-      // Get total count
-      const { count } = await supabase
-        .from('audit_logs')
-        .select('*', { count: 'exact', head: true });
-      
-      setTotalCount(count || 0);
+  const { data: logs, isLoading, totalCount } = useAdminData<AuditLog>({
+    table: 'audit_logs',
+    orderBy: 'created_at',
+    ascending: false,
+    pageSize: ITEMS_PER_PAGE,
+    currentPage,
+  });
 
-      // Get paginated data
-      const from = (currentPage - 1) * ITEMS_PER_PAGE;
-      const to = from + ITEMS_PER_PAGE - 1;
-
-      const { data: logsData, error: logsError } = await supabase
-        .from('audit_logs')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .range(from, to)
-        .abortSignal(abortController.signal);
-
-      if (logsError) throw logsError;
-
-      const userIds = [...new Set(logsData?.map(l => l.user_id) || [])];
-      
-      if (userIds.length > 0) {
-        const { data: profilesData } = await supabase
-          .from('profiles')
-          .select('id, username')
-          .in('id', userIds)
-          .abortSignal(abortController.signal);
-
-        const profileMap: Record<string, Profile> = {};
-        profilesData?.forEach(p => {
-          profileMap[p.id] = p;
-        });
-        setProfiles(profileMap);
-      }
-
-      setLogs(logsData || []);
-    } catch (error: any) {
-      if (error.name !== 'AbortError') {
-        toast({
-          title: "Fehler",
-          description: "Konnte Audit-Logs nicht laden: " + error.message,
-          variant: "destructive",
-        });
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+  // Fetch profiles for the current logs
   useEffect(() => {
-    loadLogs();
-  }, [currentPage]);
+    const fetchProfiles = async () => {
+      if (logs.length === 0) return;
+      
+      const userIds = [...new Set(logs.map(l => l.user_id))];
+      const { data: profilesData } = await supabase
+        .from('profiles')
+        .select('id, username')
+        .in('id', userIds);
+
+      const profileMap: Record<string, Profile> = {};
+      profilesData?.forEach(p => {
+        profileMap[p.id] = p;
+      });
+      setProfiles(profileMap);
+    };
+
+    fetchProfiles();
+  }, [logs]);
 
   const getActionBadge = (action: string) => {
     const variants: Record<string, { label: string; variant: "default" | "secondary" | "destructive" | "outline" }> = {

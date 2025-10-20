@@ -1,16 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Trash2, RefreshCw, Circle, CheckSquare } from "lucide-react";
+import { Trash2, RefreshCw, Circle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
-import { useDebounce } from "@/hooks/useDebounce";
+import { useAdminData } from "@/hooks/useAdminData";
 
 interface Feedback {
   id: string;
@@ -22,56 +22,22 @@ interface Feedback {
 
 const ITEMS_PER_PAGE = 10;
 
+/**
+ * AdminFeedbacks Component
+ * Manages feedback submissions with bulk actions and status updates
+ */
 export const AdminFeedbacks = () => {
-  const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalCount, setTotalCount] = useState(0);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const { toast } = useToast();
 
-  const fetchFeedbacks = async () => {
-    setIsLoading(true);
-    
-    const abortController = new AbortController();
-    
-    try {
-      // Get total count
-      const { count } = await supabase
-        .from('feedbacks')
-        .select('*', { count: 'exact', head: true });
-      
-      setTotalCount(count || 0);
-
-      // Get paginated data
-      const from = (currentPage - 1) * ITEMS_PER_PAGE;
-      const to = from + ITEMS_PER_PAGE - 1;
-
-      const { data, error } = await supabase
-        .from('feedbacks')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .range(from, to)
-        .abortSignal(abortController.signal);
-
-      if (error) throw error;
-      setFeedbacks(data || []);
-    } catch (error: any) {
-      if (error.name !== 'AbortError') {
-        toast({
-          title: "Fehler",
-          description: "Konnte Feedbacks nicht laden",
-          variant: "destructive",
-        });
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchFeedbacks();
-  }, [currentPage]);
+  const { data: feedbacks, isLoading, refetch, totalCount } = useAdminData<Feedback>({
+    table: 'feedbacks',
+    orderBy: 'created_at',
+    ascending: false,
+    pageSize: ITEMS_PER_PAGE,
+    currentPage,
+  });
 
   const handleDelete = async (id: string) => {
     if (!confirm("Möchtest du dieses Feedback wirklich löschen?")) return;
@@ -93,7 +59,7 @@ export const AdminFeedbacks = () => {
         description: "Feedback wurde gelöscht",
         className: "animate-fade-in",
       });
-      fetchFeedbacks();
+      refetch();
     }
   };
 
@@ -115,7 +81,7 @@ export const AdminFeedbacks = () => {
         description: "Status wurde aktualisiert",
         className: "animate-fade-in",
       });
-      fetchFeedbacks();
+      refetch();
     }
   };
 
@@ -142,7 +108,7 @@ export const AdminFeedbacks = () => {
         className: "animate-fade-in",
       });
       setSelectedIds(new Set());
-      fetchFeedbacks();
+      refetch();
     }
   };
 
@@ -194,7 +160,7 @@ export const AdminFeedbacks = () => {
               {selectedIds.size} löschen
             </Button>
           )}
-          <Button variant="outline" onClick={fetchFeedbacks}>
+          <Button variant="outline" onClick={() => refetch()}>
             <RefreshCw className="w-4 h-4 mr-2" />
             Aktualisieren
           </Button>
