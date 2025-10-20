@@ -65,14 +65,14 @@ export function useAdminData<T = any>(options: {
     try {
       // Get total count if pagination is enabled
       if (pageSize) {
-        const { count } = await supabase
+        const { count } = await (supabase as any)
           .from(table)
           .select('*', { count: 'exact', head: true });
         setTotalCount(count || 0);
       }
 
       // Build base query
-      const baseQuery = supabase.from(table).select(select);
+      const baseQuery = (supabase as any).from(table).select(select);
       
       // Add abort signal
       let query = baseQuery.abortSignal(abortController.signal);
