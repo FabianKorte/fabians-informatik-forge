@@ -1,8 +1,15 @@
-import { useState, useEffect, createContext, useContext, useRef } from 'react';
-import { User, Session } from '@supabase/supabase-js';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { User, Session, AuthError } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { checkAdminStatus, clearAdminCache } from '@/lib/auth/adminChecker';
+import { checkSessionTimeout, createSessionCheckInterval } from '@/lib/auth/sessionManager';
+import { logger } from '@/lib/logger';
 
+/**
+ * Authentication context type definition.
+ * Provides user state, session, admin status, and auth methods.
+ */
 interface AuthContextType {
   user: User | null;
   session: Session | null;
@@ -15,136 +22,77 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+/**
+ * Authentication provider component.
+ * Manages user authentication state, session monitoring, and admin status.
+ * 
+ * @param {Object} props - Component props
+ * @param {React.ReactNode} props.children - Child components
+ */
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
-  const adminCheckCache = useRef<{ userId: string; isAdmin: boolean; timestamp: number } | null>(null);
-  const SESSION_TIMEOUT_MS = 24 * 60 * 60 * 1000; // 24 hours
 
   useEffect(() => {
-    // Set up auth state listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        
-        // Check session timeout
-        if (session) {
-          checkSessionTimeout(session);
-        }
-        
-        // Check admin status after state update
-        if (session?.user) {
-          setTimeout(() => {
-            checkAdminStatus(session.user.id);
-          }, 0);
-        } else {
-          setIsAdmin(false);
-          adminCheckCache.current = null;
-        }
-      }
-    );
+    let timeoutInterval: NodeJS.Timeout | undefined;
 
-    // Check for existing session
+    // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
       
-      if (session) {
-        checkSessionTimeout(session);
-        if (session.user) {
-          checkAdminStatus(session.user.id);
-        }
+      if (session?.user) {
+        checkAdminStatus(session.user.id).then(setIsAdmin);
+        
+        // Start session monitoring
+        timeoutInterval = createSessionCheckInterval(
+          () => session,
+          () => {
+            setUser(null);
+            setSession(null);
+            setIsAdmin(false);
+            supabase.auth.signOut();
+          }
+        );
       }
+      
       setIsLoading(false);
     });
 
-    // Set up periodic session timeout check (every 5 minutes)
-    const timeoutCheckInterval = setInterval(() => {
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        if (session) {
-          checkSessionTimeout(session);
-        }
-      });
-    }, 5 * 60 * 1000);
-
-    // Listen for role changes to invalidate admin cache
-    const handleRoleChange = () => {
-      adminCheckCache.current = null;
-      if (user?.id) {
-        checkAdminStatus(user.id);
+    // Listen for auth changes
+    const authListener = supabase.auth.onAuthStateChange(async (event, session) => {
+      logger.info('Auth state changed:', event);
+      
+      setSession(session);
+      setUser(session?.user ?? null);
+      
+      if (session?.user) {
+        const adminStatus = await checkAdminStatus(session.user.id);
+        setIsAdmin(adminStatus);
+      } else {
+        setIsAdmin(false);
       }
-    };
-
-    window.addEventListener('user-role-changed', handleRoleChange);
+      
+      setIsLoading(false);
+    });
 
     return () => {
-      subscription.unsubscribe();
-      clearInterval(timeoutCheckInterval);
-      window.removeEventListener('user-role-changed', handleRoleChange);
+      authListener.data.subscription.unsubscribe();
+      if (timeoutInterval) clearInterval(timeoutInterval);
     };
-  }, [user?.id]);
+  }, [toast]);
 
-  const checkSessionTimeout = (session: Session) => {
-    // Use the session's expires_at timestamp instead of user creation date
-    const expiresAt = session.expires_at ? session.expires_at * 1000 : null;
-    const now = Date.now();
-    
-    if (!expiresAt) return;
-    
-    // Check if session is expired or will expire in next minute
-    if (expiresAt - now < 60000) {
-      toast({
-        title: 'Session abgelaufen',
-        description: 'Deine Sitzung ist abgelaufen. Bitte melde dich erneut an.',
-        variant: 'destructive',
-        duration: 5000,
-      });
-      signOut();
-      return;
-    }
-    
-    // Warn if session expires in less than 5 minutes
-    if (expiresAt - now < 5 * 60 * 1000 && expiresAt - now > 4 * 60 * 1000) {
-      toast({
-        title: 'Session läuft bald ab',
-        description: 'Deine Sitzung läuft in wenigen Minuten ab.',
-        duration: 4000,
-      });
-    }
-  };
-
-  const checkAdminStatus = async (userId: string) => {
-    // Check cache first (valid for 5 minutes)
-    const now = Date.now();
-    if (adminCheckCache.current && 
-        adminCheckCache.current.userId === userId && 
-        now - adminCheckCache.current.timestamp < 5 * 60 * 1000) {
-      setIsAdmin(adminCheckCache.current.isAdmin);
-      return;
-    }
-    
-    const { data } = await supabase
-      .from('user_roles')
-      .select('role')
-      .eq('user_id', userId)
-      .eq('role', 'admin')
-      .maybeSingle();
-    
-    const isAdminUser = !!data;
-    setIsAdmin(isAdminUser);
-    
-    // Update cache
-    adminCheckCache.current = {
-      userId,
-      isAdmin: isAdminUser,
-      timestamp: now,
-    };
-  };
-
+  /**
+   * Signs in a user with email and password.
+   * 
+   * @param {string} email - User email
+   * @param {string} password - User password
+   * @param {boolean} rememberMe - Whether to persist session
+   * @returns {Promise<{error: any}>} Error object if sign in fails
+   */
   const signIn = async (email: string, password: string, rememberMe = true) => {
     // Sign in with the main client so the in-memory session is available app-wide
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -176,6 +124,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return { error: null };
   };
 
+  /**
+   * Signs up a new user with email and password.
+   * 
+   * @param {string} email - User email
+   * @param {string} password - User password
+   * @param {string} username - Optional username
+   * @returns {Promise<{error: any}>} Error object if sign up fails
+   */
   const signUp = async (email: string, password: string, username?: string) => {
     const redirectUrl = `${window.location.origin}/`;
     
@@ -192,8 +148,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return { error };
   };
 
+  /**
+   * Signs out the current user and clears all auth state.
+   */
   const signOut = async () => {
+    if (user) {
+      clearAdminCache(user.id);
+    }
     await supabase.auth.signOut();
+    setUser(null);
+    setSession(null);
     setIsAdmin(false);
   };
 
@@ -204,6 +168,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
+/**
+ * Hook to access authentication context.
+ * Must be used within an AuthProvider.
+ * 
+ * @throws {Error} If used outside AuthProvider
+ * @returns {AuthContextType} Authentication context
+ * 
+ * @example
+ * const { user, isAdmin, signIn, signOut } = useAuth();
+ */
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {

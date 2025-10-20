@@ -179,6 +179,9 @@ export const AdminUsers = () => {
     return () => window.removeEventListener('2fa-status-changed', handleRefresh);
   }, []);
 
+  /**
+   * Toggles admin role for a user.
+   */
   const toggleAdminRole = async (userId: string, currentlyAdmin: boolean) => {
     try {
       if (currentlyAdmin) {
@@ -231,6 +234,9 @@ export const AdminUsers = () => {
     }
   };
 
+  /**
+   * Initiates password reset for a user.
+   */
   const handlePasswordReset = async (email: string, userId: string) => {
     if (!email || email === 'Unbekannt') {
       toast({
@@ -267,6 +273,9 @@ export const AdminUsers = () => {
     }
   };
 
+  /**
+   * Removes 2FA for a user.
+   */
   const handleRemove2FA = async (userId: string, username: string) => {
     try {
       const { data: sessionData } = await supabase.auth.getSession();
@@ -304,6 +313,9 @@ export const AdminUsers = () => {
     }
   };
 
+  /**
+   * Deletes a user and their data.
+   */
   const handleDeleteUser = async (userId: string, username: string) => {
     try {
       // Delete user profile (cascade will handle related data)
