@@ -26,6 +26,8 @@ import { EmailChangeDialog } from "@/components/profile/EmailChangeDialog";
 import { use2FA } from "@/hooks/use2FA";
 import { use2FABackup } from "@/hooks/use2FABackup";
 import { useProfile } from "@/hooks/useProfile";
+import { logger } from "@/lib/logger";
+import { sanitizeInput, sanitizeBio } from "@/lib/sanitization";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -91,12 +93,14 @@ const Profile = () => {
       const isAal2 = (aal?.currentLevel || '').toLowerCase() === 'aal2';
       setHas2FA(hasTotpConsidered || isAal2);
     } catch (error: any) {
-      console.error('Error checking 2FA status:', error);
+      logger.error('Error checking 2FA status:', error);
     }
   };
 
   const handleSaveProfile = () => {
-    updateProfile.mutate({ username, bio });
+    const sanitizedUsername = sanitizeInput(username, 30);
+    const sanitizedBio = sanitizeBio(bio);
+    updateProfile.mutate({ username: sanitizedUsername, bio: sanitizedBio });
   };
 
   const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {

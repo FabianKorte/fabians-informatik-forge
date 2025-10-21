@@ -8,6 +8,8 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2, Send } from "lucide-react";
 import { z } from "zod";
+import { logger } from "@/lib/logger";
+import { sanitizeInput } from "@/lib/sanitization";
 
 const feedbackSchema = z.object({
   name: z.string().trim().max(100, "Name darf maximal 100 Zeichen lang sein"),
@@ -89,7 +91,7 @@ export const FeedbackForm = ({ onFeedbackSubmitted }: { onFeedbackSubmitted?: ()
       onFeedbackSubmitted?.();
       
     } catch (error) {
-      console.error('Error submitting feedback:', error);
+      logger.error('Error submitting feedback:', error);
       toast({
         title: "Fehler",
         description: "Feedback konnte nicht gesendet werden. Versuche es später erneut.",

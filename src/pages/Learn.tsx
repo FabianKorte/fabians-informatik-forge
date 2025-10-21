@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { SEO } from "@/components/SEO";
 import { getCategoriesFromDatabase } from "@/lib/categoryUtils";
 import { getModulesForCategory } from "@/lib/learnContentUtils";
 import { GradientShadowCard } from "@/components/ui/gradient-shadow-card";
@@ -15,6 +16,7 @@ import { InteractiveTraining } from "@/components/learn/InteractiveTraining";
 import { interactiveTasksByCategory } from "@/data/learn/interactive-training";
 import { Target, Brain, Zap } from "lucide-react";
 import { MicrochipLoader } from "@/components/MicrochipLoader";
+import { logger } from "@/lib/logger";
 
 const LearnPage = () => {
   const { categoryId } = useParams();
@@ -36,7 +38,7 @@ const LearnPage = () => {
         const categoryModules = await getModulesForCategory(categoryId);
         setModules(categoryModules);
       } catch (error) {
-        console.error('Error loading learn data:', error);
+        logger.error('Error loading learn data:', error);
       } finally {
         setIsLoading(false);
       }
@@ -76,7 +78,13 @@ const LearnPage = () => {
   }
 
   return (
-    <main className="min-h-screen bg-background">
+    <>
+      <SEO 
+        title={`${category?.title || 'Lernen'} | IHK IT-Prüfungsvorbereitung`}
+        description={category?.description || 'Lerne mit interaktiven Übungen für deine IHK IT-Prüfung'}
+        keywords={`${category?.title}, IHK, IT-Prüfung, Lernen, Übungen`}
+      />
+      <main className="min-h-screen bg-background">
       <header className="px-6 pt-14 pb-10 bg-gradient-to-b from-background to-background">
         <div className="max-w-6xl mx-auto">
           <div className="mb-6">
@@ -260,6 +268,7 @@ const LearnPage = () => {
         </div>
       </section>
     </main>
+    </>
   );
 };
 

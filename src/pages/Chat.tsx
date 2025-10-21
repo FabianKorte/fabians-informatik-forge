@@ -8,6 +8,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
 import { Send, ArrowLeft } from 'lucide-react';
+import { logger } from '@/lib/logger';
+import { sanitizeInput } from '@/lib/sanitization';
 
 interface ChatMessage {
   id: string;
@@ -45,7 +47,7 @@ const Chat = () => {
         .order('created_at', { ascending: true });
 
       if (messagesError) {
-        console.error('Error fetching messages:', messagesError);
+        logger.error('Error fetching messages:', messagesError);
         toast({
           title: 'Fehler',
           description: 'Nachrichten konnten nicht geladen werden.',
@@ -121,18 +123,18 @@ const Chat = () => {
 
               setMessages((prev) => [...prev, newMsg]);
             } catch (error) {
-              console.error('Error processing realtime message:', error);
+              logger.error('Error processing realtime message:', error);
             }
           }
         )
         .subscribe((status) => {
           if (status === 'CHANNEL_ERROR') {
-            console.error('Realtime channel error, attempting reconnect...');
+            logger.error('Realtime channel error, attempting reconnect...');
             
             if (reconnectAttempts < maxReconnectAttempts) {
               reconnectAttempts++;
               reconnectTimeout = setTimeout(() => {
-                console.log(`Reconnect attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
+                logger.log(`Reconnect attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
                 supabase.removeChannel(channel);
                 setupChannel();
               }, Math.min(1000 * Math.pow(2, reconnectAttempts), 30000));
@@ -145,7 +147,7 @@ const Chat = () => {
             }
           } else if (status === 'SUBSCRIBED') {
             reconnectAttempts = 0;
-            console.log('Realtime channel connected');
+            logger.log('Realtime channel connected');
           }
         });
       
@@ -168,13 +170,16 @@ const Chat = () => {
     e.preventDefault();
     if (!newMessage.trim() || !user) return;
 
+    const sanitized = sanitizeInput(newMessage, 500);
+    if (!sanitized) return;
+
     const { error } = await supabase.from('chat_messages').insert({
       user_id: user.id,
-      message: newMessage.trim(),
+      message: sanitized,
     });
 
     if (error) {
-      console.error('Error sending message:', error);
+      logger.error('Error sending message:', error);
       toast({
         title: 'Fehler',
         description: 'Nachricht konnte nicht gesendet werden.',

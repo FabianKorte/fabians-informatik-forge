@@ -7,6 +7,8 @@ import { FeedbackForm } from "@/components/feedback/FeedbackForm";
 import { FeedbackList } from "@/components/feedback/FeedbackList";
 import { RoadmapModal } from "@/components/RoadmapModal";
 import { LoadingScreen } from "@/components/LoadingScreen";
+import { SEO } from "@/components/SEO";
+import { StructuredData } from "@/components/StructuredData";
 import { Button } from "@/components/ui/button";
 import { seedDatabase } from "@/lib/seedDatabase";
 import { useAuth } from "@/hooks/useAuth";
@@ -17,6 +19,7 @@ import type { Category } from "@/data/categories";
 import { Download, MapPin, Sparkles } from "lucide-react";
 import logo from "@/assets/logo.png";
 import type { LearnModule } from "@/types/learn";
+import { logger } from "@/lib/logger";
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -46,7 +49,7 @@ const Index = () => {
           setAllModules(modules);
         }
       } catch (error) {
-        console.error('Error initializing data:', error);
+        logger.error('Error initializing data:', error);
       } finally {
         if (mounted) setIsLoading(false);
       }
@@ -155,6 +158,9 @@ const Index = () => {
 
   return (
     <>
+      <SEO />
+      <StructuredData />
+      
       {/* Skip to main content link */}
       <a
         href="#main-content"

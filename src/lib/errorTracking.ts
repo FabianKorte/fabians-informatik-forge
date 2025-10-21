@@ -1,3 +1,5 @@
+import { logger } from './logger';
+
 interface ErrorLog {
   timestamp: string;
   message: string;
@@ -11,6 +13,23 @@ interface ErrorLog {
 class ErrorTracker {
   private errors: ErrorLog[] = [];
   private maxErrors = 50;
+  private storageAvailable = true;
+
+  constructor() {
+    this.checkStorageAvailability();
+  }
+
+  private checkStorageAvailability() {
+    try {
+      const test = '__storage_test__';
+      localStorage.setItem(test, test);
+      localStorage.removeItem(test);
+      this.storageAvailable = true;
+    } catch (e) {
+      this.storageAvailable = false;
+      logger.warn('localStorage not available, using in-memory storage');
+    }
+  }
 
   logError(error: Error, errorInfo?: { componentStack?: string }, userId?: string) {
     const errorLog: ErrorLog = {
@@ -25,21 +44,21 @@ class ErrorTracker {
 
     this.errors.push(errorLog);
     
-    // Keep only last maxErrors
     if (this.errors.length > this.maxErrors) {
       this.errors = this.errors.slice(-this.maxErrors);
     }
 
-    // Log to console in development
     if (import.meta.env.DEV) {
-      console.error('Error tracked:', errorLog);
+      logger.error('Error tracked:', errorLog);
     }
 
-    // Store in localStorage for persistence
-    try {
-      localStorage.setItem('error_logs', JSON.stringify(this.errors));
-    } catch (e) {
-      console.warn('Could not store error logs:', e);
+    if (this.storageAvailable) {
+      try {
+        localStorage.setItem('error_logs', JSON.stringify(this.errors));
+      } catch (e) {
+        this.storageAvailable = false;
+        logger.warn('localStorage quota exceeded');
+      }
     }
   }
 
@@ -49,39 +68,39 @@ class ErrorTracker {
 
   clearErrors() {
     this.errors = [];
-    try {
-      localStorage.removeItem('error_logs');
-    } catch (e) {
-      console.warn('Could not clear error logs:', e);
+    if (this.storageAvailable) {
+      try {
+        localStorage.removeItem('error_logs');
+      } catch (e) {
+        logger.warn('Could not clear error logs:', e);
+      }
     }
   }
 
-  // Load errors from localStorage on init
   loadFromStorage() {
+    if (!this.storageAvailable) return;
+    
     try {
       const stored = localStorage.getItem('error_logs');
       if (stored) {
         this.errors = JSON.parse(stored);
       }
     } catch (e) {
-      console.warn('Could not load error logs:', e);
+      logger.warn('Could not load error logs:', e);
     }
   }
 }
 
 export const errorTracker = new ErrorTracker();
 
-// Initialize error tracking
 errorTracker.loadFromStorage();
 
-// Global error handler
 window.addEventListener('error', (event) => {
   errorTracker.logError(new Error(event.message), {
     componentStack: event.filename ? `at ${event.filename}:${event.lineno}:${event.colno}` : undefined
   });
 });
 
-// Unhandled promise rejection handler
 window.addEventListener('unhandledrejection', (event) => {
   errorTracker.logError(
     new Error(`Unhandled Promise Rejection: ${event.reason}`),

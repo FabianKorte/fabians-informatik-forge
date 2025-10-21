@@ -5,6 +5,8 @@ import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { MessageCircle, X, Send, Loader2, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
+import { sanitizeInput } from "@/lib/sanitization";
 
 interface Message {
   role: "user" | "assistant";
@@ -95,12 +97,12 @@ export const AIChatbot = () => {
               });
             }
           } catch (e) {
-            console.error("Error parsing JSON:", e);
+            logger.error("Error parsing JSON:", e);
           }
         }
       }
     } catch (error) {
-      console.error("Chat error:", error);
+      logger.error("Chat error:", error);
       toast({
         title: "Fehler",
         description: "Konnte keine Antwort vom KI-Tutor erhalten.",
@@ -117,9 +119,11 @@ export const AIChatbot = () => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
 
-    const message = input.trim();
+    const sanitized = sanitizeInput(input, 500);
+    if (!sanitized) return;
+    
     setInput("");
-    await streamChat(message);
+    await streamChat(sanitized);
   };
 
   if (!isOpen) {

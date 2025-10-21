@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Loader2, Shield, User, Trash2, Info, Key, ShieldOff, ShieldCheck } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { logAuditAction } from "@/lib/auditLog";
+import { logger } from "@/lib/logger";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -71,14 +72,14 @@ export const AdminUsers = () => {
           emailMap = emailData.emailMap;
         }
       } catch (err) {
-        console.error("Could not fetch emails:", err);
+        logger.error("Could not fetch emails:", err);
       }
 
       // Fetch 2FA status for all users
       let statusMap: Record<string, { has2FA: boolean, factorCount: number, factors: any[] }> = {};
       try {
         const userIds = (profiles || []).map(p => p.id);
-        console.log('Fetching 2FA status for users:', userIds);
+        logger.log('Fetching 2FA status for users:', userIds);
 
         // Ensure Authorization header is sent (some environments require explicit header)
         const { data: sessionData } = await supabase.auth.getSession();
@@ -92,7 +93,7 @@ export const AdminUsers = () => {
             'Content-Type': 'application/json',
           },
         });
-        console.log('2FA status response:', statusData, statusError);
+        logger.log('2FA status response:', statusData, statusError);
         if (statusError) {
           toast({
             title: "2FA-Status konnte nicht geladen werden",
@@ -103,7 +104,7 @@ export const AdminUsers = () => {
         if (statusData?.statusMap) {
           statusMap = statusData.statusMap;
         } else {
-          console.warn('No statusMap in response from get-user-2fa-status');
+          logger.warn('No statusMap in response from get-user-2fa-status');
         }
 
         // Fallback: falls der eigene Nutzer nicht im statusMap ist, lokale Factors prüfen
@@ -122,11 +123,11 @@ export const AdminUsers = () => {
               })),
             };
           } catch (e) {
-            console.warn('Fallback MFA check failed:', e);
+            logger.warn('Fallback MFA check failed:', e);
           }
         }
       } catch (err) {
-        console.error("Could not fetch 2FA status:", err);
+        logger.error("Could not fetch 2FA status:", err);
         toast({
           title: "2FA-Status Fehler",
           description: "Fehler beim Abrufen des 2FA-Status",
@@ -139,7 +140,7 @@ export const AdminUsers = () => {
         const userRole = roles?.find(r => r.user_id === profile.id);
         const status = statusMap[profile.id] || { has2FA: false, factorCount: 0, factors: [] };
         
-        console.log(`User ${profile.username} (${profile.id}) - 2FA status:`, status);
+        logger.log(`User ${profile.username} (${profile.id}) - 2FA status:`, status);
         
         return {
           id: profile.id,
@@ -171,7 +172,7 @@ export const AdminUsers = () => {
     fetchUsers();
     
     const handleRefresh = () => {
-      console.log('2FA status changed, refreshing users...');
+      logger.log('2FA status changed, refreshing users...');
       fetchUsers();
     };
     

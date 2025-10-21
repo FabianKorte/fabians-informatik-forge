@@ -8,6 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { MessageSquare, RefreshCw, User, Clock, Lock } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { de } from "date-fns/locale";
+import { logger } from "@/lib/logger";
 
 interface Feedback {
   id: string;
@@ -36,7 +37,7 @@ export const FeedbackList = ({ refreshTrigger }: { refreshTrigger?: number }) =>
       setHasAccess(true);
       setFeedbacks(data || []);
     } catch (error) {
-      console.error('Error fetching feedbacks:', error);
+      logger.error('Error fetching feedbacks:', error);
       setHasAccess(false);
       setFeedbacks([]);
     } finally {

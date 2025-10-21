@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { MapPin, Calendar, AlertCircle, CheckCircle2, Clock, Pause } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface RoadmapItem {
   id: string;
@@ -59,13 +60,13 @@ export const RoadmapModal = ({ children }: RoadmapModalProps) => {
         .order('order_index', { ascending: true });
 
       if (error) {
-        console.error('Error fetching roadmap:', error);
+        logger.error('Error fetching roadmap:', error);
         return;
       }
 
       setRoadmapItems(data || []);
     } catch (error) {
-      console.error('Error fetching roadmap:', error);
+      logger.error('Error fetching roadmap:', error);
     } finally {
       setLoading(false);
     }
