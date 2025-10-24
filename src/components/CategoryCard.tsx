@@ -27,36 +27,37 @@ export const CategoryCard = ({
 
   return (
     <GradientShadowCard className="view-transition-card">
-      <Card className="group cursor-pointer p-8 h-full flex flex-col">
-      <div className="flex items-start gap-4 mb-6">
-        <div className="p-2.5 rounded-lg bg-accent/5 border border-accent/10">
-          <Icon className="w-6 h-6 text-accent" />
+      <Card className="group cursor-pointer p-4 sm:p-8 h-full flex flex-col">
+      <div className="flex items-start gap-3 sm:gap-4 mb-4 sm:mb-6">
+        <div className="p-2 sm:p-2.5 rounded-lg bg-accent/5 border border-accent/10">
+          <Icon className="w-4 h-4 sm:w-6 sm:h-6 text-accent" />
         </div>
         <div className="flex-1">
-          <h3 className="text-lg font-medium text-foreground mb-2">{title}</h3>
-          <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
+          <h3 className="text-base sm:text-lg font-medium text-foreground mb-1 sm:mb-2">{title}</h3>
+          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{description}</p>
         </div>
       </div>
 
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-4 text-xs text-muted-foreground">
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
+        <div className="flex items-center gap-2 sm:gap-4 text-xs text-muted-foreground">
           <span>{totalElements} Elemente</span>
           <span>•</span>
-          <span>~{Math.ceil(totalElements * 2)} Min</span>
+          <span className="hidden sm:inline">~{Math.ceil(totalElements * 2)} Min</span>
+          <span className="sm:hidden">~{Math.ceil(totalElements * 2)}m</span>
         </div>
         {progress > 0 && (
           <div className="text-xs font-medium text-accent">
-            {progress}% abgeschlossen
+            {progress}%
           </div>
         )}
       </div>
 
       {progress > 0 && (
-        <Progress value={progress} className="h-1 mb-4" />
+        <Progress value={progress} className="h-1 mb-3 sm:mb-4" />
       )}
 
       <Button 
-        className="w-full justify-center mt-auto" 
+        className="w-full justify-center mt-auto text-xs sm:text-sm" 
         size="sm"
         onClick={(e) => {
           e.preventDefault();
@@ -64,7 +65,7 @@ export const CategoryCard = ({
         }}
       >
         Starten
-        <ArrowRight className="w-4 h-4 ml-2" />
+        <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 ml-2" />
       </Button>
     </Card>
     </GradientShadowCard>

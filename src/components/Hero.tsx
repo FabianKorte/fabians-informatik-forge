@@ -33,13 +33,13 @@ export const Hero = ({
       <div className="absolute bottom-1/3 left-1/2 w-1.5 h-1.5 rounded-full bg-accent/20 animate-float" style={{ animationDelay: '1s' }} aria-hidden="true" />
 
       {/* Main content */}
-      <div className="relative z-10 text-center max-w-4xl mx-auto px-6 py-20">
+      <div className="relative z-10 text-center max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-20">
         {/* Logo */}
-        <div className="mb-8 animate-fade-in view-transition-logo">
+        <div className="mb-4 sm:mb-8 animate-fade-in view-transition-logo">
           <img 
             src={logo} 
             alt="Fabian Korte - Fachinformatiker Lernplattform Logo" 
-            className="mx-auto h-32 md:h-40 w-auto object-contain"
+            className="mx-auto h-20 sm:h-32 md:h-40 w-auto object-contain"
             data-hero-logo
           />
         </div>
@@ -47,32 +47,32 @@ export const Hero = ({
         {/* Clean subtitle */}
         <h2 
           id="hero-title"
-          className="text-2xl md:text-3xl font-light text-accent mb-4 animate-fade-in" 
+          className="text-xl sm:text-2xl md:text-3xl font-light text-accent mb-2 sm:mb-4 animate-fade-in" 
           style={{ animationDelay: '0.1s' }}
         >
           Lernplattform
         </h2>
 
         {/* Clean subtitle */}
-        <p className="text-lg md:text-xl text-muted-foreground mb-16 max-w-2xl mx-auto leading-relaxed animate-fade-in font-light" style={{ animationDelay: '0.2s' }}>
+        <p className="text-sm sm:text-lg md:text-xl text-muted-foreground mb-8 sm:mb-16 max-w-2xl mx-auto leading-relaxed animate-fade-in font-light" style={{ animationDelay: '0.2s' }}>
           Professionelle Vorbereitung auf alle Fachinformatiker-Prüfungen mit strukturierten Lernpfaden und interaktiven Inhalten.
         </p>
 
         {/* Minimal progress card */}
         <div 
-          className="bg-card border border-border rounded-xl p-6 mb-12 max-w-md mx-auto shadow-sm animate-fade-in" 
+          className="bg-card border border-border rounded-xl p-4 sm:p-6 mb-6 sm:mb-12 max-w-md mx-auto shadow-sm animate-fade-in"
           style={{ animationDelay: '0.4s' }}
           role="region"
           aria-label="Lernfortschritt Übersicht"
         >
-          <h3 className="text-sm font-medium text-muted-foreground mb-4 flex items-center justify-center gap-2">
-            <Target className="w-4 h-4" aria-hidden="true" />
+          <h3 className="text-xs sm:text-sm font-medium text-muted-foreground mb-3 sm:mb-4 flex items-center justify-center gap-2">
+            <Target className="w-3 h-3 sm:w-4 sm:h-4" aria-hidden="true" />
             Lernfortschritt
           </h3>
           
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <div className="text-center">
-              <p className="text-2xl font-light text-foreground" aria-label={`${Math.round(progressPercentage)} Prozent abgeschlossen`}>
+              <p className="text-xl sm:text-2xl font-light text-foreground" aria-label={`${Math.round(progressPercentage)} Prozent abgeschlossen`}>
                 {Math.round(progressPercentage)}%
               </p>
               <p className="text-xs text-muted-foreground">Abgeschlossen</p>
@@ -84,15 +84,15 @@ export const Hero = ({
               aria-label={`Fortschritt: ${Math.round(progressPercentage)} Prozent`}
             />
             
-            <div className="grid grid-cols-2 gap-4 pt-2">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-2">
               <div className="text-center">
-                <p className="text-lg font-medium text-accent" aria-label={`${correctAnswers} richtige Antworten`}>
+                <p className="text-base sm:text-lg font-medium text-accent" aria-label={`${correctAnswers} richtige Antworten`}>
                   {correctAnswers}
                 </p>
                 <p className="text-xs text-muted-foreground">Richtige</p>
               </div>
               <div className="text-center">
-                <p className="text-lg font-medium text-foreground" aria-label={`${answeredQuestions} bearbeitete Fragen`}>
+                <p className="text-base sm:text-lg font-medium text-foreground" aria-label={`${answeredQuestions} bearbeitete Fragen`}>
                   {answeredQuestions}
                 </p>
                 <p className="text-xs text-muted-foreground">Bearbeitet</p>
@@ -111,25 +111,25 @@ export const Hero = ({
         </div>
 
         {/* Clean action buttons */}
-        <div className="flex flex-col sm:flex-row gap-3 justify-center items-center animate-fade-in" style={{ animationDelay: '0.6s' }}>
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center items-center animate-fade-in" style={{ animationDelay: '0.6s' }}>
           <Button
             onClick={onShowProgress}
             variant="outline"
-            size="lg"
-            className="min-w-[180px]"
+            size="sm"
+            className="w-full sm:w-auto sm:min-w-[180px]"
             aria-label="Lernfortschritt anzeigen"
           >
-            <TrendingUp className="w-4 h-4" aria-hidden="true" />
+            <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" aria-hidden="true" />
             Fortschritt anzeigen
           </Button>
           
           <Button
             onClick={onStartLearning}
-            size="lg"
-            className="min-w-[180px]"
+            size="sm"
+            className="w-full sm:w-auto sm:min-w-[180px]"
             aria-label="Mit dem Lernen beginnen"
           >
-            <BookOpen className="w-4 h-4" aria-hidden="true" />
+            <BookOpen className="w-3 h-3 sm:w-4 sm:h-4" aria-hidden="true" />
             Jetzt starten
           </Button>
         </div>

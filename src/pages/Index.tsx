@@ -174,16 +174,16 @@ const Index = () => {
           <LoadingScreen onComplete={() => { setSplashActive(false); setShowContent(true); }} />
         )}
       {/* Floating Action Buttons */}
-      <div className={`fixed top-6 right-6 z-50 flex flex-col gap-3 transition-all duration-700 ${showContent ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}>
+      <div className={`fixed top-3 sm:top-6 right-3 sm:right-6 z-50 flex flex-col gap-2 transition-all duration-700 ${showContent ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}>
         {user && (
           <Button
             variant="outline"
             size="sm"
-            className="shadow-lg backdrop-blur-sm bg-background/80 border-border/50"
+            className="shadow-lg backdrop-blur-sm bg-background/80 border-border/50 h-8 sm:h-9 px-2 sm:px-3"
             onClick={() => navigate('/dashboard')}
           >
-            <span className="hidden sm:inline">Dashboard</span>
-            <span className="sm:hidden">👤</span>
+            <span className="hidden sm:inline text-xs">Dashboard</span>
+            <span className="sm:hidden text-sm">👤</span>
           </Button>
         )}
         
@@ -191,32 +191,32 @@ const Index = () => {
           <Button
             variant="outline"
             size="sm"
-            className="shadow-lg backdrop-blur-sm bg-background/80 border-border/50"
+            className="shadow-lg backdrop-blur-sm bg-background/80 border-border/50 h-8 sm:h-9 px-2 sm:px-3"
             onClick={() => navigate('/auth')}
           >
-            <span className="hidden sm:inline">Anmelden</span>
-            <span className="sm:hidden">🔐</span>
+            <span className="hidden sm:inline text-xs">Anmelden</span>
+            <span className="sm:hidden text-sm">🔐</span>
           </Button>
         )}
         
         <Button
           variant="outline"
           size="sm"
-          className="shadow-lg backdrop-blur-sm bg-background/80 border-border/50"
+          className="shadow-lg backdrop-blur-sm bg-background/80 border-border/50 h-8 sm:h-9 px-2 sm:px-3"
           onClick={() => window.open('https://drive.google.com/drive/folders/1x_OJDgFV7z0XGMcSBPIvKe-fTTHqp1kR?usp=sharing', '_blank')}
         >
-          <Download className="w-4 h-4" />
-          <span className="hidden sm:inline ml-2">Downloads</span>
+          <Download className="w-3 h-3 sm:w-4 sm:h-4" />
+          <span className="hidden sm:inline ml-2 text-xs">Downloads</span>
         </Button>
         
         <RoadmapModal>
           <Button
             variant="outline"
             size="sm"
-            className="shadow-lg backdrop-blur-sm bg-background/80 border-border/50"
+            className="shadow-lg backdrop-blur-sm bg-background/80 border-border/50 h-8 sm:h-9 px-2 sm:px-3"
           >
-            <MapPin className="w-4 h-4" />
-            <span className="hidden sm:inline ml-2">Roadmap</span>
+            <MapPin className="w-3 h-3 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline ml-2 text-xs">Roadmap</span>
           </Button>
         </RoadmapModal>
       </div>
@@ -232,15 +232,15 @@ const Index = () => {
       </div>
 
       {randomTrainingCategory && (
-        <section className={`py-12 px-6 bg-gradient-to-br from-violet-500/10 via-fuchsia-500/10 to-purple-500/10 transition-all duration-700 delay-300 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <section className={`py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-violet-500/10 via-fuchsia-500/10 to-purple-500/10 transition-all duration-700 delay-300 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center gap-2 mb-4">
-                <Sparkles className="w-6 h-6 text-violet-500" />
-                <h2 className="text-3xl font-medium text-foreground">Zufallstraining</h2>
-                <Sparkles className="w-6 h-6 text-fuchsia-500" />
+            <div className="text-center mb-6 sm:mb-8">
+              <div className="inline-flex items-center gap-2 mb-3 sm:mb-4">
+                <Sparkles className="w-4 h-4 sm:w-6 sm:h-6 text-violet-500" />
+                <h2 className="text-xl sm:text-3xl font-medium text-foreground">Zufallstraining</h2>
+                <Sparkles className="w-4 h-4 sm:w-6 sm:h-6 text-fuchsia-500" />
               </div>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
+              <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-8 px-4">
                 Alle Aufgaben aus allen Kategorien in einem Training - Perfekt zur Prüfungsvorbereitung
               </p>
             </div>
@@ -261,45 +261,45 @@ const Index = () => {
         </section>
       )}
 
-      <section id="categories-section" className={`py-20 px-6 bg-background transition-all duration-700 delay-500 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+      <section id="categories-section" className={`py-8 sm:py-20 px-4 sm:px-6 bg-background transition-all duration-700 delay-500 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
         <main 
           id="main-content"
           tabIndex={-1}
           aria-label="Hauptinhalt"
         >
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-medium text-foreground mb-4">Lernkategorien</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <div className="text-center mb-8 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl font-medium text-foreground mb-2 sm:mb-4">Lernkategorien</h2>
+            <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto px-4">
               Wähle eine Kategorie aus und beginne dein strukturiertes Lernen.
             </p>
           </div>
 
-          <div className="mb-12">
+          <div className="mb-8 sm:mb-12">
             <SearchBar onSearch={setSearchQuery} />
           </div>
 
-          <section className="py-16 bg-muted/30 rounded-xl mb-12">
-            <div className="container mx-auto px-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl mx-auto">
-                <div className="text-center p-6 bg-card rounded-lg border border-border">
-                  <div className="text-2xl font-light text-foreground mb-1">{stats.totalCategories}</div>
-                  <div className="text-sm text-muted-foreground">Kategorien</div>
+          <section className="py-6 sm:py-16 bg-muted/30 rounded-xl mb-8 sm:mb-12">
+            <div className="container mx-auto px-4 sm:px-6">
+              <div className="grid grid-cols-3 md:grid-cols-3 gap-3 sm:gap-6 max-w-2xl mx-auto">
+                <div className="text-center p-3 sm:p-6 bg-card rounded-lg border border-border">
+                  <div className="text-lg sm:text-2xl font-light text-foreground mb-1">{stats.totalCategories}</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground">Kategorien</div>
                 </div>
-                <div className="text-center p-6 bg-card rounded-lg border border-border">
-                  <div className="text-2xl font-light text-accent mb-1">{stats.totalQuestions}</div>
-                  <div className="text-sm text-muted-foreground">Fragen insgesamt</div>
+                <div className="text-center p-3 sm:p-6 bg-card rounded-lg border border-border">
+                  <div className="text-lg sm:text-2xl font-light text-accent mb-1">{stats.totalQuestions}</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground">Fragen</div>
                 </div>
-                <div className="text-center p-6 bg-card rounded-lg border border-border">
-                  <div className="text-2xl font-light text-success mb-1">{stats.correctAnswers}</div>
-                  <div className="text-sm text-muted-foreground">Richtig beantwortet</div>
+                <div className="text-center p-3 sm:p-6 bg-card rounded-lg border border-border">
+                  <div className="text-lg sm:text-2xl font-light text-success mb-1">{stats.correctAnswers}</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground">Richtig</div>
                 </div>
               </div>
             </div>
           </section>
 
           {filteredCategories.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {filteredCategories.map((category) => (
                 <CategoryCard
                   key={category.id}
@@ -314,8 +314,8 @@ const Index = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-20">
-              <p className="text-lg text-muted-foreground mb-4">
+            <div className="text-center py-12 sm:py-20">
+              <p className="text-base sm:text-lg text-muted-foreground mb-4">
                 Keine Kategorien gefunden für "{searchQuery}"
               </p>
               <p className="text-sm text-muted-foreground">
@@ -327,16 +327,16 @@ const Index = () => {
         </main>
       </section>
 
-      <section className={`py-20 px-6 bg-muted/30 transition-all duration-700 delay-700 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+      <section className={`py-8 sm:py-20 px-4 sm:px-6 bg-muted/30 transition-all duration-700 delay-700 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-medium text-foreground mb-4">Feedback</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <div className="text-center mb-8 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl font-medium text-foreground mb-2 sm:mb-4">Feedback</h2>
+            <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto px-4">
               Teile deine Gedanken mit uns und sieh, was andere über die Lernplattform sagen.
             </p>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
             <div className="flex justify-center">
               <FeedbackForm onFeedbackSubmitted={handleFeedbackSubmitted} />
             </div>
@@ -347,16 +347,16 @@ const Index = () => {
         </div>
       </section>
 
-      <footer className={`py-12 px-6 border-t border-border bg-background transition-all duration-700 delay-1000 ${showContent ? 'opacity-100' : 'opacity-0'}`}>
+      <footer className={`py-6 sm:py-12 px-4 sm:px-6 border-t border-border bg-background transition-all duration-700 delay-1000 ${showContent ? 'opacity-100' : 'opacity-0'}`}>
         <div className="max-w-4xl mx-auto text-center">
-          <div className="mb-6">
+          <div className="mb-4 sm:mb-6">
             <img 
               src={logo} 
               alt="Fabian Korte - Fachinformatiker" 
-              className="mx-auto h-16 w-auto object-contain opacity-80"
+              className="mx-auto h-12 sm:h-16 w-auto object-contain opacity-80"
             />
           </div>
-          <p className="text-sm text-muted-foreground mb-6">
+          <p className="text-xs sm:text-sm text-muted-foreground mb-4 sm:mb-6">
             Vorbereitung auf die IHK IT-Prüfungen.
           </p>
           <p className="text-xs text-muted-foreground">

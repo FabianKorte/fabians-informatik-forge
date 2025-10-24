@@ -28,7 +28,7 @@ export const SearchBar = ({
   return (
     <div className="w-full max-w-2xl mx-auto" role="search">
       <div className={`
-        relative flex items-center gap-3 p-4 rounded-2xl 
+        relative flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-2xl 
         transition-all duration-300 
         ${isFocused 
           ? 'glass-effect shadow-accent scale-[1.02]' 
@@ -39,7 +39,7 @@ export const SearchBar = ({
         {/* Search icon */}
         <Search 
           className={`
-            w-5 h-5 transition-colors duration-200
+            w-4 h-4 sm:w-5 sm:h-5 transition-colors duration-200
             ${isFocused ? 'text-accent' : 'text-muted-foreground'}
           `}
           aria-hidden="true"
@@ -57,7 +57,7 @@ export const SearchBar = ({
           className={`
             flex-1 border-none bg-transparent text-foreground
             placeholder:text-muted-foreground focus:ring-0 focus:outline-none
-            text-base
+            text-sm sm:text-base
           `}
         />
 
@@ -68,9 +68,9 @@ export const SearchBar = ({
             variant="ghost"
             size="icon"
             aria-label="Suche zurücksetzen"
-            className="h-8 w-8 text-muted-foreground hover:text-foreground transition-colors"
+            className="h-7 w-7 sm:h-8 sm:w-8 text-muted-foreground hover:text-foreground transition-colors"
           >
-            <X className="w-4 h-4" aria-hidden="true" />
+            <X className="w-3 h-3 sm:w-4 sm:h-4" aria-hidden="true" />
           </Button>
         )}
       </div>
