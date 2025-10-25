@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useAdminData } from "@/hooks/useAdminData";
 import { Loader2, Plus, Pencil, Trash2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
@@ -22,7 +23,6 @@ interface RoadmapItem {
 
 export const AdminRoadmap = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [items, setItems] = useState<RoadmapItem[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     title: "",
@@ -33,21 +33,11 @@ export const AdminRoadmap = () => {
     estimated_completion: "",
   });
   const { toast } = useToast();
-
-  useEffect(() => {
-    fetchRoadmapItems();
-  }, []);
-
-  const fetchRoadmapItems = async () => {
-    const { data, error } = await supabase
-      .from('roadmap')
-      .select('*')
-      .order('priority', { ascending: false });
-
-    if (!error && data) {
-      setItems(data);
-    }
-  };
+  const { data: items, isLoading: isFetchingItems, refetch } = useAdminData<RoadmapItem>({
+    table: 'roadmap',
+    orderBy: 'priority',
+    ascending: false,
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,7 +96,7 @@ export const AdminRoadmap = () => {
         estimated_completion: "",
       });
       setEditingId(null);
-      fetchRoadmapItems();
+      refetch();
     } catch (error: any) {
       toast({
         title: "Fehler",
@@ -150,7 +140,7 @@ export const AdminRoadmap = () => {
         description: "Item wurde gelöscht",
         className: "animate-fade-in",
       });
-      fetchRoadmapItems();
+      refetch();
     }
   };
 

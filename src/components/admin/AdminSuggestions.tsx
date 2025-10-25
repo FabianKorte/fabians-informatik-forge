@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useAdminData } from "@/hooks/useAdminData";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -36,52 +37,45 @@ interface Suggestion {
 }
 
 export const AdminSuggestions = () => {
-  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [selectedSuggestion, setSelectedSuggestion] = useState<Suggestion | null>(null);
   const [adminNotes, setAdminNotes] = useState("");
   const { toast } = useToast();
+  
+  const { data: rawSuggestions, isLoading, refetch } = useAdminData<any>({
+    table: 'learn_module_suggestions',
+    orderBy: 'created_at',
+    ascending: false,
+  });
 
-  const fetchSuggestions = async () => {
-    try {
-      const { data: suggestionsData, error } = await supabase
-        .from('learn_module_suggestions')
-        .select('*')
-        .order('created_at', { ascending: false });
+  // Fetch profiles and combine with suggestions
+  const [profilesMap, setProfilesMap] = useState<Map<string, Profile>>(new Map());
 
-      if (error) throw error;
-
-      // Fetch profiles separately
-      if (suggestionsData && suggestionsData.length > 0) {
-        const userIds = suggestionsData.map(s => s.user_id);
+  useEffect(() => {
+    const fetchProfiles = async () => {
+      if (rawSuggestions && rawSuggestions.length > 0) {
+        const userIds = [...new Set(rawSuggestions.map(s => s.user_id))];
         const { data: profilesData } = await supabase
           .from('profiles')
           .select('id, username')
           .in('id', userIds);
 
-        const suggestionsWithProfiles = suggestionsData.map(suggestion => ({
-          ...suggestion,
-          profiles: profilesData?.find(p => p.id === suggestion.user_id) || null
-        }));
-
-        setSuggestions(suggestionsWithProfiles as Suggestion[]);
-      } else {
-        setSuggestions([]);
+        const newMap = new Map<string, Profile>();
+        profilesData?.forEach(profile => {
+          newMap.set(profile.id, { username: profile.username });
+        });
+        setProfilesMap(newMap);
       }
-    } catch (error: any) {
-      toast({
-        title: "Fehler",
-        description: "Vorschläge konnten nicht geladen werden",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    };
+    fetchProfiles();
+  }, [rawSuggestions]);
 
-  useEffect(() => {
-    fetchSuggestions();
-  }, []);
+  const suggestions = useMemo(() => {
+    if (!rawSuggestions) return [];
+    return rawSuggestions.map(suggestion => ({
+      ...suggestion,
+      profiles: profilesMap.get(suggestion.user_id) || null
+    }));
+  }, [rawSuggestions, profilesMap]);
 
   const updateSuggestionStatus = async (id: string, status: 'approved' | 'rejected') => {
     try {
@@ -122,7 +116,7 @@ export const AdminSuggestions = () => {
       });
 
       setAdminNotes("");
-      fetchSuggestions();
+      refetch();
     } catch (error: any) {
       toast({
         title: "Fehler",
@@ -132,6 +126,16 @@ export const AdminSuggestions = () => {
     }
   };
 
+  const pendingSuggestions = useMemo(
+    () => suggestions.filter(s => s.status === 'pending'),
+    [suggestions]
+  );
+
+  const processedSuggestions = useMemo(
+    () => suggestions.filter(s => s.status !== 'pending'),
+    [suggestions]
+  );
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-8">
@@ -139,9 +143,6 @@ export const AdminSuggestions = () => {
       </div>
     );
   }
-
-  const pendingSuggestions = suggestions.filter(s => s.status === 'pending');
-  const processedSuggestions = suggestions.filter(s => s.status !== 'pending');
 
   return (
     <div className="space-y-6">

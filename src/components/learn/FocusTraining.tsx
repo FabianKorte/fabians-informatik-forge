@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -20,12 +20,12 @@ type FocusItem = {
 };
 
 export const FocusTraining = ({ modules, categoryId }: FocusTrainingProps) => {
-  const [focusItems, setFocusItems] = useState<FocusItem[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [completedItems, setCompletedItems] = useState<Set<number>>(new Set());
   const [showResults, setShowResults] = useState(false);
 
-  useEffect(() => {
+  // Memoize the extraction and filtering of difficult items
+  const focusItems = useMemo(() => {
     // Extract difficult items from modules
     const items: FocusItem[] = [];
     
@@ -54,14 +54,9 @@ export const FocusTraining = ({ modules, categoryId }: FocusTrainingProps) => {
     });
 
     // Sort by difficulty and take top difficult items
-    const difficultItems = items
+    return items
       .filter(item => item.difficulty >= 2)
       .slice(0, Math.min(10, items.length));
-    
-    setFocusItems(difficultItems);
-    setCurrentIndex(0);
-    setCompletedItems(new Set());
-    setShowResults(false);
   }, [modules]);
 
   const handleItemComplete = (correct: boolean) => {

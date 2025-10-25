@@ -14,7 +14,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { checkRateLimit, recordLoginAttempt, clearLoginAttempts } from "@/lib/rateLimit";
 import { checkServerRateLimit, recordServerLoginAttempt, clearServerLoginAttempts } from "@/lib/serverRateLimit";
 import { PasswordInput } from "@/components/auth/PasswordInput";
-import { TwoFactorSetupDialog } from "@/components/auth/TwoFactorSetupDialog";
 import { MFAVerificationDialog } from "@/components/auth/MFAVerificationDialog";
 import { PasswordResetDialog } from "@/components/auth/PasswordResetDialog";
 import { use2FA } from "@/hooks/use2FA";

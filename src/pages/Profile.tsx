@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -21,13 +21,17 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { TwoFactorSetupDialog } from "@/components/auth/TwoFactorSetupDialog";
 import { EmailChangeDialog } from "@/components/profile/EmailChangeDialog";
 import { use2FA } from "@/hooks/use2FA";
 import { use2FABackup } from "@/hooks/use2FABackup";
 import { useProfile } from "@/hooks/useProfile";
 import { logger } from "@/lib/logger";
 import { sanitizeInput, sanitizeBio } from "@/lib/sanitization";
+
+// Lazy load TwoFactorSetupDialog
+const TwoFactorSetupDialog = lazy(() => 
+  import("@/components/auth/TwoFactorSetupDialog").then(module => ({ default: module.TwoFactorSetupDialog }))
+);
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -389,18 +393,20 @@ const Profile = () => {
         </div>
       </div>
 
-      <TwoFactorSetupDialog
-        open={show2FADialog}
-        onOpenChange={setShow2FADialog}
-        qrCode={qrCode}
-        enrollSecret={enrollSecret}
-        enrollUri={enrollUri}
-        verificationCode={verificationCode}
-        onVerificationCodeChange={setVerificationCode}
-        onVerify={handleVerify2FA}
-        backupCodes={backupCodes}
-        onDownloadBackupCodes={() => downloadBackupCodes(backupCodes)}
-      />
+      <Suspense fallback={null}>
+        <TwoFactorSetupDialog
+          open={show2FADialog}
+          onOpenChange={setShow2FADialog}
+          qrCode={qrCode}
+          enrollSecret={enrollSecret}
+          enrollUri={enrollUri}
+          verificationCode={verificationCode}
+          onVerificationCodeChange={setVerificationCode}
+          onVerify={handleVerify2FA}
+          backupCodes={backupCodes}
+          onDownloadBackupCodes={() => downloadBackupCodes(backupCodes)}
+        />
+      </Suspense>
     </div>
   );
 };

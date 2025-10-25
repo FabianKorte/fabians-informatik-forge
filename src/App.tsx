@@ -8,7 +8,6 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import Privacy from "./pages/Privacy";
-import { AIChatbot } from "@/components/AIChatbot";
 import { AuthProvider } from "@/hooks/useAuth";
 import { useViewTransition } from "@/hooks/useViewTransition";
 import { ProtectedRoute } from "@/components/admin/ProtectedRoute";
@@ -19,13 +18,14 @@ import { AdminErrorBoundary } from "@/components/ErrorBoundaries/AdminErrorBound
 import { ChatErrorBoundary } from "@/components/ErrorBoundaries/ChatErrorBoundary";
 import { LearnErrorBoundary } from "@/components/ErrorBoundaries/LearnErrorBoundary";
 
-// Lazy load heavy pages
+// Lazy load heavy pages and components
 const LearnPage = lazy(() => import("./pages/Learn"));
 const Progress = lazy(() => import("./pages/Progress"));
 const Admin = lazy(() => import("./pages/Admin"));
 const UserDashboard = lazy(() => import("./pages/UserDashboard"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Chat = lazy(() => import("./pages/Chat"));
+const AIChatbot = lazy(() => import("@/components/AIChatbot").then(module => ({ default: module.AIChatbot })));
 
 const queryClient = new QueryClient();
 
@@ -83,7 +83,9 @@ const App = () => (
           <BrowserRouter>
             <AppRoutes />
           </BrowserRouter>
-          <AIChatbot />
+          <Suspense fallback={null}>
+            <AIChatbot />
+          </Suspense>
         </TooltipProvider>
       </AuthProvider>
     </QueryClientProvider>
