@@ -38,8 +38,19 @@ const getProgressFromCookie = () => {
   return {};
 };
 
+interface CategoryStat {
+  id: string;
+  title: string;
+  icon: any;
+  difficulty: string;
+  totalItems: number;
+  completedItems: number;
+  difficultItems: number;
+  completionRate: number;
+}
+
 const ProgressView = ({ userId }: { userId?: string }) => {
-  const [categoryStats, setCategoryStats] = useState<any[]>([]);
+  const [categoryStats, setCategoryStats] = useState<CategoryStat[]>([]);
   const [overallStats, setOverallStats] = useState({ totalCategories: 0, totalModules: 0 });
 
   useEffect(() => {
@@ -222,11 +233,21 @@ const ProgressView = ({ userId }: { userId?: string }) => {
   );
 };
 
+interface Suggestion {
+  id: string;
+  title: string;
+  category_id: string;
+  module_type: string;
+  status: string;
+  admin_notes?: string;
+  created_at: string;
+}
+
 export default function UserDashboard() {
   const navigate = useNavigate();
   const { user, isAdmin, signOut } = useAuth();
   const { toast } = useToast();
-  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [username, setUsername] = useState<string>("");
 
   useEffect(() => {

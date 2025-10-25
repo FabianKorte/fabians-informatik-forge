@@ -15,6 +15,9 @@ import { ProtectedRoute } from "@/components/admin/ProtectedRoute";
 import { Footer } from "@/components/Footer";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { FallbackLoader } from "@/components/FallbackLoader";
+import { AdminErrorBoundary } from "@/components/ErrorBoundaries/AdminErrorBoundary";
+import { ChatErrorBoundary } from "@/components/ErrorBoundaries/ChatErrorBoundary";
+import { LearnErrorBoundary } from "@/components/ErrorBoundaries/LearnErrorBoundary";
 
 // Lazy load heavy pages
 const LearnPage = lazy(() => import("./pages/Learn"));
@@ -36,20 +39,30 @@ const AppRoutes = () => {
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/progress" element={<Progress />} />
-            <Route path="/learn/:categoryId" element={<LearnPage />} />
+            <Route path="/learn/:categoryId" element={
+              <LearnErrorBoundary>
+                <LearnPage />
+              </LearnErrorBoundary>
+            } />
             <Route path="/auth" element={<Auth />} />
             <Route 
               path="/admin" 
               element={
                 <ProtectedRoute>
-                  <Admin />
+                  <AdminErrorBoundary>
+                    <Admin />
+                  </AdminErrorBoundary>
                 </ProtectedRoute>
               } 
             />
             <Route path="/dashboard" element={<UserDashboard />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/privacy" element={<Privacy />} />
-            <Route path="/chat" element={<Chat />} />
+            <Route path="/chat" element={
+              <ChatErrorBoundary>
+                <Chat />
+              </ChatErrorBoundary>
+            } />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -10,6 +10,19 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Loader2, Plus, Lightbulb } from "lucide-react";
 import { categories } from "@/data/categories";
 
+interface FlashcardItem {
+  front: string;
+  back: string;
+  explanation: string;
+}
+
+interface QuizItem {
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  explanation: string;
+}
+
 export const SimpleLearningContentForm = () => {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -17,7 +30,7 @@ export const SimpleLearningContentForm = () => {
   const [categoryId, setCategoryId] = useState("");
   const [moduleType, setModuleType] = useState("");
   const [title, setTitle] = useState("");
-  const [items, setItems] = useState<any[]>([{ front: "", back: "", explanation: "" }]);
+  const [items, setItems] = useState<(FlashcardItem | QuizItem)[]>([{ front: "", back: "", explanation: "" }]);
 
   const addItem = () => {
     if (moduleType === "flashcards") {
@@ -27,7 +40,7 @@ export const SimpleLearningContentForm = () => {
     }
   };
 
-  const updateItem = (index: number, field: string, value: any) => {
+  const updateItem = (index: number, field: string, value: string | number) => {
     const newItems = [...items];
     newItems[index] = { ...newItems[index], [field]: value };
     setItems(newItems);
@@ -35,9 +48,10 @@ export const SimpleLearningContentForm = () => {
 
   const updateQuizOption = (itemIndex: number, optionIndex: number, value: string) => {
     const newItems = [...items];
-    const options = [...newItems[itemIndex].options];
+    const quiz = newItems[itemIndex] as QuizItem;
+    const options = [...quiz.options];
     options[optionIndex] = value;
-    newItems[itemIndex] = { ...newItems[itemIndex], options };
+    newItems[itemIndex] = { ...quiz, options };
     setItems(newItems);
   };
 
@@ -70,7 +84,10 @@ export const SimpleLearningContentForm = () => {
 
     // Validate based on type
     if (moduleType === "flashcards") {
-      const invalid = items.some(item => !item.front?.trim() || !item.back?.trim() || !item.explanation?.trim());
+      const invalid = items.some(item => {
+        const flashcard = item as FlashcardItem;
+        return !flashcard.front?.trim() || !flashcard.back?.trim() || !flashcard.explanation?.trim();
+      });
       if (invalid) {
         toast({
           title: "Fehler",
@@ -80,11 +97,12 @@ export const SimpleLearningContentForm = () => {
         return;
       }
     } else if (moduleType === "quiz") {
-      const invalid = items.some(item => 
-        !item.question?.trim() || 
-        item.options.some((opt: string) => !opt?.trim()) ||
-        !item.explanation?.trim()
-      );
+      const invalid = items.some(item => {
+        const quiz = item as QuizItem;
+        return !quiz.question?.trim() || 
+          quiz.options.some((opt: string) => !opt?.trim()) ||
+          !quiz.explanation?.trim();
+      });
       if (invalid) {
         toast({
           title: "Fehler",
@@ -104,21 +122,27 @@ export const SimpleLearningContentForm = () => {
       switch (moduleType) {
         case "flashcards":
           content = {
-            cards: items.map(item => ({
-              question: item.front,
-              answer: item.back,
-              explanation: item.explanation
-            }))
+            cards: items.map(item => {
+              const flashcard = item as FlashcardItem;
+              return {
+                question: flashcard.front,
+                answer: flashcard.back,
+                explanation: flashcard.explanation
+              };
+            })
           };
           break;
         case "quiz":
           content = {
-            questions: items.map(item => ({
-              question: item.question,
-              options: item.options,
-              correctAnswer: item.correctAnswer,
-              explanation: item.explanation
-            }))
+            questions: items.map(item => {
+              const quiz = item as QuizItem;
+              return {
+                question: quiz.question,
+                options: quiz.options,
+                correctAnswer: quiz.correctAnswer,
+                explanation: quiz.explanation
+              };
+            })
           };
           break;
         default:
@@ -235,7 +259,9 @@ export const SimpleLearningContentForm = () => {
             {!moduleType && "Wähle zuerst einen Lern-Typ"}
           </p>
           
-          {moduleType === "flashcards" && items.map((item, index) => (
+          {moduleType === "flashcards" && items.map((item, index) => {
+            const flashcard = item as FlashcardItem;
+            return (
             <Card key={index} className="p-4">
               <div className="space-y-2">
                 <div className="flex items-center justify-between mb-2">
@@ -254,27 +280,30 @@ export const SimpleLearningContentForm = () => {
                 </div>
                 <Input
                   placeholder="Vorderseite (Frage)"
-                  value={item.front}
+                  value={flashcard.front}
                   onChange={(e) => updateItem(index, "front", e.target.value)}
                   disabled={isLoading}
                 />
                 <Input
                   placeholder="Rückseite (Antwort)"
-                  value={item.back}
+                  value={flashcard.back}
                   onChange={(e) => updateItem(index, "back", e.target.value)}
                   disabled={isLoading}
                 />
                 <Input
                   placeholder="Erklärung (z.B. zusätzlicher Kontext)"
-                  value={item.explanation}
+                  value={flashcard.explanation}
                   onChange={(e) => updateItem(index, "explanation", e.target.value)}
                   disabled={isLoading}
                 />
               </div>
             </Card>
-          ))}
+            );
+          })}
 
-          {moduleType === "quiz" && items.map((item, index) => (
+          {moduleType === "quiz" && items.map((item, index) => {
+            const quiz = item as QuizItem;
+            return (
             <Card key={index} className="p-4">
               <div className="space-y-2">
                 <div className="flex items-center justify-between mb-2">
@@ -293,18 +322,18 @@ export const SimpleLearningContentForm = () => {
                 </div>
                 <Input
                   placeholder="Frage"
-                  value={item.question}
+                  value={quiz.question}
                   onChange={(e) => updateItem(index, "question", e.target.value)}
                   disabled={isLoading}
                 />
                 <div className="space-y-1">
                   <Label className="text-xs">Antwortmöglichkeiten</Label>
-                  {item.options.map((option: string, optIndex: number) => (
+                  {quiz.options.map((option: string, optIndex: number) => (
                     <div key={optIndex} className="flex gap-2 items-center">
                       <input
                         type="radio"
                         name={`correct-${index}`}
-                        checked={item.correctAnswer === optIndex}
+                        checked={quiz.correctAnswer === optIndex}
                         onChange={() => updateItem(index, "correctAnswer", optIndex)}
                         disabled={isLoading}
                       />
@@ -322,13 +351,14 @@ export const SimpleLearningContentForm = () => {
                 </div>
                 <Input
                   placeholder="Erklärung zur Antwort"
-                  value={item.explanation}
+                  value={quiz.explanation}
                   onChange={(e) => updateItem(index, "explanation", e.target.value)}
                   disabled={isLoading}
                 />
               </div>
             </Card>
-          ))}
+            );
+          })}
 
           {moduleType && (
             <Button

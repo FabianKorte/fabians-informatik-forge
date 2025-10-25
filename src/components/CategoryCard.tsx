@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Card } from "@/components/ui/card";
@@ -14,7 +15,7 @@ interface CategoryCardProps {
   onStart: () => void;
 }
 
-export const CategoryCard = ({
+const CategoryCardComponent = ({
   title,
   description,
   totalElements,
@@ -71,3 +72,5 @@ export const CategoryCard = ({
     </GradientShadowCard>
   );
 };
+
+export const CategoryCard = memo(CategoryCardComponent);

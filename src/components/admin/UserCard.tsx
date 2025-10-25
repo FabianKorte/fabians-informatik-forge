@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Shield, Lock } from 'lucide-react';
@@ -21,7 +22,7 @@ interface UserCardProps {
  * 
  * @param {UserCardProps} props - Component props
  */
-export const UserCard = ({
+const UserCardComponent = ({
   id,
   username,
   email,
@@ -71,3 +72,5 @@ export const UserCard = ({
     </Card>
   );
 };
+
+export const UserCard = memo(UserCardComponent);

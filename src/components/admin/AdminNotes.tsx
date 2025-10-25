@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
+import { useAdminData } from "@/hooks/useAdminData";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -22,35 +23,15 @@ interface Note {
 export const AdminNotes = () => {
   const { user } = useAuth();
   const { toast } = useToast();
-  const [notes, setNotes] = useState<Note[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: notes, isLoading, refetch } = useAdminData<Note>({
+    table: 'admin_notes',
+    orderBy: 'updated_at',
+    ascending: false,
+  });
   const [isCreating, setIsCreating] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [newNote, setNewNote] = useState({ title: "", content: "" });
   const [editNote, setEditNote] = useState({ title: "", content: "" });
-
-  const fetchNotes = async () => {
-    setIsLoading(true);
-    const { data, error } = await supabase
-      .from('admin_notes')
-      .select('*')
-      .order('updated_at', { ascending: false });
-
-    if (error) {
-      toast({
-        title: "Fehler",
-        description: "Notizen konnten nicht geladen werden",
-        variant: "destructive",
-      });
-    } else {
-      setNotes(data || []);
-    }
-    setIsLoading(false);
-  };
-
-  useEffect(() => {
-    fetchNotes();
-  }, []);
 
   const handleCreate = async () => {
     if (!newNote.title.trim() || !newNote.content.trim()) {
@@ -84,7 +65,7 @@ export const AdminNotes = () => {
       });
       setNewNote({ title: "", content: "" });
       setIsCreating(false);
-      fetchNotes();
+      refetch();
     }
   };
 
@@ -119,7 +100,7 @@ export const AdminNotes = () => {
         className: "animate-fade-in",
       });
       setEditingId(null);
-      fetchNotes();
+      refetch();
     }
   };
 
@@ -143,7 +124,7 @@ export const AdminNotes = () => {
         description: "Notiz wurde gelöscht",
         className: "animate-fade-in",
       });
-      fetchNotes();
+      refetch();
     }
   };
 
