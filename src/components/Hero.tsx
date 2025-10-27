@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { TrendingUp, BookOpen, Target } from "lucide-react";
-import heroBackground from "@/assets/hero-bg.jpg";
 import logo from "@/assets/logo.png";
 
 interface HeroProps {
