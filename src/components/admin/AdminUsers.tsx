@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
@@ -44,7 +44,7 @@ export const AdminUsers = () => {
   const [selectedUser, setSelectedUser] = useState<UserWithRole | null>(null);
   const { toast } = useToast();
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       // Get all profiles with their usernames and avatars
       const { data: profiles, error: profilesError } = await supabase
@@ -166,7 +166,7 @@ export const AdminUsers = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [toast]);
 
   useEffect(() => {
     fetchUsers();
@@ -183,7 +183,7 @@ export const AdminUsers = () => {
   /**
    * Toggles admin role for a user.
    */
-  const toggleAdminRole = async (userId: string, currentlyAdmin: boolean) => {
+  const toggleAdminRole = useCallback(async (userId: string, currentlyAdmin: boolean) => {
     try {
       if (currentlyAdmin) {
         // Remove admin role
@@ -233,12 +233,12 @@ export const AdminUsers = () => {
         variant: "destructive",
       });
     }
-  };
+  }, [fetchUsers, toast]);
 
   /**
    * Initiates password reset for a user.
    */
-  const handlePasswordReset = async (email: string, userId: string) => {
+  const handlePasswordReset = useCallback(async (email: string, userId: string) => {
     if (!email || email === 'Unbekannt') {
       toast({
         title: "Fehler",
@@ -272,12 +272,12 @@ export const AdminUsers = () => {
         className: "animate-fade-in",
       });
     }
-  };
+  }, [toast]);
 
   /**
    * Removes 2FA for a user.
    */
-  const handleRemove2FA = async (userId: string, username: string) => {
+  const handleRemove2FA = useCallback(async (userId: string, username: string) => {
     try {
       const { data: sessionData } = await supabase.auth.getSession();
       const accessToken = sessionData.session?.access_token;
@@ -312,12 +312,12 @@ export const AdminUsers = () => {
         variant: "destructive",
       });
     }
-  };
+  }, [fetchUsers, toast]);
 
   /**
    * Deletes a user and their data.
    */
-  const handleDeleteUser = async (userId: string, username: string) => {
+  const handleDeleteUser = useCallback(async (userId: string, username: string) => {
     try {
       // Delete user profile (cascade will handle related data)
       const { error } = await supabase
@@ -348,7 +348,7 @@ export const AdminUsers = () => {
         variant: "destructive",
       });
     }
-  };
+  }, [fetchUsers, toast]);
 
   if (isLoading) {
     return (

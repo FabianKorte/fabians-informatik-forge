@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import type { Flashcard } from "@/types/learn";
 import { useProgress } from "@/hooks/useProgress";
@@ -62,8 +62,13 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
   }
 
   const current = cards[index];
+  
+  const currentCardStatus: "known" | "unknown" | "neutral" = useMemo(() => 
+    knownCards.has(index) ? "known" : unknownCards.has(index) ? "unknown" : "neutral",
+    [knownCards, unknownCards, index]
+  );
 
-  const pickNextIndex = (exclude?: number) => {
+  const pickNextIndex = useCallback((exclude?: number) => {
     const total = cards.length;
     if (total <= 1) return 0;
     const all = Array.from({ length: total }, (_, i) => i);
@@ -92,9 +97,9 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
     }
     setShownThisRound(roundShown);
     return nextIdx;
-  };
+  }, [knownCards, unknownCards, cards.length, shownThisRound, index]);
 
-  const next = () => {
+  const next = useCallback(() => {
     setFlipped(false);
     const nextIdx = pickNextIndex(index);
     setIndex(nextIdx);
@@ -103,9 +108,9 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
       return [...cut, nextIdx];
     });
     setHistoryPtr((p) => p + 1);
-  };
+  }, [pickNextIndex, index, historyPtr]);
 
-  const prev = () => {
+  const prev = useCallback(() => {
     if (historyPtr <= 0) return;
     setFlipped(false);
     setHistoryPtr((p) => {
@@ -113,9 +118,9 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
       setIndex((_) => history[newPtr] ?? index);
       return newPtr;
     });
-  };
+  }, [historyPtr, history, index]);
 
-  const markAsKnown = () => {
+  const markAsKnown = useCallback(() => {
     const newKnown = new Set(knownCards);
     newKnown.add(index);
     setKnownCards(newKnown);
@@ -125,9 +130,9 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
     setUnknownCards(newUnknown);
 
     next();
-  };
+  }, [knownCards, unknownCards, index, next]);
 
-  const markAsUnknown = () => {
+  const markAsUnknown = useCallback(() => {
     const newUnknown = new Set(unknownCards);
     newUnknown.add(index);
     setUnknownCards(newUnknown);
@@ -137,9 +142,9 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
     setKnownCards(newKnown);
 
     next();
-  };
+  }, [unknownCards, knownCards, index, next]);
 
-  const resetProgress = () => {
+  const resetProgress = useCallback(() => {
     setKnownCards(new Set());
     setUnknownCards(new Set());
     setShownThisRound(new Set());
@@ -148,13 +153,7 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
     setHistory([start]);
     setHistoryPtr(0);
     setFlipped(false);
-  };
-
-  const currentCardStatus: "known" | "unknown" | "neutral" = knownCards.has(index)
-    ? "known"
-    : unknownCards.has(index)
-    ? "unknown"
-    : "neutral";
+  }, [cards.length]);
 
   return (
     <div className="space-y-6">

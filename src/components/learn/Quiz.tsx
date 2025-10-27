@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import type { QuizQuestion } from "@/types/learn";
 
@@ -15,6 +15,9 @@ export const Quiz = ({ questions }: QuizProps) => {
   const q = questions[qIndex];
   const isAnswered = selected !== null;
   const isCorrect = isAnswered && selected === q.correctIndex;
+  
+  const totalAnswered = useMemo(() => answered.filter(Boolean).length, [answered]);
+  const finished = useMemo(() => qIndex === questions.length - 1 && isAnswered, [qIndex, questions.length, isAnswered]);
 
   const handleSelect = (i: number) => {
     if (isAnswered) return;
@@ -41,9 +44,6 @@ export const Quiz = ({ questions }: QuizProps) => {
     setScore(0);
     setAnswered(new Array(questions.length).fill(false));
   };
-
-  const finished = qIndex === questions.length - 1 && isAnswered;
-  const totalAnswered = answered.filter(Boolean).length;
 
   return (
     <div className="space-y-6">
