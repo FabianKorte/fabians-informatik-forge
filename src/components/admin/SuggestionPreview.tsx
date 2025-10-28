@@ -58,7 +58,7 @@ export const SuggestionPreview = ({ content, moduleType }: SuggestionPreviewProp
                       key={optIndex} 
                       className={`p-2 rounded text-sm ${
                         optIndex === q.correctAnswer 
-                          ? 'bg-success/10 text-success border border-success/20' 
+                          ? 'bg-success/10 text-success-foreground border border-success/20' 
                           : 'bg-muted'
                       }`}
                     >

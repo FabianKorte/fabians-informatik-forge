@@ -299,7 +299,7 @@ export const InteractiveTraining = ({ tasks, categoryId }: InteractiveTrainingPr
               }`}>
                 <div className="flex items-start gap-3">
                   {isCorrect ? (
-                    <CheckCircle2 className="w-5 h-5 text-success mt-0.5" />
+                    <CheckCircle2 className="w-5 h-5 text-success-foreground mt-0.5" />
                   ) : (
                     <AlertCircle className="w-5 h-5 text-destructive mt-0.5" />
                   )}

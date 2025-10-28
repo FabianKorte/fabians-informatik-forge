@@ -77,7 +77,7 @@ export const Matching = ({ pairs }: MatchingProps) => {
                     "text-left rounded-lg border px-3 py-2 transition-colors",
                     isSelected && "border-primary text-primary bg-primary/10",
                     isMatched && !showResults && "border-border/60 bg-background opacity-60 cursor-default",
-                    showResults && isMatched && isCorrect && "border-success text-success bg-success/10",
+                    showResults && isMatched && isCorrect && "border-success text-success-foreground bg-success/10",
                     showResults && isMatched && !isCorrect && "border-destructive text-destructive bg-destructive/10",
                     !isMatched && !isSelected && "border-border/60 bg-background hover:border-primary/50"
                   )}
@@ -120,7 +120,7 @@ export const Matching = ({ pairs }: MatchingProps) => {
             <div>
               <p className="font-medium">Ergebnis: {correctCount} / {pairs.length} richtig</p>
               {correctCount === pairs.length ? (
-                <p className="text-success">Perfekt! Alle Zuordnungen sind korrekt! 🎉</p>
+                <p className="text-success-foreground">Perfekt! Alle Zuordnungen sind korrekt! 🎉</p>
               ) : (
                 <p className="text-orange-600">Versuche es nochmal für ein besseres Ergebnis.</p>
               )}

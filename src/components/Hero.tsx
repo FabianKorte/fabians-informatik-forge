@@ -102,7 +102,7 @@ export const Hero = ({
               <div className="pt-2 border-t border-border">
                 <div className="flex items-center justify-center gap-1 text-sm">
                   <TrendingUp className="w-3 h-3 text-success" />
-                  <span className="text-success text-xs">{accuracy.toFixed(1)}% Genauigkeit</span>
+                  <span className="text-success-foreground text-xs">{accuracy.toFixed(1)}% Genauigkeit</span>
                 </div>
               </div>
             )}

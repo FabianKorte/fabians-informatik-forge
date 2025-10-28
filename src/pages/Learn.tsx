@@ -151,7 +151,7 @@ const LearnPage = () => {
                                 <span className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">
                                   {interactiveTasks.length} Aufgaben
                                 </span>
-                                <span className="px-2 py-1 bg-success/10 text-success text-xs rounded-full">
+                                <span className="px-2 py-1 bg-success/10 text-success-foreground text-xs rounded-full">
                                   Punkte & Badges
                                 </span>
                                 <span className="px-2 py-1 bg-warning/10 text-warning text-xs rounded-full">

@@ -292,7 +292,7 @@ const Index = () => {
                   <div className="text-xs sm:text-sm text-muted-foreground">Fragen</div>
                 </div>
                 <div className="text-center p-3 sm:p-6 bg-card rounded-lg border border-border">
-                  <div className="text-lg sm:text-2xl font-light text-success mb-1">{stats.correctAnswers}</div>
+                  <div className="text-lg sm:text-2xl font-light text-success-foreground mb-1">{stats.correctAnswers}</div>
                   <div className="text-xs sm:text-sm text-muted-foreground">Richtig</div>
                 </div>
               </div>

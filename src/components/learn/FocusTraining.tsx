@@ -96,7 +96,7 @@ export const FocusTraining = ({ modules, categoryId }: FocusTrainingProps) => {
         <h3 className="text-2xl font-semibold mb-4">Schwerpunkt-Training abgeschlossen!</h3>
         <div className="flex justify-center gap-8 mb-6">
           <div className="text-center">
-            <div className="text-3xl font-bold text-success">{completedItems.size}</div>
+            <div className="text-3xl font-bold text-success-foreground">{completedItems.size}</div>
             <div className="text-sm text-muted-foreground">Bearbeitet</div>
           </div>
           <div className="text-center">

@@ -133,7 +133,7 @@ export const MemoryGameComponent = ({ games }: MemoryGameProps) => {
           <div className="text-right">
             <p className="text-sm text-muted-foreground">Züge: {moves}</p>
             {gameComplete && (
-              <p className="text-sm font-medium text-success">Geschafft! 🎉</p>
+              <p className="text-sm font-medium text-success-foreground">Geschafft! 🎉</p>
             )}
           </div>
         </div>

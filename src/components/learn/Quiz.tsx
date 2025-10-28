@@ -70,9 +70,9 @@ export const Quiz = ({ questions }: QuizProps) => {
                 variant={state === "secondary" ? "outline" : "default"}
                 className={`h-auto text-left justify-start whitespace-normal break-words py-3 ${
                   state === "success"
-                    ? "border-success text-success bg-success/10 hover:bg-success/20"
+                    ? "border-success text-success-foreground bg-success/10 hover:bg-success/20"
                     : state === "destructive"
-                    ? "border-destructive text-destructive bg-destructive/10 hover:bg-destructive/20"
+                    ? "border-destructive text-destructive-foreground bg-destructive/10 hover:bg-destructive/20"
                     : ""
                 }`}
                 disabled={isAnswered}
@@ -90,7 +90,7 @@ export const Quiz = ({ questions }: QuizProps) => {
         </div>
         {isAnswered && (
           <div className="mt-4 p-4 rounded-lg bg-secondary/50">
-            <p className={`font-medium mb-2 ${isCorrect ? "text-success" : "text-destructive"}`}>
+            <p className={`font-medium mb-2 ${isCorrect ? "text-success-foreground" : "text-destructive-foreground"}`}>
               {isCorrect ? "🎉 Richtig!" : "❌ Leider falsch."}
             </p>
             {q.explanation && (

@@ -76,12 +76,12 @@ export const ScenarioGame = ({ scenarios }: ScenarioGameProps) => {
               
               if (showResult && selectedChoice === index) {
                 if (choice.isCorrect) {
-                  buttonClass = "border-success text-success bg-success/10";
+                  buttonClass = "border-success text-success-foreground bg-success/10";
                 } else {
-                  buttonClass = "border-destructive text-destructive bg-destructive/10";
+                  buttonClass = "border-destructive text-destructive-foreground bg-destructive/10";
                 }
               } else if (showResult && choice.isCorrect) {
-                buttonClass = "border-success text-success bg-success/5";
+                buttonClass = "border-success text-success-foreground bg-success/5";
               }
               
               return (

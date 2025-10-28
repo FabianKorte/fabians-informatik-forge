@@ -215,7 +215,7 @@ const Progress = () => {
           <Card className="p-6">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-success/10 rounded-lg">
-                <Target className="w-5 h-5 text-success" />
+                <Target className="w-5 h-5 text-success-foreground" />
               </div>
               <div>
                 <p className="text-2xl font-semibold text-foreground">
@@ -286,7 +286,7 @@ const Progress = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
                       <div className="flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4 text-success" />
+                        <CheckCircle className="w-4 h-4 text-success-foreground" />
                         <span className="text-sm text-muted-foreground">
                           {category.completedItems} abgeschlossen
                         </span>
@@ -373,7 +373,7 @@ const Progress = () => {
 
                 {categoryStats.filter(cat => cat.difficultItems > 0).length === 0 && (
                   <div className="text-center py-8">
-                    <Trophy className="w-12 h-12 text-success mx-auto mb-4" />
+                    <Trophy className="w-12 h-12 text-success-foreground mx-auto mb-4" />
                     <h4 className="text-lg font-medium text-foreground mb-2">
                       Großartig!
                     </h4>
