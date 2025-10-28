@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { logger } from "@/lib/logger";
 
 interface ProgressData {
@@ -90,11 +90,11 @@ export const useProgress = (categoryId: string, methodType: string, moduleIndex:
     }
   }, [progressData]);
 
-  const getModuleProgress = () => {
+  const getModuleProgress = useCallback(() => {
     return progressData[categoryId]?.[methodType]?.[moduleKey] || {};
-  };
+  }, [progressData, categoryId, methodType, moduleKey]);
 
-  const updateProgress = (methodData: any) => {
+  const updateProgress = useCallback((methodData: any) => {
     setProgressData(prev => ({
       ...prev,
       [categoryId]: {
@@ -108,18 +108,18 @@ export const useProgress = (categoryId: string, methodType: string, moduleIndex:
         }
       }
     }));
-  };
+  }, [categoryId, methodType, moduleKey]);
 
   // Specific method helpers
-  const saveFlashcardProgress = (knownCards: Set<number>, unknownCards: Set<number>, lastIndex: number) => {
+  const saveFlashcardProgress = useCallback((knownCards: Set<number>, unknownCards: Set<number>, lastIndex: number) => {
     updateProgress({
       knownCards: Array.from(knownCards),
       unknownCards: Array.from(unknownCards),
       lastIndex
     });
-  };
+  }, [updateProgress]);
 
-  const saveQuizProgress = (completedQuestions: number[], newScore: number) => {
+  const saveQuizProgress = useCallback((completedQuestions: number[], newScore: number) => {
     const current = getModuleProgress();
     const quizData = current.quiz || { completedQuestions: [], scores: [], bestScore: 0 };
     
@@ -128,9 +128,9 @@ export const useProgress = (categoryId: string, methodType: string, moduleIndex:
       scores: [...quizData.scores, newScore],
       bestScore: Math.max(quizData.bestScore, newScore)
     });
-  };
+  }, [getModuleProgress, updateProgress]);
 
-  const saveMatchingProgress = (score: number) => {
+  const saveMatchingProgress = useCallback((score: number) => {
     const current = getModuleProgress();
     const matchingData = current.matching || { completions: 0, bestScore: 0 };
     
@@ -138,27 +138,27 @@ export const useProgress = (categoryId: string, methodType: string, moduleIndex:
       completions: matchingData.completions + 1,
       bestScore: Math.max(matchingData.bestScore, score)
     });
-  };
+  }, [getModuleProgress, updateProgress]);
 
-  const saveCodeProgress = (challengeIndex: number) => {
+  const saveCodeProgress = useCallback((challengeIndex: number) => {
     const current = getModuleProgress();
     const codeData = current.code || { completedChallenges: [] };
     
     updateProgress({
       completedChallenges: [...new Set([...codeData.completedChallenges, challengeIndex])]
     });
-  };
+  }, [getModuleProgress, updateProgress]);
 
-  const saveDragDropProgress = (gameIndex: number) => {
+  const saveDragDropProgress = useCallback((gameIndex: number) => {
     const current = getModuleProgress();
     const dragDropData = current.dragdrop || { completedGames: [] };
     
     updateProgress({
       completedGames: [...new Set([...dragDropData.completedGames, gameIndex])]
     });
-  };
+  }, [getModuleProgress, updateProgress]);
 
-  const saveMemoryProgress = (gameIndex: number, moves: number) => {
+  const saveMemoryProgress = useCallback((gameIndex: number, moves: number) => {
     const current = getModuleProgress();
     const memoryData = current.memory || { completedGames: [], bestMoves: {} };
     
@@ -169,18 +169,18 @@ export const useProgress = (categoryId: string, methodType: string, moduleIndex:
         [gameIndex]: Math.min(memoryData.bestMoves[gameIndex] || Infinity, moves)
       }
     });
-  };
+  }, [getModuleProgress, updateProgress]);
 
-  const saveTimelineProgress = (timelineIndex: number) => {
+  const saveTimelineProgress = useCallback((timelineIndex: number) => {
     const current = getModuleProgress();
     const timelineData = current.timeline || { viewedTimelines: [] };
     
     updateProgress({
       viewedTimelines: [...new Set([...timelineData.viewedTimelines, timelineIndex])]
     });
-  };
+  }, [getModuleProgress, updateProgress]);
 
-  const saveScenarioProgress = (scenarioIndex: number, wasCorrect: boolean) => {
+  const saveScenarioProgress = useCallback((scenarioIndex: number, wasCorrect: boolean) => {
     const current = getModuleProgress();
     const scenarioData = current.scenario || { completedScenarios: [], correctChoices: 0 };
     
@@ -188,10 +188,10 @@ export const useProgress = (categoryId: string, methodType: string, moduleIndex:
       completedScenarios: [...new Set([...scenarioData.completedScenarios, scenarioIndex])],
       correctChoices: scenarioData.correctChoices + (wasCorrect ? 1 : 0)
     });
-  };
+  }, [getModuleProgress, updateProgress]);
 
-  // Get overall progress statistics
-  const getOverallProgress = () => {
+  // Get overall progress statistics - memoized
+  const getOverallProgress = useMemo(() => {
     const totalCategories = Object.keys(progressData).length;
     const totalModules = Object.values(progressData).reduce((acc, category) => {
       return acc + Object.values(category).reduce((methodAcc, method) => {
@@ -204,12 +204,12 @@ export const useProgress = (categoryId: string, methodType: string, moduleIndex:
       totalModules,
       hasProgress: totalModules > 0
     };
-  };
+  }, [progressData]);
 
-  const clearAllProgress = () => {
+  const clearAllProgress = useCallback(() => {
     setProgressData({});
     document.cookie = `${PROGRESS_COOKIE_NAME}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
-  };
+  }, []);
 
   return {
     progressData: getModuleProgress(),
@@ -222,7 +222,7 @@ export const useProgress = (categoryId: string, methodType: string, moduleIndex:
     saveMemoryProgress,
     saveTimelineProgress,
     saveScenarioProgress,
-    getOverallProgress,
+    overallProgress: getOverallProgress,
     clearAllProgress
   };
 };

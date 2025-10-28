@@ -280,6 +280,15 @@ export const AdminLearningContent = () => {
                     <TableHead 
                       className="cursor-pointer hover:bg-muted/50 select-none"
                       onClick={() => toggleSort('category')}
+                      role="button"
+                      tabIndex={0}
+                      aria-label="Nach Kategorie sortieren"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          toggleSort('category');
+                        }
+                      }}
                     >
                       <div className="flex items-center">
                         Kategorie
@@ -289,6 +298,15 @@ export const AdminLearningContent = () => {
                     <TableHead 
                       className="cursor-pointer hover:bg-muted/50 select-none"
                       onClick={() => toggleSort('title')}
+                      role="button"
+                      tabIndex={0}
+                      aria-label="Nach Titel sortieren"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          toggleSort('title');
+                        }
+                      }}
                     >
                       <div className="flex items-center">
                         Titel
@@ -298,6 +316,15 @@ export const AdminLearningContent = () => {
                     <TableHead 
                       className="cursor-pointer hover:bg-muted/50 select-none"
                       onClick={() => toggleSort('type')}
+                      role="button"
+                      tabIndex={0}
+                      aria-label="Nach Typ sortieren"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          toggleSort('type');
+                        }
+                      }}
                     >
                       <div className="flex items-center">
                         Typ

@@ -378,7 +378,19 @@ export const InteractiveTraining = ({ tasks, categoryId }: InteractiveTrainingPr
       {/* Hilfsmittel und Informationen */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {currentTask.tools.length > 0 && (
-          <Card className="cursor-pointer" onClick={() => setShowTools(!showTools)}>
+          <Card 
+            className="cursor-pointer" 
+            onClick={() => setShowTools(!showTools)}
+            role="button"
+            tabIndex={0}
+            aria-label="Hilfsmittel anzeigen"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setShowTools(!showTools);
+              }
+            }}
+          >
             <CardContent className="p-4 text-center">
               <Calculator className="w-6 h-6 mx-auto mb-2 text-primary" />
               <h6 className="font-semibold text-sm">Hilfsmittel</h6>
@@ -388,7 +400,19 @@ export const InteractiveTraining = ({ tasks, categoryId }: InteractiveTrainingPr
         )}
         
         {currentTask.infoTexts.length > 0 && (
-          <Card className="cursor-pointer" onClick={() => setShowInfo(!showInfo)}>
+          <Card 
+            className="cursor-pointer" 
+            onClick={() => setShowInfo(!showInfo)}
+            role="button"
+            tabIndex={0}
+            aria-label="Wissen anzeigen"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setShowInfo(!showInfo);
+              }
+            }}
+          >
             <CardContent className="p-4 text-center">
               <FileText className="w-6 h-6 mx-auto mb-2 text-success" />
               <h6 className="font-semibold text-sm">Wissen</h6>
@@ -397,7 +421,19 @@ export const InteractiveTraining = ({ tasks, categoryId }: InteractiveTrainingPr
           </Card>
         )}
 
-        <Card className="cursor-pointer" onClick={showHint}>
+        <Card 
+          className="cursor-pointer" 
+          onClick={showHint}
+          role="button"
+          tabIndex={0}
+          aria-label="Hilfe anzeigen"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              showHint();
+            }
+          }}
+        >
           <CardContent className="p-4 text-center">
             <HelpCircle className="w-6 h-6 mx-auto mb-2 text-warning" />
             <h6 className="font-semibold text-sm">Hilfe</h6>

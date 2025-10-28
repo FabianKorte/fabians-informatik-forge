@@ -25,8 +25,8 @@ const Progress = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   // Get overall progress data
-  const { getOverallProgress } = useProgress("", "", 0);
-  const overallStats = getOverallProgress();
+  const { overallProgress } = useProgress("", "", 0);
+  const overallStats = overallProgress;
 
   // Calculate real statistics for each category from actual progress data
   const categoryStats = categories.map(category => {
