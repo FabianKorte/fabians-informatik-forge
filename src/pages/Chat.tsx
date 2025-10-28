@@ -11,6 +11,10 @@ import { Send, ArrowLeft } from 'lucide-react';
 import { logger } from '@/lib/logger';
 import { sanitizeInput } from '@/lib/sanitization';
 
+// Rate limiting: Max 5 messages per 10 seconds
+const MESSAGE_RATE_LIMIT = 5;
+const RATE_LIMIT_WINDOW = 10000; // 10 seconds
+
 interface ChatMessage {
   id: string;
   user_id: string;
@@ -31,6 +35,7 @@ const Chat = () => {
   const [isLoading, setIsLoading] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const messageTimestampsRef = useRef<number[]>([]);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -175,6 +180,21 @@ const Chat = () => {
     e.preventDefault();
     if (!newMessage.trim() || !user) return;
 
+    // Rate limiting check
+    const now = Date.now();
+    const recentMessages = messageTimestampsRef.current.filter(
+      timestamp => now - timestamp < RATE_LIMIT_WINDOW
+    );
+
+    if (recentMessages.length >= MESSAGE_RATE_LIMIT) {
+      toast({
+        title: 'Zu schnell',
+        description: `Bitte warte ${Math.ceil((recentMessages[0] + RATE_LIMIT_WINDOW - now) / 1000)} Sekunden, bevor du die nächste Nachricht sendest.`,
+        variant: 'destructive',
+      });
+      return;
+    }
+
     const sanitized = sanitizeInput(newMessage, 500);
     if (!sanitized) return;
 
@@ -191,6 +211,8 @@ const Chat = () => {
         variant: 'destructive',
       });
     } else {
+      // Track message timestamp
+      messageTimestampsRef.current = [...recentMessages, now];
       setNewMessage('');
     }
   };

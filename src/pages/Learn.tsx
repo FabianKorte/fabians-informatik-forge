@@ -17,6 +17,7 @@ import { interactiveTasksByCategory } from "@/data/learn/interactive-training";
 import { Target, Brain, Zap } from "lucide-react";
 import { MicrochipLoader } from "@/components/MicrochipLoader";
 import { logger } from "@/lib/logger";
+import { LearnErrorBoundary } from "@/components/ErrorBoundaries/LearnErrorBoundary";
 
 const LearnPage = () => {
   const { categoryId } = useParams();
@@ -241,27 +242,29 @@ const LearnPage = () => {
               </div>
               
               <div className="rounded-2xl border border-border bg-card p-6 shadow-elegant">
-                {selectedMethod === 'interactive' && interactiveTasks.length > 0 && (
-                  <InteractiveTraining tasks={interactiveTasks} categoryId={categoryId} />
-                )}
+                <LearnErrorBoundary>
+                  {selectedMethod === 'interactive' && interactiveTasks.length > 0 && (
+                    <InteractiveTraining tasks={interactiveTasks} categoryId={categoryId} />
+                  )}
 
-                {selectedMethod === 'flashcards' && modules.filter(m => m.type === 'flashcards').length > 0 && (
-                  <Flashcards 
-                    cards={modules.filter(m => m.type === 'flashcards').flatMap(m => m.cards)} 
-                    categoryId={categoryId} 
-                    moduleIndex={0} 
-                  />
-                )}
+                  {selectedMethod === 'flashcards' && modules.filter(m => m.type === 'flashcards').length > 0 && (
+                    <Flashcards 
+                      cards={modules.filter(m => m.type === 'flashcards').flatMap(m => m.cards)} 
+                      categoryId={categoryId} 
+                      moduleIndex={0} 
+                    />
+                  )}
 
-                {selectedMethod === 'quiz' && modules.filter(m => m.type === 'quiz').length > 0 && (
-                  <Quiz 
-                    questions={modules.filter(m => m.type === 'quiz').flatMap(m => m.questions)} 
-                  />
-                )}
+                  {selectedMethod === 'quiz' && modules.filter(m => m.type === 'quiz').length > 0 && (
+                    <Quiz 
+                      questions={modules.filter(m => m.type === 'quiz').flatMap(m => m.questions)} 
+                    />
+                  )}
 
-                {selectedMethod === 'focus' && (
-                  <FocusTraining modules={modules} categoryId={categoryId} />
-                )}
+                  {selectedMethod === 'focus' && (
+                    <FocusTraining modules={modules} categoryId={categoryId} />
+                  )}
+                </LearnErrorBoundary>
               </div>
             </div>
           )}

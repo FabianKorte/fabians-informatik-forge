@@ -25,6 +25,8 @@ export const AIChatbot = () => {
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  const retryCountRef = useRef(0);
+  const MAX_RETRIES = 3;
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -32,9 +34,13 @@ export const AIChatbot = () => {
     }
   }, [messages]);
 
-  const streamChat = async (userMessage: string) => {
+  const streamChat = async (userMessage: string, retryCount = 0) => {
     const userMsg: Message = { role: "user", content: userMessage };
-    setMessages((prev) => [...prev, userMsg]);
+    
+    if (retryCount === 0) {
+      setMessages((prev) => [...prev, userMsg]);
+    }
+    
     setIsLoading(true);
 
     let assistantContent = "";
@@ -103,15 +109,39 @@ export const AIChatbot = () => {
       }
     } catch (error) {
       logger.error("Chat error:", error);
-      toast({
-        title: "Fehler",
-        description: "Konnte keine Antwort vom KI-Tutor erhalten.",
-        variant: "destructive",
-      });
-      // Remove the empty assistant message if there was an error
-      setMessages((prev) => prev.slice(0, -1));
+      
+      // Retry logic with exponential backoff
+      if (retryCount < MAX_RETRIES) {
+        const delay = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
+        
+        toast({
+          title: "Verbindungsfehler",
+          description: `Versuche erneut... (${retryCount + 1}/${MAX_RETRIES})`,
+        });
+        
+        // Remove the empty assistant message before retry
+        if (retryCount === 0) {
+          setMessages((prev) => prev.slice(0, -1));
+        }
+        
+        setTimeout(() => {
+          streamChat(userMessage, retryCount + 1);
+        }, delay);
+      } else {
+        toast({
+          title: "Fehler",
+          description: "Konnte keine Antwort vom KI-Tutor erhalten. Bitte versuche es später erneut.",
+          variant: "destructive",
+        });
+        // Remove the empty assistant message if there was an error
+        if (retryCount === 0) {
+          setMessages((prev) => prev.slice(0, -1));
+        }
+      }
     } finally {
-      setIsLoading(false);
+      if (retryCount >= MAX_RETRIES || retryCount === 0) {
+        setIsLoading(false);
+      }
     }
   };
 
