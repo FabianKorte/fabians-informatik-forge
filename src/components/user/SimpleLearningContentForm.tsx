@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Loader2, Plus, Lightbulb } from "lucide-react";
 import { categories } from "@/data/categories";
 import { flashcardItemSchema, quizItemSchema, type FlashcardItem, type QuizItem } from "@/lib/validation/learningContent";
+import { handleValidationError, handleDatabaseError } from "@/lib/errorHandler";
 
 // Types are now imported from validation schema
 
@@ -84,11 +85,7 @@ export const SimpleLearningContentForm = () => {
         });
       }
     } catch (error: any) {
-      toast({
-        title: "Validierungsfehler",
-        description: error.errors?.[0]?.message || "Bitte überprüfe deine Eingaben",
-        variant: "destructive",
-      });
+      handleValidationError(error);
       return;
     }
 
@@ -153,11 +150,7 @@ export const SimpleLearningContentForm = () => {
       setTitle("");
       setItems([{ front: "", back: "", explanation: "" }]);
     } catch (error: any) {
-      toast({
-        title: "Fehler",
-        description: error.message || "Konnte Vorschlag nicht einreichen",
-        variant: "destructive",
-      });
+      handleDatabaseError(error);
     } finally {
       setIsLoading(false);
     }

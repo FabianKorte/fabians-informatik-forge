@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { MapPin, Calendar, AlertCircle, CheckCircle2, Clock, Pause } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import { handleError } from "@/lib/errorHandler";
 
 interface RoadmapItem {
   id: string;
@@ -66,7 +67,11 @@ export const RoadmapModal = ({ children }: RoadmapModalProps) => {
 
       setRoadmapItems(data || []);
     } catch (error) {
-      logger.error('Error fetching roadmap:', error);
+      handleError(error, {
+        title: "Fehler beim Laden",
+        description: "Roadmap konnte nicht geladen werden",
+        logError: true,
+      });
     } finally {
       setLoading(false);
     }

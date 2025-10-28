@@ -15,6 +15,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useLearningModules } from "@/hooks/useLearningModules";
 import { useCategories } from "@/hooks/useCategories";
 import { adminLearningModuleSchema } from "@/lib/validation/learningContent";
+import { handleValidationError } from "@/lib/errorHandler";
 
 interface LearnModule {
   id: string;
@@ -154,11 +155,7 @@ export const AdminLearningContent = () => {
 
       handleCancelEdit();
     } catch (error: any) {
-      toast({
-        title: "Validierungsfehler",
-        description: error.errors?.[0]?.message || error.message || "Konnte Lerninhalt nicht speichern",
-        variant: "destructive",
-      });
+      handleValidationError(error);
     }
   };
 

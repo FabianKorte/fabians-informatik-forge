@@ -7,6 +7,7 @@ import { MessageCircle, X, Send, Loader2, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { logger } from "@/lib/logger";
 import { sanitizeInput } from "@/lib/sanitization";
+import { handleError } from "@/lib/errorHandler";
 
 interface Message {
   role: "user" | "assistant";
@@ -108,8 +109,6 @@ export const AIChatbot = () => {
         }
       }
     } catch (error) {
-      logger.error("Chat error:", error);
-      
       // Retry logic with exponential backoff
       if (retryCount < MAX_RETRIES) {
         const delay = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
@@ -128,10 +127,9 @@ export const AIChatbot = () => {
           streamChat(userMessage, retryCount + 1);
         }, delay);
       } else {
-        toast({
+        handleError(error, {
           title: "Fehler",
           description: "Konnte keine Antwort vom KI-Tutor erhalten. Bitte versuche es später erneut.",
-          variant: "destructive",
         });
         // Remove the empty assistant message if there was an error
         if (retryCount === 0) {
