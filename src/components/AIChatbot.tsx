@@ -173,7 +173,7 @@ export const AIChatbot = () => {
       {/* Header */}
       <div className="flex items-center justify-between p-5 border-b border-border/50 bg-gradient-to-r from-primary via-primary to-primary-glow text-primary-foreground rounded-t-xl">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
+          <div className="p-2 bg-primary-foreground/20 rounded-lg backdrop-blur-sm">
             <Sparkles className="h-5 w-5" />
           </div>
           <div>
@@ -185,7 +185,7 @@ export const AIChatbot = () => {
           variant="ghost"
           size="icon"
           onClick={() => setIsOpen(false)}
-          className="text-primary-foreground hover:bg-white/20 h-9 w-9 rounded-lg"
+          className="text-primary-foreground hover:bg-primary-foreground/20 h-9 w-9 rounded-lg"
         >
           <X className="h-4 w-4" />
         </Button>

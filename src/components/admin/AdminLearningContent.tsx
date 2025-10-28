@@ -14,6 +14,7 @@ import { Loader2, Plus, Pencil, Trash2, Eye, ArrowUpDown, ArrowUp, ArrowDown, Do
 import { Checkbox } from "@/components/ui/checkbox";
 import { useLearningModules } from "@/hooks/useLearningModules";
 import { useCategories } from "@/hooks/useCategories";
+import { adminLearningModuleSchema } from "@/lib/validation/learningContent";
 
 interface LearnModule {
   id: string;
@@ -123,52 +124,41 @@ export const AdminLearningContent = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!categoryId || !moduleType || !title || !content) {
-      toast({
-        title: "Fehler",
-        description: "Bitte fülle alle Felder aus",
-        variant: "destructive",
-      });
-      return;
-    }
 
     try {
-      const contentJson = JSON.parse(content);
+      // Validate with Zod schema
+      const validated = adminLearningModuleSchema.parse({
+        category_id: categoryId,
+        type: moduleType,
+        title: title,
+        content: content,
+      });
       
       if (editingModule) {
         await updateModule.mutateAsync({
           id: editingModule.id,
-          category_id: categoryId,
-          type: moduleType,
-          title: title,
-          content: contentJson,
+          category_id: validated.category_id,
+          type: validated.type,
+          title: validated.title,
+          content: validated.content,
         });
       } else {
         await createModule.mutateAsync({
-          category_id: categoryId,
-          type: moduleType,
-          title: title,
-          content: contentJson,
+          category_id: validated.category_id,
+          type: validated.type,
+          title: validated.title,
+          content: validated.content,
           order_index: 0
         });
       }
 
       handleCancelEdit();
     } catch (error: any) {
-      if (error instanceof SyntaxError) {
-        toast({
-          title: "Fehler",
-          description: "Content muss ein gültiges JSON-Objekt sein",
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Fehler",
-          description: error.message || "Konnte Lerninhalt nicht speichern",
-          variant: "destructive",
-        });
-      }
+      toast({
+        title: "Validierungsfehler",
+        description: error.errors?.[0]?.message || error.message || "Konnte Lerninhalt nicht speichern",
+        variant: "destructive",
+      });
     }
   };
 

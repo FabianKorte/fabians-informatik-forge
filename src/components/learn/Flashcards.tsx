@@ -225,7 +225,7 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
         {/* Clean Status indicator */}
         {currentCardStatus !== "neutral" && (
           <div
-            className={`absolute top-4 right-4 w-10 h-10 rounded-xl flex items-center justify-center text-white text-sm font-bold shadow-lg animate-fade-in ${
+            className={`absolute top-4 right-4 w-10 h-10 rounded-xl flex items-center justify-center text-success-foreground text-sm font-bold shadow-lg animate-fade-in ${
               currentCardStatus === "known" 
                 ? "bg-success border border-success/20" 
                 : "bg-destructive border border-destructive/20"
@@ -249,7 +249,7 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
           <Button
             onClick={markAsUnknown}
             variant="outline"
-            className="border-destructive/50 text-destructive hover:bg-destructive hover:text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 min-w-[140px]"
+            className="border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 min-w-[140px]"
             size="lg"
           >
             <span className="mr-2 text-lg">✗</span>
@@ -258,7 +258,7 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
           <Button
             onClick={markAsKnown}
             variant="outline" 
-            className="border-success/50 text-success hover:bg-success hover:text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 min-w-[140px]"
+            className="border-success/50 text-success hover:bg-success hover:text-success-foreground shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 min-w-[140px]"
             size="lg"
           >
             <span className="mr-2 text-lg">✓</span>

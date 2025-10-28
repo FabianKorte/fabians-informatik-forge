@@ -28,6 +28,13 @@ class Logger {
     }
   }
 
+  // Performance logs - only in dev
+  performance(name: string, value: number) {
+    if (this.isDev) {
+      console.log(`Performance: ${name} = ${Math.round(value)}ms`);
+    }
+  }
+
   // Always log errors in production for critical issues
   critical(...args: any[]) {
     console.error('[CRITICAL]', ...args);

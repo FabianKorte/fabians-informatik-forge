@@ -44,7 +44,7 @@ export const TwoFactorSetupDialog = ({
         <div className="space-y-4">
           {qrCode && (
             <div className="flex justify-center">
-              <div className="p-3 bg-white rounded-md border">
+              <div className="p-3 bg-card rounded-md border">
                 <img src={qrCode} alt="2FA QR Code" className="w-56 h-56 object-contain" />
               </div>
             </div>

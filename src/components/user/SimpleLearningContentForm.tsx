@@ -9,19 +9,9 @@ import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2, Plus, Lightbulb } from "lucide-react";
 import { categories } from "@/data/categories";
+import { flashcardItemSchema, quizItemSchema, type FlashcardItem, type QuizItem } from "@/lib/validation/learningContent";
 
-interface FlashcardItem {
-  front: string;
-  back: string;
-  explanation: string;
-}
-
-interface QuizItem {
-  question: string;
-  options: string[];
-  correctAnswer: number;
-  explanation: string;
-}
+// Types are now imported from validation schema
 
 export const SimpleLearningContentForm = () => {
   const { user } = useAuth();
@@ -82,35 +72,24 @@ export const SimpleLearningContentForm = () => {
       return;
     }
 
-    // Validate based on type
-    if (moduleType === "flashcards") {
-      const invalid = items.some(item => {
-        const flashcard = item as FlashcardItem;
-        return !flashcard.front?.trim() || !flashcard.back?.trim() || !flashcard.explanation?.trim();
-      });
-      if (invalid) {
-        toast({
-          title: "Fehler",
-          description: "Bitte fülle alle Felder aus (inkl. Erklärung)",
-          variant: "destructive",
+    // Validate with Zod schema
+    try {
+      if (moduleType === "flashcards") {
+        items.forEach((item, idx) => {
+          flashcardItemSchema.parse(item);
         });
-        return;
-      }
-    } else if (moduleType === "quiz") {
-      const invalid = items.some(item => {
-        const quiz = item as QuizItem;
-        return !quiz.question?.trim() || 
-          quiz.options.some((opt: string) => !opt?.trim()) ||
-          !quiz.explanation?.trim();
-      });
-      if (invalid) {
-        toast({
-          title: "Fehler",
-          description: "Bitte fülle alle Felder aus (inkl. Erklärung)",
-          variant: "destructive",
+      } else if (moduleType === "quiz") {
+        items.forEach((item, idx) => {
+          quizItemSchema.parse(item);
         });
-        return;
       }
+    } catch (error: any) {
+      toast({
+        title: "Validierungsfehler",
+        description: error.errors?.[0]?.message || "Bitte überprüfe deine Eingaben",
+        variant: "destructive",
+      });
+      return;
     }
 
     setIsLoading(true);

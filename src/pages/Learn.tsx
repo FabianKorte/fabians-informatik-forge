@@ -128,6 +128,15 @@ const LearnPage = () => {
                         <Card 
                           className="cursor-pointer p-4 sm:p-6 md:p-8 hover:scale-[1.02] transition-transform bg-gradient-to-br from-primary/5 to-accent/5"
                           onClick={() => setSelectedMethod('interactive')}
+                          role="button"
+                          tabIndex={0}
+                          aria-label="Interaktives Training starten"
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault();
+                              setSelectedMethod('interactive');
+                            }
+                          }}
                         >
                           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
                             <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center shrink-0">
@@ -166,6 +175,15 @@ const LearnPage = () => {
                     <Card 
                       className="cursor-pointer p-4 sm:p-6 md:p-8 text-center h-full flex flex-col justify-between hover:scale-105 transition-transform"
                       onClick={() => setSelectedMethod('flashcards')}
+                      role="button"
+                      tabIndex={0}
+                      aria-label="Karteikarten lernen starten"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          setSelectedMethod('flashcards');
+                        }
+                      }}
                     >
                       <div>
                         <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto mb-3 md:mb-4 rounded-2xl bg-gradient-to-br from-success/20 to-success/10 flex items-center justify-center">
@@ -187,6 +205,15 @@ const LearnPage = () => {
                     <Card 
                       className="cursor-pointer p-4 sm:p-6 md:p-8 text-center h-full flex flex-col justify-between hover:scale-105 transition-transform"
                       onClick={() => setSelectedMethod('quiz')}
+                      role="button"
+                      tabIndex={0}
+                      aria-label="Quiz starten"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          setSelectedMethod('quiz');
+                        }
+                      }}
                     >
                       <div>
                         <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto mb-3 md:mb-4 rounded-2xl bg-gradient-to-br from-warning/20 to-warning/10 flex items-center justify-center">
@@ -209,6 +236,15 @@ const LearnPage = () => {
                       <Card 
                         className="cursor-pointer p-4 sm:p-6 md:p-8 hover:scale-[1.02] transition-transform"
                         onClick={() => setSelectedMethod('focus')}
+                        role="button"
+                        tabIndex={0}
+                        aria-label="Schwerpunkt-Training starten"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            setSelectedMethod('focus');
+                          }
+                        }}
                       >
                         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
                           <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-destructive/20 to-primary/20 flex items-center justify-center shrink-0">

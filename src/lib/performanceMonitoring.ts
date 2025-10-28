@@ -1,3 +1,5 @@
+import { logger } from './logger';
+
 interface PerformanceMetric {
   name: string;
   value: number;
@@ -81,7 +83,7 @@ class PerformanceMonitor {
 
     // Log in development
     if (import.meta.env.DEV) {
-      console.log(`Performance: ${name} = ${Math.round(value)}ms`);
+      logger.performance(name, value);
     }
   }
 
