@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
@@ -30,6 +30,7 @@ const Chat = () => {
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -91,9 +92,8 @@ const Chat = () => {
 
     let reconnectAttempts = 0;
     const maxReconnectAttempts = 5;
-    let reconnectTimeout: NodeJS.Timeout;
     
-    const setupChannel = () => {
+    const setupChannel = (): ReturnType<typeof supabase.channel> => {
       const channel = supabase
         .channel('chat-messages', {
           config: {
@@ -133,7 +133,10 @@ const Chat = () => {
             
             if (reconnectAttempts < maxReconnectAttempts) {
               reconnectAttempts++;
-              reconnectTimeout = setTimeout(() => {
+              if (reconnectTimeoutRef.current) {
+                clearTimeout(reconnectTimeoutRef.current);
+              }
+              reconnectTimeoutRef.current = setTimeout(() => {
                 logger.log(`Reconnect attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
                 supabase.removeChannel(channel);
                 setupChannel();
@@ -157,7 +160,9 @@ const Chat = () => {
     const channel = setupChannel();
 
     return () => {
-      clearTimeout(reconnectTimeout);
+      if (reconnectTimeoutRef.current) {
+        clearTimeout(reconnectTimeoutRef.current);
+      }
       supabase.removeChannel(channel);
     };
   }, [user, toast]);

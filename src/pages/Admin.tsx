@@ -1,17 +1,26 @@
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/useAuth";
 import { LogOut, BookOpen, MapPin, MessageSquare, Home, FileText, Users, Shield } from "lucide-react";
-import { AdminLearningContent } from "@/components/admin/AdminLearningContent";
-import { AdminRoadmap } from "@/components/admin/AdminRoadmap";
-import { AdminFeedbacks } from "@/components/admin/AdminFeedbacks";
-import { AdminUsers } from "@/components/admin/AdminUsers";
-import { AdminSuggestions } from "@/components/admin/AdminSuggestions";
-import { AdminNotes } from "@/components/admin/AdminNotes";
-import { AdminAuditLogs } from "@/components/admin/AdminAuditLogs";
+
+// Lazy load admin components
+const AdminLearningContent = lazy(() => import("@/components/admin/AdminLearningContent").then(m => ({ default: m.AdminLearningContent })));
+const AdminRoadmap = lazy(() => import("@/components/admin/AdminRoadmap").then(m => ({ default: m.AdminRoadmap })));
+const AdminFeedbacks = lazy(() => import("@/components/admin/AdminFeedbacks").then(m => ({ default: m.AdminFeedbacks })));
+const AdminUsers = lazy(() => import("@/components/admin/AdminUsers").then(m => ({ default: m.AdminUsers })));
+const AdminSuggestions = lazy(() => import("@/components/admin/AdminSuggestions").then(m => ({ default: m.AdminSuggestions })));
+const AdminNotes = lazy(() => import("@/components/admin/AdminNotes").then(m => ({ default: m.AdminNotes })));
+const AdminAuditLogs = lazy(() => import("@/components/admin/AdminAuditLogs").then(m => ({ default: m.AdminAuditLogs })));
+
+const TabSkeleton = () => (
+  <div className="space-y-4">
+    <div className="h-8 w-48 bg-muted animate-pulse rounded" />
+    <div className="h-64 bg-muted animate-pulse rounded" />
+  </div>
+);
 
 export default function Admin() {
   const { signOut } = useAuth();
@@ -92,31 +101,45 @@ export default function Admin() {
               </TabsList>
 
               <TabsContent value="learning" className="mt-6">
-                <AdminLearningContent />
+                <Suspense fallback={<TabSkeleton />}>
+                  <AdminLearningContent />
+                </Suspense>
               </TabsContent>
 
               <TabsContent value="suggestions" className="mt-6">
-                <AdminSuggestions />
+                <Suspense fallback={<TabSkeleton />}>
+                  <AdminSuggestions />
+                </Suspense>
               </TabsContent>
 
               <TabsContent value="roadmap" className="mt-6">
-                <AdminRoadmap />
+                <Suspense fallback={<TabSkeleton />}>
+                  <AdminRoadmap />
+                </Suspense>
               </TabsContent>
 
               <TabsContent value="feedbacks" className="mt-6">
-                <AdminFeedbacks />
+                <Suspense fallback={<TabSkeleton />}>
+                  <AdminFeedbacks />
+                </Suspense>
               </TabsContent>
 
               <TabsContent value="users" className="mt-6">
-                <AdminUsers />
+                <Suspense fallback={<TabSkeleton />}>
+                  <AdminUsers />
+                </Suspense>
               </TabsContent>
 
               <TabsContent value="notes" className="mt-6">
-                <AdminNotes />
+                <Suspense fallback={<TabSkeleton />}>
+                  <AdminNotes />
+                </Suspense>
               </TabsContent>
 
               <TabsContent value="audit" className="mt-6">
-                <AdminAuditLogs />
+                <Suspense fallback={<TabSkeleton />}>
+                  <AdminAuditLogs />
+                </Suspense>
               </TabsContent>
             </Tabs>
           </CardContent>

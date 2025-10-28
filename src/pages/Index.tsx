@@ -21,6 +21,25 @@ import logo from "@/assets/logo.png";
 import type { LearnModule } from "@/types/learn";
 import { logger } from "@/lib/logger";
 
+// Pure function to count elements in modules
+const countElements = (modules: LearnModule[]) => {
+  if (!modules || modules.length === 0) return 0;
+  return modules.reduce((sum, m) => {
+    switch (m.type) {
+      case "flashcards": return sum + (m.cards?.length || 0);
+      case "quiz": return sum + (m.questions?.length || 0);
+      case "matching": return sum + (m.pairs?.length || 0);
+      case "code": return sum + (m.challenges?.length || 0);
+      case "dragdrop": return sum + (m.games?.reduce((a, g) => a + (g.items?.length || 0), 0) || 0);
+      case "memory": return sum + (m.games?.reduce((a, g) => a + (g.pairs?.length || 0), 0) || 0);
+      case "timeline": return sum + (m.timelines?.reduce((a, t) => a + (t.events?.length || 0), 0) || 0);
+      case "scenario": return sum + (m.scenarios?.length || 0);
+      case "interactive": return sum + (m.tasks?.length || 0);
+      default: return sum;
+    }
+  }, 0);
+};
+
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [feedbackRefreshTrigger, setFeedbackRefreshTrigger] = useState(0);
@@ -75,24 +94,6 @@ const Index = () => {
       setShowContent(true);
     }
   }, [isLoading]);
-
-  const countElements = useMemo(() => (modules: LearnModule[]) => {
-    if (!modules || modules.length === 0) return 0;
-    return modules.reduce((sum, m) => {
-      switch (m.type) {
-        case "flashcards": return sum + (m.cards?.length || 0);
-        case "quiz": return sum + (m.questions?.length || 0);
-        case "matching": return sum + (m.pairs?.length || 0);
-        case "code": return sum + (m.challenges?.length || 0);
-        case "dragdrop": return sum + (m.games?.reduce((a, g) => a + (g.items?.length || 0), 0) || 0);
-        case "memory": return sum + (m.games?.reduce((a, g) => a + (g.pairs?.length || 0), 0) || 0);
-        case "timeline": return sum + (m.timelines?.reduce((a, t) => a + (t.events?.length || 0), 0) || 0);
-        case "scenario": return sum + (m.scenarios?.length || 0);
-        case "interactive": return sum + (m.tasks?.length || 0);
-        default: return sum;
-      }
-    }, 0);
-  }, []);
 
   const { regularCategories, randomTrainingCategory, stats } = useMemo(() => {
     const random = categories.find(c => c.id === 'zufallstraining');
