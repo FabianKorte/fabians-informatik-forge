@@ -338,7 +338,7 @@ export const InteractiveTraining = ({ tasks, categoryId }: InteractiveTrainingPr
                 <h6 className="font-semibold text-sm">Hilfestellungen:</h6>
                 {showHints.map((show, index) => 
                   show && (
-                    <div key={index} className="p-3 rounded-lg bg-warning/10 border border-warning/20">
+                    <div key={`hint-${currentTaskIndex}-${index}`} className="p-3 rounded-lg bg-warning/10 border border-warning/20">
                       <div className="flex items-start gap-2">
                         <Lightbulb className="w-4 h-4 text-warning mt-0.5" />
                         <div>
@@ -451,7 +451,7 @@ export const InteractiveTraining = ({ tasks, categoryId }: InteractiveTrainingPr
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {currentTask.tools.map((tool, index) => (
-                <div key={index} className="p-3 bg-muted/50 rounded-lg border">
+                <div key={`tool-${currentTaskIndex}-${tool.substring(0, 20)}`} className="p-3 bg-muted/50 rounded-lg border">
                   <span className="text-sm font-medium">{tool}</span>
                 </div>
               ))}
@@ -469,7 +469,7 @@ export const InteractiveTraining = ({ tasks, categoryId }: InteractiveTrainingPr
           <CardContent>
             <div className="space-y-3">
               {currentTask.infoTexts.map((info, index) => (
-                <div key={index} className="p-3 bg-muted/50 rounded-lg border">
+                <div key={`info-${currentTaskIndex}-${info.substring(0, 30)}`} className="p-3 bg-muted/50 rounded-lg border">
                   <p className="text-sm leading-relaxed">{info}</p>
                 </div>
               ))}

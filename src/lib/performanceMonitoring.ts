@@ -26,7 +26,7 @@ class PerformanceMonitor {
         });
         lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
       } catch (e) {
-        console.warn('LCP observer not supported');
+        logger.warn('LCP observer not supported', e);
       }
 
       // First Input Delay (FID)
@@ -39,7 +39,7 @@ class PerformanceMonitor {
         });
         fidObserver.observe({ type: 'first-input', buffered: true });
       } catch (e) {
-        console.warn('FID observer not supported');
+        logger.warn('FID observer not supported', e);
       }
 
       // Cumulative Layout Shift (CLS)
@@ -55,7 +55,7 @@ class PerformanceMonitor {
         });
         clsObserver.observe({ type: 'layout-shift', buffered: true });
       } catch (e) {
-        console.warn('CLS observer not supported');
+        logger.warn('CLS observer not supported', e);
       }
     }
 

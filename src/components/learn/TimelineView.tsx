@@ -39,7 +39,7 @@ export const TimelineView = ({ timelines }: TimelineViewProps) => {
           
           <div className="space-y-6">
             {current.events.map((event, index) => (
-              <div key={index} className="relative flex items-start gap-6">
+              <div key={`event-${currentIndex}-${event.year}-${index}`} className="relative flex items-start gap-6">
                 {/* Timeline dot */}
                 <div 
                   className={`relative z-10 w-8 h-8 rounded-full border-4 border-card flex items-center justify-center cursor-pointer transition-all ${

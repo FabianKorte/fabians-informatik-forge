@@ -17,7 +17,7 @@ export const SuggestionPreview = ({ content, moduleType }: SuggestionPreviewProp
         </div>
         <div className="space-y-3">
           {content.cards.map((card: any, index: number) => (
-            <Card key={index} className="p-4">
+            <Card key={`card-${index}-${card.front?.substring(0, 20)}`} className="p-4">
               <div className="space-y-2">
                 <div>
                   <p className="text-xs text-muted-foreground font-medium mb-1">Frage:</p>
@@ -45,7 +45,7 @@ export const SuggestionPreview = ({ content, moduleType }: SuggestionPreviewProp
         </div>
         <div className="space-y-3">
           {content.questions.map((q: any, index: number) => (
-            <Card key={index} className="p-4">
+            <Card key={`question-${index}-${q.question?.substring(0, 20)}`} className="p-4">
               <div className="space-y-3">
                 <div>
                   <p className="text-xs text-muted-foreground font-medium mb-1">Frage {index + 1}:</p>

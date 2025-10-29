@@ -11,6 +11,7 @@ import { Loader2, LogIn, UserPlus, Eye, EyeOff, Shield, Copy as CopyIcon, Extern
 import { z } from "zod";
 import { ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import { checkRateLimit, recordLoginAttempt, clearLoginAttempts } from "@/lib/rateLimit";
 import { checkServerRateLimit, recordServerLoginAttempt, clearServerLoginAttempts } from "@/lib/serverRateLimit";
 import { PasswordInput } from "@/components/auth/PasswordInput";
@@ -265,7 +266,7 @@ export default function Auth() {
           });
           
           if (challengeErr) {
-            console.error('MFA challenge error:', challengeErr);
+            logger.error('MFA challenge error:', challengeErr);
             throw challengeErr;
           }
           

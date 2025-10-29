@@ -86,7 +86,7 @@ export const ScenarioGame = ({ scenarios }: ScenarioGameProps) => {
               
               return (
                 <Button
-                  key={index}
+                  key={`choice-${currentIndex}-${index}-${choice.text.substring(0, 20)}`}
                   variant={buttonVariant}
                   onClick={() => !showResult && handleChoice(index)}
                   disabled={showResult}

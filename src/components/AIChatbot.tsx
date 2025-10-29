@@ -194,7 +194,7 @@ export const AIChatbot = () => {
         <div className="space-y-4">
           {messages.map((message, index) => (
             <div
-              key={index}
+              key={`message-${index}-${message.role}-${message.content.substring(0, 30)}`}
               className={`flex ${
                 message.role === "user" ? "justify-end" : "justify-start"
               }`}

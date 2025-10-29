@@ -234,7 +234,7 @@ export const SimpleLearningContentForm = () => {
           {moduleType === "flashcards" && items.map((item, index) => {
             const flashcard = item as FlashcardItem;
             return (
-            <Card key={index} className="p-4">
+            <Card key={`flashcard-${index}-${flashcard.front.substring(0, 20)}`} className="p-4">
               <div className="space-y-2">
                 <div className="flex items-center justify-between mb-2">
                   <Label className="text-sm font-medium">Karteikarte {index + 1}</Label>
@@ -276,7 +276,7 @@ export const SimpleLearningContentForm = () => {
           {moduleType === "quiz" && items.map((item, index) => {
             const quiz = item as QuizItem;
             return (
-            <Card key={index} className="p-4">
+            <Card key={`quiz-${index}-${quiz.question.substring(0, 20)}`} className="p-4">
               <div className="space-y-2">
                 <div className="flex items-center justify-between mb-2">
                   <Label className="text-sm font-medium">Quiz-Frage {index + 1}</Label>
