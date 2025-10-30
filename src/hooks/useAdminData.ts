@@ -3,24 +3,31 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import type { PostgrestError } from '@supabase/supabase-js';
 
+interface AdminDataOptions {
+  table: string;
+  orderBy?: string;
+  ascending?: boolean;
+  pageSize?: number;
+  select?: string;
+  currentPage?: number;
+}
+
+interface AdminDataResult<T> {
+  data: T[];
+  isLoading: boolean;
+  error: PostgrestError | null;
+  refetch: () => Promise<void>;
+  totalCount: number;
+}
+
 /**
  * Generic hook for fetching and managing admin data with pagination support.
  * Handles loading states, error handling, and data refetching.
  * 
  * @template T - The type of data being fetched
- * @param {Object} options - Configuration options
- * @param {string} options.table - Supabase table name
- * @param {string} [options.orderBy] - Column to order by
- * @param {boolean} [options.ascending=false] - Sort order
- * @param {number} [options.pageSize] - Items per page for pagination
- * @param {string} [options.select='*'] - Columns to select
+ * @param {AdminDataOptions} options - Configuration options
  * 
- * @returns {Object} Hook state and methods
- * @returns {T[]} data - Fetched data array
- * @returns {boolean} isLoading - Loading state
- * @returns {PostgrestError | null} error - Error object if fetch failed
- * @returns {() => Promise<void>} refetch - Function to refetch data
- * @returns {number} totalCount - Total number of items (for pagination)
+ * @returns {AdminDataResult<T>} Hook state and methods
  * 
  * @example
  * const { data, isLoading, refetch } = useAdminData<Feedback>({
@@ -30,14 +37,7 @@ import type { PostgrestError } from '@supabase/supabase-js';
  *   pageSize: 10
  * });
  */
-export function useAdminData<T = any>(options: {
-  table: string;
-  orderBy?: string;
-  ascending?: boolean;
-  pageSize?: number;
-  select?: string;
-  currentPage?: number;
-}) {
+export function useAdminData<T>(options: AdminDataOptions): AdminDataResult<T> {
   const {
     table,
     orderBy,
@@ -65,14 +65,14 @@ export function useAdminData<T = any>(options: {
     try {
       // Get total count if pagination is enabled
       if (pageSize) {
-        const { count } = await (supabase as any)
-          .from(table)
+        const { count } = await supabase
+          .from(table as any)
           .select('*', { count: 'exact', head: true });
         setTotalCount(count || 0);
       }
 
       // Build base query
-      const baseQuery = (supabase as any).from(table).select(select);
+      const baseQuery = supabase.from(table as any).select(select);
       
       // Add abort signal
       let query = baseQuery.abortSignal(abortController.signal);
@@ -107,7 +107,7 @@ export function useAdminData<T = any>(options: {
       setIsLoading(false);
     }
 
-    return () => abortController.abort();
+    abortController.abort();
   }, [table, orderBy, ascending, pageSize, select, currentPage, toast]);
 
   useEffect(() => {

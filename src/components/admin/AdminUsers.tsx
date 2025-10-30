@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { Loader2, Shield, User, Trash2, Info, Key, ShieldOff, ShieldCheck } from
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { logAuditAction } from "@/lib/auditLog";
 import { logger } from "@/lib/logger";
+import { handleError } from "@/lib/errorHandler";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,6 +21,19 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
+interface MFAFactor {
+  id: string;
+  friendlyName: string;
+  createdAt: string;
+  status: string;
+}
+
+interface TwoFactorStatus {
+  has2FA: boolean;
+  factorCount: number;
+  factors: MFAFactor[];
+}
+
 interface UserWithRole {
   id: string;
   email: string;
@@ -28,14 +42,9 @@ interface UserWithRole {
   is_admin: boolean;
   avatar_url?: string;
   bio?: string;
-  has2FA?: boolean;
-  factorCount?: number;
-  factors?: Array<{
-    id: string;
-    friendlyName: string;
-    createdAt: string;
-    status: string;
-  }>;
+  has2FA: boolean;
+  factorCount: number;
+  factors: MFAFactor[];
 }
 
 export const AdminUsers = () => {
@@ -76,7 +85,7 @@ export const AdminUsers = () => {
       }
 
       // Fetch 2FA status for all users
-      let statusMap: Record<string, { has2FA: boolean, factorCount: number, factors: any[] }> = {};
+      let statusMap: Record<string, TwoFactorStatus> = {};
       try {
         const userIds = (profiles || []).map(p => p.id);
         logger.log('Fetching 2FA status for users:', userIds);
@@ -111,14 +120,14 @@ export const AdminUsers = () => {
         if (currentUserId && !statusMap[currentUserId]) {
           try {
             const factors = await supabase.auth.mfa.listFactors();
-            const verified = (factors.data?.totp || []).filter((f: any) => f.status === 'verified');
+            const verified = (factors.data?.totp || []).filter((f) => f.status === 'verified');
             statusMap[currentUserId] = {
               has2FA: verified.length > 0,
               factorCount: verified.length,
-              factors: verified.map((f: any) => ({
+              factors: verified.map((f) => ({
                 id: f.id,
-                friendlyName: (f as any).friendly_name,
-                createdAt: (f as any).created_at,
+                friendlyName: f.friendly_name || 'Authenticator',
+                createdAt: f.created_at,
                 status: f.status,
               })),
             };
@@ -157,11 +166,11 @@ export const AdminUsers = () => {
       });
 
       setUsers(usersWithRoles);
-    } catch (error: any) {
-      toast({
-        title: "Fehler",
-        description: "Benutzer konnten nicht geladen werden: " + error.message,
-        variant: "destructive",
+    } catch (error) {
+      handleError(error, {
+        title: "Fehler beim Laden",
+        description: "Benutzer konnten nicht geladen werden",
+        logError: true,
       });
     } finally {
       setIsLoading(false);
@@ -226,11 +235,11 @@ export const AdminUsers = () => {
       });
 
       fetchUsers();
-    } catch (error: any) {
-      toast({
+    } catch (error) {
+      handleError(error, {
         title: "Fehler",
-        description: error.message,
-        variant: "destructive",
+        description: "Rolle konnte nicht geändert werden",
+        logError: true,
       });
     }
   }, [fetchUsers, toast]);
@@ -305,11 +314,11 @@ export const AdminUsers = () => {
       // Refresh users to update UI
       fetchUsers();
       window.dispatchEvent(new CustomEvent('2fa-status-changed'));
-    } catch (error: any) {
-      toast({
+    } catch (error) {
+      handleError(error, {
         title: "Fehler",
-        description: "2FA konnte nicht entfernt werden: " + error.message,
-        variant: "destructive",
+        description: "2FA konnte nicht entfernt werden",
+        logError: true,
       });
     }
   }, [fetchUsers, toast]);
@@ -341,11 +350,11 @@ export const AdminUsers = () => {
       });
 
       fetchUsers();
-    } catch (error: any) {
-      toast({
+    } catch (error) {
+      handleError(error, {
         title: "Fehler",
-        description: "Benutzer konnte nicht gelöscht werden: " + error.message,
-        variant: "destructive",
+        description: "Benutzer konnte nicht gelöscht werden",
+        logError: true,
       });
     }
   }, [fetchUsers, toast]);

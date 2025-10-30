@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo, useMemo } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -48,7 +48,7 @@ const statusLabels = {
   'on-hold': 'Pausiert',
 };
 
-export const RoadmapModal = ({ children }: RoadmapModalProps) => {
+const RoadmapModal = ({ children }: RoadmapModalProps) => {
   const [roadmapItems, setRoadmapItems] = useState<RoadmapItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
@@ -83,19 +83,21 @@ export const RoadmapModal = ({ children }: RoadmapModalProps) => {
     }
   }, [open]);
 
-  const getProgress = () => {
+  const progress = useMemo(() => {
     const completed = roadmapItems.filter(item => item.status === 'completed').length;
     return roadmapItems.length > 0 ? (completed / roadmapItems.length) * 100 : 0;
-  };
+  }, [roadmapItems]);
 
-  const groupedItems = roadmapItems.reduce((acc, item) => {
-    const category = item.category || 'Allgemein';
-    if (!acc[category]) {
-      acc[category] = [];
-    }
-    acc[category].push(item);
-    return acc;
-  }, {} as Record<string, RoadmapItem[]>);
+  const groupedItems = useMemo(() => {
+    return roadmapItems.reduce((acc, item) => {
+      const category = item.category || 'Allgemein';
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(item);
+      return acc;
+    }, {} as Record<string, RoadmapItem[]>);
+  }, [roadmapItems]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -124,10 +126,10 @@ export const RoadmapModal = ({ children }: RoadmapModalProps) => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  <Progress value={getProgress()} className="h-2" />
+                  <Progress value={progress} className="h-2" />
                   <div className="flex justify-between text-sm text-muted-foreground">
                     <span>{roadmapItems.filter(item => item.status === 'completed').length} von {roadmapItems.length} abgeschlossen</span>
-                    <span>{Math.round(getProgress())}%</span>
+                    <span>{Math.round(progress)}%</span>
                   </div>
                 </div>
               </CardContent>
@@ -234,3 +236,5 @@ export const RoadmapModal = ({ children }: RoadmapModalProps) => {
     </Dialog>
   );
 };
+
+export default memo(RoadmapModal);

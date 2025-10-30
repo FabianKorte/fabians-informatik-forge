@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo, useCallback } from "react";
 import { Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,7 +9,7 @@ interface SearchBarProps {
   onSearch: (query: string) => void;
 }
 
-export const SearchBar = ({
+const SearchBar = ({
   placeholder = "Kategorien durchsuchen...",
   onSearch,
 }: SearchBarProps) => {
@@ -21,14 +21,14 @@ export const SearchBar = ({
     onSearch(debouncedQuery);
   }, [debouncedQuery, onSearch]);
 
-  const handleSearch = (value: string) => {
+  const handleSearch = useCallback((value: string) => {
     setQuery(value);
-  };
+  }, []);
 
-  const clearSearch = () => {
+  const clearSearch = useCallback(() => {
     setQuery("");
     onSearch("");
-  };
+  }, [onSearch]);
 
   return (
     <div className="w-full max-w-2xl mx-auto" role="search">
@@ -91,3 +91,5 @@ export const SearchBar = ({
     </div>
   );
 };
+
+export default memo(SearchBar);

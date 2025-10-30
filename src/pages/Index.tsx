@@ -1,11 +1,11 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Hero } from "@/components/Hero";
 import { CategoryCard } from "@/components/CategoryCard";
-import { SearchBar } from "@/components/SearchBar";
-import { FeedbackForm } from "@/components/feedback/FeedbackForm";
+import SearchBar from "@/components/SearchBar";
+import FeedbackForm from "@/components/feedback/FeedbackForm";
 import { FeedbackList } from "@/components/feedback/FeedbackList";
-import { RoadmapModal } from "@/components/RoadmapModal";
+import RoadmapModal from "@/components/RoadmapModal";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { SEO } from "@/components/SEO";
 import { StructuredData } from "@/components/StructuredData";
@@ -21,24 +21,6 @@ import logo from "@/assets/logo.png";
 import type { LearnModule } from "@/types/learn";
 import { logger } from "@/lib/logger";
 
-// Pure function to count elements in modules
-const countElements = (modules: LearnModule[]) => {
-  if (!modules || modules.length === 0) return 0;
-  return modules.reduce((sum, m) => {
-    switch (m.type) {
-      case "flashcards": return sum + (m.cards?.length || 0);
-      case "quiz": return sum + (m.questions?.length || 0);
-      case "matching": return sum + (m.pairs?.length || 0);
-      case "code": return sum + (m.challenges?.length || 0);
-      case "dragdrop": return sum + (m.games?.reduce((a, g) => a + (g.items?.length || 0), 0) || 0);
-      case "memory": return sum + (m.games?.reduce((a, g) => a + (g.pairs?.length || 0), 0) || 0);
-      case "timeline": return sum + (m.timelines?.reduce((a, t) => a + (t.events?.length || 0), 0) || 0);
-      case "scenario": return sum + (m.scenarios?.length || 0);
-      case "interactive": return sum + (m.tasks?.length || 0);
-      default: return sum;
-    }
-  }, 0);
-};
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -95,6 +77,25 @@ const Index = () => {
     }
   }, [isLoading]);
 
+  // Pure function to count elements in modules (memoized)
+  const countElements = useCallback((modules: LearnModule[]) => {
+    if (!modules || modules.length === 0) return 0;
+    return modules.reduce((sum, m) => {
+      switch (m.type) {
+        case "flashcards": return sum + (m.cards?.length || 0);
+        case "quiz": return sum + (m.questions?.length || 0);
+        case "matching": return sum + (m.pairs?.length || 0);
+        case "code": return sum + (m.challenges?.length || 0);
+        case "dragdrop": return sum + (m.games?.reduce((a, g) => a + (g.items?.length || 0), 0) || 0);
+        case "memory": return sum + (m.games?.reduce((a, g) => a + (g.pairs?.length || 0), 0) || 0);
+        case "timeline": return sum + (m.timelines?.reduce((a, t) => a + (t.events?.length || 0), 0) || 0);
+        case "scenario": return sum + (m.scenarios?.length || 0);
+        case "interactive": return sum + (m.tasks?.length || 0);
+        default: return sum;
+      }
+    }, 0);
+  }, []);
+
   const { regularCategories, randomTrainingCategory, stats } = useMemo(() => {
     const random = categories.find(c => c.id === 'zufallstraining');
     const regular = categories.filter(c => c.id !== 'zufallstraining');
@@ -127,13 +128,13 @@ const Index = () => {
     ), [regularCategories, searchQuery]
   );
 
-  const handleStartLearning = () => {
+  const handleStartLearning = useCallback(() => {
     document.getElementById('categories-section')?.scrollIntoView({ behavior: 'smooth' });
-  };
+  }, []);
 
-  const handleShowProgress = () => navigate('/progress');
-  const handleCategoryStart = (categoryId: string) => navigate(`/learn/${categoryId}`);
-  const handleFeedbackSubmitted = () => setFeedbackRefreshTrigger(prev => prev + 1);
+  const handleShowProgress = useCallback(() => navigate('/progress'), [navigate]);
+  const handleCategoryStart = useCallback((categoryId: string) => navigate(`/learn/${categoryId}`), [navigate]);
+  const handleFeedbackSubmitted = useCallback(() => setFeedbackRefreshTrigger(prev => prev + 1), []);
 
   // Keyboard shortcuts
   useKeyboardNavigation([

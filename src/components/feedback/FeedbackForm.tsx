@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -9,14 +9,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { Loader2, Send } from "lucide-react";
 import { z } from "zod";
 import { logger } from "@/lib/logger";
-import { sanitizeInput } from "@/lib/sanitization";
+import { handleError } from "@/lib/errorHandler";
 
 const feedbackSchema = z.object({
   name: z.string().trim().max(100, "Name darf maximal 100 Zeichen lang sein"),
   message: z.string().trim().min(1, "Feedback ist erforderlich").max(1000, "Feedback darf maximal 1000 Zeichen lang sein")
 });
 
-export const FeedbackForm = ({ onFeedbackSubmitted }: { onFeedbackSubmitted?: () => void }) => {
+const FeedbackForm = ({ onFeedbackSubmitted }: { onFeedbackSubmitted?: () => void }) => {
   const [name, setName] = useState("");
   const [feedback, setFeedback] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -91,11 +91,10 @@ export const FeedbackForm = ({ onFeedbackSubmitted }: { onFeedbackSubmitted?: ()
       onFeedbackSubmitted?.();
       
     } catch (error) {
-      logger.error('Error submitting feedback:', error);
-      toast({
-        title: "Fehler",
-        description: "Feedback konnte nicht gesendet werden. Versuche es später erneut.",
-        variant: "destructive",
+      handleError(error, {
+        title: "Fehler beim Senden",
+        description: "Feedback konnte nicht gesendet werden",
+        logError: true,
       });
     } finally {
       setIsSubmitting(false);
@@ -165,3 +164,5 @@ export const FeedbackForm = ({ onFeedbackSubmitted }: { onFeedbackSubmitted?: ()
     </Card>
   );
 };
+
+export default memo(FeedbackForm);
