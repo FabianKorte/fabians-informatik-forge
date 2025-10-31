@@ -11,6 +11,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import { useAdminData } from "@/hooks/useAdminData";
+import { EmptyState } from "@/components/ui/empty-state";
+import { LoadingState } from "@/components/ui/loading-state";
+import { MessageSquare } from "lucide-react";
 
 interface Feedback {
   id: string;
@@ -133,14 +136,7 @@ export const AdminFeedbacks = () => {
   const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
   if (isLoading) {
-    return (
-      <div className="space-y-4">
-        <Skeleton className="h-12 w-full" />
-        <Skeleton className="h-32 w-full" />
-        <Skeleton className="h-32 w-full" />
-        <Skeleton className="h-32 w-full" />
-      </div>
-    );
+    return <LoadingState message="Lade Feedbacks..." />;
   }
 
   return (
@@ -168,9 +164,11 @@ export const AdminFeedbacks = () => {
       </div>
 
       {feedbacks.length === 0 ? (
-        <Card className="p-8 text-center text-muted-foreground">
-          Noch keine Feedbacks vorhanden
-        </Card>
+        <EmptyState
+          icon={MessageSquare}
+          title="Noch keine Feedbacks vorhanden"
+          description="Wenn Nutzer Feedback senden, erscheint es hier."
+        />
       ) : (
         <div className="space-y-4">
           {feedbacks.length > 0 && (

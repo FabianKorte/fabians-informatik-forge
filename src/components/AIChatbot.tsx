@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { useFocusTrap } from "@/hooks/useKeyboardNavigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -25,9 +26,21 @@ export const AIChatbot = () => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const chatRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const retryCountRef = useRef(0);
   const MAX_RETRIES = 3;
+
+  // Focus trap when chatbot is open
+  useFocusTrap(isOpen, chatRef);
+
+  // Focus input when opened
+  useEffect(() => {
+    if (isOpen && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -159,39 +172,47 @@ export const AIChatbot = () => {
       <Button
         onClick={() => setIsOpen(true)}
         size="lg"
-        className="fixed bottom-6 right-6 h-16 w-16 rounded-full shadow-elegant hover:shadow-glow transition-all duration-300 bg-gradient-to-br from-primary via-primary to-primary-glow hover:scale-110 group"
+        className="fixed bottom-6 right-6 h-16 w-16 rounded-full shadow-elegant hover:shadow-glow transition-all duration-300 bg-gradient-to-br from-primary via-primary to-primary-glow hover:scale-110 group z-50"
+        aria-label="KI-Chatbot öffnen"
       >
-        <MessageCircle className="h-7 w-7 group-hover:rotate-12 transition-transform" />
+        <MessageCircle className="h-7 w-7 group-hover:rotate-12 transition-transform" aria-hidden="true" />
       </Button>
     );
   }
 
   return (
-    <Card className="fixed bottom-6 right-6 w-[400px] h-[650px] flex flex-col shadow-elegant border-0 animate-in slide-in-from-bottom-4 duration-300 bg-background/95 backdrop-blur-sm">
+    <Card 
+      ref={chatRef}
+      className="fixed bottom-6 right-6 w-[400px] h-[650px] flex flex-col shadow-elegant border-0 animate-in slide-in-from-bottom-4 duration-300 bg-background/95 backdrop-blur-sm z-50"
+      role="dialog"
+      aria-labelledby="chatbot-title"
+      aria-describedby="chatbot-description"
+    >
       {/* Header */}
       <div className="flex items-center justify-between p-5 border-b border-border/50 bg-gradient-to-r from-primary via-primary to-primary-glow text-primary-foreground rounded-t-xl">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-primary-foreground/20 rounded-lg backdrop-blur-sm">
             <Sparkles className="h-5 w-5" />
           </div>
-          <div>
-            <h3 className="font-semibold text-base">KI-Tutor</h3>
-            <p className="text-xs opacity-90">Immer für dich da</p>
-          </div>
+            <div>
+              <h3 id="chatbot-title" className="font-semibold text-base">KI-Tutor</h3>
+              <p id="chatbot-description" className="text-xs opacity-90">Immer für dich da</p>
+            </div>
         </div>
         <Button
           variant="ghost"
           size="icon"
           onClick={() => setIsOpen(false)}
           className="text-primary-foreground hover:bg-primary-foreground/20 h-9 w-9 rounded-lg"
+          aria-label="Chat schließen"
         >
-          <X className="h-4 w-4" />
+          <X className="h-4 w-4" aria-hidden="true" />
         </Button>
       </div>
 
       {/* Messages */}
       <ScrollArea className="flex-1 p-5" ref={scrollRef}>
-        <div className="space-y-4">
+        <div className="space-y-4" role="log" aria-live="polite" aria-label="Chat-Verlauf">
           {messages.map((message, index) => (
             <div
               key={`message-${index}-${message.role}-${message.content.substring(0, 30)}`}
@@ -225,19 +246,22 @@ export const AIChatbot = () => {
       <form onSubmit={handleSubmit} className="p-4 border-t border-border/50 bg-background/50">
         <div className="flex gap-2">
           <Input
+            ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Stelle eine Frage..."
             disabled={isLoading}
             className="flex-1 rounded-xl border-border/50 bg-background focus-visible:ring-primary"
+            aria-label="Nachricht eingeben"
           />
           <Button 
             type="submit" 
             disabled={isLoading || !input.trim()} 
             size="icon"
             className="h-10 w-10 rounded-xl"
+            aria-label="Nachricht senden"
           >
-            <Send className="h-4 w-4" />
+            <Send className="h-4 w-4" aria-hidden="true" />
           </Button>
         </div>
       </form>

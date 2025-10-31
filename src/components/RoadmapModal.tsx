@@ -1,4 +1,5 @@
-import { useEffect, useState, memo, useMemo } from "react";
+import { useEffect, useState, memo, useMemo, useRef } from "react";
+import { useFocusTrap } from "@/hooks/useKeyboardNavigation";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -52,6 +53,10 @@ const RoadmapModal = ({ children }: RoadmapModalProps) => {
   const [roadmapItems, setRoadmapItems] = useState<RoadmapItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
+  
+  // Focus trap when modal is open
+  useFocusTrap(open, modalRef);
 
   const fetchRoadmapItems = async () => {
     try {
@@ -104,17 +109,24 @@ const RoadmapModal = ({ children }: RoadmapModalProps) => {
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
-      <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+      <DialogContent 
+        ref={modalRef}
+        className="max-w-4xl max-h-[80vh] overflow-y-auto"
+        aria-describedby="roadmap-description"
+      >
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <MapPin className="w-5 h-5 text-accent" />
+            <MapPin className="w-5 h-5 text-accent" aria-hidden="true" />
             Entwicklungs-Roadmap
           </DialogTitle>
+          <p id="roadmap-description" className="sr-only">
+            Übersicht über geplante und abgeschlossene Features der Lernplattform
+          </p>
         </DialogHeader>
 
         {loading ? (
-          <div className="py-8 text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent mx-auto"></div>
+          <div className="py-8 text-center" role="status" aria-live="polite">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent mx-auto" aria-hidden="true"></div>
             <p className="text-muted-foreground mt-4">Lade Roadmap...</p>
           </div>
         ) : (

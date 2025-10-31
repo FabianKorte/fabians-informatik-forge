@@ -18,6 +18,9 @@ import { Target, Brain, Zap } from "lucide-react";
 import { MicrochipLoader } from "@/components/MicrochipLoader";
 import { logger } from "@/lib/logger";
 import { LearnErrorBoundary } from "@/components/ErrorBoundaries/LearnErrorBoundary";
+import { EmptyState } from "@/components/ui/empty-state";
+import { LoadingState } from "@/components/ui/loading-state";
+import { BookOpen } from "lucide-react";
 
 const LearnPage = () => {
   const { categoryId } = useParams();
@@ -112,13 +115,15 @@ const LearnPage = () => {
               </div>
 
               {interactiveTasks.length === 0 && modules.length === 0 ? (
-                <Card className="p-8 text-center">
-                  <div className="text-6xl mb-4">🚧</div>
-                  <h3 className="text-xl font-semibold mb-2">Inhalte werden erstellt</h3>
-                  <p className="text-muted-foreground">
-                    Für diese Kategorie werden die Lerninhalte gerade erstellt. Schau bald wieder vorbei!
-                  </p>
-                </Card>
+                <EmptyState
+                  emoji="🚧"
+                  title="Inhalte werden erstellt"
+                  description="Für diese Kategorie werden die Lerninhalte gerade erstellt. Schau bald wieder vorbei!"
+                  action={{
+                    label: "Zurück zur Übersicht",
+                    onClick: () => window.location.href = "/"
+                  }}
+                />
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                   {/* Interactive Training */}

@@ -9,6 +9,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { logAuditAction } from "@/lib/auditLog";
 import { logger } from "@/lib/logger";
 import { handleError } from "@/lib/errorHandler";
+import { EmptyState } from "@/components/ui/empty-state";
+import { LoadingState } from "@/components/ui/loading-state";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -360,11 +362,7 @@ export const AdminUsers = () => {
   }, [fetchUsers, toast]);
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-8">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
-    );
+    return <LoadingState message="Lade Benutzer..." />;
   }
 
   return (
@@ -383,8 +381,15 @@ export const AdminUsers = () => {
       </div>
 
       <div className="grid grid-cols-1 gap-4">
-        {users.map((user) => (
-          <Card key={user.id} className="p-4">
+        {users.length === 0 ? (
+          <EmptyState
+            icon={User}
+            title="Keine Benutzer gefunden"
+            description="Es wurden noch keine Benutzer registriert."
+          />
+        ) : (
+          users.map((user) => (
+            <Card key={user.id} className="p-4">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
               <div className="flex items-center gap-3 min-w-0">
                 <Avatar className="w-10 h-10 shrink-0">
@@ -513,13 +518,9 @@ export const AdminUsers = () => {
               </div>
             </div>
           </Card>
-        ))}
-
-        {users.length === 0 && (
-          <Card className="p-8 text-center">
-            <p className="text-muted-foreground">Keine Benutzer gefunden</p>
-          </Card>
+          ))
         )}
+
       </div>
     </div>
   );

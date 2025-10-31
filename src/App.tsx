@@ -17,6 +17,7 @@ import { FallbackLoader } from "@/components/FallbackLoader";
 import { AdminErrorBoundary } from "@/components/ErrorBoundaries/AdminErrorBoundary";
 import { ChatErrorBoundary } from "@/components/ErrorBoundaries/ChatErrorBoundary";
 import { LearnErrorBoundary } from "@/components/ErrorBoundaries/LearnErrorBoundary";
+import { SkipToContent } from "@/components/SkipToContent";
 
 // Lazy load heavy pages and components
 const LearnPage = lazy(() => import("./pages/Learn"));
@@ -34,7 +35,8 @@ const AppRoutes = () => {
   
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="flex-1">
+      <SkipToContent />
+      <main id="main-content" className="flex-1" role="main">
         <Suspense fallback={<FallbackLoader />}>
           <Routes>
             <Route path="/" element={<Index />} />
@@ -67,7 +69,7 @@ const AppRoutes = () => {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
-      </div>
+      </main>
       <Footer />
     </div>
   );
