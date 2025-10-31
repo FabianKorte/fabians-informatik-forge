@@ -39,7 +39,13 @@ const Index = () => {
     const initializeData = async () => {
       try {
         setIsLoading(true);
-        await seedDatabase();
+        // Try to seed database, but don't let it block category loading
+        try {
+          await seedDatabase();
+        } catch (seedError) {
+          logger.warn('Database seeding failed, but continuing with data fetch:', seedError);
+        }
+        
         const [cats, modules] = await Promise.all([
           getCategoriesFromDatabase(),
           getAllModules(),
