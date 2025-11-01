@@ -26,6 +26,7 @@ const Admin = lazy(() => import("./pages/Admin"));
 const UserDashboard = lazy(() => import("./pages/UserDashboard"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Chat = lazy(() => import("./pages/Chat"));
+const StudyGroups = lazy(() => import("./pages/StudyGroups"));
 const AIChatbot = lazy(() => import("@/components/AIChatbot").then(module => ({ default: module.AIChatbot })));
 
 const queryClient = new QueryClient();
@@ -59,6 +60,7 @@ const AppRoutes = () => {
             />
             <Route path="/dashboard" element={<UserDashboard />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/study-groups" element={<StudyGroups />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/chat" element={
               <ChatErrorBoundary>

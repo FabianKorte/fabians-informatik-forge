@@ -21,6 +21,9 @@ import { LearnErrorBoundary } from "@/components/ErrorBoundaries/LearnErrorBound
 import { EmptyState } from "@/components/ui/empty-state";
 import { LoadingState } from "@/components/ui/loading-state";
 import { BookOpen } from "lucide-react";
+import { GamificationBar } from "@/components/gamification/GamificationBar";
+import { StreakDisplay } from "@/components/streaks/StreakDisplay";
+import { ModuleNotesEditor } from "@/components/notes/ModuleNotesEditor";
 
 const LearnPage = () => {
   const { categoryId } = useParams();
@@ -90,12 +93,19 @@ const LearnPage = () => {
       />
       <main className="min-h-screen bg-background">
       <header className="px-6 pt-14 pb-10 bg-gradient-to-b from-background to-background">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto space-y-6">
           <div className="mb-6">
             <span className="inline-block text-xs uppercase tracking-wider text-muted-foreground">{category.difficulty}</span>
             <h1 className="text-3xl md:text-4xl font-extrabold text-foreground mt-2">{category.title}</h1>
             <p className="text-muted-foreground mt-2 max-w-2xl">{category.description}</p>
           </div>
+          
+          {/* Gamification & Streak Display */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <GamificationBar />
+            <StreakDisplay />
+          </div>
+
           <Button asChild variant="outline">
             <Link to="/">Zur Übersicht</Link>
           </Button>
@@ -282,30 +292,37 @@ const LearnPage = () => {
                 </Button>
               </div>
               
-              <div className="rounded-2xl border border-border bg-card p-6 shadow-elegant">
-                <LearnErrorBoundary>
-                  {selectedMethod === 'interactive' && interactiveTasks.length > 0 && (
-                    <InteractiveTraining tasks={interactiveTasks} categoryId={categoryId} />
-                  )}
+              <div className="space-y-6">
+                {/* Module Notes Editor */}
+                {selectedMethod && categoryId && (
+                  <ModuleNotesEditor categoryId={categoryId} moduleIndex={0} />
+                )}
 
-                  {selectedMethod === 'flashcards' && modules.filter(m => m.type === 'flashcards').length > 0 && (
-                    <Flashcards 
-                      cards={modules.filter(m => m.type === 'flashcards').flatMap(m => m.cards)} 
-                      categoryId={categoryId} 
-                      moduleIndex={0} 
-                    />
-                  )}
+                <div className="rounded-2xl border border-border bg-card p-6 shadow-elegant">
+                  <LearnErrorBoundary>
+                    {selectedMethod === 'interactive' && interactiveTasks.length > 0 && (
+                      <InteractiveTraining tasks={interactiveTasks} categoryId={categoryId} />
+                    )}
 
-                  {selectedMethod === 'quiz' && modules.filter(m => m.type === 'quiz').length > 0 && (
-                    <Quiz 
-                      questions={modules.filter(m => m.type === 'quiz').flatMap(m => m.questions)} 
-                    />
-                  )}
+                    {selectedMethod === 'flashcards' && modules.filter(m => m.type === 'flashcards').length > 0 && (
+                      <Flashcards 
+                        cards={modules.filter(m => m.type === 'flashcards').flatMap(m => m.cards)} 
+                        categoryId={categoryId} 
+                        moduleIndex={0} 
+                      />
+                    )}
 
-                  {selectedMethod === 'focus' && (
-                    <FocusTraining modules={modules} categoryId={categoryId} />
-                  )}
-                </LearnErrorBoundary>
+                    {selectedMethod === 'quiz' && modules.filter(m => m.type === 'quiz').length > 0 && (
+                      <Quiz 
+                        questions={modules.filter(m => m.type === 'quiz').flatMap(m => m.questions)} 
+                      />
+                    )}
+
+                    {selectedMethod === 'focus' && (
+                      <FocusTraining modules={modules} categoryId={categoryId} />
+                    )}
+                  </LearnErrorBoundary>
+                </div>
               </div>
             </div>
           )}

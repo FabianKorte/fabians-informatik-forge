@@ -2,6 +2,8 @@ import { useEffect, useState, useMemo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import type { Flashcard } from "@/types/learn";
 import { useProgress } from "@/hooks/useProgress";
+import { useTextToSpeech } from "@/hooks/useTextToSpeech";
+import { Volume2, VolumeX } from "lucide-react";
 
 interface FlashcardsProps {
   cards: Flashcard[];
@@ -21,6 +23,9 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
 
   // Progress tracking
   const { progressData, loaded, saveFlashcardProgress } = useProgress(categoryId, "flashcards", moduleIndex);
+  
+  // Text-to-Speech
+  const { speak, stop, isPlaying } = useTextToSpeech();
 
   // Initialize on cards load with a random start + load saved progress
   useEffect(() => {
@@ -167,6 +172,33 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
         <p className="text-xs text-muted-foreground">
           💡 <strong>Tipp:</strong> Schwierige Karten werden öfter wiederholt. Dein Lernfortschritt wird automatisch gespeichert.
         </p>
+      </div>
+
+      {/* Audio Controls */}
+      <div className="flex justify-center gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            if (isPlaying) {
+              stop();
+            } else {
+              speak(flipped ? current.back : current.front);
+            }
+          }}
+        >
+          {isPlaying ? (
+            <>
+              <VolumeX className="h-4 w-4 mr-2" />
+              Stop
+            </>
+          ) : (
+            <>
+              <Volume2 className="h-4 w-4 mr-2" />
+              Vorlesen
+            </>
+          )}
+        </Button>
       </div>
 
       {/* Clean Interactive Card */}

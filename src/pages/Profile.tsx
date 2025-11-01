@@ -27,6 +27,10 @@ import { use2FABackup } from "@/hooks/use2FABackup";
 import { useProfile } from "@/hooks/useProfile";
 import { logger } from "@/lib/logger";
 import { sanitizeInput, sanitizeBio } from "@/lib/sanitization";
+import { StatisticsDashboard } from "@/components/statistics/StatisticsDashboard";
+import { AchievementsList } from "@/components/gamification/AchievementsList";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Trophy, BarChart3 } from "lucide-react";
 
 // Lazy load TwoFactorSetupDialog
 const TwoFactorSetupDialog = lazy(() => 
@@ -391,6 +395,34 @@ const Profile = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Statistics & Achievements */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Statistiken & Erfolge</CardTitle>
+            <CardDescription>Deine Lernfortschritte und Achievements</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Tabs defaultValue="statistics">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="statistics">
+                  <BarChart3 className="w-4 h-4 mr-2" />
+                  Statistiken
+                </TabsTrigger>
+                <TabsTrigger value="achievements">
+                  <Trophy className="w-4 h-4 mr-2" />
+                  Achievements
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="statistics" className="mt-6">
+                <StatisticsDashboard />
+              </TabsContent>
+              <TabsContent value="achievements" className="mt-6">
+                <AchievementsList />
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
       </div>
 
       <Suspense fallback={null}>
