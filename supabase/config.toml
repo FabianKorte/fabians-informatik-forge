@@ -21,3 +21,6 @@ verify_jwt = true
 
 [functions.check-rate-limit]
 verify_jwt = false
+
+[functions.generate-ai-exercises]
+verify_jwt = true

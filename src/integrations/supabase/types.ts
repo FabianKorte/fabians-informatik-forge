@@ -74,6 +74,42 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_generated_content: {
+        Row: {
+          category_id: string
+          created_at: string
+          error_message: string | null
+          generated_content: Json
+          id: string
+          module_type: string
+          prompt: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          category_id: string
+          created_at?: string
+          error_message?: string | null
+          generated_content: Json
+          id?: string
+          module_type: string
+          prompt: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          category_id?: string
+          created_at?: string
+          error_message?: string | null
+          generated_content?: Json
+          id?: string
+          module_type?: string
+          prompt?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       audit_logs: {
         Row: {
           action: string
@@ -161,6 +197,48 @@ export type Database = {
         }
         Relationships: []
       }
+      exam_sessions: {
+        Row: {
+          category_id: string
+          completed_at: string | null
+          correct_answers: number
+          created_at: string
+          id: string
+          score: number | null
+          session_data: Json
+          started_at: string
+          time_limit_minutes: number
+          total_questions: number
+          user_id: string
+        }
+        Insert: {
+          category_id: string
+          completed_at?: string | null
+          correct_answers?: number
+          created_at?: string
+          id?: string
+          score?: number | null
+          session_data?: Json
+          started_at?: string
+          time_limit_minutes: number
+          total_questions: number
+          user_id: string
+        }
+        Update: {
+          category_id?: string
+          completed_at?: string | null
+          correct_answers?: number
+          created_at?: string
+          id?: string
+          score?: number | null
+          session_data?: Json
+          started_at?: string
+          time_limit_minutes?: number
+          total_questions?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       feedbacks: {
         Row: {
           created_at: string | null
@@ -231,6 +309,7 @@ export type Database = {
           created_at: string
           id: string
           order_index: number
+          search_vector: unknown
           title: string
           type: string
           updated_at: string
@@ -241,6 +320,7 @@ export type Database = {
           created_at?: string
           id?: string
           order_index?: number
+          search_vector?: unknown
           title: string
           type: string
           updated_at?: string
@@ -251,6 +331,7 @@ export type Database = {
           created_at?: string
           id?: string
           order_index?: number
+          search_vector?: unknown
           title?: string
           type?: string
           updated_at?: string
@@ -261,6 +342,47 @@ export type Database = {
             columns: ["category_id"]
             isOneToOne: false
             referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      learn_modules_history: {
+        Row: {
+          change_notes: string | null
+          changed_by: string | null
+          content: Json
+          created_at: string
+          id: string
+          module_id: string
+          title: string
+          version: number
+        }
+        Insert: {
+          change_notes?: string | null
+          changed_by?: string | null
+          content: Json
+          created_at?: string
+          id?: string
+          module_id: string
+          title: string
+          version: number
+        }
+        Update: {
+          change_notes?: string | null
+          changed_by?: string | null
+          content?: Json
+          created_at?: string
+          id?: string
+          module_id?: string
+          title?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "learn_modules_history_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "learn_modules"
             referencedColumns: ["id"]
           },
         ]
@@ -294,6 +416,42 @@ export type Database = {
           last_attempt_at?: string
         }
         Relationships: []
+      }
+      module_tags: {
+        Row: {
+          created_at: string
+          id: string
+          module_id: string
+          tag_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          module_id: string
+          tag_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          module_id?: string
+          tag_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "module_tags_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "learn_modules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "module_tags_tag_id_fkey"
+            columns: ["tag_id"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -424,6 +582,30 @@ export type Database = {
           id?: string
           is_public?: boolean
           max_members?: number | null
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      tags: {
+        Row: {
+          color: string
+          created_at: string
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          color?: string
+          created_at?: string
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          id?: string
           name?: string
           updated_at?: string
         }

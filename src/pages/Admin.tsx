@@ -14,6 +14,7 @@ const AdminUsers = lazy(() => import("@/components/admin/AdminUsers").then(m => 
 const AdminSuggestions = lazy(() => import("@/components/admin/AdminSuggestions").then(m => ({ default: m.AdminSuggestions })));
 const AdminNotes = lazy(() => import("@/components/admin/AdminNotes").then(m => ({ default: m.AdminNotes })));
 const AdminAuditLogs = lazy(() => import("@/components/admin/AdminAuditLogs").then(m => ({ default: m.AdminAuditLogs })));
+const BulkEditModules = lazy(() => import("@/components/admin/BulkEditModules").then(m => ({ default: m.BulkEditModules })));
 
 const TabSkeleton = () => (
   <div className="space-y-4">

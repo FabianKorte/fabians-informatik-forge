@@ -24,6 +24,9 @@ import { BookOpen } from "lucide-react";
 import { GamificationBar } from "@/components/gamification/GamificationBar";
 import { StreakDisplay } from "@/components/streaks/StreakDisplay";
 import { ModuleNotesEditor } from "@/components/notes/ModuleNotesEditor";
+import { ContentSearch } from "@/components/ContentSearch";
+import { ExamMode } from "@/components/ExamMode";
+import { AIExerciseGenerator } from "@/components/AIExerciseGenerator";
 
 const LearnPage = () => {
   const { categoryId } = useParams();
@@ -136,10 +139,33 @@ const LearnPage = () => {
                 />
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-                  {/* Interactive Training */}
-                  {interactiveTasks.length > 0 && (
-                    <div className="md:col-span-3 mb-4 md:mb-6">
-                      <GradientShadowCard>
+              {/* Content Search */}
+              <div className="md:col-span-3 mb-4">
+                <Card className="p-6">
+                  <ContentSearch />
+                </Card>
+              </div>
+
+              {/* AI Exercise Generator */}
+              {categoryId && (
+                <div className="md:col-span-3 mb-4">
+                  <AIExerciseGenerator categoryId={categoryId} />
+                </div>
+              )}
+
+              {/* Exam Mode */}
+              <div className="md:col-span-3 mb-4">
+                <Card className="p-6">
+                  <Button onClick={() => setSelectedMethod('exam')} className="w-full">
+                    Prüfungsmodus starten
+                  </Button>
+                </Card>
+              </div>
+
+              {/* Interactive Training */}
+              {interactiveTasks.length > 0 && (
+                <div className="md:col-span-3 mb-4 md:mb-6">
+                  <GradientShadowCard>
                         <Card 
                           className="cursor-pointer p-4 sm:p-6 md:p-8 hover:scale-[1.02] transition-transform bg-gradient-to-br from-primary/5 to-accent/5"
                           onClick={() => setSelectedMethod('interactive')}
@@ -282,6 +308,11 @@ const LearnPage = () => {
                   </div>
                 </div>
               )}
+            </div>
+          ) : selectedMethod === 'exam' ? (
+            <div className="space-y-4">
+              <Button variant="outline" onClick={() => setSelectedMethod(null)}>← Zurück</Button>
+              <ExamMode categoryId={categoryId || ''} modules={modules} timeLimitMinutes={60} />
             </div>
           ) : (
             // Learning Content View
