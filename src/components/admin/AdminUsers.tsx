@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
 import { Search, Trash2, Shield } from "lucide-react";
 import { UserCard } from "./UserCard";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -19,7 +20,8 @@ export function AdminUsers() {
   
   const { data: profiles, isLoading, refetch } = useAdminData<any>({
     table: 'profiles',
-    orderBy: { column: 'created_at', ascending: false },
+    orderBy: 'created_at',
+    ascending: false,
   });
 
   const filteredProfiles = profiles?.filter(profile => 
@@ -83,7 +85,7 @@ export function AdminUsers() {
         // Then insert new role
         const { error } = await supabase
           .from('user_roles')
-          .insert({ user_id: userId, role });
+          .insert([{ user_id: userId, role: role as any }]);
 
         if (error) throw error;
 
@@ -165,10 +167,15 @@ export function AdminUsers() {
                 className="mt-4"
               />
               <div className="flex-1">
-                <UserCard
-                  profile={profile}
-                  onUpdate={refetch}
-                />
+                <Card className="p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="font-semibold">{profile.username}</span>
+                    <Badge variant="outline">{profile.id}</Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Erstellt: {new Date(profile.created_at).toLocaleDateString()}
+                  </p>
+                </Card>
               </div>
             </div>
           ))}
