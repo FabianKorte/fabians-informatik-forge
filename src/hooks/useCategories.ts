@@ -4,6 +4,10 @@ import { supabase } from '@/integrations/supabase/client';
 interface Category {
   id: string;
   title: string;
+  description?: string;
+  icon?: string;
+  difficulty?: string;
+  gradient?: string;
 }
 
 export const useCategories = () => {
@@ -12,7 +16,7 @@ export const useCategories = () => {
     queryFn: async ({ signal }) => {
       const { data, error } = await supabase
         .from('categories')
-        .select('id, title')
+        .select('*')
         .order('id')
         .abortSignal(signal);
 

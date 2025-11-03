@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/useAuth";
-import { LogOut, BookOpen, MapPin, MessageSquare, Home, FileText, Users, Shield } from "lucide-react";
+import { LogOut, BookOpen, MapPin, MessageSquare, Home, FileText, Users, Shield, TrendingUp, Activity } from "lucide-react";
 
 // Lazy load admin components
 const AdminLearningContent = lazy(() => import("@/components/admin/AdminLearningContent").then(m => ({ default: m.AdminLearningContent })));
@@ -15,6 +15,9 @@ const AdminSuggestions = lazy(() => import("@/components/admin/AdminSuggestions"
 const AdminNotes = lazy(() => import("@/components/admin/AdminNotes").then(m => ({ default: m.AdminNotes })));
 const AdminAuditLogs = lazy(() => import("@/components/admin/AdminAuditLogs").then(m => ({ default: m.AdminAuditLogs })));
 const BulkEditModules = lazy(() => import("@/components/admin/BulkEditModules").then(m => ({ default: m.BulkEditModules })));
+const AnalyticsDashboard = lazy(() => import("@/components/admin/AnalyticsDashboard").then(m => ({ default: m.AnalyticsDashboard })));
+const CategoryManager = lazy(() => import("@/components/admin/CategoryManager").then(m => ({ default: m.CategoryManager })));
+const PerformanceMonitor = lazy(() => import("@/components/admin/PerformanceMonitor").then(m => ({ default: m.PerformanceMonitor })));
 
 const TabSkeleton = () => (
   <div className="space-y-4">
@@ -63,7 +66,7 @@ export default function Admin() {
           </CardHeader>
           <CardContent>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-3 lg:grid-cols-7 gap-1">
+              <TabsList className="grid w-full grid-cols-4 lg:grid-cols-9 gap-1">
                 <TabsTrigger value="learning" className="text-xs lg:text-sm">
                   <BookOpen className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
                   <span className="hidden sm:inline">Lerninhalte</span>
@@ -98,6 +101,16 @@ export default function Admin() {
                   <Shield className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
                   <span className="hidden sm:inline">Audit-Log</span>
                   <span className="sm:hidden">Audit</span>
+                </TabsTrigger>
+                <TabsTrigger value="analytics" className="text-xs lg:text-sm">
+                  <TrendingUp className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
+                  <span className="hidden sm:inline">Analytics</span>
+                  <span className="sm:hidden">Stats</span>
+                </TabsTrigger>
+                <TabsTrigger value="performance" className="text-xs lg:text-sm">
+                  <Activity className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
+                  <span className="hidden sm:inline">Performance</span>
+                  <span className="sm:hidden">Perf</span>
                 </TabsTrigger>
               </TabsList>
 
@@ -140,6 +153,18 @@ export default function Admin() {
               <TabsContent value="audit" className="mt-6">
                 <Suspense fallback={<TabSkeleton />}>
                   <AdminAuditLogs />
+                </Suspense>
+              </TabsContent>
+
+              <TabsContent value="analytics" className="mt-6">
+                <Suspense fallback={<TabSkeleton />}>
+                  <AnalyticsDashboard />
+                </Suspense>
+              </TabsContent>
+
+              <TabsContent value="performance" className="mt-6">
+                <Suspense fallback={<TabSkeleton />}>
+                  <PerformanceMonitor />
                 </Suspense>
               </TabsContent>
             </Tabs>

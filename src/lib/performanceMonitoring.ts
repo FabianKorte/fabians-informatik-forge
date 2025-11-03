@@ -1,107 +1,85 @@
-import { logger } from './logger';
+import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
-interface PerformanceMetric {
-  name: string;
-  value: number;
-  timestamp: string;
-}
+export class PerformanceMonitor {
+  private static instance: PerformanceMonitor;
+  private metrics: Map<string, number[]> = new Map();
 
-class PerformanceMonitor {
-  private metrics: PerformanceMetric[] = [];
-  private maxMetrics = 100;
+  private constructor() {}
 
-  constructor() {
-    this.initWebVitals();
+  static getInstance(): PerformanceMonitor {
+    if (!PerformanceMonitor.instance) {
+      PerformanceMonitor.instance = new PerformanceMonitor();
+    }
+    return PerformanceMonitor.instance;
   }
 
-  private initWebVitals() {
-    // Core Web Vitals monitoring
-    if ('PerformanceObserver' in window) {
-      // Largest Contentful Paint (LCP)
-      try {
-        const lcpObserver = new PerformanceObserver((list) => {
-          const entries = list.getEntries();
-          const lastEntry = entries[entries.length - 1] as any;
-          this.recordMetric('LCP', lastEntry.renderTime || lastEntry.loadTime);
-        });
-        lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
-      } catch (e) {
-        logger.warn('LCP observer not supported', e);
+  async trackMetric(name: string, value: number, unit: string = 'ms', metadata: Record<string, any> = {}) {
+    try {
+      // Store locally for aggregation
+      if (!this.metrics.has(name)) {
+        this.metrics.set(name, []);
       }
+      this.metrics.get(name)?.push(value);
 
-      // First Input Delay (FID)
-      try {
-        const fidObserver = new PerformanceObserver((list) => {
-          const entries = list.getEntries();
-          entries.forEach((entry: any) => {
-            this.recordMetric('FID', entry.processingStart - entry.startTime);
-          });
+      // Send to database (with throttling)
+      if (Math.random() < 0.1) { // Only send 10% of metrics to avoid overload
+        await supabase.from('performance_metrics').insert({
+          metric_name: name,
+          metric_value: value,
+          metric_unit: unit,
+          metadata,
         });
-        fidObserver.observe({ type: 'first-input', buffered: true });
-      } catch (e) {
-        logger.warn('FID observer not supported', e);
       }
-
-      // Cumulative Layout Shift (CLS)
-      try {
-        let clsValue = 0;
-        const clsObserver = new PerformanceObserver((list) => {
-          for (const entry of list.getEntries()) {
-            if (!(entry as any).hadRecentInput) {
-              clsValue += (entry as any).value;
-            }
-          }
-          this.recordMetric('CLS', clsValue);
-        });
-        clsObserver.observe({ type: 'layout-shift', buffered: true });
-      } catch (e) {
-        logger.warn('CLS observer not supported', e);
-      }
+    } catch (error) {
+      logger.error('Failed to track metric:', error);
     }
+  }
 
-    // Record page load time
+  trackPageLoad() {
+    if (typeof window === 'undefined') return;
+
     window.addEventListener('load', () => {
-      const perfData = performance.timing;
-      const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
-      this.recordMetric('Page Load Time', pageLoadTime);
+      const perfData = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      if (perfData) {
+        this.trackMetric('page_load', perfData.loadEventEnd - perfData.fetchStart, 'ms', {
+          domContentLoaded: perfData.domContentLoadedEventEnd - perfData.fetchStart,
+          domInteractive: perfData.domInteractive - perfData.fetchStart,
+        });
+      }
     });
   }
 
-  recordMetric(name: string, value: number) {
-    const metric: PerformanceMetric = {
-      name,
-      value: Math.round(value),
-      timestamp: new Date().toISOString(),
-    };
-
-    this.metrics.push(metric);
-
-    // Keep only last maxMetrics
-    if (this.metrics.length > this.maxMetrics) {
-      this.metrics = this.metrics.slice(-this.maxMetrics);
-    }
-
-    // Log in development
-    if (import.meta.env.DEV) {
-      logger.performance(name, value);
-    }
+  async trackApiCall(url: string, duration: number) {
+    await this.trackMetric('api_response', duration, 'ms', { url });
   }
 
-  getMetrics(): PerformanceMetric[] {
-    return [...this.metrics];
+  async trackDatabaseQuery(query: string, duration: number) {
+    await this.trackMetric('database_query', duration, 'ms', { query });
   }
 
-  getAverageMetric(name: string): number | null {
-    const relevantMetrics = this.metrics.filter(m => m.name === name);
-    if (relevantMetrics.length === 0) return null;
-    
-    const sum = relevantMetrics.reduce((acc, m) => acc + m.value, 0);
-    return Math.round(sum / relevantMetrics.length);
+  async trackRenderTime(componentName: string, duration: number) {
+    await this.trackMetric('render_time', duration, 'ms', { component: componentName });
+  }
+
+  getLocalMetrics(name: string): number[] {
+    return this.metrics.get(name) || [];
+  }
+
+  getAverageMetric(name: string): number {
+    const values = this.getLocalMetrics(name);
+    if (values.length === 0) return 0;
+    return values.reduce((a, b) => a + b, 0) / values.length;
   }
 
   clearMetrics() {
-    this.metrics = [];
+    this.metrics.clear();
   }
 }
 
-export const performanceMonitor = new PerformanceMonitor();
+export const performanceMonitor = PerformanceMonitor.getInstance();
+
+// Auto-track page load
+if (typeof window !== 'undefined') {
+  performanceMonitor.trackPageLoad();
+}

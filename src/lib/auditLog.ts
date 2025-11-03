@@ -25,7 +25,7 @@ interface AuditLogEntry {
   details?: Record<string, any>;
 }
 
-export async function logAuditAction(entry: AuditLogEntry) {
+export async function logAuditAction(entry: AuditLogEntry, ipAddress?: string) {
   try {
     const { data: { user } } = await supabase.auth.getUser();
     
@@ -42,6 +42,7 @@ export async function logAuditAction(entry: AuditLogEntry) {
         entity_type: entry.entity_type,
         entity_id: entry.entity_id || null,
         details: entry.details || {},
+        ip_address: ipAddress || null,
       });
 
     if (error) {
