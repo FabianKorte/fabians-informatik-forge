@@ -176,6 +176,48 @@ export type Database = {
         }
         Relationships: []
       }
+      card_reviews: {
+        Row: {
+          card_index: number
+          created_at: string
+          easiness_factor: number
+          id: string
+          interval: number
+          module_id: string
+          next_review: string
+          quality: number
+          repetitions: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          card_index: number
+          created_at?: string
+          easiness_factor?: number
+          id?: string
+          interval?: number
+          module_id: string
+          next_review?: string
+          quality: number
+          repetitions?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          card_index?: number
+          created_at?: string
+          easiness_factor?: number
+          id?: string
+          interval?: number
+          module_id?: string
+          next_review?: string
+          quality?: number
+          repetitions?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       categories: {
         Row: {
           created_at: string
@@ -422,6 +464,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      learning_paths: {
+        Row: {
+          created_at: string
+          current_position: number
+          description: string | null
+          difficulty_level: string
+          id: string
+          is_active: boolean
+          modules: Json
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_position?: number
+          description?: string | null
+          difficulty_level?: string
+          id?: string
+          is_active?: boolean
+          modules?: Json
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_position?: number
+          description?: string | null
+          difficulty_level?: string
+          id?: string
+          is_active?: boolean
+          modules?: Json
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       login_rate_limits: {
         Row: {

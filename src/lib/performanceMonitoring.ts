@@ -22,8 +22,9 @@ export class PerformanceMonitor {
       }
       this.metrics.get(name)?.push(value);
 
-      // Send to database (with throttling)
-      if (Math.random() < 0.1) { // Only send 10% of metrics to avoid overload
+      // Send to database (with aggressive throttling - disabled by default for performance)
+      // Only enable in production for critical metrics
+      if (false && Math.random() < 0.01) { // Disabled - was causing performance issues
         await supabase.from('performance_metrics').insert({
           metric_name: name,
           metric_value: value,
