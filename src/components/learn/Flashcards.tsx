@@ -27,6 +27,13 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
   // Text-to-Speech
   const { speak, stop, isPlaying } = useTextToSpeech();
 
+  // Touch/Swipe state for mobile gestures
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  // Minimum swipe distance (in px)
+  const minSwipeDistance = 50;
+
   // Initialize on cards load with a random start + load saved progress
   useEffect(() => {
     if (!loaded || !cards || cards.length === 0) return;
@@ -160,6 +167,38 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
     setFlipped(false);
   }, [cards.length]);
 
+  // Swipe gesture handlers
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe && flipped) {
+      // Swipe left = mark as unknown
+      markAsUnknown();
+    } else if (isRightSwipe && flipped) {
+      // Swipe right = mark as known
+      markAsKnown();
+    } else if (isLeftSwipe && !flipped) {
+      // Swipe left on front = next card
+      next();
+    } else if (isRightSwipe && !flipped) {
+      // Swipe right on front = previous card
+      prev();
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Lernhilfe-Einführung */}
@@ -201,7 +240,7 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
         </Button>
       </div>
 
-      {/* Clean Interactive Card */}
+      {/* Clean Interactive Card with Swipe Support */}
       <div
         className={`relative h-[60vh] sm:h-[65vh] md:h-[500px] lg:h-[500px] rounded-2xl border overflow-hidden select-none cursor-pointer flip-3d transition-all duration-300 ${
           currentCardStatus === "known"
@@ -211,7 +250,10 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
             : "border-border bg-card shadow-lg"
         } hover:shadow-xl hover:border-primary/50 hover:scale-[1.02]`}
         onClick={() => setFlipped((f) => !f)}
-        aria-label="Karte umdrehen"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+        aria-label="Karte umdrehen oder wischen"
         role="button"
       >
         {/* Clean Inner Flipper */}
@@ -277,25 +319,30 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
 
       {/* Clean learning progress buttons */}
       {flipped && (
-        <div className="flex gap-4 justify-center animate-fade-in">
-          <Button
-            onClick={markAsUnknown}
-            variant="outline"
-            className="border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 min-w-[140px]"
-            size="lg"
-          >
-            <span className="mr-2 text-lg">✗</span>
-            Nicht gewusst
-          </Button>
-          <Button
-            onClick={markAsKnown}
-            variant="outline" 
-            className="border-success/50 text-success hover:bg-success hover:text-success-foreground shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 min-w-[140px]"
-            size="lg"
-          >
-            <span className="mr-2 text-lg">✓</span>
-            Gewusst
-          </Button>
+        <div className="flex flex-col gap-2 animate-fade-in">
+          <div className="flex gap-4 justify-center">
+            <Button
+              onClick={markAsUnknown}
+              variant="outline"
+              className="border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 min-w-[140px]"
+              size="lg"
+            >
+              <span className="mr-2 text-lg">✗</span>
+              Nicht gewusst
+            </Button>
+            <Button
+              onClick={markAsKnown}
+              variant="outline" 
+              className="border-success/50 text-success hover:bg-success hover:text-success-foreground shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 min-w-[140px]"
+              size="lg"
+            >
+              <span className="mr-2 text-lg">✓</span>
+              Gewusst
+            </Button>
+          </div>
+          <p className="text-xs text-center text-muted-foreground">
+            💡 Tipp: Wische nach links (✗) oder rechts (✓) auf mobilen Geräten
+          </p>
         </div>
       )}
 

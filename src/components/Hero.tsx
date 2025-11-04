@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { TrendingUp, BookOpen, Target } from "lucide-react";
+import { TrendingUp, BookOpen, Target, Download } from "lucide-react";
 import logo from "@/assets/logo.png";
+import { useNavigate } from "react-router-dom";
 
 interface HeroProps {
   totalQuestions: number;
@@ -18,8 +19,12 @@ export const Hero = ({
   onStartLearning,
   onShowProgress,
 }: HeroProps) => {
+  const navigate = useNavigate();
   const progressPercentage = totalQuestions > 0 ? (answeredQuestions / totalQuestions) * 100 : 0;
   const accuracy = answeredQuestions > 0 ? (correctAnswers / answeredQuestions) * 100 : 0;
+  
+  // Check if app is already installed
+  const isInstalled = window.matchMedia('(display-mode: standalone)').matches;
 
   return (
     <section 
@@ -132,6 +137,21 @@ export const Hero = ({
             Jetzt starten
           </Button>
         </div>
+        
+        {/* PWA Install Button */}
+        {!isInstalled && (
+          <div className="mt-4 animate-fade-in" style={{ animationDelay: '0.8s' }}>
+            <Button
+              onClick={() => navigate('/install')}
+              variant="ghost"
+              size="sm"
+              className="text-muted-foreground hover:text-foreground"
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Als App installieren
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   );

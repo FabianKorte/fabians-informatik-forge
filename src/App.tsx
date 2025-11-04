@@ -18,6 +18,8 @@ import { AdminErrorBoundary } from "@/components/ErrorBoundaries/AdminErrorBound
 import { ChatErrorBoundary } from "@/components/ErrorBoundaries/ChatErrorBoundary";
 import { LearnErrorBoundary } from "@/components/ErrorBoundaries/LearnErrorBoundary";
 import { SkipToContent } from "@/components/SkipToContent";
+import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
+import { OfflineIndicator } from "@/components/OfflineIndicator";
 
 // Lazy load heavy pages and components
 const LearnPage = lazy(() => import("./pages/Learn"));
@@ -27,6 +29,7 @@ const UserDashboard = lazy(() => import("./pages/UserDashboard"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Chat = lazy(() => import("./pages/Chat"));
 const StudyGroups = lazy(() => import("./pages/StudyGroups"));
+const Install = lazy(() => import("./pages/Install"));
 const AIChatbot = lazy(() => import("@/components/AIChatbot").then(module => ({ default: module.AIChatbot })));
 
 const queryClient = new QueryClient();
@@ -62,6 +65,7 @@ const AppRoutes = () => {
             <Route path="/profile" element={<Profile />} />
             <Route path="/study-groups" element={<StudyGroups />} />
             <Route path="/privacy" element={<Privacy />} />
+            <Route path="/install" element={<Install />} />
             <Route path="/chat" element={
               <ChatErrorBoundary>
                 <Chat />
@@ -90,6 +94,8 @@ const App = () => (
           <Suspense fallback={null}>
             <AIChatbot />
           </Suspense>
+          <PWAInstallPrompt />
+          <OfflineIndicator />
         </TooltipProvider>
       </AuthProvider>
     </QueryClientProvider>
