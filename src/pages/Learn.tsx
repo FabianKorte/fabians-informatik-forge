@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -30,6 +30,7 @@ import { AIExerciseGenerator } from "@/components/AIExerciseGenerator";
 
 const LearnPage = () => {
   const { categoryId } = useParams();
+  const navigate = useNavigate();
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const [category, setCategory] = useState<Category | undefined>();
   const [modules, setModules] = useState<LearnModule[]>([]);
@@ -134,7 +135,7 @@ const LearnPage = () => {
                   description="Für diese Kategorie werden die Lerninhalte gerade erstellt. Schau bald wieder vorbei!"
                   action={{
                     label: "Zurück zur Übersicht",
-                    onClick: () => window.location.href = "/"
+                    onClick: () => navigate("/")
                   }}
                 />
               ) : (

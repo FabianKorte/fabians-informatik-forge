@@ -90,12 +90,12 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <AppRoutes />
+            <PWAInstallPrompt />
+            <OfflineIndicator />
           </BrowserRouter>
           <Suspense fallback={null}>
             <AIChatbot />
           </Suspense>
-          <PWAInstallPrompt />
-          <OfflineIndicator />
         </TooltipProvider>
       </AuthProvider>
     </QueryClientProvider>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useCategories } from "@/hooks/useCategories";
+import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -27,6 +28,7 @@ const icons = ["Code", "Database", "Lock", "Server", "Globe", "Smartphone", "Use
 
 export function CategoryManager() {
   const { categories, isLoading } = useCategories();
+  const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<CategoryFormData | null>(null);
   const [formData, setFormData] = useState<CategoryFormData>({
@@ -111,8 +113,8 @@ export function CategoryManager() {
         toast.success('Kategorie erstellt');
       }
 
-      // Force reload by navigating
-      window.location.reload();
+      // Refresh categories list
+      queryClient.invalidateQueries({ queryKey: ['categories'] });
       setIsDialogOpen(false);
       resetForm();
     } catch (error: any) {
@@ -139,7 +141,7 @@ export function CategoryManager() {
       });
 
       toast.success('Kategorie gelöscht');
-      window.location.reload();
+      queryClient.invalidateQueries({ queryKey: ['categories'] });
     } catch (error: any) {
       toast.error('Fehler: ' + error.message);
     }
