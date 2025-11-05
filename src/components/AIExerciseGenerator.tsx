@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
+import { logger } from '@/lib/logger';
 import {
   Select,
   SelectContent,
@@ -72,7 +73,7 @@ export function AIExerciseGenerator({ categoryId, onGenerated }: AIExerciseGener
       // Reset form
       setTopic('');
     } catch (error: any) {
-      console.error('Generation error:', error);
+      logger.error('Generation error:', error);
       toast({
         title: 'Fehler',
         description: error.message || 'Die Generierung ist fehlgeschlagen.',

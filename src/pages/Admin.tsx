@@ -18,6 +18,7 @@ const BulkEditModules = lazy(() => import("@/components/admin/BulkEditModules").
 const AnalyticsDashboard = lazy(() => import("@/components/admin/AnalyticsDashboard").then(m => ({ default: m.AnalyticsDashboard })));
 const CategoryManager = lazy(() => import("@/components/admin/CategoryManager").then(m => ({ default: m.CategoryManager })));
 const PerformanceMonitor = lazy(() => import("@/components/admin/PerformanceMonitor").then(m => ({ default: m.PerformanceMonitor })));
+const ErrorConsole = lazy(() => import("@/components/admin/ErrorConsole").then(m => ({ default: m.ErrorConsole })));
 
 const TabSkeleton = () => (
   <div className="space-y-4">
@@ -66,7 +67,7 @@ export default function Admin() {
           </CardHeader>
           <CardContent>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-4 lg:grid-cols-9 gap-1">
+              <TabsList className="grid w-full grid-cols-5 lg:grid-cols-10 gap-1">
                 <TabsTrigger value="learning" className="text-xs lg:text-sm">
                   <BookOpen className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
                   <span className="hidden sm:inline">Lerninhalte</span>
@@ -111,6 +112,11 @@ export default function Admin() {
                   <Activity className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
                   <span className="hidden sm:inline">Performance</span>
                   <span className="sm:hidden">Perf</span>
+                </TabsTrigger>
+                <TabsTrigger value="console" className="text-xs lg:text-sm">
+                  <Shield className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
+                  <span className="hidden sm:inline">Konsole</span>
+                  <span className="sm:hidden">Cons</span>
                 </TabsTrigger>
               </TabsList>
 
@@ -165,6 +171,12 @@ export default function Admin() {
               <TabsContent value="performance" className="mt-6">
                 <Suspense fallback={<TabSkeleton />}>
                   <PerformanceMonitor />
+                </Suspense>
+              </TabsContent>
+
+              <TabsContent value="console" className="mt-6">
+                <Suspense fallback={<TabSkeleton />}>
+                  <ErrorConsole />
                 </Suspense>
               </TabsContent>
             </Tabs>

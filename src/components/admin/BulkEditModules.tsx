@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
+import { logger } from '@/lib/logger';
 import {
   Select,
   SelectContent,
@@ -77,7 +78,7 @@ export function BulkEditModules() {
         setBulkAction('');
         setSelectedTag('');
       } catch (error) {
-        console.error('Bulk tag error:', error);
+        logger.error('Bulk tag error:', error);
       }
     }
   };
