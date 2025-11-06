@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 interface OfflineData {
   categories: any[];
@@ -42,7 +43,7 @@ export const useOfflineMode = () => {
         setOfflineData(JSON.parse(stored));
       }
     } catch (error) {
-      console.error('Error loading offline data:', error);
+      logger.error('Error loading offline data:', error);
     }
   };
 
@@ -79,7 +80,7 @@ export const useOfflineMode = () => {
       
       return true;
     } catch (error) {
-      console.error('Error saving offline data:', error);
+      logger.error('Error saving offline data:', error);
       return false;
     }
   };
@@ -110,7 +111,7 @@ export const useOfflineMode = () => {
       // Refresh offline data with latest from server
       await saveOfflineData();
     } catch (error) {
-      console.error('Error syncing offline data:', error);
+      logger.error('Error syncing offline data:', error);
     } finally {
       setIsSyncing(false);
     }
@@ -123,7 +124,7 @@ export const useOfflineMode = () => {
       changes.push(change);
       localStorage.setItem('offline_pending_changes', JSON.stringify(changes));
     } catch (error) {
-      console.error('Error queuing offline change:', error);
+      logger.error('Error queuing offline change:', error);
     }
   };
 

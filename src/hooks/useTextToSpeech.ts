@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { logger } from '@/lib/logger';
 
 export const useTextToSpeech = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -42,7 +43,7 @@ export const useTextToSpeech = () => {
         });
       }
     } catch (error) {
-      console.error('Text-to-Speech error:', error);
+      logger.error('Text-to-Speech error:', error);
       toast({
         title: 'Fehler',
         description: 'Text-to-Speech konnte nicht gestartet werden.',

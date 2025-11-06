@@ -39,13 +39,8 @@ const Index = () => {
     const initializeData = async () => {
       try {
         setIsLoading(true);
-        // Try to seed database, but don't let it block category loading
-        try {
-          await seedDatabase();
-        } catch (seedError) {
-          logger.warn('Database seeding failed, but continuing with data fetch:', seedError);
-        }
         
+        // Load categories and modules directly without seeding
         const [cats, modules] = await Promise.all([
           getCategoriesFromDatabase(),
           getAllModules(),
@@ -54,6 +49,7 @@ const Index = () => {
         if (mounted) {
           setCategories(cats);
           setAllModules(modules);
+          logger.log('Loaded categories:', cats.length, 'Loaded modules:', Object.keys(modules).length);
         }
       } catch (error) {
         logger.error('Error initializing data:', error);

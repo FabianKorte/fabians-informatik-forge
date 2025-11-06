@@ -15,18 +15,25 @@ export async function getCategoriesFromDatabase(): Promise<Category[]> {
   }
 
   return data.map(cat => {
-    // Map icon string to actual icon component
-    const IconComponent = (Icons as any)[cat.icon] || Icons.Code2;
+    // Map icon string to actual icon component - with fallback
+    let IconComponent = Icons.Code2;
+    try {
+      if (cat.icon && (Icons as any)[cat.icon]) {
+        IconComponent = (Icons as any)[cat.icon];
+      }
+    } catch (e) {
+      logger.warn('Invalid icon name:', cat.icon);
+    }
     
     return {
       id: cat.id,
       title: cat.title,
       description: cat.description,
-      totalElements: 0, // Will be calculated from learn_modules
-      completedElements: 0, // Will be calculated from user progress
+      totalElements: 0,
+      completedElements: 0,
       icon: IconComponent,
-      difficulty: cat.difficulty as "Anfänger" | "Fortgeschritten" | "Experte",
-      gradient: cat.gradient
+      difficulty: (cat.difficulty || "Anfänger") as "Anfänger" | "Fortgeschritten" | "Experte",
+      gradient: cat.gradient || "from-blue-500 to-purple-500"
     };
   });
 }

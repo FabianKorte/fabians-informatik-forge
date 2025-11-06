@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 export const usePushNotifications = () => {
   const [permission, setPermission] = useState<NotificationPermission>('default');
@@ -32,7 +33,7 @@ export const usePushNotifications = () => {
         return false;
       }
     } catch (error) {
-      console.error('Error requesting notification permission:', error);
+      logger.error('Error requesting notification permission:', error);
       toast.error('Fehler beim Aktivieren der Benachrichtigungen');
       return false;
     }
@@ -48,13 +49,13 @@ export const usePushNotifications = () => {
       if (!sub) {
         // For now, just enable notifications without server push
         // In production, you would need VAPID keys and server setup
-        console.log('Push subscription would be created here with VAPID keys');
+        logger.log('Push subscription would be created here with VAPID keys');
       }
 
       setSubscription(sub);
       return sub;
     } catch (error) {
-      console.error('Error subscribing to push:', error);
+      logger.error('Error subscribing to push:', error);
       throw error;
     }
   };
@@ -67,7 +68,7 @@ export const usePushNotifications = () => {
         toast.success('Push-Benachrichtigungen deaktiviert');
       }
     } catch (error) {
-      console.error('Error unsubscribing from push:', error);
+      logger.error('Error unsubscribing from push:', error);
       toast.error('Fehler beim Deaktivieren der Benachrichtigungen');
     }
   };
