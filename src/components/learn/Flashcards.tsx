@@ -3,7 +3,9 @@ import { Button } from "@/components/ui/button";
 import type { Flashcard } from "@/types/learn";
 import { useProgress } from "@/hooks/useProgress";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
-import { Volume2, VolumeX } from "lucide-react";
+import { useSRS } from "@/hooks/useSRS";
+import { Volume2, VolumeX, Calendar, TrendingUp } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 interface FlashcardsProps {
   cards: Flashcard[];
@@ -26,6 +28,11 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
   
   // Text-to-Speech
   const { speak, stop, isPlaying } = useTextToSpeech();
+
+  // SRS (Spaced Repetition System)
+  const moduleId = `${categoryId}-flashcards-${moduleIndex}`;
+  const { recordReview, getDueCards, getCardSRS } = useSRS(moduleId);
+  const dueCards = getDueCards(cards.length);
 
   // Touch/Swipe state for mobile gestures
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -141,8 +148,11 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
     newUnknown.delete(index);
     setUnknownCards(newUnknown);
 
+    // Record SRS review with quality 5 (perfect)
+    recordReview(index, 5);
+
     next();
-  }, [knownCards, unknownCards, index, next]);
+  }, [knownCards, unknownCards, index, next, recordReview]);
 
   const markAsUnknown = useCallback(() => {
     const newUnknown = new Set(unknownCards);
@@ -153,8 +163,11 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
     newKnown.delete(index);
     setKnownCards(newKnown);
 
+    // Record SRS review with quality 1 (incorrect)
+    recordReview(index, 1);
+
     next();
-  }, [unknownCards, knownCards, index, next]);
+  }, [unknownCards, knownCards, index, next, recordReview]);
 
   const resetProgress = useCallback(() => {
     setKnownCards(new Set());
@@ -199,18 +212,57 @@ export const Flashcards = ({ cards, categoryId, moduleIndex }: FlashcardsProps) 
     }
   };
 
+  const currentSRS = getCardSRS(index);
+
   return (
     <div className="space-y-6">
-      {/* Lernhilfe-Einführung */}
-      <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
-        <h3 className="font-semibold text-foreground mb-2">📚 Lernhilfe - Karteikarten optimal nutzen</h3>
-        <p className="text-sm text-muted-foreground mb-2">
-          <strong>Effektive Lernstrategie:</strong> Karteikarten helfen beim aktiven Abruf von Wissen. 
-          Versuche erst selbst zu antworten, bevor du die Karte umdrehst.
-        </p>
-        <p className="text-xs text-muted-foreground">
-          💡 <strong>Tipp:</strong> Schwierige Karten werden öfter wiederholt. Dein Lernfortschritt wird automatisch gespeichert.
-        </p>
+      {/* SRS Status & Learning Info */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
+          <h3 className="font-semibold text-foreground mb-2">📚 Lernhilfe - Karteikarten optimal nutzen</h3>
+          <p className="text-sm text-muted-foreground mb-2">
+            <strong>Effektive Lernstrategie:</strong> Karteikarten helfen beim aktiven Abruf von Wissen. 
+            Versuche erst selbst zu antworten, bevor du die Karte umdrehst.
+          </p>
+          <p className="text-xs text-muted-foreground">
+            💡 <strong>Tipp:</strong> Schwierige Karten werden öfter wiederholt. Dein Lernfortschritt wird automatisch gespeichert.
+          </p>
+        </div>
+
+        {/* SRS Statistics */}
+        <div className="p-4 rounded-lg bg-accent/5 border border-accent/20">
+          <h3 className="font-semibold text-foreground mb-2 flex items-center gap-2">
+            <TrendingUp className="w-4 h-4" />
+            Spaced Repetition Status
+          </h3>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">Fällige Karten heute:</span>
+              <Badge variant={dueCards.length > 0 ? "destructive" : "default"} className="ml-2">
+                <Calendar className="w-3 h-3 mr-1" />
+                {dueCards.length}
+              </Badge>
+            </div>
+            {currentSRS && (
+              <>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">Nächste Wiederholung:</span>
+                  <span className="font-medium">
+                    {currentSRS.nextReview.toLocaleDateString('de-DE')}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">Intervall:</span>
+                  <span className="font-medium">{currentSRS.interval} Tag(e)</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">Wiederholungen:</span>
+                  <span className="font-medium">{currentSRS.repetitions}</span>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Audio Controls */}

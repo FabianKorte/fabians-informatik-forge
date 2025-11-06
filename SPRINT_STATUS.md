@@ -247,26 +247,36 @@
 
 ---
 
-### 🟢 Sprint 18: Advanced SRS & Learning Paths (EMPFOHLEN)
+### 🟢 Sprint 18: Advanced SRS & Learning Paths ✅ ABGESCHLOSSEN
 **Priorität: HOCH | Dauer: 4-6 Stunden**
+**Status:** ✅ **ABGESCHLOSSEN**
 
 **Grund:** Die Hooks wurden in Sprint 11 erstellt, aber noch nicht in UI integriert.
 
-#### Features
-1. 📚 Learning Paths UI (Dashboard)
+#### Features ✅ Implementiert
+1. ✅ 📚 Learning Paths UI (Dashboard)
    - Pfad-Übersicht mit Fortschrittsbalken
-   - Empfohlene nächste Module
-   - Schwierigkeitsanpassung
+   - Empfohlene nächste Module (Top 3)
+   - Schwierigkeitsanzeige (Anfänger/Fortgeschritten/Experte)
+   - Integration in UserDashboard als neuer Tab
+   - Aktivierungs-Funktion für verschiedene Pfade
    
-2. 🧠 SRS Integration
-   - SRS-Modus für Flashcards
-   - "Fällige Karten heute" Badge
-   - Review-Statistiken
+2. ✅ 🧠 SRS Integration in Flashcards
+   - SRS-Modus vollständig integriert mit `useSRS` Hook
+   - "Fällige Karten heute" Badge mit Calendar-Icon (rot wenn > 0)
+   - Automatisches Review-Recording (Quality 5/1)
+   - Review-Statistiken: Nächste Wiederholung, Intervall, Wiederholungen
+   - SRS-Status-Card neben Lernhilfe
    
-3. 📊 Learning Path Creator
+3. ⏭️ Learning Path Creator (verschoben auf Sprint 21)
    - Admin-Interface zum Erstellen von Pfaden
    - Drag & Drop Module-Sortierung
    - Vorlagen für gängige Lernziele
+
+**Implementierte Dateien:**
+- ✅ `src/components/learning-paths/LearningPathsDashboard.tsx` (neu)
+- ✅ `src/components/learn/Flashcards.tsx` (SRS Integration)
+- ✅ `src/pages/UserDashboard.tsx` (neuer Lernpfade-Tab)
 
 ---
 
