@@ -6,11 +6,9 @@ import SearchBar from "@/components/SearchBar";
 import FeedbackForm from "@/components/feedback/FeedbackForm";
 import { FeedbackList } from "@/components/feedback/FeedbackList";
 import RoadmapModal from "@/components/RoadmapModal";
-import { LoadingScreen } from "@/components/LoadingScreen";
 import { SEO } from "@/components/SEO";
 import { StructuredData } from "@/components/StructuredData";
 import { Button } from "@/components/ui/button";
-import { seedDatabase } from "@/lib/seedDatabase";
 import { useAuth } from "@/hooks/useAuth";
 import { getCategoriesFromDatabase } from "@/lib/categoryUtils";
 import { getAllModules } from "@/lib/learnContentUtils";
@@ -19,7 +17,6 @@ import type { Category } from "@/data/categories";
 import { Download, MapPin, Sparkles } from "lucide-react";
 import logo from "@/assets/logo.png";
 import type { LearnModule } from "@/types/learn";
-import { logger } from "@/lib/logger";
 
 
 const Index = () => {
@@ -27,57 +24,20 @@ const Index = () => {
   const [feedbackRefreshTrigger, setFeedbackRefreshTrigger] = useState(0);
   const [categories, setCategories] = useState<Category[]>([]);
   const [allModules, setAllModules] = useState<Record<string, LearnModule[]>>({});
-  const [isLoading, setIsLoading] = useState(true);
-  const [splashActive, setSplashActive] = useState(true);
-  const [showContent, setShowContent] = useState(false);
   const navigate = useNavigate();
-  const { user, isAdmin } = useAuth();
+  const { user } = useAuth();
 
   useEffect(() => {
-    let mounted = true;
-    
-    const initializeData = async () => {
-      try {
-        setIsLoading(true);
-        
-        // Load categories and modules directly without seeding
-        const [cats, modules] = await Promise.all([
-          getCategoriesFromDatabase(),
-          getAllModules(),
-        ]);
-        
-        if (mounted) {
-          setCategories(cats);
-          setAllModules(modules);
-          logger.log('Loaded categories:', cats.length, 'Loaded modules:', Object.keys(modules).length);
-        }
-      } catch (error) {
-        logger.error('Error initializing data:', error);
-      } finally {
-        if (mounted) setIsLoading(false);
-      }
+    const loadData = async () => {
+      const [cats, mods] = await Promise.all([
+        getCategoriesFromDatabase(),
+        getAllModules()
+      ]);
+      setCategories(cats);
+      setAllModules(mods);
     };
-
-    initializeData();
-    return () => { mounted = false; };
+    loadData();
   }, []);
-
-  // Failsafe: ensure splash overlay hides quickly
-  useEffect(() => {
-    const t = setTimeout(() => {
-      setSplashActive(false);
-      setShowContent(true);
-    }, 1200);
-    return () => clearTimeout(t);
-  }, []);
-
-  // Hide splash as soon as data finished loading
-  useEffect(() => {
-    if (!isLoading) {
-      setSplashActive(false);
-      setShowContent(true);
-    }
-  }, [isLoading]);
 
   // Pure function to count elements in modules (memoized)
   const countElements = useCallback((modules: LearnModule[]) => {
@@ -174,11 +134,8 @@ const Index = () => {
       </a>
       
       <div className="min-h-screen bg-background">
-        {splashActive && (
-          <LoadingScreen onComplete={() => { setSplashActive(false); setShowContent(true); }} />
-        )}
       {/* Floating Action Buttons */}
-      <div className={`fixed top-3 sm:top-6 right-3 sm:right-6 z-50 flex flex-col gap-2 transition-all duration-700 ${showContent ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}>
+      <div className="fixed top-3 sm:top-6 right-3 sm:right-6 z-50 flex flex-col gap-2">
         {user && (
           <Button
             variant="outline"
@@ -225,7 +182,7 @@ const Index = () => {
         </RoadmapModal>
       </div>
 
-      <div className={`transition-all duration-700 delay-100 ${showContent ? 'opacity-100' : 'opacity-0'}`}>
+      <div className="transition-all duration-300">
         <Hero
           totalQuestions={stats.totalQuestions}
           answeredQuestions={stats.answeredQuestions}
@@ -236,7 +193,7 @@ const Index = () => {
       </div>
 
       {randomTrainingCategory && (
-        <section className={`py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-violet-500/10 via-fuchsia-500/10 to-purple-500/10 transition-all duration-700 delay-300 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <section className="py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-violet-500/10 via-fuchsia-500/10 to-purple-500/10">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-6 sm:mb-8">
               <div className="inline-flex items-center gap-2 mb-3 sm:mb-4">
@@ -265,7 +222,7 @@ const Index = () => {
         </section>
       )}
 
-      <section id="categories-section" className={`py-8 sm:py-20 px-4 sm:px-6 bg-background transition-all duration-700 delay-500 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+      <section id="categories-section" className="py-8 sm:py-20 px-4 sm:px-6 bg-background">
         <main 
           id="main-content"
           tabIndex={-1}
@@ -331,7 +288,7 @@ const Index = () => {
         </main>
       </section>
 
-      <section className={`py-8 sm:py-20 px-4 sm:px-6 bg-muted/30 transition-all duration-700 delay-700 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+      <section className="py-8 sm:py-20 px-4 sm:px-6 bg-muted/30">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-8 sm:mb-16">
             <h2 className="text-2xl sm:text-3xl font-medium text-foreground mb-2 sm:mb-4">Feedback</h2>
@@ -351,7 +308,7 @@ const Index = () => {
         </div>
       </section>
 
-      <footer className={`py-6 sm:py-12 px-4 sm:px-6 border-t border-border bg-background transition-all duration-700 delay-1000 ${showContent ? 'opacity-100' : 'opacity-0'}`}>
+      <footer className="py-6 sm:py-12 px-4 sm:px-6 border-t border-border bg-background">
         <div className="max-w-4xl mx-auto text-center">
           <div className="mb-4 sm:mb-6">
             <img 

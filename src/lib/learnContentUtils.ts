@@ -28,8 +28,8 @@ export async function getAllModules(): Promise<Record<string, LearnModule[]>> {
     .select('*')
     .order('order_index');
 
-  if (error) {
-    logger.error('Error fetching all learn modules:', error);
+  if (error || !data) {
+    logger.error('Error fetching learn modules:', error);
     return {};
   }
 
@@ -42,7 +42,6 @@ export async function getAllModules(): Promise<Record<string, LearnModule[]>> {
     grouped[module.category_id].push(module.content as unknown as LearnModule);
   }
 
-  // Add random training modules
   grouped['zufallstraining'] = await generateRandomTrainingModules();
 
   return grouped;
