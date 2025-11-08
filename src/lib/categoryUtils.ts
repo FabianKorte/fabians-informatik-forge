@@ -4,50 +4,41 @@ import * as Icons from "lucide-react";
 import { logger } from "@/lib/logger";
 
 export async function getCategoriesFromDatabase(): Promise<Category[]> {
-  try {
-    const { data, error } = await supabase
-      .from('categories')
-      .select('*')
-      .order('id');
+  console.log('🔍 getCategoriesFromDatabase called');
+  const { data, error } = await supabase
+    .from('categories')
+    .select('*')
+    .order('id');
 
-    if (error) {
-      console.error('Error fetching categories:', error);
-      return [];
-    }
-
-    if (!data || data.length === 0) {
-      console.warn('No categories found in database');
-      return [];
-    }
-
-    console.log('📦 Fetched', data.length, 'categories from database');
-
-    return data.map(cat => {
-      // Map icon string to actual icon component - with fallback
-      let IconComponent = Icons.Code2;
-      try {
-        if (cat.icon && (Icons as any)[cat.icon]) {
-          IconComponent = (Icons as any)[cat.icon];
-        }
-      } catch (e) {
-        console.warn('Invalid icon name:', cat.icon);
-      }
-      
-      return {
-        id: cat.id,
-        title: cat.title,
-        description: cat.description || '',
-        totalElements: 0,
-        completedElements: 0,
-        icon: IconComponent,
-        difficulty: (cat.difficulty || "Anfänger") as "Anfänger" | "Fortgeschritten" | "Experte",
-        gradient: cat.gradient || "from-blue-500 to-purple-500"
-      };
-    });
-  } catch (err) {
-    console.error('Exception in getCategoriesFromDatabase:', err);
+  if (error) {
+    console.error('❌ Error fetching categories:', error);
     return [];
   }
+
+  if (!data || data.length === 0) {
+    console.warn('⚠️ No categories found in database');
+    return [];
+  }
+
+  console.log('✅ Fetched', data.length, 'categories from database');
+
+  return data.map(cat => {
+    let IconComponent = Icons.Code2;
+    if (cat.icon && (Icons as any)[cat.icon]) {
+      IconComponent = (Icons as any)[cat.icon];
+    }
+    
+    return {
+      id: cat.id,
+      title: cat.title,
+      description: cat.description || '',
+      totalElements: 0,
+      completedElements: 0,
+      icon: IconComponent,
+      difficulty: (cat.difficulty || "Anfänger") as "Anfänger" | "Fortgeschritten" | "Experte",
+      gradient: cat.gradient || "from-blue-500 to-purple-500"
+    };
+  });
 }
 
 export async function updateCategoryElementCounts(categories: Category[]): Promise<Category[]> {

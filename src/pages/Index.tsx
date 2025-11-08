@@ -28,13 +28,20 @@ const Index = () => {
   const { user } = useAuth();
 
   useEffect(() => {
+    console.log('🚀 Index page mounted - starting data load');
     const loadData = async () => {
-      const [cats, mods] = await Promise.all([
-        getCategoriesFromDatabase(),
-        getAllModules()
-      ]);
-      setCategories(cats);
-      setAllModules(mods);
+      try {
+        console.log('📡 Fetching categories and modules...');
+        const [cats, mods] = await Promise.all([
+          getCategoriesFromDatabase(),
+          getAllModules()
+        ]);
+        console.log('✅ Data loaded:', cats.length, 'categories', Object.keys(mods).length, 'module groups');
+        setCategories(cats);
+        setAllModules(mods);
+      } catch (error) {
+        console.error('❌ Error loading data:', error);
+      }
     };
     loadData();
   }, []);
