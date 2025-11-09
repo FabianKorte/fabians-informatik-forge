@@ -3,18 +3,26 @@ import type { Category } from "@/data/categories";
 import * as Icons from "lucide-react";
 import { logger } from "@/lib/logger";
 
+// Helper to fail fast if a network request hangs
+const withTimeout = <T>(promise: Promise<T>, ms = 12000): Promise<T> => {
+  return new Promise<T>((resolve, reject) => {
+    const id = setTimeout(() => reject(new Error(`Supabase request timed out after ${ms}ms`)), ms);
+    promise.then((val) => { clearTimeout(id); resolve(val); })
+      .catch((err) => { clearTimeout(id); reject(err); });
+  });
+};
 export async function getCategoriesFromDatabase(): Promise<Category[]> {
   console.log('🔍 getCategoriesFromDatabase called');
   console.log('📦 Supabase client:', supabase ? 'initialized' : 'NOT initialized');
   
   try {
     console.log('🌐 Starting Supabase query...');
-    const { data, error } = await supabase
+    const query = supabase
       .from('categories')
       .select('*')
       .order('id');
-    
-    console.log('🎯 Query completed. Data:', data?.length, 'Error:', error);
+    const { data, error } = await withTimeout(query as unknown as Promise<{ data: any[]; error: any }>, 12000);
+    console.log('🎯 Query completed. Data:', (data as any[])?.length, 'Error:', error);
 
     if (error) {
       console.error('❌ Error fetching categories:', error);
