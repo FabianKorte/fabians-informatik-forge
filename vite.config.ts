@@ -15,6 +15,7 @@ export default defineConfig(({ mode }) => ({
     mode === "development" && componentTagger(),
     VitePWA({
       registerType: 'autoUpdate',
+      injectRegister: 'auto',
       includeAssets: ['logo.png', 'robots.txt'],
       manifest: {
         name: 'Fabian Korte - Fachinformatiker Lernplattform',
@@ -51,6 +52,9 @@ export default defineConfig(({ mode }) => ({
         ]
       },
       workbox: {
+        cleanupOutdatedCaches: true,
+        skipWaiting: true,
+        clientsClaim: true,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,woff,woff2}'],
         runtimeCaching: [
           {
