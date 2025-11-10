@@ -54,19 +54,14 @@ export default defineConfig(({ mode }) => ({
         globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,woff,woff2}'],
         runtimeCaching: [
           {
-            urlPattern: /^https:\/\/bjjxfcpxnoivjkplxktw\.supabase\.co\/.*/i,
-            handler: 'NetworkFirst',
+            urlPattern: /^https:\/\/bjjxfcpxnoivjkplxktw\.supabase\.co\/.*$/i,
+            handler: 'NetworkOnly',
             options: {
-              cacheName: 'supabase-cache',
-              expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24 // 24 hours
-              },
-              networkTimeoutSeconds: 10
+              cacheName: 'supabase-bypass-cache'
             }
           },
           {
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*$/i,
             handler: 'CacheFirst',
             options: {
               cacheName: 'google-fonts-cache',
