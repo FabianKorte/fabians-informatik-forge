@@ -16,6 +16,7 @@ export default defineConfig(({ mode }) => ({
     VitePWA({
       registerType: 'autoUpdate',
       injectRegister: 'auto',
+      selfDestroying: true,
       includeAssets: ['logo.png', 'robots.txt'],
       manifest: {
         name: 'Fabian Korte - Fachinformatiker Lernplattform',
@@ -62,6 +63,13 @@ export default defineConfig(({ mode }) => ({
             handler: 'NetworkOnly',
             options: {
               cacheName: 'supabase-bypass-cache'
+            }
+          },
+          {
+            urlPattern: /^https:\/\/bjjxfcpxnoivjkplxktw\.functions\.supabase\.co\/.*$/i,
+            handler: 'NetworkOnly',
+            options: {
+              cacheName: 'supabase-functions-bypass-cache'
             }
           },
           {
