@@ -16,7 +16,6 @@ export default defineConfig(({ mode }) => ({
     VitePWA({
       registerType: 'autoUpdate',
       injectRegister: 'auto',
-      selfDestroying: true,
       includeAssets: ['logo.png', 'robots.txt'],
       manifest: {
         name: 'Fabian Korte - Fachinformatiker Lernplattform',
