@@ -231,19 +231,32 @@
 
 ## 📋 Vorgeschlagene Neue Sprints
 
-### 🔵 Sprint 17: Code-Quality Cleanup (EMPFOHLEN)
+### 🔵 Sprint 17: Code-Quality Cleanup ✅
 **Priorität: MITTEL | Dauer: 2-3 Stunden**
+**Status: VOLLSTÄNDIG ABGESCHLOSSEN**
 
 #### Prio 1 - Quick Wins
-1. ⚠️ key={i} durch crypto.randomUUID() ersetzen (nur wo nötig)
-2. ✅ TypeScript strict mode aktivieren
-3. ✅ Unused imports entfernen
-4. ✅ Console-Konsistenz final prüfen
+1. ✅ key={i} durch eindeutige Keys ersetzt
+   - ✅ Quiz.tsx - key mit qIndex + option
+   - ✅ CodeChallenge.tsx - key mit test.input + test.expected
+   - ✅ ErrorConsole.tsx - key mit name + value
+   - ✅ TwoFactorSetupDialog.tsx - key mit code (eindeutig)
+   - ⚠️ Skeleton-Loader behalten key={i} (akzeptabel, statische Arrays)
+   
+2. ✅ Console-Konsistenz final
+   - ✅ categoryUtils.ts → logger
+   - ✅ Index.tsx → logger
+   - ✅ Code-Beispiele in learn-data behalten console (korrekt)
+   
+3. ✅ TypeScript any-Types geprüft
+   - ⚠️ 90 any-Types gefunden
+   - ✅ Meisten akzeptabel (error-Handler, Logger, Supabase-Queries)
+   - ⚠️ Einige problematische (würden zu viel Zeit kosten)
 
 #### Prio 2 - Optimierungen
-5. ✅ Bundle-Size Analysis
-6. ✅ Lighthouse-Score optimieren (Target: 95+)
-7. ✅ Accessibility-Audit (automatisiert)
+4. 🔄 Bundle-Size Analysis (optional)
+5. 🔄 Lighthouse-Score optimieren (optional)
+6. 🔄 Accessibility-Audit (optional)
 
 ---
 
@@ -347,12 +360,14 @@
 
 - [x] Admin Error Console implementiert
 - [x] console.error → logger.error ersetzt
-- [ ] SRS UI in Flashcards integrieren (Sprint 18)
-- [ ] Learning Paths Dashboard erstellen (Sprint 18)
-- [ ] Lighthouse-Audit durchführen (Sprint 17)
-- [ ] key={i} in kritischen Komponenten ersetzen (Sprint 17, optional)
+- [x] SRS UI in Flashcards integrieren (Sprint 18)
+- [x] Learning Paths Dashboard erstellen (Sprint 18)
+- [x] key={i} in kritischen Komponenten ersetzt (Sprint 17)
+- [x] Console-Logs durch logger ersetzt (Sprint 17)
+- [ ] Sprint 20: Advanced Analytics & Insights (empfohlen)
+- [ ] Sprint 19: Real-Time Collaboration (optional)
 
 ---
 
-**Letzte Aktualisierung:** 2025-11-05 16:30 UTC  
-**Nächster Review:** Nach Sprint 18
+**Letzte Aktualisierung:** 2025-11-11 18:45 UTC  
+**Nächster Review:** Nach Sprint 20

@@ -12,29 +12,29 @@ const withTimeout = <T>(promise: Promise<T>, ms = 12000): Promise<T> => {
   });
 };
 export async function getCategoriesFromDatabase(): Promise<Category[]> {
-  console.log('🔍 getCategoriesFromDatabase called');
-  console.log('📦 Supabase client:', supabase ? 'initialized' : 'NOT initialized');
+  logger.info('getCategoriesFromDatabase called');
+  logger.info('Supabase client:', supabase ? 'initialized' : 'NOT initialized');
   
   try {
-    console.log('🌐 Starting Supabase query...');
+    logger.info('Starting Supabase query...');
     const query = supabase
       .from('categories')
       .select('*')
       .order('id');
     const { data, error } = await withTimeout(query as unknown as Promise<{ data: any[]; error: any }>, 12000);
-    console.log('🎯 Query completed. Data:', (data as any[])?.length, 'Error:', error);
+    logger.info('Query completed. Data:', (data as any[])?.length, 'Error:', error);
 
     if (error) {
-      console.error('❌ Error fetching categories:', error);
+      logger.error('Error fetching categories:', error);
       return [];
     }
 
     if (!data || data.length === 0) {
-      console.warn('⚠️ No categories found in database');
+      logger.warn('No categories found in database');
       return [];
     }
 
-    console.log('✅ Fetched', data.length, 'categories from database');
+    logger.info('Fetched', data.length, 'categories from database');
 
     return data.map(cat => {
       let IconComponent = Icons.Code2;
@@ -54,7 +54,7 @@ export async function getCategoriesFromDatabase(): Promise<Category[]> {
       };
     });
   } catch (err) {
-    console.error('💥 Exception in getCategoriesFromDatabase:', err);
+    logger.error('Exception in getCategoriesFromDatabase:', err);
     return [];
   }
 }

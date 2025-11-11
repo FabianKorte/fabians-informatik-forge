@@ -224,7 +224,7 @@ export const ErrorConsole = () => {
                             </summary>
                             <div className="mt-2 p-2 bg-muted rounded max-h-32 overflow-y-auto">
                               {values.map((v, i) => (
-                                <div key={i} className="flex justify-between py-1">
+                                <div key={`${name}-${v}-${i}`} className="flex justify-between py-1">
                                   <span>#{i + 1}</span>
                                   <span>{Math.round(v)}ms</span>
                                 </div>

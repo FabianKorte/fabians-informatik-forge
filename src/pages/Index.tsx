@@ -13,6 +13,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { getCategoriesFromDatabase } from "@/lib/categoryUtils";
 import { getAllModules } from "@/lib/learnContentUtils";
 import { useKeyboardNavigation } from "@/hooks/useKeyboardNavigation";
+import { logger } from "@/lib/logger";
 import type { Category } from "@/data/categories";
 import { Download, MapPin, Sparkles } from "lucide-react";
 import logo from "@/assets/logo.png";
@@ -28,19 +29,19 @@ const Index = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    console.log('🚀 Index page mounted - starting data load');
+    logger.info('Index page mounted - starting data load');
     const loadData = async () => {
       try {
-        console.log('📡 Fetching categories and modules...');
+        logger.info('Fetching categories and modules...');
         const [cats, mods] = await Promise.all([
           getCategoriesFromDatabase(),
           getAllModules()
         ]);
-        console.log('✅ Data loaded:', cats.length, 'categories', Object.keys(mods).length, 'module groups');
+        logger.info('Data loaded:', cats.length, 'categories', Object.keys(mods).length, 'module groups');
         setCategories(cats);
         setAllModules(mods);
       } catch (error) {
-        console.error('❌ Error loading data:', error);
+        logger.error('Error loading data:', error);
       }
     };
     loadData();

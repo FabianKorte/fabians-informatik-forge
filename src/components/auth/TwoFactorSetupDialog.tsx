@@ -126,7 +126,7 @@ export const TwoFactorSetupDialog = ({
               </div>
               <div className="grid grid-cols-2 gap-2 font-mono text-xs">
                 {backupCodes.map((code, i) => (
-                  <div key={i} className="p-2 bg-background rounded border">
+                  <div key={code} className="p-2 bg-background rounded border">
                     {i + 1}. {code}
                   </div>
                 ))}

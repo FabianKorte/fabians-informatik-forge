@@ -83,7 +83,7 @@ export const CodeChallengeComponent = ({ challenges }: CodeChallengeProps) => {
             <h4 className="font-medium text-foreground">Tests:</h4>
             <div className="space-y-2">
               {current.tests.map((test, i) => (
-                <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-secondary">
+                <div key={`${test.input}-${test.expected}-${i}`} className="flex items-center justify-between p-3 rounded-lg bg-secondary">
                   <div className="text-sm">
                     <span className="text-muted-foreground">Input: </span>
                     <code className="font-mono">{test.input}</code>

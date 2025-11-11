@@ -65,7 +65,7 @@ export const Quiz = ({ questions }: QuizProps) => {
               : "secondary";
             return (
               <Button
-                key={i}
+                key={`${qIndex}-${i}-${opt.substring(0, 20)}`}
                 onClick={() => handleSelect(i)}
                 variant={state === "secondary" ? "outline" : "default"}
                 className={`h-auto text-left justify-start whitespace-normal break-words py-3 ${
