@@ -62,6 +62,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setIsLoading(false);
     });
 
+    // Exchange OAuth code for session if present (handles Safari/3rd‑party cookies)
+    (async () => {
+      try {
+        const url = new URL(window.location.href);
+        if (url.searchParams.get('code')) {
+          await supabase.auth.exchangeCodeForSession(window.location.href);
+          url.searchParams.delete('code');
+          url.searchParams.delete('state');
+          const cleaned = url.pathname + (url.searchParams.toString() ? `?${url.searchParams.toString()}` : '');
+          window.history.replaceState({}, '', cleaned);
+        }
+      } catch {}
+    })();
+
     // THEN get the initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);

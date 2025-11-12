@@ -27,7 +27,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import QRCode from "qrcode";
+
 
 const authSchema = z.object({
   email: z.string().trim().email("Ungültige E-Mail-Adresse"),
@@ -85,7 +85,26 @@ export default function Auth() {
       if (suppressAutoRedirect) return;
       navigate("/");
     }
-  }, [user, show2FADialog, showMfaDialog, navigate, location.search, suppressAutoRedirect]);
+}, [user, show2FADialog, showMfaDialog, navigate, location.search, suppressAutoRedirect]);
+
+  // Handle OAuth error messages returned via URL params (e.g., from Supabase OAuth redirects)
+  useEffect(() => {
+    try {
+      const url = new URL(window.location.href);
+      const err = url.searchParams.get('error') || url.searchParams.get('error_description');
+      if (err) {
+        toast({
+          title: 'Anmeldung fehlgeschlagen',
+          description: decodeURIComponent(err),
+          variant: 'destructive',
+        });
+        url.searchParams.delete('error');
+        url.searchParams.delete('error_description');
+        const cleaned = url.pathname + (url.searchParams.toString() ? `?${url.searchParams.toString()}` : '');
+        window.history.replaceState({}, '', cleaned);
+      }
+    } catch {}
+  }, [toast]);
 
 
   const handleMfaVerify = async () => {
