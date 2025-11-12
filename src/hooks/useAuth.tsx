@@ -18,6 +18,8 @@ interface AuthContextType {
   signIn: (email: string, password: string, rememberMe?: boolean) => Promise<{ error: AuthError | null }>;
   signUp: (email: string, password: string, username?: string) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<void>;
+  signInWithGoogle: () => Promise<{ error: AuthError | null }>;
+  signInWithDiscord: () => Promise<{ error: AuthError | null }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -171,8 +173,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsAdmin(false);
   };
 
+  /**
+   * Signs in a user with Google OAuth.
+   * 
+   * @returns {Promise<{error: any}>} Error object if sign in fails
+   */
+  const signInWithGoogle = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/`,
+      },
+    });
+    return { error };
+  };
+
+  /**
+   * Signs in a user with Discord OAuth.
+   * 
+   * @returns {Promise<{error: any}>} Error object if sign in fails
+   */
+  const signInWithDiscord = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'discord',
+      options: {
+        redirectTo: `${window.location.origin}/`,
+      },
+    });
+    return { error };
+  };
+
   return (
-    <AuthContext.Provider value={{ user, session, isAdmin, isLoading, signIn, signUp, signOut }}>
+    <AuthContext.Provider value={{ user, session, isAdmin, isLoading, signIn, signUp, signOut, signInWithGoogle, signInWithDiscord }}>
       {children}
     </AuthContext.Provider>
   );
