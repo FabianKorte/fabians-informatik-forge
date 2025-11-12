@@ -4,6 +4,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   BookOpen, 
   CheckCircle, 
@@ -15,6 +20,7 @@ import {
   Sparkles
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { categories } from "@/data/categories";
 
 interface Module {
   id: string;
@@ -24,8 +30,13 @@ interface Module {
 }
 
 export function LearningPathsDashboard() {
-  const { paths, activePath, isLoading, setActivePath, updateProgress } = useLearningPaths();
+  const { paths, activePath, isLoading, setActivePath, updateProgress, createPath } = useLearningPaths();
   const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [newPathName, setNewPathName] = useState("");
+  const [newPathDescription, setNewPathDescription] = useState("");
+  const [newPathDifficulty, setNewPathDifficulty] = useState<"beginner" | "intermediate" | "advanced">("beginner");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [isCreating, setIsCreating] = useState(false);
 
   if (isLoading) {
     return (
@@ -66,6 +77,50 @@ export function LearningPathsDashboard() {
       case 'advanced': return 'Experte';
       default: return difficulty;
     }
+  };
+
+  const handleCreatePath = async () => {
+    if (!newPathName.trim()) return;
+    
+    setIsCreating(true);
+    try {
+      // Create modules array from selected categories
+      const modules = selectedCategories.map((categoryId, index) => {
+        const category = categories.find(c => c.id === categoryId);
+        return {
+          id: `${categoryId}-0`,
+          categoryId,
+          title: category?.title || categoryId,
+          type: 'interactive',
+          index: 0,
+          order: index
+        };
+      });
+
+      await createPath(
+        newPathName,
+        newPathDescription,
+        newPathDifficulty,
+        modules
+      );
+      
+      // Reset form
+      setShowCreateDialog(false);
+      setNewPathName("");
+      setNewPathDescription("");
+      setNewPathDifficulty("beginner");
+      setSelectedCategories([]);
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
+  const toggleCategory = (categoryId: string) => {
+    setSelectedCategories(prev => 
+      prev.includes(categoryId) 
+        ? prev.filter(id => id !== categoryId)
+        : [...prev, categoryId]
+    );
   };
 
   return (
@@ -281,6 +336,98 @@ export function LearningPathsDashboard() {
           </Button>
         </CardContent>
       </Card>
+
+      {/* Create Learning Path Dialog */}
+      <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Neuen Lernpfad erstellen</DialogTitle>
+            <DialogDescription>
+              Erstelle einen strukturierten Lernpfad mit mehreren Modulen
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="path-name">Name des Lernpfads *</Label>
+              <Input
+                id="path-name"
+                placeholder="z.B. Full-Stack Entwicklung"
+                value={newPathName}
+                onChange={(e) => setNewPathName(e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="path-description">Beschreibung</Label>
+              <Textarea
+                id="path-description"
+                placeholder="Beschreibe die Ziele dieses Lernpfads..."
+                value={newPathDescription}
+                onChange={(e) => setNewPathDescription(e.target.value)}
+                rows={3}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="path-difficulty">Schwierigkeitsgrad</Label>
+              <Select
+                value={newPathDifficulty}
+                onValueChange={(value: "beginner" | "intermediate" | "advanced") => 
+                  setNewPathDifficulty(value)
+                }
+              >
+                <SelectTrigger id="path-difficulty">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="beginner">Anfänger</SelectItem>
+                  <SelectItem value="intermediate">Fortgeschritten</SelectItem>
+                  <SelectItem value="advanced">Experte</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Kategorien auswählen ({selectedCategories.length} ausgewählt)</Label>
+              <div className="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto border rounded-lg p-3">
+                {categories.map((category) => (
+                  <Button
+                    key={category.id}
+                    type="button"
+                    variant={selectedCategories.includes(category.id) ? "default" : "outline"}
+                    size="sm"
+                    className="justify-start h-auto py-2"
+                    onClick={() => toggleCategory(category.id)}
+                  >
+                    <span className="mr-2">{category.icon}</span>
+                    <span className="text-xs truncate">{category.title}</span>
+                  </Button>
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Wähle die Kategorien aus, die in deinem Lernpfad enthalten sein sollen
+              </p>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setShowCreateDialog(false)}
+              disabled={isCreating}
+            >
+              Abbrechen
+            </Button>
+            <Button
+              onClick={handleCreatePath}
+              disabled={!newPathName.trim() || selectedCategories.length === 0 || isCreating}
+            >
+              {isCreating ? "Wird erstellt..." : "Lernpfad erstellen"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
