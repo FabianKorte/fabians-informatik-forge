@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/collapsible";
 import RoadmapModal from "@/components/RoadmapModal";
 import { cn } from "@/lib/utils";
+import logo from "@/assets/logo.png";
 
 const mainItems = [
   { title: "Home", url: "/", icon: Home },
@@ -33,6 +34,11 @@ const userItems = [
   { title: "Profil", url: "/profile", icon: User },
   { title: "Chat", url: "/chat", icon: MessageSquare },
   { title: "Studiengruppen", url: "/study-groups", icon: Users },
+];
+
+const resourceItems = [
+  { title: "Downloads", url: "https://drive.google.com/drive/folders/1x_OJDgFV7z0XGMcSBPIvKe-fTTHqp1kR?usp=sharing", icon: Download, external: true },
+  { title: "Datenschutz", url: "/privacy", icon: Shield, external: false },
 ];
 
 const adminSubItems = [
@@ -91,25 +97,33 @@ export const NavigationDrawer = () => {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button
-          variant="outline"
+          variant="ghost"
           size="icon"
-          className="fixed top-4 left-4 z-50 bg-card/90 backdrop-blur-sm hover:bg-card border-border shadow-lg"
+          className="fixed top-4 left-4 z-50 bg-gradient-to-br from-card/95 to-card/80 backdrop-blur-md hover:from-card hover:to-card/90 border border-border/50 shadow-elegant transition-all duration-300 hover:scale-105"
           aria-label="Navigation öffnen"
         >
           <Menu className="h-5 w-5" />
         </Button>
       </SheetTrigger>
 
-      <SheetContent side="left" className="w-80 p-0">
-        <SheetHeader className="p-6 pb-4">
-          <SheetTitle className="text-xl font-medium">Navigation</SheetTitle>
+      <SheetContent side="left" className="w-80 p-0 bg-gradient-to-b from-background to-background/95">
+        <SheetHeader className="p-6 pb-4 border-b border-border/50">
+          <div className="flex items-center gap-3">
+            <img src={logo} alt="Logo" className="h-10 w-10 rounded-lg shadow-md" />
+            <div>
+              <SheetTitle className="text-xl font-semibold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                Navigation
+              </SheetTitle>
+              <p className="text-xs text-muted-foreground">Fabian Korte</p>
+            </div>
+          </div>
         </SheetHeader>
 
-        <ScrollArea className="h-[calc(100vh-80px)] px-6">
-          <div className="space-y-6">
+        <ScrollArea className="h-[calc(100vh-180px)] px-4 py-4">
+          <div className="space-y-4">
             {/* Hauptnavigation */}
             <div className="space-y-1">
-              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-3">
                 Hauptmenü
               </h3>
               {mainItems.map((item) => {
@@ -118,10 +132,10 @@ export const NavigationDrawer = () => {
                 return (
                   <Button
                     key={item.url}
-                    variant={active ? "secondary" : "ghost"}
+                    variant="ghost"
                     className={cn(
-                      "w-full justify-start gap-3",
-                      active && "bg-accent text-accent-foreground font-medium"
+                      "w-full justify-start gap-3 transition-all duration-200",
+                      active && "bg-gradient-to-r from-accent/20 to-accent/10 text-accent-foreground font-medium shadow-sm border-l-2 border-accent"
                     )}
                     onClick={() => handleNavigate(item.url)}
                   >
@@ -132,13 +146,13 @@ export const NavigationDrawer = () => {
               })}
             </div>
 
-            <Separator />
+            <Separator className="my-4" />
 
             {/* Benutzer-Bereich */}
             {user && (
               <>
                 <div className="space-y-1">
-                  <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                  <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-3">
                     Mein Bereich
                   </h3>
                   {userItems.map((item) => {
@@ -147,10 +161,10 @@ export const NavigationDrawer = () => {
                     return (
                       <Button
                         key={item.url}
-                        variant={active ? "secondary" : "ghost"}
+                        variant="ghost"
                         className={cn(
-                          "w-full justify-start gap-3",
-                          active && "bg-accent text-accent-foreground font-medium"
+                          "w-full justify-start gap-3 transition-all duration-200",
+                          active && "bg-gradient-to-r from-accent/20 to-accent/10 text-accent-foreground font-medium shadow-sm border-l-2 border-accent"
                         )}
                         onClick={() => handleNavigate(item.url)}
                       >
@@ -160,7 +174,7 @@ export const NavigationDrawer = () => {
                     );
                   })}
                 </div>
-                <Separator />
+                <Separator className="my-4" />
               </>
             )}
 
@@ -168,16 +182,16 @@ export const NavigationDrawer = () => {
             {isAdmin && (
               <>
                 <div className="space-y-1">
-                  <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                  <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-3">
                     Administration
                   </h3>
                   <Collapsible open={adminOpen} onOpenChange={setAdminOpen}>
                     <CollapsibleTrigger asChild>
                       <Button
-                        variant={isActive("/admin") ? "secondary" : "ghost"}
+                        variant="ghost"
                         className={cn(
-                          "w-full justify-between gap-3",
-                          isActive("/admin") && "bg-accent text-accent-foreground font-medium"
+                          "w-full justify-between gap-3 transition-all duration-200",
+                          isActive("/admin") && "bg-gradient-to-r from-accent/20 to-accent/10 text-accent-foreground font-medium shadow-sm border-l-2 border-accent"
                         )}
                       >
                         <div className="flex items-center gap-3">
@@ -186,19 +200,19 @@ export const NavigationDrawer = () => {
                         </div>
                         <div className="flex items-center gap-2">
                           {(counts.feedbacks + counts.users) > 0 && (
-                            <Badge variant="destructive" className="text-xs">
+                            <Badge variant="destructive" className="text-xs animate-pulse">
                               {counts.feedbacks + counts.users}
                             </Badge>
                           )}
                           {adminOpen ? (
-                            <ChevronDown className="h-4 w-4" />
+                            <ChevronDown className="h-4 w-4 transition-transform" />
                           ) : (
-                            <ChevronRight className="h-4 w-4" />
+                            <ChevronRight className="h-4 w-4 transition-transform" />
                           )}
                         </div>
                       </Button>
                     </CollapsibleTrigger>
-                    <CollapsibleContent className="pl-6 mt-1 space-y-1">
+                    <CollapsibleContent className="pl-4 mt-1 space-y-1 animate-in slide-in-from-top-2">
                       {adminSubItems.map((item) => {
                         const Icon = item.icon;
                         const count = getCountForTab(item.tab);
@@ -207,7 +221,7 @@ export const NavigationDrawer = () => {
                             key={item.tab}
                             variant="ghost"
                             size="sm"
-                            className="w-full justify-between gap-2 text-sm"
+                            className="w-full justify-between gap-2 text-sm hover:bg-accent/10 transition-colors"
                             onClick={() => handleNavigate("/admin", item.tab)}
                           >
                             <div className="flex items-center gap-2">
@@ -215,7 +229,7 @@ export const NavigationDrawer = () => {
                               <span>{item.title}</span>
                             </div>
                             {count > 0 && (
-                              <Badge variant="destructive" className="ml-auto">
+                              <Badge variant="destructive" className="ml-auto text-xs animate-pulse">
                                 {count}
                               </Badge>
                             )}
@@ -225,64 +239,87 @@ export const NavigationDrawer = () => {
                     </CollapsibleContent>
                   </Collapsible>
                 </div>
-                <Separator />
+                <Separator className="my-4" />
               </>
             )}
 
-            {/* Externe Links */}
+            {/* Externe Links & Ressourcen */}
             <div className="space-y-1">
-              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-3">
                 Ressourcen
               </h3>
-              <Button
-                variant="ghost"
-                className="w-full justify-start gap-3"
-                asChild
-              >
-                <a
-                  href="https://drive.google.com/drive/folders/1x_OJDgFV7z0XGMcSBPIvKe-fTTHqp1kR?usp=sharing"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Download className="h-5 w-5" />
-                  <span>Downloads</span>
-                </a>
-              </Button>
+              
+              {resourceItems.map((item) => {
+                const Icon = item.icon;
+                const active = !item.external && isActive(item.url);
+                
+                if (item.external) {
+                  return (
+                    <Button
+                      key={item.url}
+                      variant="ghost"
+                      className="w-full justify-start gap-3 hover:bg-accent/10 transition-colors"
+                      asChild
+                    >
+                      <a
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Icon className="h-5 w-5" />
+                        <span>{item.title}</span>
+                      </a>
+                    </Button>
+                  );
+                }
+                
+                return (
+                  <Button
+                    key={item.url}
+                    variant="ghost"
+                    className={cn(
+                      "w-full justify-start gap-3 transition-all duration-200",
+                      active && "bg-gradient-to-r from-accent/20 to-accent/10 text-accent-foreground font-medium shadow-sm border-l-2 border-accent"
+                    )}
+                    onClick={() => handleNavigate(item.url)}
+                  >
+                    <Icon className="h-5 w-5" />
+                    <span>{item.title}</span>
+                  </Button>
+                );
+              })}
 
               <RoadmapModal>
-                <Button variant="ghost" className="w-full justify-start gap-3">
+                <Button variant="ghost" className="w-full justify-start gap-3 hover:bg-accent/10 transition-colors">
                   <MapPin className="h-5 w-5" />
                   <span>Roadmap</span>
                 </Button>
               </RoadmapModal>
             </div>
-
-            <Separator />
-
-            {/* Auth */}
-            <div className="pb-6">
-              {user ? (
-                <Button
-                  variant="outline"
-                  className="w-full justify-start gap-3"
-                  onClick={handleSignOut}
-                >
-                  <LogOut className="h-5 w-5" />
-                  <span>Abmelden</span>
-                </Button>
-              ) : (
-                <Button
-                  variant="default"
-                  className="w-full justify-start gap-3"
-                  onClick={() => handleNavigate("/auth")}
-                >
-                  <LogIn className="h-5 w-5" />
-                  <span>Anmelden</span>
-                </Button>
-              )}
-            </div>
           </div>
         </ScrollArea>
+
+        {/* Auth Actions */}
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-border/50 bg-gradient-to-t from-background to-background/50 backdrop-blur-sm">
+          {user ? (
+            <Button
+              variant="outline"
+              className="w-full justify-start gap-3 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50 transition-colors"
+              onClick={handleSignOut}
+            >
+              <LogOut className="h-5 w-5" />
+              <span>Abmelden</span>
+            </Button>
+          ) : (
+            <Button
+              className="w-full justify-start gap-3 bg-gradient-to-r from-accent to-accent/80 hover:from-accent/90 hover:to-accent/70 shadow-accent transition-all duration-300"
+              onClick={() => handleNavigate("/auth")}
+            >
+              <LogIn className="h-5 w-5" />
+              <span>Anmelden</span>
+            </Button>
+          )}
+        </div>
       </SheetContent>
     </Sheet>
   );

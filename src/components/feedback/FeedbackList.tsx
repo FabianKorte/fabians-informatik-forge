@@ -14,7 +14,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 
-import { MessageSquare, RefreshCw, User, Clock, Lock, Search, Bug, Lightbulb, Star, ThumbsUp, Heart, TrendingUp, Filter } from "lucide-react";
+import { MessageSquare, RefreshCw, User, Clock, Lock, Search, Bug, Lightbulb, Star, Filter } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { de } from "date-fns/locale";
 import { logger } from "@/lib/logger";
@@ -66,13 +66,6 @@ const FeedbackItem = ({ feedback, isAdmin }: { feedback: Feedback; isAdmin: bool
                'Erledigt'}
             </Badge>
           )}
-
-          {feedback.upvotes > 0 && (
-            <Badge variant="secondary" className="text-xs">
-              <TrendingUp className="w-3 h-3 mr-1" />
-              {feedback.upvotes} Upvotes
-            </Badge>
-          )}
         </div>
         
         <div className="flex items-center gap-1 text-xs text-muted-foreground shrink-0">
@@ -97,7 +90,7 @@ export const FeedbackList = ({ refreshTrigger }: { refreshTrigger?: number }) =>
   const [hasAccess, setHasAccess] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
-  const [sortBy, setSortBy] = useState<'recent' | 'popular'>('recent');
+  const [sortBy, setSortBy] = useState<'recent'>('recent');
   const { isAdmin } = useAuth();
 
   const fetchFeedbacks = async () => {
@@ -142,12 +135,8 @@ export const FeedbackList = ({ refreshTrigger }: { refreshTrigger?: number }) =>
       result = result.filter(f => f.category === categoryFilter);
     }
 
-    // Sort
-    if (sortBy === 'popular') {
-      result.sort((a, b) => (b.upvotes || 0) - (a.upvotes || 0));
-    } else {
-      result.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-    }
+    // Sort by recent
+    result.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
     setFilteredFeedbacks(result);
   }, [feedbacks, searchQuery, categoryFilter, sortBy]);
@@ -189,32 +178,8 @@ export const FeedbackList = ({ refreshTrigger }: { refreshTrigger?: number }) =>
     );
   }
 
-  // Get top 3 popular feedbacks
-  const topFeedbacks = [...feedbacks]
-    .sort((a, b) => (b.upvotes || 0) - (a.upvotes || 0))
-    .slice(0, 3)
-    .filter(f => f.upvotes > 0);
-
   return (
     <div className="space-y-6">
-      {/* Top Feedbacks Section */}
-      {topFeedbacks.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <TrendingUp className="w-5 h-5" />
-              Beliebte Feedbacks
-            </CardTitle>
-            <CardDescription>Die am häufigsten upgevoteten Feedbacks</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {topFeedbacks.map((feedback) => (
-              <FeedbackItem key={feedback.id} feedback={feedback} isAdmin={false} />
-            ))}
-          </CardContent>
-        </Card>
-      )}
-
       {/* Main Feedback List */}
       <Card className="w-full">
         <CardHeader>
@@ -243,7 +208,7 @@ export const FeedbackList = ({ refreshTrigger }: { refreshTrigger?: number }) =>
           </div>
 
           {/* Filters */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
@@ -271,16 +236,6 @@ export const FeedbackList = ({ refreshTrigger }: { refreshTrigger?: number }) =>
                     </div>
                   </SelectItem>
                 ))}
-              </SelectContent>
-            </Select>
-
-            <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="recent">Neueste zuerst</SelectItem>
-                <SelectItem value="popular">Beliebteste zuerst</SelectItem>
               </SelectContent>
             </Select>
           </div>
