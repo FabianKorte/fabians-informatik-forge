@@ -201,7 +201,7 @@ const Index = () => {
       </div>
 
       {randomTrainingCategory && (
-        <section className="py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-violet-500/10 via-fuchsia-500/10 to-purple-500/10 relative z-10">
+        <section className="py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-violet-500/10 via-fuchsia-500/10 to-purple-500/10">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-6 sm:mb-8">
               <div className="inline-flex items-center gap-2 mb-3 sm:mb-4">
@@ -230,7 +230,7 @@ const Index = () => {
         </section>
       )}
 
-      <section id="categories-section" className="py-8 sm:py-20 px-4 sm:px-6 bg-background relative z-10">
+      <section id="categories-section" className="py-8 sm:py-20 px-4 sm:px-6 bg-background">
         <main 
           id="main-content"
           tabIndex={-1}
@@ -296,7 +296,7 @@ const Index = () => {
         </main>
       </section>
 
-      <section className="py-8 sm:py-20 px-4 sm:px-6 bg-muted/30 relative z-10">
+      <section className="py-8 sm:py-20 px-4 sm:px-6 bg-muted/30">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-8 sm:mb-16">
             <h2 className="text-2xl sm:text-3xl font-medium text-foreground mb-2 sm:mb-4">Feedback</h2>
@@ -316,7 +316,7 @@ const Index = () => {
         </div>
       </section>
 
-      <footer className="py-6 sm:py-12 px-4 sm:px-6 border-t border-border bg-background relative z-10">
+      <footer className="py-6 sm:py-12 px-4 sm:px-6 border-t border-border bg-background">
         <div className="max-w-4xl mx-auto text-center">
           <div className="mb-4 sm:mb-6">
             <img 

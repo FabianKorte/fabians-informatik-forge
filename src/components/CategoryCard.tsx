@@ -27,7 +27,7 @@ const CategoryCardComponent = ({
   const progress = totalElements > 0 ? (completedElements / totalElements) * 100 : 0;
 
   return (
-    <GradientShadowCard className="view-transition-card">
+    <GradientShadowCard className="view-transition-card relative z-10">
       <Card className="group cursor-pointer p-4 sm:p-8 h-full flex flex-col">
       <div className="flex items-start gap-3 sm:gap-4 mb-4 sm:mb-6">
         <div className="p-2 sm:p-2.5 rounded-lg bg-accent/5 border border-accent/10">
