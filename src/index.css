@@ -182,6 +182,17 @@ All colors MUST be HSL.
     scroll-behavior: smooth;
   }
 
+  /* Text selection colors */
+  ::selection {
+    background-color: hsl(var(--primary) / 0.2);
+    color: hsl(var(--foreground));
+  }
+
+  ::-moz-selection {
+    background-color: hsl(var(--primary) / 0.2);
+    color: hsl(var(--foreground));
+  }
+
   /* Enable View Transitions API for smooth page transitions */
   @view-transition {
     navigation: auto;

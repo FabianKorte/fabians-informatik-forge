@@ -154,41 +154,44 @@ export const ChatMessageComponent = ({
             )}
           </div>
 
-          {/* Action buttons */}
+          {/* Action buttons - positioned outside message bubble */}
           {isOwnMessage && !isEditing && (
-            <div className="absolute -right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+            <div className={`absolute ${isOwnMessage ? '-left-20' : '-right-20'} top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1`}>
               <Button
                 size="icon"
-                variant="ghost"
+                variant="secondary"
                 onClick={() => setIsEditing(true)}
-                className="h-7 w-7 bg-background shadow-sm"
+                className="h-8 w-8 bg-card hover:bg-accent border border-border shadow-md hover:shadow-lg transition-all"
+                aria-label="Nachricht bearbeiten"
               >
-                <Pencil className="h-3 w-3" />
+                <Pencil className="h-4 w-4" />
               </Button>
               <Button
                 size="icon"
-                variant="ghost"
+                variant="secondary"
                 onClick={() => onDelete(message.id)}
-                className="h-7 w-7 bg-background shadow-sm"
+                className="h-8 w-8 bg-card hover:bg-destructive/10 hover:text-destructive border border-border shadow-md hover:shadow-lg transition-all"
+                aria-label="Nachricht löschen"
               >
-                <Trash2 className="h-3 w-3" />
+                <Trash2 className="h-4 w-4" />
               </Button>
             </div>
           )}
 
-          {/* Emoji picker */}
+          {/* Emoji picker - positioned outside message bubble */}
           {!isEditing && (
             <Popover>
               <PopoverTrigger asChild>
                 <Button
                   size="icon"
-                  variant="ghost"
-                  className={`absolute ${isOwnMessage ? '-left-2' : '-right-2'} top-1/2 -translate-y-1/2 h-7 w-7 bg-background shadow-sm opacity-0 group-hover:opacity-100 transition-opacity`}
+                  variant="secondary"
+                  className={`absolute ${isOwnMessage ? '-left-10' : '-right-10'} top-1/2 -translate-y-1/2 h-8 w-8 bg-card hover:bg-accent border border-border shadow-md hover:shadow-lg opacity-0 group-hover:opacity-100 transition-all`}
+                  aria-label="Reaktion hinzufügen"
                 >
-                  <Smile className="h-3 w-3" />
+                  <Smile className="h-4 w-4" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-2">
+              <PopoverContent className="w-auto p-2 bg-popover border-border">
                 <div className="flex gap-1">
                   {EMOJI_OPTIONS.map((emoji) => (
                     <Button
@@ -196,7 +199,7 @@ export const ChatMessageComponent = ({
                       variant="ghost"
                       size="sm"
                       onClick={() => onReactionToggle(message.id, emoji)}
-                      className="h-8 w-8 p-0 text-lg hover:scale-110 transition-transform"
+                      className="h-8 w-8 p-0 text-lg hover:scale-110 hover:bg-accent transition-transform"
                     >
                       {emoji}
                     </Button>
