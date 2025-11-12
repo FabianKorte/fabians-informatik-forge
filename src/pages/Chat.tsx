@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
-import { Send, ArrowLeft } from 'lucide-react';
+import { Send, ArrowLeft, MessageCircle, Loader2 } from 'lucide-react';
 import { logger } from '@/lib/logger';
 import { sanitizeInput } from '@/lib/sanitization';
 
@@ -198,29 +198,58 @@ const Chat = () => {
     const sanitized = sanitizeInput(newMessage, 500);
     if (!sanitized) return;
 
-    const { error } = await supabase.from('chat_messages').insert({
-      user_id: user.id,
-      message: sanitized,
-    });
-
-    if (error) {
-      logger.error('Error sending message:', error);
-      toast({
-        title: 'Fehler',
-        description: 'Nachricht konnte nicht gesendet werden.',
-        variant: 'destructive',
+    try {
+      const { error } = await supabase.from('chat_messages').insert({
+        user_id: user.id,
+        message: sanitized,
       });
-    } else {
+
+      if (error) {
+        logger.error('Error sending message:', error);
+        
+        // Bessere Fehlerbehandlung
+        if (error.message.includes('row-level security')) {
+          toast({
+            title: 'Berechtigungsfehler',
+            description: 'Du hast keine Berechtigung, Nachrichten zu senden. Bitte melde dich erneut an.',
+            variant: 'destructive',
+          });
+        } else if (error.message.includes('violates foreign key')) {
+          toast({
+            title: 'Profilfehler',
+            description: 'Dein Profil ist nicht korrekt eingerichtet. Bitte kontaktiere den Support.',
+            variant: 'destructive',
+          });
+        } else {
+          toast({
+            title: 'Fehler beim Senden',
+            description: error.message || 'Nachricht konnte nicht gesendet werden.',
+            variant: 'destructive',
+          });
+        }
+        return;
+      }
+
       // Track message timestamp
       messageTimestampsRef.current = [...recentMessages, now];
       setNewMessage('');
+      
+      logger.log('Message sent successfully');
+    } catch (err) {
+      logger.error('Unexpected error sending message:', err);
+      toast({
+        title: 'Unerwarteter Fehler',
+        description: 'Bitte versuche es erneut.',
+        variant: 'destructive',
+      });
     }
   };
 
   if (authLoading || isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse text-lg">Lädt...</div>
+      <div className="min-h-screen flex flex-col items-center justify-center gap-3">
+        <Loader2 className="w-10 h-10 animate-spin text-primary" />
+        <p className="text-muted-foreground">Chat wird geladen...</p>
       </div>
     );
   }
@@ -235,11 +264,13 @@ const Chat = () => {
           <h1 className="text-2xl font-bold">Community Chat</h1>
         </div>
 
-        <ScrollArea className="flex-1 border rounded-lg p-4 mb-4">
+        <ScrollArea className="flex-1 border rounded-lg p-4 mb-4 bg-muted/20">
           <div className="space-y-4">
             {messages.length === 0 ? (
-              <div className="text-center text-muted-foreground py-8">
-                Keine Nachrichten vorhanden. Schreibe die erste Nachricht!
+              <div className="text-center text-muted-foreground py-12">
+                <MessageCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                <p className="font-medium">Keine Nachrichten vorhanden</p>
+                <p className="text-sm mt-1">Schreibe die erste Nachricht!</p>
               </div>
             ) : (
               messages.map((msg) => (
@@ -250,7 +281,10 @@ const Chat = () => {
                   }`}
                 >
                   <Avatar className="h-10 w-10 shrink-0">
-                    <AvatarFallback>
+                    {msg.profiles?.avatar_url && (
+                      <AvatarImage src={msg.profiles.avatar_url} alt={msg.profiles.username} />
+                    )}
+                    <AvatarFallback className="bg-primary/10 text-primary font-semibold">
                       {msg.profiles?.username ? msg.profiles.username.charAt(0).toUpperCase() : 'U'}
                     </AvatarFallback>
                   </Avatar>
@@ -263,13 +297,13 @@ const Chat = () => {
                       {msg.profiles?.username || 'Unbekannt'}
                     </span>
                     <div
-                      className={`rounded-lg px-4 py-2 max-w-md ${
+                      className={`rounded-2xl px-4 py-2.5 max-w-md shadow-sm ${
                         msg.user_id === user?.id
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-muted'
+                          ? 'bg-primary text-primary-foreground rounded-br-md'
+                          : 'bg-card border border-border rounded-bl-md'
                       }`}
                     >
-                      <p className="text-sm break-words">{msg.message}</p>
+                      <p className="text-sm break-words leading-relaxed">{msg.message}</p>
                     </div>
                     <span className="text-xs text-muted-foreground mt-1">
                       {new Date(msg.created_at).toLocaleTimeString('de-DE', {
@@ -290,13 +324,22 @@ const Chat = () => {
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="Nachricht eingeben..."
-            className="flex-1"
+            className="flex-1 rounded-xl"
             maxLength={500}
+            autoFocus
           />
-          <Button type="submit" size="icon" disabled={!newMessage.trim()}>
+          <Button 
+            type="submit" 
+            size="icon" 
+            disabled={!newMessage.trim()}
+            className="rounded-xl"
+          >
             <Send className="h-4 w-4" />
           </Button>
         </form>
+        <p className="text-xs text-muted-foreground text-center mt-2">
+          {newMessage.length}/500 Zeichen
+        </p>
       </div>
     </div>
   );
