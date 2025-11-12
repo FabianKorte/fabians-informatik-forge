@@ -133,7 +133,7 @@ export const ChatMessageComponent = ({
                 <Input
                   value={editText}
                   onChange={(e) => setEditText(e.target.value)}
-                  className="h-8 text-sm"
+                  className="h-8 text-sm bg-background text-foreground"
                   autoFocus
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') handleSaveEdit();
