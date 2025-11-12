@@ -38,7 +38,7 @@ interface Feedback {
   upvotes: number;
 }
 
-const FeedbackItem = ({ feedback }: { feedback: Feedback }) => {
+const FeedbackItem = ({ feedback, isAdmin }: { feedback: Feedback; isAdmin: boolean }) => {
   const { toggleReaction, getReactionCount, hasUserReacted } = useFeedbackReactions(feedback.id);
   const categoryConfig = FEEDBACK_CATEGORIES[feedback.category] || FEEDBACK_CATEGORIES.general;
   const CategoryIcon = categoryConfig.icon;
@@ -86,25 +86,27 @@ const FeedbackItem = ({ feedback }: { feedback: Feedback }) => {
       
       <p className="text-sm leading-relaxed pl-6">{feedback.message}</p>
       
-      <div className="flex gap-1 pl-6">
-        {REACTION_EMOJIS.map(emoji => {
-          const count = getReactionCount(emoji);
-          const isActive = hasUserReacted(emoji);
-          
-          return (
-            <Button
-              key={emoji}
-              variant={isActive ? "default" : "outline"}
-              size="sm"
-              onClick={() => toggleReaction(emoji)}
-              className="h-7 px-2 text-sm gap-1"
-            >
-              <span>{emoji}</span>
-              {count > 0 && <span>{count}</span>}
-            </Button>
-          );
-        })}
-      </div>
+      {isAdmin && (
+        <div className="flex gap-1 pl-6">
+          {REACTION_EMOJIS.map(emoji => {
+            const count = getReactionCount(emoji);
+            const isActive = hasUserReacted(emoji);
+            
+            return (
+              <Button
+                key={emoji}
+                variant={isActive ? "default" : "outline"}
+                size="sm"
+                onClick={() => toggleReaction(emoji)}
+                className="h-7 px-2 text-sm gap-1"
+              >
+                <span>{emoji}</span>
+                {count > 0 && <span>{count}</span>}
+              </Button>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };
@@ -228,7 +230,7 @@ export const FeedbackList = ({ refreshTrigger }: { refreshTrigger?: number }) =>
           </CardHeader>
           <CardContent className="space-y-3">
             {topFeedbacks.map((feedback) => (
-              <FeedbackItem key={feedback.id} feedback={feedback} />
+              <FeedbackItem key={feedback.id} feedback={feedback} isAdmin={isAdmin} />
             ))}
           </CardContent>
         </Card>
@@ -320,7 +322,7 @@ export const FeedbackList = ({ refreshTrigger }: { refreshTrigger?: number }) =>
             </div>
           ) : (
             filteredFeedbacks.map((feedback) => (
-              <FeedbackItem key={feedback.id} feedback={feedback} />
+              <FeedbackItem key={feedback.id} feedback={feedback} isAdmin={isAdmin} />
             ))
           )}
         </CardContent>
