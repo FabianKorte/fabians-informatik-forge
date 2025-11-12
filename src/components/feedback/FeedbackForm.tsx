@@ -4,21 +4,37 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Send } from "lucide-react";
+import { Loader2, Send, Bug, Lightbulb, MessageSquare, Star } from "lucide-react";
 import { z } from "zod";
 import { logger } from "@/lib/logger";
 import { handleError } from "@/lib/errorHandler";
 
+const FEEDBACK_CATEGORIES = {
+  general: { label: 'Allgemein', icon: MessageSquare, color: 'text-gray-500' },
+  bug: { label: 'Fehlermeldung', icon: Bug, color: 'text-red-500' },
+  feature: { label: 'Feature-Wunsch', icon: Star, color: 'text-yellow-500' },
+  suggestion: { label: 'Verbesserungsvorschlag', icon: Lightbulb, color: 'text-blue-500' },
+};
+
 const feedbackSchema = z.object({
   name: z.string().trim().max(100, "Name darf maximal 100 Zeichen lang sein"),
-  message: z.string().trim().min(1, "Feedback ist erforderlich").max(1000, "Feedback darf maximal 1000 Zeichen lang sein")
+  message: z.string().trim().min(1, "Feedback ist erforderlich").max(1000, "Feedback darf maximal 1000 Zeichen lang sein"),
+  category: z.enum(['general', 'bug', 'feature', 'suggestion'])
 });
 
 const FeedbackForm = ({ onFeedbackSubmitted }: { onFeedbackSubmitted?: () => void }) => {
   const [name, setName] = useState("");
   const [feedback, setFeedback] = useState("");
+  const [category, setCategory] = useState<keyof typeof FEEDBACK_CATEGORIES>('general');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
@@ -52,7 +68,8 @@ const FeedbackForm = ({ onFeedbackSubmitted }: { onFeedbackSubmitted?: () => voi
     // Validate input with zod
     const validationResult = feedbackSchema.safeParse({
       name: name,
-      message: feedback
+      message: feedback,
+      category: category
     });
     
     if (!validationResult.success) {
@@ -73,6 +90,7 @@ const FeedbackForm = ({ onFeedbackSubmitted }: { onFeedbackSubmitted?: () => voi
         .insert([{
           name: sanitizedData.name || 'Anonym',
           message: sanitizedData.message,
+          category: sanitizedData.category,
           created_at: new Date().toISOString()
         }]);
 
@@ -88,6 +106,7 @@ const FeedbackForm = ({ onFeedbackSubmitted }: { onFeedbackSubmitted?: () => voi
       
       setName("");
       setFeedback("");
+      setCategory('general');
       onFeedbackSubmitted?.();
       
     } catch (error) {
@@ -127,6 +146,25 @@ const FeedbackForm = ({ onFeedbackSubmitted }: { onFeedbackSubmitted?: () => voi
               onChange={(e) => setName(e.target.value)}
               disabled={isSubmitting}
             />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="category">Kategorie *</Label>
+            <Select value={category} onValueChange={(value: any) => setCategory(value)}>
+              <SelectTrigger id="category" disabled={isSubmitting}>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.entries(FEEDBACK_CATEGORIES).map(([key, { label, icon: Icon, color }]) => (
+                  <SelectItem key={key} value={key}>
+                    <div className="flex items-center gap-2">
+                      <Icon className={`w-4 h-4 ${color}`} />
+                      {label}
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           
           <div className="space-y-2">

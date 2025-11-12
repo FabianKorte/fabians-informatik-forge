@@ -323,27 +323,65 @@ export type Database = {
         }
         Relationships: []
       }
+      feedback_reactions: {
+        Row: {
+          created_at: string
+          emoji: string
+          feedback_id: string
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          emoji: string
+          feedback_id: string
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          emoji?: string
+          feedback_id?: string
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feedback_reactions_feedback_id_fkey"
+            columns: ["feedback_id"]
+            isOneToOne: false
+            referencedRelation: "feedbacks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       feedbacks: {
         Row: {
+          category: string | null
           created_at: string | null
           id: string
           message: string
           name: string
           status: string | null
+          upvotes: number | null
         }
         Insert: {
+          category?: string | null
           created_at?: string | null
           id?: string
           message: string
           name?: string
           status?: string | null
+          upvotes?: number | null
         }
         Update: {
+          category?: string | null
           created_at?: string | null
           id?: string
           message?: string
           name?: string
           status?: string | null
+          upvotes?: number | null
         }
         Relationships: []
       }

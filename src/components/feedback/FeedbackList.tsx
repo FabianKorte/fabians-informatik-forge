@@ -2,13 +2,31 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { MessageSquare, RefreshCw, User, Clock, Lock } from "lucide-react";
+import { useFeedbackReactions } from "@/hooks/useFeedbackReactions";
+import { MessageSquare, RefreshCw, User, Clock, Lock, Search, Bug, Lightbulb, Star, ThumbsUp, Heart, TrendingUp, Filter } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { de } from "date-fns/locale";
 import { logger } from "@/lib/logger";
+
+const FEEDBACK_CATEGORIES = {
+  general: { label: 'Allgemein', icon: MessageSquare, color: 'text-gray-500' },
+  bug: { label: 'Fehlermeldung', icon: Bug, color: 'text-red-500' },
+  feature: { label: 'Feature-Wunsch', icon: Star, color: 'text-yellow-500' },
+  suggestion: { label: 'Verbesserungsvorschlag', icon: Lightbulb, color: 'text-blue-500' },
+};
+
+const REACTION_EMOJIS = ['👍', '❤️', '💡'];
 
 interface Feedback {
   id: string;
@@ -16,12 +34,89 @@ interface Feedback {
   message: string;
   created_at: string;
   status: string;
+  category: keyof typeof FEEDBACK_CATEGORIES;
+  upvotes: number;
 }
+
+const FeedbackItem = ({ feedback }: { feedback: Feedback }) => {
+  const { toggleReaction, getReactionCount, hasUserReacted } = useFeedbackReactions(feedback.id);
+  const categoryConfig = FEEDBACK_CATEGORIES[feedback.category] || FEEDBACK_CATEGORIES.general;
+  const CategoryIcon = categoryConfig.icon;
+
+  return (
+    <div className="space-y-3 p-4 rounded-lg border bg-card hover:bg-accent/5 transition-colors">
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          <User className="w-4 h-4 text-muted-foreground shrink-0" />
+          <span className="font-medium text-sm">{feedback.name}</span>
+          
+          <Badge variant="outline" className={`text-xs ${categoryConfig.color}`}>
+            <CategoryIcon className="w-3 h-3 mr-1" />
+            {categoryConfig.label}
+          </Badge>
+          
+          {feedback.status && (
+            <Badge variant={
+              feedback.status === 'resolved' ? 'default' :
+              feedback.status === 'in_progress' ? 'secondary' :
+              'outline'
+            } className="text-xs">
+              {feedback.status === 'new' ? 'Neu' :
+               feedback.status === 'in_progress' ? 'In Arbeit' :
+               'Erledigt'}
+            </Badge>
+          )}
+
+          {feedback.upvotes > 0 && (
+            <Badge variant="secondary" className="text-xs">
+              <TrendingUp className="w-3 h-3 mr-1" />
+              {feedback.upvotes} Upvotes
+            </Badge>
+          )}
+        </div>
+        
+        <div className="flex items-center gap-1 text-xs text-muted-foreground shrink-0">
+          <Clock className="w-3 h-3" />
+          {formatDistanceToNow(new Date(feedback.created_at), {
+            addSuffix: true,
+            locale: de
+          })}
+        </div>
+      </div>
+      
+      <p className="text-sm leading-relaxed pl-6">{feedback.message}</p>
+      
+      <div className="flex gap-1 pl-6">
+        {REACTION_EMOJIS.map(emoji => {
+          const count = getReactionCount(emoji);
+          const isActive = hasUserReacted(emoji);
+          
+          return (
+            <Button
+              key={emoji}
+              variant={isActive ? "default" : "outline"}
+              size="sm"
+              onClick={() => toggleReaction(emoji)}
+              className="h-7 px-2 text-sm gap-1"
+            >
+              <span>{emoji}</span>
+              {count > 0 && <span>{count}</span>}
+            </Button>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
 
 export const FeedbackList = ({ refreshTrigger }: { refreshTrigger?: number }) => {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
+  const [filteredFeedbacks, setFilteredFeedbacks] = useState<Feedback[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [hasAccess, setHasAccess] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<'recent' | 'popular'>('recent');
   const { isAdmin } = useAuth();
 
   const fetchFeedbacks = async () => {
@@ -35,7 +130,7 @@ export const FeedbackList = ({ refreshTrigger }: { refreshTrigger?: number }) =>
       if (error) throw error;
       
       setHasAccess(true);
-      setFeedbacks(data || []);
+      setFeedbacks((data || []) as Feedback[]);
     } catch (error) {
       logger.error('Error fetching feedbacks:', error);
       setHasAccess(false);
@@ -48,6 +143,33 @@ export const FeedbackList = ({ refreshTrigger }: { refreshTrigger?: number }) =>
   useEffect(() => {
     fetchFeedbacks();
   }, [refreshTrigger, isAdmin]);
+
+  // Apply filters and sorting
+  useEffect(() => {
+    let result = [...feedbacks];
+
+    // Search filter
+    if (searchQuery) {
+      result = result.filter(f => 
+        f.message.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        f.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    // Category filter
+    if (categoryFilter !== 'all') {
+      result = result.filter(f => f.category === categoryFilter);
+    }
+
+    // Sort
+    if (sortBy === 'popular') {
+      result.sort((a, b) => (b.upvotes || 0) - (a.upvotes || 0));
+    } else {
+      result.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    }
+
+    setFilteredFeedbacks(result);
+  }, [feedbacks, searchQuery, categoryFilter, sortBy]);
 
   if (isLoading) {
     return (
@@ -86,73 +208,123 @@ export const FeedbackList = ({ refreshTrigger }: { refreshTrigger?: number }) =>
     );
   }
 
+  // Get top 3 popular feedbacks
+  const topFeedbacks = [...feedbacks]
+    .sort((a, b) => (b.upvotes || 0) - (a.upvotes || 0))
+    .slice(0, 3)
+    .filter(f => f.upvotes > 0);
+
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <MessageSquare className="w-5 h-5" />
-          Feedback-Verwaltung
-          <Badge variant="secondary" className="ml-auto">
-            {feedbacks.length} Einträge
-          </Badge>
-        </CardTitle>
-        <CardDescription>
-          Übersicht aller eingereichten Feedbacks (nur für Admins sichtbar).
-        </CardDescription>
-        <div className="flex justify-end">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={fetchFeedbacks}
-            disabled={isLoading}
-          >
-            <RefreshCw className="w-4 h-4 mr-2" />
-            Aktualisieren
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {feedbacks.length === 0 ? (
-          <div className="text-center py-8">
-            <MessageSquare className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-            <p className="text-muted-foreground mb-2">Noch kein Feedback vorhanden.</p>
-            <p className="text-sm text-muted-foreground">Sei der Erste, der Feedback gibt!</p>
-          </div>
-        ) : (
-          feedbacks.map((feedback, index) => (
-            <div key={feedback.id}>
-              {index > 0 && <Separator className="my-4" />}
-              <div className="space-y-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-2">
-                    <User className="w-4 h-4 text-muted-foreground" />
-                    <span className="font-medium text-sm">{feedback.name}</span>
-                    {feedback.status && (
-                      <Badge variant={
-                        feedback.status === 'resolved' ? 'default' :
-                        feedback.status === 'in_progress' ? 'secondary' :
-                        'outline'
-                      } className="text-xs">
-                        {feedback.status === 'new' ? 'Neu' :
-                         feedback.status === 'in_progress' ? 'In Arbeit' :
-                         'Erledigt'}
-                      </Badge>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                    <Clock className="w-3 h-3" />
-                    {formatDistanceToNow(new Date(feedback.created_at), {
-                      addSuffix: true,
-                      locale: de
-                    })}
-                  </div>
-                </div>
-                <p className="text-sm leading-relaxed pl-6">{feedback.message}</p>
-              </div>
+    <div className="space-y-6">
+      {/* Top Feedbacks Section */}
+      {topFeedbacks.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <TrendingUp className="w-5 h-5" />
+              Beliebte Feedbacks
+            </CardTitle>
+            <CardDescription>Die am häufigsten upgevoteten Feedbacks</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {topFeedbacks.map((feedback) => (
+              <FeedbackItem key={feedback.id} feedback={feedback} />
+            ))}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Main Feedback List */}
+      <Card className="w-full">
+        <CardHeader>
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <MessageSquare className="w-5 h-5" />
+                Feedback-Verwaltung
+                <Badge variant="secondary" className="ml-2">
+                  {filteredFeedbacks.length} {filteredFeedbacks.length === 1 ? 'Eintrag' : 'Einträge'}
+                </Badge>
+              </CardTitle>
+              <CardDescription>
+                Übersicht aller eingereichten Feedbacks
+              </CardDescription>
             </div>
-          ))
-        )}
-      </CardContent>
-    </Card>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={fetchFeedbacks}
+              disabled={isLoading}
+            >
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Aktualisieren
+            </Button>
+          </div>
+
+          {/* Filters */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Suchen..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9"
+              />
+            </div>
+
+            <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+              <SelectTrigger>
+                <div className="flex items-center gap-2">
+                  <Filter className="w-4 h-4" />
+                  <SelectValue />
+                </div>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Alle Kategorien</SelectItem>
+                {Object.entries(FEEDBACK_CATEGORIES).map(([key, { label, icon: Icon, color }]) => (
+                  <SelectItem key={key} value={key}>
+                    <div className="flex items-center gap-2">
+                      <Icon className={`w-4 h-4 ${color}`} />
+                      {label}
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="recent">Neueste zuerst</SelectItem>
+                <SelectItem value="popular">Beliebteste zuerst</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </CardHeader>
+        
+        <CardContent className="space-y-3">
+          {filteredFeedbacks.length === 0 ? (
+            <div className="text-center py-8">
+              <MessageSquare className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+              <p className="text-muted-foreground mb-2">
+                {searchQuery || categoryFilter !== 'all' 
+                  ? 'Keine Feedbacks gefunden.' 
+                  : 'Noch kein Feedback vorhanden.'}
+              </p>
+              {!searchQuery && categoryFilter === 'all' && (
+                <p className="text-sm text-muted-foreground">Sei der Erste, der Feedback gibt!</p>
+              )}
+            </div>
+          ) : (
+            filteredFeedbacks.map((feedback) => (
+              <FeedbackItem key={feedback.id} feedback={feedback} />
+            ))
+          )}
+        </CardContent>
+      </Card>
+    </div>
   );
 };
