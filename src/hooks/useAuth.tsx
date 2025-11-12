@@ -193,12 +193,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
    * @returns {Promise<{error: any}>} Error object if sign in fails
    */
   const signInWithGoogle = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: `${window.location.origin}/`,
+        skipBrowserRedirect: true,
       },
     });
+
+    if (data?.url) {
+      try {
+        if (window.top) {
+          window.top.location.href = data.url;
+        } else {
+          window.location.href = data.url;
+        }
+      } catch {
+        window.location.href = data.url;
+      }
+    }
+
     return { error };
   };
 
@@ -208,12 +222,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
    * @returns {Promise<{error: any}>} Error object if sign in fails
    */
   const signInWithDiscord = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'discord',
       options: {
         redirectTo: `${window.location.origin}/`,
+        skipBrowserRedirect: true,
       },
     });
+
+    if (data?.url) {
+      try {
+        if (window.top) {
+          window.top.location.href = data.url;
+        } else {
+          window.location.href = data.url;
+        }
+      } catch {
+        window.location.href = data.url;
+      }
+    }
+
     return { error };
   };
 
