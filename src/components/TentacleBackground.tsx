@@ -170,14 +170,18 @@ export const TentacleBackground = () => {
     <>
       <canvas
         ref={canvasRef}
-        className="fixed inset-0 pointer-events-none -z-10"
-        style={{ opacity: 0.5 }}
+        className="fixed inset-0 pointer-events-none"
+        style={{ 
+          zIndex: 0,
+          opacity: 0.6,
+          mixBlendMode: 'normal'
+        }}
       />
       <Button
         variant="outline"
         size="icon"
         onClick={() => setIsPaused(!isPaused)}
-        className="fixed bottom-4 left-4 z-50 bg-background/80 backdrop-blur-sm hover:bg-background/90"
+        className="fixed bottom-4 left-4 z-50 bg-card/90 backdrop-blur-sm hover:bg-card border-border"
         aria-label={isPaused ? "Animation starten" : "Animation pausieren"}
       >
         {isPaused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
