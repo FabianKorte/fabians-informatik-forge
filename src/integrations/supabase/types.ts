@@ -254,6 +254,8 @@ export type Database = {
       chat_messages: {
         Row: {
           created_at: string
+          deleted_at: string | null
+          edited_at: string | null
           id: string
           message: string
           updated_at: string
@@ -261,6 +263,8 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          deleted_at?: string | null
+          edited_at?: string | null
           id?: string
           message: string
           updated_at?: string
@@ -268,6 +272,8 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          deleted_at?: string | null
+          edited_at?: string | null
           id?: string
           message?: string
           updated_at?: string
@@ -533,6 +539,38 @@ export type Database = {
           last_attempt_at?: string
         }
         Relationships: []
+      }
+      message_reactions: {
+        Row: {
+          created_at: string
+          emoji: string
+          id: string
+          message_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          emoji: string
+          id?: string
+          message_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          emoji?: string
+          id?: string
+          message_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_reactions_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "chat_messages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       module_tags: {
         Row: {

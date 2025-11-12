@@ -1,29 +1,48 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
 import { Send, ArrowLeft, MessageCircle, Loader2 } from 'lucide-react';
 import { logger } from '@/lib/logger';
 import { sanitizeInput } from '@/lib/sanitization';
+import { ChatMessageComponent } from '@/components/chat/ChatMessage';
+import { TypingIndicator } from '@/components/chat/TypingIndicator';
+import { OnlineUsers } from '@/components/chat/OnlineUsers';
 
 // Rate limiting: Max 5 messages per 10 seconds
 const MESSAGE_RATE_LIMIT = 5;
-const RATE_LIMIT_WINDOW = 10000; // 10 seconds
+const RATE_LIMIT_WINDOW = 10000;
+const TYPING_TIMEOUT = 3000;
+
+interface MessageReaction {
+  id: string;
+  message_id: string;
+  user_id: string;
+  emoji: string;
+}
 
 interface ChatMessage {
   id: string;
   user_id: string;
   message: string;
   created_at: string;
+  edited_at?: string;
+  deleted_at?: string;
   profiles?: {
     username: string;
     avatar_url: string | null;
   };
+  reactions?: MessageReaction[];
+}
+
+interface OnlineUser {
+  user_id: string;
+  username: string;
+  avatar_url?: string;
 }
 
 const Chat = () => {
@@ -31,11 +50,15 @@ const Chat = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [reactions, setReactions] = useState<MessageReaction[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
+  const [typingUsers, setTypingUsers] = useState<string[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const messageTimestampsRef = useRef<number[]>([]);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -43,13 +66,16 @@ const Chat = () => {
     }
   }, [user, authLoading, navigate]);
 
+  // Fetch initial data
   useEffect(() => {
     if (!user) return;
 
-    const fetchMessages = async () => {
+    const fetchData = async () => {
+      // Fetch messages
       const { data: messagesData, error: messagesError } = await supabase
         .from('chat_messages')
         .select('*')
+        .is('deleted_at', null)
         .order('created_at', { ascending: true });
 
       if (messagesError) {
@@ -63,111 +89,198 @@ const Chat = () => {
         return;
       }
 
-      if (!messagesData || messagesData.length === 0) {
-        setMessages([]);
-        setIsLoading(false);
-        return;
-      }
-
-      // Hole alle User IDs
-      const userIds = [...new Set(messagesData.map(msg => msg.user_id))];
-      
-      // Hole alle Profile in einer Abfrage
+      // Fetch profiles
+      const userIds = [...new Set(messagesData?.map(msg => msg.user_id) || [])];
       const { data: profilesData } = await supabase
         .from('profiles')
         .select('id, username, avatar_url')
         .in('id', userIds);
 
-      // Erstelle eine Map für schnellen Zugriff
       const profilesMap = new Map(
         (profilesData || []).map(profile => [profile.id, profile])
       );
 
-      // Verknüpfe Nachrichten mit Profilen
-      const messagesWithProfiles = messagesData.map(msg => ({
+      // Fetch reactions
+      const { data: reactionsData } = await supabase
+        .from('message_reactions')
+        .select('*');
+
+      setReactions(reactionsData || []);
+
+      const messagesWithData = (messagesData || []).map(msg => ({
         ...msg,
         profiles: profilesMap.get(msg.user_id),
+        reactions: (reactionsData || []).filter(r => r.message_id === msg.id),
       }));
 
-      setMessages(messagesWithProfiles as ChatMessage[]);
+      setMessages(messagesWithData as ChatMessage[]);
       setIsLoading(false);
     };
 
-    fetchMessages();
+    fetchData();
+  }, [user, toast]);
 
-    let reconnectAttempts = 0;
-    const maxReconnectAttempts = 5;
-    
-    const setupChannel = (): ReturnType<typeof supabase.channel> => {
-      const channel = supabase
-        .channel('chat-messages', {
-          config: {
-            broadcast: { self: true },
-            presence: { key: user?.id }
-          }
-        })
-        .on(
-          'postgres_changes',
-          {
-            event: 'INSERT',
-            schema: 'public',
-            table: 'chat_messages',
-          },
-          async (payload) => {
-            try {
-              const { data: profileData } = await supabase
-                .from('profiles')
-                .select('username, avatar_url')
-                .eq('id', payload.new.user_id)
-                .single();
+  // Setup realtime channels
+  useEffect(() => {
+    if (!user) return;
 
-              const newMsg = {
-                ...payload.new,
-                profiles: profileData,
-              } as ChatMessage;
+    const channel = supabase.channel('chat-room', {
+      config: {
+        broadcast: { self: true },
+        presence: { key: user.id }
+      }
+    });
 
-              setMessages((prev) => [...prev, newMsg]);
-            } catch (error) {
-              logger.error('Error processing realtime message:', error);
-            }
-          }
-        )
-        .subscribe((status) => {
-          if (status === 'CHANNEL_ERROR') {
-            logger.error('Realtime channel error, attempting reconnect...');
-            
-            if (reconnectAttempts < maxReconnectAttempts) {
-              reconnectAttempts++;
-              if (reconnectTimeoutRef.current) {
-                clearTimeout(reconnectTimeoutRef.current);
-              }
-              reconnectTimeoutRef.current = setTimeout(() => {
-                logger.log(`Reconnect attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
-                supabase.removeChannel(channel);
-                setupChannel();
-              }, Math.min(1000 * Math.pow(2, reconnectAttempts), 30000));
-            } else {
-              toast({
-                title: 'Verbindungsfehler',
-                description: 'Die Verbindung zum Chat konnte nicht wiederhergestellt werden.',
-                variant: 'destructive',
+    // Track presence (online users)
+    channel
+      .on('presence', { event: 'sync' }, () => {
+        const state = channel.presenceState();
+        const users: OnlineUser[] = [];
+        Object.values(state).forEach((presences: any) => {
+          presences.forEach((presence: any) => {
+            if (presence.username) {
+              users.push({
+                user_id: presence.user_id,
+                username: presence.username,
+                avatar_url: presence.avatar_url,
               });
             }
-          } else if (status === 'SUBSCRIBED') {
-            reconnectAttempts = 0;
-            logger.log('Realtime channel connected');
-          }
+          });
         });
-      
-      return channel;
-    };
+        setOnlineUsers(users.filter(u => u.user_id !== user.id));
+      })
+      .on('presence', { event: 'join' }, ({ newPresences }: any) => {
+        logger.log('User joined:', newPresences);
+      })
+      .on('presence', { event: 'leave' }, ({ leftPresences }: any) => {
+        logger.log('User left:', leftPresences);
+      });
 
-    const channel = setupChannel();
+    // Listen for typing events
+    channel.on('broadcast', { event: 'typing' }, ({ payload }: any) => {
+      if (payload.user_id !== user.id) {
+        setTypingUsers(prev => {
+          if (!prev.includes(payload.username)) {
+            return [...prev, payload.username];
+          }
+          return prev;
+        });
+
+        setTimeout(() => {
+          setTypingUsers(prev => prev.filter(u => u !== payload.username));
+        }, TYPING_TIMEOUT);
+      }
+    });
+
+    // Listen for message inserts
+    channel.on(
+      'postgres_changes',
+      {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'chat_messages',
+      },
+      async (payload: any) => {
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('username, avatar_url')
+          .eq('id', payload.new.user_id)
+          .single();
+
+        const newMsg: ChatMessage = {
+          id: payload.new.id,
+          user_id: payload.new.user_id,
+          message: payload.new.message,
+          created_at: payload.new.created_at,
+          edited_at: payload.new.edited_at,
+          deleted_at: payload.new.deleted_at,
+          profiles: profileData || undefined,
+          reactions: [],
+        };
+
+        setMessages(prev => [...prev, newMsg]);
+      }
+    );
+
+    // Listen for message updates
+    channel.on(
+      'postgres_changes',
+      {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'chat_messages',
+      },
+      (payload) => {
+        setMessages(prev =>
+          prev.map(msg =>
+            msg.id === payload.new.id
+              ? { ...msg, ...payload.new }
+              : msg
+          )
+        );
+      }
+    );
+
+    // Listen for reaction changes
+    channel.on(
+      'postgres_changes',
+      {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'message_reactions',
+      },
+      (payload) => {
+        const newReaction = payload.new as MessageReaction;
+        setReactions(prev => [...prev, newReaction]);
+        setMessages(prev =>
+          prev.map(msg =>
+            msg.id === newReaction.message_id
+              ? { ...msg, reactions: [...(msg.reactions || []), newReaction] }
+              : msg
+          )
+        );
+      }
+    );
+
+    channel.on(
+      'postgres_changes',
+      {
+        event: 'DELETE',
+        schema: 'public',
+        table: 'message_reactions',
+      },
+      (payload) => {
+        setReactions(prev => prev.filter(r => r.id !== payload.old.id));
+        setMessages(prev =>
+          prev.map(msg => ({
+            ...msg,
+            reactions: msg.reactions?.filter(r => r.id !== payload.old.id) || [],
+          }))
+        );
+      }
+    );
+
+    // Subscribe with user presence
+    channel.subscribe(async (status) => {
+      if (status === 'SUBSCRIBED') {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('username, avatar_url')
+          .eq('id', user.id)
+          .single();
+
+        await channel.track({
+          user_id: user.id,
+          username: profile?.username || 'Unbekannt',
+          avatar_url: profile?.avatar_url,
+          online_at: new Date().toISOString(),
+        });
+      }
+    });
+
+    channelRef.current = channel;
 
     return () => {
-      if (reconnectTimeoutRef.current) {
-        clearTimeout(reconnectTimeoutRef.current);
-      }
       supabase.removeChannel(channel);
     };
   }, [user, toast]);
@@ -176,11 +289,23 @@ const Chat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  const handleTyping = () => {
+    if (!user || !channelRef.current) return;
+
+    channelRef.current.send({
+      type: 'broadcast',
+      event: 'typing',
+      payload: {
+        user_id: user.id,
+        username: user.email?.split('@')[0] || 'Unbekannt',
+      },
+    });
+  };
+
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim() || !user) return;
 
-    // Rate limiting check
     const now = Date.now();
     const recentMessages = messageTimestampsRef.current.filter(
       timestamp => now - timestamp < RATE_LIMIT_WINDOW
@@ -189,7 +314,7 @@ const Chat = () => {
     if (recentMessages.length >= MESSAGE_RATE_LIMIT) {
       toast({
         title: 'Zu schnell',
-        description: `Bitte warte ${Math.ceil((recentMessages[0] + RATE_LIMIT_WINDOW - now) / 1000)} Sekunden, bevor du die nächste Nachricht sendest.`,
+        description: `Bitte warte ${Math.ceil((recentMessages[0] + RATE_LIMIT_WINDOW - now) / 1000)} Sekunden.`,
         variant: 'destructive',
       });
       return;
@@ -206,42 +331,77 @@ const Chat = () => {
 
       if (error) {
         logger.error('Error sending message:', error);
-        
-        // Bessere Fehlerbehandlung
-        if (error.message.includes('row-level security')) {
-          toast({
-            title: 'Berechtigungsfehler',
-            description: 'Du hast keine Berechtigung, Nachrichten zu senden. Bitte melde dich erneut an.',
-            variant: 'destructive',
-          });
-        } else if (error.message.includes('violates foreign key')) {
-          toast({
-            title: 'Profilfehler',
-            description: 'Dein Profil ist nicht korrekt eingerichtet. Bitte kontaktiere den Support.',
-            variant: 'destructive',
-          });
-        } else {
-          toast({
-            title: 'Fehler beim Senden',
-            description: error.message || 'Nachricht konnte nicht gesendet werden.',
-            variant: 'destructive',
-          });
-        }
+        toast({
+          title: 'Fehler',
+          description: 'Nachricht konnte nicht gesendet werden.',
+          variant: 'destructive',
+        });
         return;
       }
 
-      // Track message timestamp
       messageTimestampsRef.current = [...recentMessages, now];
       setNewMessage('');
-      
-      logger.log('Message sent successfully');
     } catch (err) {
-      logger.error('Unexpected error sending message:', err);
+      logger.error('Unexpected error:', err);
+    }
+  };
+
+  const handleEditMessage = async (messageId: string, newText: string) => {
+    const { error } = await supabase
+      .from('chat_messages')
+      .update({ message: newText, edited_at: new Date().toISOString() })
+      .eq('id', messageId);
+
+    if (error) {
+      logger.error('Error editing message:', error);
       toast({
-        title: 'Unerwarteter Fehler',
-        description: 'Bitte versuche es erneut.',
+        title: 'Fehler',
+        description: 'Nachricht konnte nicht bearbeitet werden.',
         variant: 'destructive',
       });
+    }
+  };
+
+  const handleDeleteMessage = async (messageId: string) => {
+    const { error } = await supabase
+      .from('chat_messages')
+      .update({ deleted_at: new Date().toISOString() })
+      .eq('id', messageId);
+
+    if (error) {
+      logger.error('Error deleting message:', error);
+      toast({
+        title: 'Fehler',
+        description: 'Nachricht konnte nicht gelöscht werden.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleReactionToggle = async (messageId: string, emoji: string) => {
+    if (!user) return;
+
+    const existingReaction = reactions.find(
+      r => r.message_id === messageId && r.user_id === user.id && r.emoji === emoji
+    );
+
+    if (existingReaction) {
+      const { error } = await supabase
+        .from('message_reactions')
+        .delete()
+        .eq('id', existingReaction.id);
+
+      if (error) {
+        logger.error('Error removing reaction:', error);
+      }
+    } else {
+      const { error } = await supabase
+        .from('message_reactions')
+        .insert({ message_id: messageId, user_id: user.id, emoji });
+
+      if (error) {
+        logger.error('Error adding reaction:', error);
+      }
     }
   };
 
@@ -264,6 +424,8 @@ const Chat = () => {
           <h1 className="text-2xl font-bold">Community Chat</h1>
         </div>
 
+        <OnlineUsers users={onlineUsers} />
+
         <ScrollArea className="flex-1 border rounded-lg p-4 mb-4 bg-muted/20">
           <div className="space-y-4">
             {messages.length === 0 ? (
@@ -274,47 +436,17 @@ const Chat = () => {
               </div>
             ) : (
               messages.map((msg) => (
-                <div
+                <ChatMessageComponent
                   key={msg.id}
-                  className={`flex gap-3 ${
-                    msg.user_id === user?.id ? 'flex-row-reverse' : 'flex-row'
-                  }`}
-                >
-                  <Avatar className="h-10 w-10 shrink-0">
-                    {msg.profiles?.avatar_url && (
-                      <AvatarImage src={msg.profiles.avatar_url} alt={msg.profiles.username} />
-                    )}
-                    <AvatarFallback className="bg-primary/10 text-primary font-semibold">
-                      {msg.profiles?.username ? msg.profiles.username.charAt(0).toUpperCase() : 'U'}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div
-                    className={`flex flex-col ${
-                      msg.user_id === user?.id ? 'items-end' : 'items-start'
-                    }`}
-                  >
-                    <span className="text-xs text-muted-foreground mb-1">
-                      {msg.profiles?.username || 'Unbekannt'}
-                    </span>
-                    <div
-                      className={`rounded-2xl px-4 py-2.5 max-w-md shadow-sm ${
-                        msg.user_id === user?.id
-                          ? 'bg-primary text-primary-foreground rounded-br-md'
-                          : 'bg-card border border-border rounded-bl-md'
-                      }`}
-                    >
-                      <p className="text-sm break-words leading-relaxed">{msg.message}</p>
-                    </div>
-                    <span className="text-xs text-muted-foreground mt-1">
-                      {new Date(msg.created_at).toLocaleTimeString('de-DE', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </span>
-                  </div>
-                </div>
+                  message={msg}
+                  currentUserId={user?.id || ''}
+                  onEdit={handleEditMessage}
+                  onDelete={handleDeleteMessage}
+                  onReactionToggle={handleReactionToggle}
+                />
               ))
             )}
+            <TypingIndicator typingUsers={typingUsers} />
             <div ref={messagesEndRef} />
           </div>
         </ScrollArea>
@@ -322,15 +454,18 @@ const Chat = () => {
         <form onSubmit={handleSendMessage} className="flex gap-2">
           <Input
             value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
+            onChange={(e) => {
+              setNewMessage(e.target.value);
+              handleTyping();
+            }}
             placeholder="Nachricht eingeben..."
             className="flex-1 rounded-xl"
             maxLength={500}
             autoFocus
           />
-          <Button 
-            type="submit" 
-            size="icon" 
+          <Button
+            type="submit"
+            size="icon"
             disabled={!newMessage.trim()}
             className="rounded-xl"
           >
