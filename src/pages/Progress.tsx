@@ -29,6 +29,9 @@ const Progress = () => {
   const overallStats = overallProgress;
 
   // Calculate real statistics for each category from actual progress data
+  // Get all progress data once instead of calling hook multiple times in loops
+  const { allProgressData: globalProgressData } = useProgress("", "", 0);
+  
   const categoryStats = categories.map(category => {
     const modules = getModulesForCategory(category.id);
     let totalItems = 0;
@@ -36,9 +39,8 @@ const Progress = () => {
     let difficultItems = 0;
 
     modules.forEach((module, moduleIndex) => {
-      // Create a separate progress hook instance for each module
-      const progressHook = useProgress(category.id, module.type, moduleIndex);
-      const progress = progressHook.progressData;
+      // Access progress data from global state instead of calling hook
+      const progress = globalProgressData[category.id]?.[module.type]?.[moduleIndex.toString()] || {};
 
       switch (module.type) {
         case "flashcards":
