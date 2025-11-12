@@ -110,6 +110,42 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_recommendations: {
+        Row: {
+          category_id: string
+          created_at: string
+          expires_at: string
+          id: string
+          module_index: number
+          module_type: string
+          priority: number
+          recommendation_reason: string
+          user_id: string
+        }
+        Insert: {
+          category_id: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          module_index: number
+          module_type: string
+          priority?: number
+          recommendation_reason: string
+          user_id: string
+        }
+        Update: {
+          category_id?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          module_index?: number
+          module_type?: string
+          priority?: number
+          recommendation_reason?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       analytics_events: {
         Row: {
           created_at: string
@@ -508,6 +544,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      learning_analytics: {
+        Row: {
+          category_id: string
+          correct_answers: number
+          created_at: string
+          id: string
+          module_index: number
+          module_type: string
+          performance_score: number
+          questions_answered: number
+          session_hour: number
+          time_spent: number
+          user_id: string
+        }
+        Insert: {
+          category_id: string
+          correct_answers?: number
+          created_at?: string
+          id?: string
+          module_index: number
+          module_type: string
+          performance_score: number
+          questions_answered?: number
+          session_hour: number
+          time_spent?: number
+          user_id: string
+        }
+        Update: {
+          category_id?: string
+          correct_answers?: number
+          created_at?: string
+          id?: string
+          module_index?: number
+          module_type?: string
+          performance_score?: number
+          questions_answered?: number
+          session_hour?: number
+          time_spent?: number
+          user_id?: string
+        }
+        Relationships: []
       }
       learning_paths: {
         Row: {

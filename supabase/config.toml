@@ -24,3 +24,6 @@ verify_jwt = false
 
 [functions.generate-ai-exercises]
 verify_jwt = true
+
+[functions.generate-recommendations]
+verify_jwt = true

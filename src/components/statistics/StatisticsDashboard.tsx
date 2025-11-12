@@ -2,6 +2,10 @@ import { useStatistics } from '@/hooks/useStatistics';
 import { Card } from '@/components/ui/card';
 import { BookOpen, CheckCircle, Target, TrendingUp } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { LearningCurveChart } from './LearningCurveChart';
+import { WeaknessAnalysis } from './WeaknessAnalysis';
+import { OptimalTimesChart } from './OptimalTimesChart';
+import { AIRecommendations } from './AIRecommendations';
 
 export const StatisticsDashboard = () => {
   const { statistics, isLoading } = useStatistics();
@@ -51,6 +55,7 @@ export const StatisticsDashboard = () => {
 
   return (
     <div className="space-y-6">
+      {/* Basic Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat) => {
           const Icon = stat.icon;
@@ -74,6 +79,18 @@ export const StatisticsDashboard = () => {
           <p className="text-2xl font-bold text-primary">{statistics.favorite_category}</p>
         </Card>
       )}
+
+      {/* AI Recommendations */}
+      <AIRecommendations />
+
+      {/* Advanced Analytics */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <LearningCurveChart />
+        <WeaknessAnalysis />
+      </div>
+
+      {/* Optimal Times */}
+      <OptimalTimesChart />
     </div>
   );
 };
