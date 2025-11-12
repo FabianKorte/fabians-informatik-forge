@@ -20,6 +20,7 @@ import { LearnErrorBoundary } from "@/components/ErrorBoundaries/LearnErrorBound
 import { SkipToContent } from "@/components/SkipToContent";
 import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
+import ClickSpark from "@/components/ui/ClickSpark";
 
 // Lazy load heavy pages and components
 const LearnPage = lazy(() => import("./pages/Learn"));
@@ -89,9 +90,17 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <AppRoutes />
-            <PWAInstallPrompt />
-            <OfflineIndicator />
+            <ClickSpark
+              sparkColor="hsl(var(--primary))"
+              sparkSize={12}
+              sparkRadius={20}
+              sparkCount={8}
+              duration={500}
+            >
+              <AppRoutes />
+              <PWAInstallPrompt />
+              <OfflineIndicator />
+            </ClickSpark>
           </BrowserRouter>
           <Suspense fallback={null}>
             <AIChatbot />
