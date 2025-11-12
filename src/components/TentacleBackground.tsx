@@ -61,6 +61,7 @@ export const TentacleBackground = () => {
   const animationFrameRef = useRef<number>();
   const primaryColorRef = useRef<string>('220, 9%, 20%');
   const [isPaused, setIsPaused] = useState(false);
+  const dprRef = useRef<number>(1);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -69,33 +70,36 @@ export const TentacleBackground = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Farben aus Design-Token lesen (bevorzugt Vordergrund)
+    // Farben aus Design-Token lesen (bevorzugt Textfarbe des Hintergrunds)
     const computedStyle = getComputedStyle(document.documentElement);
-    const fgValue = computedStyle.getPropertyValue('--primary-foreground').trim();
+    const fgValue = computedStyle.getPropertyValue('--foreground').trim();
     const primaryValue = computedStyle.getPropertyValue('--primary').trim();
     if (fgValue) {
       primaryColorRef.current = fgValue;
     } else if (primaryValue) {
       primaryColorRef.current = primaryValue;
     } else {
-      primaryColorRef.current = '0 0% 100%';
+      primaryColorRef.current = '220 9% 20%';
     }
 
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      mouseRef.current = { x: canvas.width / 2, y: canvas.height / 2 };
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dprRef.current = dpr;
+      canvas.width = Math.floor(window.innerWidth * dpr);
+      canvas.height = Math.floor(window.innerHeight * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      mouseRef.current = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
     };
 
     resize();
 
-    // Erstelle 100 Partikel (weniger für sanfteren Effekt)
+    // Erstelle 220 Partikel (sichtbarer, aber noch sanft)
     if (dotsRef.current.length === 0) {
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 220; i++) {
         dotsRef.current.push(
           new TentacleDot(
-            Math.random() * canvas.width,
-            Math.random() * canvas.height
+            Math.random() * window.innerWidth,
+            Math.random() * window.innerHeight
           )
         );
       }
@@ -103,9 +107,11 @@ export const TentacleBackground = () => {
 
     const animate = () => {
       if (!isPaused) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const w = canvas.width / dprRef.current;
+        const h = canvas.height / dprRef.current;
+        ctx.clearRect(0, 0, w, h);
 
-        const bounds = { width: canvas.width, height: canvas.height };
+        const bounds = { width: w, height: h };
 
         // Punkte aktualisieren & zeichnen
         for (const dot of dotsRef.current) {
@@ -164,8 +170,8 @@ export const TentacleBackground = () => {
     <>
       <canvas
         ref={canvasRef}
-        className="fixed inset-0 pointer-events-none z-30"
-        style={{ opacity: 0.7 }}
+        className="fixed inset-0 pointer-events-none -z-10"
+        style={{ opacity: 0.5 }}
       />
       <Button
         variant="outline"
