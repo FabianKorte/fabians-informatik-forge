@@ -26,6 +26,7 @@ const mainItems = [
   { title: "Home", url: "/", icon: Home },
   { title: "Lernen", url: "/learn", icon: BookOpen },
   { title: "Fortschritt", url: "/progress", icon: TrendingUp },
+  { title: "IT-Lexikon", url: "/lexikon", icon: BookOpen },
 ];
 
 const userItems = [
