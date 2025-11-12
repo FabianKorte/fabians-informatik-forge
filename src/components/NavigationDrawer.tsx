@@ -33,7 +33,7 @@ const userItems = [
   { title: "Dashboard", url: "/dashboard", icon: User },
   { title: "Profil", url: "/profile", icon: User },
   { title: "Chat", url: "/chat", icon: MessageSquare },
-  { title: "Studiengruppen", url: "/study-groups", icon: Users },
+  { title: "Lerngruppen", url: "/study-groups", icon: Users },
 ];
 
 const resourceItems = [
