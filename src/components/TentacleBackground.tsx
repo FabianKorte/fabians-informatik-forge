@@ -104,7 +104,7 @@ export const TentacleBackground = () => {
       mouseRef.current = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
       
       // Partikelanzahl bei Resize anpassen
-      const targetCount = isMobileRef.current ? 40 : 180;
+      const targetCount = isMobileRef.current ? 12 : 180;
       if (dotsRef.current.length > targetCount) {
         dotsRef.current = dotsRef.current.slice(0, targetCount);
       } else if (dotsRef.current.length < targetCount) {
@@ -125,7 +125,7 @@ export const TentacleBackground = () => {
     // Erstelle initiale Partikel basierend auf Bildschirmgröße
     if (dotsRef.current.length === 0) {
       const isMobile = window.innerWidth < 768;
-      const particleCount = isMobile ? 40 : 180; // Deutlich weniger auf Mobile
+      const particleCount = isMobile ? 12 : 180; // Minimal auf Mobile
       
       for (let i = 0; i < particleCount; i++) {
         dotsRef.current.push(
@@ -167,29 +167,26 @@ export const TentacleBackground = () => {
           ctx.restore();
         }
 
-        // Verbindungslinien - auf Mobile stark reduziert
-        const connectionDistance = isMobileRef.current ? 80 : 150; // Kürzere Distanz auf Mobile
-        const connectionOpacity = isMobileRef.current ? 0.08 : 0.15; // Transparentere Linien auf Mobile
-        const maxConnections = isMobileRef.current ? 2 : dotsRef.current.length; // Max 2 Verbindungen pro Punkt auf Mobile
-        
-        for (let i = 0; i < dotsRef.current.length; i++) {
-          let connections = 0;
-          for (let j = i + 1; j < dotsRef.current.length; j++) {
-            if (isMobileRef.current && connections >= maxConnections) break;
-            
-            const dx = dotsRef.current[i].x - dotsRef.current[j].x;
-            const dy = dotsRef.current[i].y - dotsRef.current[j].y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            
-            if (dist < connectionDistance) {
-              const opacity = (1 - dist / connectionDistance) * connectionOpacity;
-              ctx.strokeStyle = `hsla(${primaryColorRef.current} / ${opacity})`;
-              ctx.lineWidth = 1;
-              ctx.beginPath();
-              ctx.moveTo(dotsRef.current[i].x, dotsRef.current[i].y);
-              ctx.lineTo(dotsRef.current[j].x, dotsRef.current[j].y);
-              ctx.stroke();
-              connections++;
+        // Verbindungslinien - NUR auf Desktop
+        if (!isMobileRef.current) {
+          const connectionDistance = 150;
+          const connectionOpacity = 0.15;
+          
+          for (let i = 0; i < dotsRef.current.length; i++) {
+            for (let j = i + 1; j < dotsRef.current.length; j++) {
+              const dx = dotsRef.current[i].x - dotsRef.current[j].x;
+              const dy = dotsRef.current[i].y - dotsRef.current[j].y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              
+              if (dist < connectionDistance) {
+                const opacity = (1 - dist / connectionDistance) * connectionOpacity;
+                ctx.strokeStyle = `hsla(${primaryColorRef.current} / ${opacity})`;
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(dotsRef.current[i].x, dotsRef.current[i].y);
+                ctx.lineTo(dotsRef.current[j].x, dotsRef.current[j].y);
+                ctx.stroke();
+              }
             }
           }
         }
@@ -227,7 +224,7 @@ export const TentacleBackground = () => {
         className="fixed inset-0 pointer-events-none"
         style={{ 
           zIndex: 1,
-          opacity: 0.7,
+          opacity: window.innerWidth < 768 ? 0.4 : 0.7,
           mixBlendMode: 'screen'
         }}
       />
