@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Home, BookOpen, TrendingUp, User, MessageSquare, Users, Shield, Download, MapPin, LogIn, LogOut, Menu } from "lucide-react";
+import { Home, BookOpen, TrendingUp, User, MessageSquare, Users, Shield, Download, MapPin, LogIn, LogOut, Menu, FileText, Activity, ChevronDown, ChevronRight } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import {
@@ -12,6 +12,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import RoadmapModal from "@/components/RoadmapModal";
 import { cn } from "@/lib/utils";
 
@@ -28,14 +33,33 @@ const userItems = [
   { title: "Studiengruppen", url: "/study-groups", icon: Users },
 ];
 
+const adminSubItems = [
+  { title: "Lerninhalte", tab: "learning", icon: BookOpen },
+  { title: "Vorschläge", tab: "suggestions", icon: MessageSquare },
+  { title: "Roadmap", tab: "roadmap", icon: MapPin },
+  { title: "Feedbacks", tab: "feedbacks", icon: MessageSquare },
+  { title: "Benutzer", tab: "users", icon: Users },
+  { title: "Rollen", tab: "roles", icon: Shield },
+  { title: "Notizen", tab: "notes", icon: FileText },
+  { title: "Audit-Log", tab: "audit", icon: Shield },
+  { title: "Analytics", tab: "analytics", icon: TrendingUp },
+  { title: "Performance", tab: "performance", icon: Activity },
+  { title: "Konsole", tab: "console", icon: Shield },
+];
+
 export const NavigationDrawer = () => {
   const [open, setOpen] = useState(false);
+  const [adminOpen, setAdminOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { user, isAdmin, signOut } = useAuth();
 
-  const handleNavigate = (url: string) => {
-    navigate(url);
+  const handleNavigate = (url: string, tab?: string) => {
+    if (tab) {
+      navigate(`${url}?tab=${tab}`);
+    } else {
+      navigate(url);
+    }
     setOpen(false);
   };
 
@@ -133,17 +157,44 @@ export const NavigationDrawer = () => {
                   <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
                     Administration
                   </h3>
-                  <Button
-                    variant={isActive("/admin") ? "secondary" : "ghost"}
-                    className={cn(
-                      "w-full justify-start gap-3",
-                      isActive("/admin") && "bg-accent text-accent-foreground font-medium"
-                    )}
-                    onClick={() => handleNavigate("/admin")}
-                  >
-                    <Shield className="h-5 w-5" />
-                    <span>Admin Panel</span>
-                  </Button>
+                  <Collapsible open={adminOpen} onOpenChange={setAdminOpen}>
+                    <CollapsibleTrigger asChild>
+                      <Button
+                        variant={isActive("/admin") ? "secondary" : "ghost"}
+                        className={cn(
+                          "w-full justify-between gap-3",
+                          isActive("/admin") && "bg-accent text-accent-foreground font-medium"
+                        )}
+                      >
+                        <div className="flex items-center gap-3">
+                          <Shield className="h-5 w-5" />
+                          <span>Admin Panel</span>
+                        </div>
+                        {adminOpen ? (
+                          <ChevronDown className="h-4 w-4" />
+                        ) : (
+                          <ChevronRight className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="pl-6 mt-1 space-y-1">
+                      {adminSubItems.map((item) => {
+                        const Icon = item.icon;
+                        return (
+                          <Button
+                            key={item.tab}
+                            variant="ghost"
+                            size="sm"
+                            className="w-full justify-start gap-2 text-sm"
+                            onClick={() => handleNavigate("/admin", item.tab)}
+                          >
+                            <Icon className="h-4 w-4" />
+                            <span>{item.title}</span>
+                          </Button>
+                        );
+                      })}
+                    </CollapsibleContent>
+                  </Collapsible>
                 </div>
                 <Separator />
               </>

@@ -1,5 +1,5 @@
-import { useState, lazy, Suspense } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, lazy, Suspense, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -31,7 +31,15 @@ const TabSkeleton = () => (
 export default function Admin() {
   const { signOut } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState("learning");
+
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    if (tab) {
+      setActiveTab(tab);
+    }
+  }, [searchParams]);
 
   const handleSignOut = async () => {
     await signOut();
