@@ -48,13 +48,7 @@ class TentacleDot {
   }
 
   draw(ctx: CanvasRenderingContext2D) {
-    ctx.save();
-    ctx.globalAlpha = this.alpha;
-    ctx.fillStyle = 'hsl(var(--primary))';
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
+    // Draw method removed - now handled in animate loop for proper color
   }
 }
 
@@ -63,6 +57,7 @@ export const TentacleBackground = () => {
   const dotsRef = useRef<TentacleDot[]>([]);
   const mouseRef = useRef({ x: 0, y: 0 });
   const animationFrameRef = useRef<number>();
+  const primaryColorRef = useRef<string>('220, 9%, 20%');
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -70,6 +65,13 @@ export const TentacleBackground = () => {
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
+
+    // Get CSS variable value for --primary
+    const computedStyle = getComputedStyle(document.documentElement);
+    const primaryValue = computedStyle.getPropertyValue('--primary').trim();
+    if (primaryValue) {
+      primaryColorRef.current = primaryValue;
+    }
 
     const resize = () => {
       canvas.width = window.innerWidth;
@@ -99,7 +101,13 @@ export const TentacleBackground = () => {
       // Punkte aktualisieren & zeichnen
       for (const dot of dotsRef.current) {
         dot.update(mouseRef.current, bounds);
-        dot.draw(ctx);
+        ctx.save();
+        ctx.globalAlpha = dot.alpha;
+        ctx.fillStyle = `hsl(${primaryColorRef.current})`;
+        ctx.beginPath();
+        ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
       }
 
       // Sanfte Linien zwischen nahen Punkten
@@ -111,7 +119,7 @@ export const TentacleBackground = () => {
           
           if (dist < 120) {
             const opacity = (1 - dist / 120) * 0.08;
-            ctx.strokeStyle = `hsla(var(--primary) / ${opacity})`;
+            ctx.strokeStyle = `hsla(${primaryColorRef.current} / ${opacity})`;
             ctx.lineWidth = 0.5;
             ctx.beginPath();
             ctx.moveTo(dotsRef.current[i].x, dotsRef.current[i].y);
@@ -146,7 +154,7 @@ export const TentacleBackground = () => {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: 0, opacity: 0.4 }}
+      style={{ zIndex: -1, opacity: 0.5 }}
     />
   );
 };
