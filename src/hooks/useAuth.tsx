@@ -202,14 +202,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
 
     if (data?.url) {
+      const targetUrl = data.url;
       try {
-        if (window.top) {
-          window.top.location.href = data.url;
+        // Prefer top-level navigation to escape iframe blockers
+        if (window.top && window.top !== window.self) {
+          window.top.location.href = targetUrl;
         } else {
-          window.location.href = data.url;
+          window.location.href = targetUrl;
         }
-      } catch {
-        window.location.href = data.url;
+      } catch (e) {
+        // Fallback to opening a new tab if top navigation is blocked by the host
+        const opened = window.open(targetUrl, '_blank', 'noopener,noreferrer');
+        if (!opened) {
+          // Final fallback: same-frame navigation
+          window.location.href = targetUrl;
+        }
       }
     }
 
@@ -231,14 +238,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
 
     if (data?.url) {
+      const targetUrl = data.url;
       try {
-        if (window.top) {
-          window.top.location.href = data.url;
+        if (window.top && window.top !== window.self) {
+          window.top.location.href = targetUrl;
         } else {
-          window.location.href = data.url;
+          window.location.href = targetUrl;
         }
-      } catch {
-        window.location.href = data.url;
+      } catch (e) {
+        const opened = window.open(targetUrl, '_blank', 'noopener,noreferrer');
+        if (!opened) {
+          window.location.href = targetUrl;
+        }
       }
     }
 
