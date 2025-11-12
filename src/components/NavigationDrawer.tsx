@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Home, BookOpen, TrendingUp, User, MessageSquare, Users, Shield, Download, MapPin, LogIn, LogOut, Menu, FileText, Activity, ChevronDown, ChevronRight } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useAdminCounts } from "@/hooks/useAdminCounts";
 import {
   Sheet,
   SheetContent,
@@ -12,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Badge } from "@/components/ui/badge";
 import {
   Collapsible,
   CollapsibleContent,
@@ -53,6 +55,7 @@ export const NavigationDrawer = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, isAdmin, signOut } = useAuth();
+  const { counts } = useAdminCounts();
 
   const handleNavigate = (url: string, tab?: string) => {
     if (tab) {
@@ -71,6 +74,17 @@ export const NavigationDrawer = () => {
   const isActive = (path: string) => {
     if (path === "/") return location.pathname === "/";
     return location.pathname.startsWith(path);
+  };
+
+  const getCountForTab = (tab: string): number => {
+    switch (tab) {
+      case 'feedbacks':
+        return counts.feedbacks;
+      case 'users':
+        return counts.users;
+      default:
+        return 0;
+    }
   };
 
   return (
@@ -170,26 +184,41 @@ export const NavigationDrawer = () => {
                           <Shield className="h-5 w-5" />
                           <span>Admin Panel</span>
                         </div>
-                        {adminOpen ? (
-                          <ChevronDown className="h-4 w-4" />
-                        ) : (
-                          <ChevronRight className="h-4 w-4" />
-                        )}
+                        <div className="flex items-center gap-2">
+                          {(counts.feedbacks + counts.users) > 0 && (
+                            <Badge variant="destructive" className="text-xs">
+                              {counts.feedbacks + counts.users}
+                            </Badge>
+                          )}
+                          {adminOpen ? (
+                            <ChevronDown className="h-4 w-4" />
+                          ) : (
+                            <ChevronRight className="h-4 w-4" />
+                          )}
+                        </div>
                       </Button>
                     </CollapsibleTrigger>
                     <CollapsibleContent className="pl-6 mt-1 space-y-1">
                       {adminSubItems.map((item) => {
                         const Icon = item.icon;
+                        const count = getCountForTab(item.tab);
                         return (
                           <Button
                             key={item.tab}
                             variant="ghost"
                             size="sm"
-                            className="w-full justify-start gap-2 text-sm"
+                            className="w-full justify-between gap-2 text-sm"
                             onClick={() => handleNavigate("/admin", item.tab)}
                           >
-                            <Icon className="h-4 w-4" />
-                            <span>{item.title}</span>
+                            <div className="flex items-center gap-2">
+                              <Icon className="h-4 w-4" />
+                              <span>{item.title}</span>
+                            </div>
+                            {count > 0 && (
+                              <Badge variant="destructive" className="ml-auto">
+                                {count}
+                              </Badge>
+                            )}
                           </Button>
                         );
                       })}
