@@ -62,6 +62,7 @@ export const useLearningAnalytics = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['learning-analytics'] });
+      queryClient.invalidateQueries({ queryKey: ['achievements'] });
     },
   });
 

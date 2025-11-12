@@ -6,9 +6,14 @@ import { LearningCurveChart } from './LearningCurveChart';
 import { WeaknessAnalysis } from './WeaknessAnalysis';
 import { OptimalTimesChart } from './OptimalTimesChart';
 import { AIRecommendations } from './AIRecommendations';
+import { AnalyticsAchievements } from './AnalyticsAchievements';
+import { useAnalyticsAchievements } from '@/hooks/useAnalyticsAchievements';
 
 export const StatisticsDashboard = () => {
   const { statistics, isLoading } = useStatistics();
+  
+  // Check for analytics achievements
+  useAnalyticsAchievements();
 
   if (isLoading) {
     return (
@@ -89,8 +94,11 @@ export const StatisticsDashboard = () => {
         <WeaknessAnalysis />
       </div>
 
-      {/* Optimal Times */}
-      <OptimalTimesChart />
+      {/* Analytics Achievements and Optimal Times */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <OptimalTimesChart />
+        <AnalyticsAchievements />
+      </div>
     </div>
   );
 };
