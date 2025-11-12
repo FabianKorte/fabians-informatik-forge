@@ -69,11 +69,16 @@ export const TentacleBackground = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Get CSS variable value for --primary
+    // Farben aus Design-Token lesen (bevorzugt Vordergrund)
     const computedStyle = getComputedStyle(document.documentElement);
+    const fgValue = computedStyle.getPropertyValue('--primary-foreground').trim();
     const primaryValue = computedStyle.getPropertyValue('--primary').trim();
-    if (primaryValue) {
+    if (fgValue) {
+      primaryColorRef.current = fgValue;
+    } else if (primaryValue) {
       primaryColorRef.current = primaryValue;
+    } else {
+      primaryColorRef.current = '0 0% 100%';
     }
 
     const resize = () => {
@@ -159,7 +164,7 @@ export const TentacleBackground = () => {
     <>
       <canvas
         ref={canvasRef}
-        className="fixed inset-0 pointer-events-none z-0"
+        className="fixed inset-0 pointer-events-none z-30"
         style={{ opacity: 0.7 }}
       />
       <Button
