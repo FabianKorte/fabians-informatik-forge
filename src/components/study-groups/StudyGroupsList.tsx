@@ -11,15 +11,6 @@ export const StudyGroupsList = () => {
   const { groups, joinGroup, isLoading } = useStudyGroups();
   const [showCreateDialog, setShowCreateDialog] = useState(false);
 
-  if (isLoading) {
-    return (
-      <div className="space-y-4">
-        {[1, 2, 3].map((i) => (
-          <Skeleton key={i} className="h-32" />
-        ))}
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-6">
