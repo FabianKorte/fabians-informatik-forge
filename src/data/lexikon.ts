@@ -29,6 +29,20 @@ export const lexikonData: LexikonEntry[] = [
     category: "Informatik",
     relatedTerms: ["Programmierung", "Datenstruktur"]
   },
+  {
+    id: "aws",
+    term: "AWS",
+    definition: "Amazon Web Services - Cloud-Computing-Plattform von Amazon mit über 200 Services für Computing, Storage, Datenbanken und mehr.",
+    category: "Cloud Computing",
+    relatedTerms: ["Cloud", "EC2", "S3"]
+  },
+  {
+    id: "azure",
+    term: "Azure",
+    definition: "Microsoft Azure - Cloud-Computing-Plattform von Microsoft für Infrastruktur, Plattform- und Software-Services.",
+    category: "Cloud Computing",
+    relatedTerms: ["Cloud", "Microsoft", "PaaS"]
+  },
   
   // B
   {
@@ -37,6 +51,13 @@ export const lexikonData: LexikonEntry[] = [
     definition: "Der serverseitige Teil einer Anwendung, der für Datenverarbeitung, Geschäftslogik und Datenbankzugriffe zuständig ist.",
     category: "Webentwicklung",
     relatedTerms: ["Frontend", "API", "Server"]
+  },
+  {
+    id: "backup",
+    term: "Backup",
+    definition: "Sicherungskopie von Daten zur Wiederherstellung im Falle von Datenverlust oder Systemausfall.",
+    category: "Datenmanagement",
+    relatedTerms: ["Recovery", "Storage"]
   },
   {
     id: "bug",
@@ -51,6 +72,13 @@ export const lexikonData: LexikonEntry[] = [
     definition: "Eine dezentrale, manipulationssichere Datenbank, die Transaktionen in verketteten Blöcken speichert.",
     category: "Technologie",
     relatedTerms: ["Kryptographie", "Bitcoin"]
+  },
+  {
+    id: "bandwidth",
+    term: "Bandbreite",
+    definition: "Die Datenmenge, die pro Zeiteinheit über eine Netzwerkverbindung übertragen werden kann, meist in Bit/s gemessen.",
+    category: "Netzwerk",
+    relatedTerms: ["Throughput", "Latenz"]
   },
 
   // C
@@ -75,6 +103,20 @@ export const lexikonData: LexikonEntry[] = [
     category: "Webentwicklung",
     relatedTerms: ["HTML", "JavaScript"]
   },
+  {
+    id: "cdn",
+    term: "CDN",
+    definition: "Content Delivery Network - Verteiltes Netzwerk von Servern zur schnellen Auslieferung von Web-Inhalten an Nutzer weltweit.",
+    category: "Netzwerk",
+    relatedTerms: ["Cloud", "Performance"]
+  },
+  {
+    id: "cicd",
+    term: "CI/CD",
+    definition: "Continuous Integration/Continuous Deployment - Automatisierte Prozesse für Integration, Testing und Deployment von Software.",
+    category: "DevOps",
+    relatedTerms: ["Git", "Pipeline"]
+  },
 
   // D
   {
@@ -98,6 +140,20 @@ export const lexikonData: LexikonEntry[] = [
     category: "DevOps",
     relatedTerms: ["Container", "Kubernetes"]
   },
+  {
+    id: "dns",
+    term: "DNS",
+    definition: "Domain Name System - Hierarchisches dezentrales Namenssystem, das Domain-Namen in IP-Adressen übersetzt.",
+    category: "Netzwerk",
+    relatedTerms: ["IP-Adresse", "Domain"]
+  },
+  {
+    id: "dhcp",
+    term: "DHCP",
+    definition: "Dynamic Host Configuration Protocol - Protokoll zur automatischen Zuweisung von IP-Adressen in Netzwerken.",
+    category: "Netzwerk",
+    relatedTerms: ["IP-Adresse", "Netzwerk"]
+  },
 
   // E
   {
@@ -106,6 +162,20 @@ export const lexikonData: LexikonEntry[] = [
     definition: "Umwandlung von Daten in eine unleserliche Form zum Schutz vor unbefugtem Zugriff.",
     category: "Sicherheit",
     relatedTerms: ["Kryptographie", "SSL"]
+  },
+  {
+    id: "etl",
+    term: "ETL",
+    definition: "Extract, Transform, Load - Prozess zum Extrahieren, Transformieren und Laden von Daten aus verschiedenen Quellen in ein Zielsystem.",
+    category: "Datenmanagement",
+    relatedTerms: ["Data Warehouse", "Big Data"]
+  },
+  {
+    id: "ethernet",
+    term: "Ethernet",
+    definition: "Kabelgebundene Netzwerktechnologie für lokale Netzwerke (LAN) mit verschiedenen Geschwindigkeitsstandards.",
+    category: "Netzwerk",
+    relatedTerms: ["LAN", "Switch"]
   },
 
   // F
@@ -130,6 +200,13 @@ export const lexikonData: LexikonEntry[] = [
     category: "Sicherheit",
     relatedTerms: ["Netzwerk", "Security"]
   },
+  {
+    id: "ftp",
+    term: "FTP",
+    definition: "File Transfer Protocol - Netzwerkprotokoll zur Übertragung von Dateien zwischen Client und Server.",
+    category: "Netzwerk",
+    relatedTerms: ["SFTP", "Protokoll"]
+  },
 
   // G
   {
@@ -145,6 +222,13 @@ export const lexikonData: LexikonEntry[] = [
     definition: "Graphical User Interface - Grafische Benutzeroberfläche zur visuellen Interaktion mit Software.",
     category: "Interface",
     relatedTerms: ["UI", "UX"]
+  },
+  {
+    id: "gateway",
+    term: "Gateway",
+    definition: "Netzwerkknoten, der als Schnittstelle zwischen verschiedenen Netzwerken mit unterschiedlichen Protokollen dient.",
+    category: "Netzwerk",
+    relatedTerms: ["Router", "Protokoll"]
   },
 
   // H
@@ -162,6 +246,13 @@ export const lexikonData: LexikonEntry[] = [
     category: "Netzwerk",
     relatedTerms: ["HTTPS", "API"]
   },
+  {
+    id: "https",
+    term: "HTTPS",
+    definition: "HTTP Secure - Verschlüsselte Version von HTTP für sichere Datenübertragung über SSL/TLS.",
+    category: "Sicherheit",
+    relatedTerms: ["HTTP", "SSL", "TLS"]
+  },
 
   // I
   {
@@ -170,6 +261,27 @@ export const lexikonData: LexikonEntry[] = [
     definition: "Integrated Development Environment - Entwicklungsumgebung mit integriertem Code-Editor, Debugger und Build-Tools.",
     category: "Entwicklungstools",
     relatedTerms: ["Editor", "Compiler"]
+  },
+  {
+    id: "iaas",
+    term: "IaaS",
+    definition: "Infrastructure as a Service - Cloud-Modell zur Bereitstellung virtualisierter Computing-Ressourcen über das Internet.",
+    category: "Cloud Computing",
+    relatedTerms: ["PaaS", "SaaS", "Cloud"]
+  },
+  {
+    id: "ip",
+    term: "IP-Adresse",
+    definition: "Internet Protocol Address - Eindeutige numerische Adresse zur Identifikation von Geräten in Netzwerken.",
+    category: "Netzwerk",
+    relatedTerms: ["IPv4", "IPv6", "DNS"]
+  },
+  {
+    id: "index",
+    term: "Datenbankindex",
+    definition: "Datenstruktur zur Beschleunigung von Datenbankabfragen durch schnelles Auffinden von Datensätzen.",
+    category: "Datenbank",
+    relatedTerms: ["SQL", "Performance"]
   },
 
   // J
@@ -186,6 +298,13 @@ export const lexikonData: LexikonEntry[] = [
     definition: "JavaScript Object Notation - Textbasiertes Datenaustauschformat für strukturierte Daten.",
     category: "Datenformat",
     relatedTerms: ["XML", "API"]
+  },
+  {
+    id: "join",
+    term: "SQL JOIN",
+    definition: "SQL-Operation zum Kombinieren von Zeilen aus mehreren Tabellen basierend auf verwandten Spalten.",
+    category: "Datenbank",
+    relatedTerms: ["SQL", "Relational"]
   },
 
   // K
@@ -212,6 +331,27 @@ export const lexikonData: LexikonEntry[] = [
     category: "Betriebssystem",
     relatedTerms: ["Unix", "Open Source"]
   },
+  {
+    id: "lan",
+    term: "LAN",
+    definition: "Local Area Network - Lokales Netzwerk, das Geräte in einem begrenzten geografischen Bereich verbindet.",
+    category: "Netzwerk",
+    relatedTerms: ["WAN", "Ethernet"]
+  },
+  {
+    id: "loadbalancer",
+    term: "Load Balancer",
+    definition: "System zur Verteilung eingehender Netzwerkanfragen auf mehrere Server zur Lastverteilung und Hochverfügbarkeit.",
+    category: "Netzwerk",
+    relatedTerms: ["Server", "Skalierung"]
+  },
+  {
+    id: "latency",
+    term: "Latenz",
+    definition: "Verzögerungszeit zwischen Senden und Empfangen von Daten in einem Netzwerk, gemessen in Millisekunden.",
+    category: "Netzwerk",
+    relatedTerms: ["Bandbreite", "Performance"]
+  },
 
   // M
   {
@@ -220,6 +360,20 @@ export const lexikonData: LexikonEntry[] = [
     definition: "Architekturstil, bei dem eine Anwendung aus kleinen, unabhängigen Services besteht.",
     category: "Architektur",
     relatedTerms: ["API", "Container"]
+  },
+  {
+    id: "mongodb",
+    term: "MongoDB",
+    definition: "Dokumentenorientierte NoSQL-Datenbank, die Daten im JSON-ähnlichen BSON-Format speichert.",
+    category: "Datenbank",
+    relatedTerms: ["NoSQL", "Document Store"]
+  },
+  {
+    id: "mysql",
+    term: "MySQL",
+    definition: "Open-Source relationales Datenbankmanagementsystem, weit verbreitet für Webanwendungen.",
+    category: "Datenbank",
+    relatedTerms: ["SQL", "Relational"]
   },
 
   // N
@@ -230,6 +384,20 @@ export const lexikonData: LexikonEntry[] = [
     category: "Backend",
     relatedTerms: ["JavaScript", "npm"]
   },
+  {
+    id: "nosql",
+    term: "NoSQL",
+    definition: "Nicht-relationale Datenbanksysteme für flexible, skalierbare Datenspeicherung ohne festes Schema.",
+    category: "Datenbank",
+    relatedTerms: ["MongoDB", "Document Store"]
+  },
+  {
+    id: "nat",
+    term: "NAT",
+    definition: "Network Address Translation - Verfahren zur Umwandlung von IP-Adressen zwischen privaten und öffentlichen Netzwerken.",
+    category: "Netzwerk",
+    relatedTerms: ["Router", "IP-Adresse"]
+  },
 
   // O
   {
@@ -239,6 +407,20 @@ export const lexikonData: LexikonEntry[] = [
     category: "Programmierung",
     relatedTerms: ["Klasse", "Vererbung"]
   },
+  {
+    id: "orm",
+    term: "ORM",
+    definition: "Object-Relational Mapping - Technik zur Zuordnung von Objekten zu relationalen Datenbankstrukturen.",
+    category: "Datenbank",
+    relatedTerms: ["SQL", "Database"]
+  },
+  {
+    id: "osi",
+    term: "OSI-Modell",
+    definition: "Open Systems Interconnection - Referenzmodell mit 7 Schichten zur Standardisierung von Netzwerkkommunikation.",
+    category: "Netzwerk",
+    relatedTerms: ["TCP/IP", "Protokoll"]
+  },
 
   // P
   {
@@ -247,6 +429,27 @@ export const lexikonData: LexikonEntry[] = [
     definition: "Interpretierte, höhere Programmiersprache mit einfacher Syntax, beliebt für Data Science und Webentwicklung.",
     category: "Programmierung",
     relatedTerms: ["Django", "Machine Learning"]
+  },
+  {
+    id: "paas",
+    term: "PaaS",
+    definition: "Platform as a Service - Cloud-Modell zur Bereitstellung einer Entwicklungsplattform über das Internet.",
+    category: "Cloud Computing",
+    relatedTerms: ["IaaS", "SaaS", "Cloud"]
+  },
+  {
+    id: "postgresql",
+    term: "PostgreSQL",
+    definition: "Open-Source objektrelationales Datenbanksystem mit erweiterten Features und SQL-Konformität.",
+    category: "Datenbank",
+    relatedTerms: ["SQL", "Relational"]
+  },
+  {
+    id: "proxy",
+    term: "Proxy-Server",
+    definition: "Vermittlungsserver zwischen Client und Zielserver zur Weiterleitung von Anfragen und Antworten.",
+    category: "Netzwerk",
+    relatedTerms: ["Gateway", "Firewall"]
   },
 
   // Q
@@ -273,6 +476,27 @@ export const lexikonData: LexikonEntry[] = [
     category: "Frontend",
     relatedTerms: ["JavaScript", "Component"]
   },
+  {
+    id: "redis",
+    term: "Redis",
+    definition: "In-Memory-Datenbank und Cache-System für schnellen Zugriff auf Key-Value-Datenstrukturen.",
+    category: "Datenbank",
+    relatedTerms: ["Cache", "NoSQL"]
+  },
+  {
+    id: "router",
+    term: "Router",
+    definition: "Netzwerkgerät zur Weiterleitung von Datenpaketen zwischen verschiedenen Netzwerken basierend auf IP-Adressen.",
+    category: "Netzwerk",
+    relatedTerms: ["Gateway", "IP-Adresse"]
+  },
+  {
+    id: "replica",
+    term: "Replikation",
+    definition: "Prozess der Duplizierung von Daten auf mehrere Server zur Erhöhung der Verfügbarkeit und Performance.",
+    category: "Datenbank",
+    relatedTerms: ["Backup", "Hochverfügbarkeit"]
+  },
 
   // S
   {
@@ -288,6 +512,41 @@ export const lexikonData: LexikonEntry[] = [
     definition: "Agiles Framework für Projektmanagement mit iterativen Sprints und regelmäßigen Reviews.",
     category: "Projektmanagement",
     relatedTerms: ["Agile", "Sprint"]
+  },
+  {
+    id: "saas",
+    term: "SaaS",
+    definition: "Software as a Service - Cloud-Modell zur Bereitstellung von Software über das Internet ohne lokale Installation.",
+    category: "Cloud Computing",
+    relatedTerms: ["IaaS", "PaaS", "Cloud"]
+  },
+  {
+    id: "ssh",
+    term: "SSH",
+    definition: "Secure Shell - Verschlüsseltes Netzwerkprotokoll für sichere Remote-Verbindungen zu Servern.",
+    category: "Sicherheit",
+    relatedTerms: ["Linux", "Terminal"]
+  },
+  {
+    id: "ssl",
+    term: "SSL/TLS",
+    definition: "Secure Sockets Layer/Transport Layer Security - Verschlüsselungsprotokolle für sichere Datenübertragung im Internet.",
+    category: "Sicherheit",
+    relatedTerms: ["HTTPS", "Zertifikat"]
+  },
+  {
+    id: "subnet",
+    term: "Subnetz",
+    definition: "Logische Unterteilung eines IP-Netzwerks in kleinere Segmente zur besseren Organisation und Sicherheit.",
+    category: "Netzwerk",
+    relatedTerms: ["IP-Adresse", "Router"]
+  },
+  {
+    id: "switch",
+    term: "Switch",
+    definition: "Netzwerkgerät zur Verbindung von Geräten in einem LAN und intelligenter Weiterleitung von Datenpaketen.",
+    category: "Netzwerk",
+    relatedTerms: ["LAN", "Ethernet"]
   },
 
   // T
@@ -305,6 +564,20 @@ export const lexikonData: LexikonEntry[] = [
     category: "Qualitätssicherung",
     relatedTerms: ["Unit Test", "Integration Test"]
   },
+  {
+    id: "tcp",
+    term: "TCP/IP",
+    definition: "Transmission Control Protocol/Internet Protocol - Grundlegende Protokollfamilie für die Internet-Kommunikation.",
+    category: "Netzwerk",
+    relatedTerms: ["HTTP", "UDP"]
+  },
+  {
+    id: "transaction",
+    term: "Transaktion",
+    definition: "Logische Einheit von Datenbankoperationen, die als Ganzes ausgeführt oder rückgängig gemacht wird (ACID-Prinzip).",
+    category: "Datenbank",
+    relatedTerms: ["SQL", "ACID"]
+  },
 
   // U
   {
@@ -321,6 +594,13 @@ export const lexikonData: LexikonEntry[] = [
     category: "Design",
     relatedTerms: ["UI", "Usability"]
   },
+  {
+    id: "udp",
+    term: "UDP",
+    definition: "User Datagram Protocol - Verbindungsloses Transportprotokoll für schnelle, unzuverlässige Datenübertragung.",
+    category: "Netzwerk",
+    relatedTerms: ["TCP/IP", "Streaming"]
+  },
 
   // V
   {
@@ -330,6 +610,27 @@ export const lexikonData: LexikonEntry[] = [
     category: "DevOps",
     relatedTerms: ["Git", "SVN"]
   },
+  {
+    id: "vpn",
+    term: "VPN",
+    definition: "Virtual Private Network - Verschlüsselte Netzwerkverbindung zur sicheren Datenübertragung über öffentliche Netzwerke.",
+    category: "Netzwerk",
+    relatedTerms: ["Sicherheit", "Tunnel"]
+  },
+  {
+    id: "vlan",
+    term: "VLAN",
+    definition: "Virtual Local Area Network - Logische Segmentierung eines physischen Netzwerks zur besseren Organisation und Sicherheit.",
+    category: "Netzwerk",
+    relatedTerms: ["LAN", "Switch"]
+  },
+  {
+    id: "vm",
+    term: "Virtuelle Maschine",
+    definition: "Softwarebasierte Emulation eines physischen Computers, die ein eigenes Betriebssystem ausführt.",
+    category: "Infrastruktur",
+    relatedTerms: ["Hypervisor", "Cloud"]
+  },
 
   // W
   {
@@ -338,6 +639,20 @@ export const lexikonData: LexikonEntry[] = [
     definition: "Module-Bundler für JavaScript-Anwendungen, der Assets zusammenfasst und optimiert.",
     category: "Build Tools",
     relatedTerms: ["npm", "Bundler"]
+  },
+  {
+    id: "wan",
+    term: "WAN",
+    definition: "Wide Area Network - Weiträumiges Netzwerk, das geografisch verteilte LANs miteinander verbindet.",
+    category: "Netzwerk",
+    relatedTerms: ["LAN", "Router"]
+  },
+  {
+    id: "websocket",
+    term: "WebSocket",
+    definition: "Protokoll für bidirektionale, dauerhafte Verbindungen zwischen Client und Server für Echtzeit-Kommunikation.",
+    category: "Netzwerk",
+    relatedTerms: ["HTTP", "Real-time"]
   },
 
   // X
