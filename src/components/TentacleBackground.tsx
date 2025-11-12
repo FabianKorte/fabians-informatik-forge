@@ -1,4 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Pause, Play } from 'lucide-react';
 
 class TentacleDot {
   x: number;
@@ -12,10 +14,10 @@ class TentacleDot {
   constructor(x: number, y: number) {
     this.x = x;
     this.y = y;
-    this.size = Math.random() * 2 + 1;
-    this.speedY = (Math.random() - 0.5) * 0.3;
-    this.speedX = (Math.random() - 0.5) * 0.3;
-    this.baseAlpha = Math.random() * 0.2 + 0.1;
+    this.size = Math.random() * 3 + 2; // Größere Partikel
+    this.speedY = (Math.random() - 0.5) * 0.5;
+    this.speedX = (Math.random() - 0.5) * 0.5;
+    this.baseAlpha = Math.random() * 0.4 + 0.3; // Deutlich sichtbarer
     this.alpha = this.baseAlpha;
   }
 
@@ -58,6 +60,7 @@ export const TentacleBackground = () => {
   const mouseRef = useRef({ x: 0, y: 0 });
   const animationFrameRef = useRef<number>();
   const primaryColorRef = useRef<string>('220, 9%, 20%');
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -94,37 +97,39 @@ export const TentacleBackground = () => {
     }
 
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (!isPaused) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      const bounds = { width: canvas.width, height: canvas.height };
+        const bounds = { width: canvas.width, height: canvas.height };
 
-      // Punkte aktualisieren & zeichnen
-      for (const dot of dotsRef.current) {
-        dot.update(mouseRef.current, bounds);
-        ctx.save();
-        ctx.globalAlpha = dot.alpha;
-        ctx.fillStyle = `hsl(${primaryColorRef.current})`;
-        ctx.beginPath();
-        ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      }
+        // Punkte aktualisieren & zeichnen
+        for (const dot of dotsRef.current) {
+          dot.update(mouseRef.current, bounds);
+          ctx.save();
+          ctx.globalAlpha = dot.alpha;
+          ctx.fillStyle = `hsl(${primaryColorRef.current})`;
+          ctx.beginPath();
+          ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
 
-      // Sanfte Linien zwischen nahen Punkten
-      for (let i = 0; i < dotsRef.current.length; i++) {
-        for (let j = i + 1; j < dotsRef.current.length; j++) {
-          const dx = dotsRef.current[i].x - dotsRef.current[j].x;
-          const dy = dotsRef.current[i].y - dotsRef.current[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          
-          if (dist < 120) {
-            const opacity = (1 - dist / 120) * 0.08;
-            ctx.strokeStyle = `hsla(${primaryColorRef.current} / ${opacity})`;
-            ctx.lineWidth = 0.5;
-            ctx.beginPath();
-            ctx.moveTo(dotsRef.current[i].x, dotsRef.current[i].y);
-            ctx.lineTo(dotsRef.current[j].x, dotsRef.current[j].y);
-            ctx.stroke();
+        // Sanfte Linien zwischen nahen Punkten
+        for (let i = 0; i < dotsRef.current.length; i++) {
+          for (let j = i + 1; j < dotsRef.current.length; j++) {
+            const dx = dotsRef.current[i].x - dotsRef.current[j].x;
+            const dy = dotsRef.current[i].y - dotsRef.current[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            
+            if (dist < 150) {
+              const opacity = (1 - dist / 150) * 0.15; // Sichtbarere Linien
+              ctx.strokeStyle = `hsla(${primaryColorRef.current} / ${opacity})`;
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(dotsRef.current[i].x, dotsRef.current[i].y);
+              ctx.lineTo(dotsRef.current[j].x, dotsRef.current[j].y);
+              ctx.stroke();
+            }
           }
         }
       }
@@ -148,13 +153,24 @@ export const TentacleBackground = () => {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, []);
+  }, [isPaused]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: -1, opacity: 0.5 }}
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        className="fixed inset-0 pointer-events-none"
+        style={{ zIndex: -1, opacity: 0.7 }}
+      />
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={() => setIsPaused(!isPaused)}
+        className="fixed bottom-4 right-4 z-50 bg-background/80 backdrop-blur-sm hover:bg-background/90"
+        aria-label={isPaused ? "Animation starten" : "Animation pausieren"}
+      >
+        {isPaused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
+      </Button>
+    </>
   );
 };
