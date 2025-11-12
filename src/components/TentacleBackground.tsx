@@ -179,7 +179,7 @@ export const TentacleBackground = () => {
         ref={canvasRef}
         className="fixed inset-0 pointer-events-none"
         style={{ 
-          zIndex: 10,
+          zIndex: 1,
           opacity: 0.7,
           mixBlendMode: 'screen'
         }}
