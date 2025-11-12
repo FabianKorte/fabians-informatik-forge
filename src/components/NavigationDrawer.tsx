@@ -1,0 +1,209 @@
+import { useState } from "react";
+import { Home, BookOpen, TrendingUp, User, MessageSquare, Users, Shield, Download, MapPin, LogIn, LogOut, Menu } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import RoadmapModal from "@/components/RoadmapModal";
+import { cn } from "@/lib/utils";
+
+const mainItems = [
+  { title: "Home", url: "/", icon: Home },
+  { title: "Lernen", url: "/learn", icon: BookOpen },
+  { title: "Fortschritt", url: "/progress", icon: TrendingUp },
+];
+
+const userItems = [
+  { title: "Dashboard", url: "/dashboard", icon: User },
+  { title: "Profil", url: "/profile", icon: User },
+  { title: "Chat", url: "/chat", icon: MessageSquare },
+  { title: "Studiengruppen", url: "/study-groups", icon: Users },
+];
+
+export const NavigationDrawer = () => {
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user, isAdmin, signOut } = useAuth();
+
+  const handleNavigate = (url: string) => {
+    navigate(url);
+    setOpen(false);
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
+    setOpen(false);
+  };
+
+  const isActive = (path: string) => {
+    if (path === "/") return location.pathname === "/";
+    return location.pathname.startsWith(path);
+  };
+
+  return (
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
+        <Button
+          variant="outline"
+          size="icon"
+          className="fixed top-4 left-4 z-50 bg-card/90 backdrop-blur-sm hover:bg-card border-border shadow-lg"
+          aria-label="Navigation öffnen"
+        >
+          <Menu className="h-5 w-5" />
+        </Button>
+      </SheetTrigger>
+
+      <SheetContent side="left" className="w-80 p-0">
+        <SheetHeader className="p-6 pb-4">
+          <SheetTitle className="text-xl font-medium">Navigation</SheetTitle>
+        </SheetHeader>
+
+        <ScrollArea className="h-[calc(100vh-80px)] px-6">
+          <div className="space-y-6">
+            {/* Hauptnavigation */}
+            <div className="space-y-1">
+              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                Hauptmenü
+              </h3>
+              {mainItems.map((item) => {
+                const Icon = item.icon;
+                const active = isActive(item.url);
+                return (
+                  <Button
+                    key={item.url}
+                    variant={active ? "secondary" : "ghost"}
+                    className={cn(
+                      "w-full justify-start gap-3",
+                      active && "bg-accent text-accent-foreground font-medium"
+                    )}
+                    onClick={() => handleNavigate(item.url)}
+                  >
+                    <Icon className="h-5 w-5" />
+                    <span>{item.title}</span>
+                  </Button>
+                );
+              })}
+            </div>
+
+            <Separator />
+
+            {/* Benutzer-Bereich */}
+            {user && (
+              <>
+                <div className="space-y-1">
+                  <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                    Mein Bereich
+                  </h3>
+                  {userItems.map((item) => {
+                    const Icon = item.icon;
+                    const active = isActive(item.url);
+                    return (
+                      <Button
+                        key={item.url}
+                        variant={active ? "secondary" : "ghost"}
+                        className={cn(
+                          "w-full justify-start gap-3",
+                          active && "bg-accent text-accent-foreground font-medium"
+                        )}
+                        onClick={() => handleNavigate(item.url)}
+                      >
+                        <Icon className="h-5 w-5" />
+                        <span>{item.title}</span>
+                      </Button>
+                    );
+                  })}
+                </div>
+                <Separator />
+              </>
+            )}
+
+            {/* Admin-Bereich */}
+            {isAdmin && (
+              <>
+                <div className="space-y-1">
+                  <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                    Administration
+                  </h3>
+                  <Button
+                    variant={isActive("/admin") ? "secondary" : "ghost"}
+                    className={cn(
+                      "w-full justify-start gap-3",
+                      isActive("/admin") && "bg-accent text-accent-foreground font-medium"
+                    )}
+                    onClick={() => handleNavigate("/admin")}
+                  >
+                    <Shield className="h-5 w-5" />
+                    <span>Admin Panel</span>
+                  </Button>
+                </div>
+                <Separator />
+              </>
+            )}
+
+            {/* Externe Links */}
+            <div className="space-y-1">
+              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                Ressourcen
+              </h3>
+              <Button
+                variant="ghost"
+                className="w-full justify-start gap-3"
+                asChild
+              >
+                <a
+                  href="https://drive.google.com/drive/folders/1x_OJDgFV7z0XGMcSBPIvKe-fTTHqp1kR?usp=sharing"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Download className="h-5 w-5" />
+                  <span>Downloads</span>
+                </a>
+              </Button>
+
+              <RoadmapModal>
+                <Button variant="ghost" className="w-full justify-start gap-3">
+                  <MapPin className="h-5 w-5" />
+                  <span>Roadmap</span>
+                </Button>
+              </RoadmapModal>
+            </div>
+
+            <Separator />
+
+            {/* Auth */}
+            <div className="pb-6">
+              {user ? (
+                <Button
+                  variant="outline"
+                  className="w-full justify-start gap-3"
+                  onClick={handleSignOut}
+                >
+                  <LogOut className="h-5 w-5" />
+                  <span>Abmelden</span>
+                </Button>
+              ) : (
+                <Button
+                  variant="default"
+                  className="w-full justify-start gap-3"
+                  onClick={() => handleNavigate("/auth")}
+                >
+                  <LogIn className="h-5 w-5" />
+                  <span>Anmelden</span>
+                </Button>
+              )}
+            </div>
+          </div>
+        </ScrollArea>
+      </SheetContent>
+    </Sheet>
+  );
+};

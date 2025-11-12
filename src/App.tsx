@@ -22,8 +22,7 @@ import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
 import ClickSpark from "@/components/ui/ClickSpark";
 import { TentacleBackground } from "@/components/TentacleBackground";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/AppSidebar";
+import { NavigationDrawer } from "@/components/NavigationDrawer";
 
 // Lazy load heavy pages and components
 const LearnPage = lazy(() => import("./pages/Learn"));
@@ -42,59 +41,47 @@ const AppRoutes = () => {
   useViewTransition();
   
   return (
-    <SidebarProvider defaultOpen={false}>
-      <div className="flex min-h-screen w-full">
-        <AppSidebar />
-        
-        <div className="flex flex-col flex-1 w-full">
-          <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <div className="flex h-14 items-center px-4 gap-4">
-              <SidebarTrigger />
-              <h1 className="font-medium text-lg">Fabian Korte - Fachinformatiker</h1>
-            </div>
-          </header>
-
-          <SkipToContent />
-          <main id="main-content" className="flex-1" role="main">
-            <Suspense fallback={<FallbackLoader />}>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/progress" element={<Progress />} />
-                <Route path="/learn/:categoryId" element={
-                  <LearnErrorBoundary>
-                    <LearnPage />
-                  </LearnErrorBoundary>
-                } />
-                <Route path="/auth" element={<Auth />} />
-                <Route 
-                  path="/admin" 
-                  element={
-                    <ProtectedRoute>
-                      <AdminErrorBoundary>
-                        <Admin />
-                      </AdminErrorBoundary>
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route path="/dashboard" element={<UserDashboard />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/study-groups" element={<StudyGroups />} />
-                <Route path="/privacy" element={<Privacy />} />
-                <Route path="/install" element={<Install />} />
-                <Route path="/chat" element={
-                  <ChatErrorBoundary>
-                    <Chat />
-                  </ChatErrorBoundary>
-                } />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
-          </main>
-          <Footer />
-        </div>
-      </div>
-    </SidebarProvider>
+    <div className="flex flex-col min-h-screen">
+      <NavigationDrawer />
+      <SkipToContent />
+      <main id="main-content" className="flex-1" role="main">
+        <Suspense fallback={<FallbackLoader />}>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/progress" element={<Progress />} />
+            <Route path="/learn/:categoryId" element={
+              <LearnErrorBoundary>
+                <LearnPage />
+              </LearnErrorBoundary>
+            } />
+            <Route path="/auth" element={<Auth />} />
+            <Route 
+              path="/admin" 
+              element={
+                <ProtectedRoute>
+                  <AdminErrorBoundary>
+                    <Admin />
+                  </AdminErrorBoundary>
+                </ProtectedRoute>
+              } 
+            />
+            <Route path="/dashboard" element={<UserDashboard />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/study-groups" element={<StudyGroups />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/install" element={<Install />} />
+            <Route path="/chat" element={
+              <ChatErrorBoundary>
+                <Chat />
+              </ChatErrorBoundary>
+            } />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+      </main>
+      <Footer />
+    </div>
   );
 };
 
