@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { User, Session, AuthError } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -32,6 +32,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  const sessionRef = useRef<Session | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
@@ -39,51 +40,60 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     let timeoutInterval: NodeJS.Timeout | undefined;
 
-    // Get initial session
+    // Set up auth state listener FIRST to avoid missing events
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, newSession) => {
+      logger.info('Auth state changed:', event);
+
+      setSession(newSession);
+      sessionRef.current = newSession;
+      setUser(newSession?.user ?? null);
+
+      if (newSession?.user) {
+        // Defer Supabase-dependent work to avoid deadlocks in the callback
+        setTimeout(() => {
+          checkAdminStatus(newSession.user!.id).then(setIsAdmin);
+        }, 0);
+      } else {
+        setIsAdmin(false);
+      }
+
+      setIsLoading(false);
+    });
+
+    // THEN get the initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      sessionRef.current = session;
       setUser(session?.user ?? null);
-      
+
       if (session?.user) {
-        checkAdminStatus(session.user.id).then(setIsAdmin);
-        
-        // Start session monitoring
+        setTimeout(() => {
+          checkAdminStatus(session.user!.id).then(setIsAdmin);
+        }, 0);
+
+        // Start session monitoring with a live session getter
         timeoutInterval = createSessionCheckInterval(
-          () => session,
+          () => sessionRef.current,
           () => {
             setUser(null);
             setSession(null);
+            sessionRef.current = null;
             setIsAdmin(false);
             supabase.auth.signOut();
           }
         );
-      }
-      
-      setIsLoading(false);
-    });
-
-    // Listen for auth changes
-    const authListener = supabase.auth.onAuthStateChange(async (event, session) => {
-      logger.info('Auth state changed:', event);
-      
-      setSession(session);
-      setUser(session?.user ?? null);
-      
-      if (session?.user) {
-        const adminStatus = await checkAdminStatus(session.user.id);
-        setIsAdmin(adminStatus);
       } else {
         setIsAdmin(false);
       }
-      
+
       setIsLoading(false);
     });
 
     return () => {
-      authListener.data.subscription.unsubscribe();
+      subscription.unsubscribe();
       if (timeoutInterval) clearInterval(timeoutInterval);
     };
-  }, [toast]);
+  }, []);
 
   /**
    * Signs in a user with email and password.
