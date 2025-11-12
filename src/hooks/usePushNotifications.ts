@@ -97,8 +97,8 @@ export const usePushNotifications = () => {
     const now = Date.now();
     const delay = targetTime - now;
 
-    if (delay > 0) {
-      setTimeout(() => {
+    if (delay > 0 && delay < 86400000) { // Max 24 hours
+      const timerId = setTimeout(() => {
         new Notification('Lern-Erinnerung', {
           body: message,
           icon: '/logo.png',
@@ -109,6 +109,11 @@ export const usePushNotifications = () => {
       }, delay);
 
       toast.success('Erinnerung eingerichtet');
+      
+      // Return cleanup function
+      return () => clearTimeout(timerId);
+    } else if (delay >= 86400000) {
+      toast.error('Erinnerungen können maximal 24 Stunden im Voraus eingestellt werden');
     }
   };
 

@@ -21,12 +21,14 @@ export const PWAInstallPrompt = () => {
 
     if (dismissed || isInstalled) return;
 
+    let promptTimer: NodeJS.Timeout;
+
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
       
       // Show prompt after 30 seconds
-      setTimeout(() => {
+      promptTimer = setTimeout(() => {
         setShowPrompt(true);
       }, 30000);
     };
@@ -35,6 +37,7 @@ export const PWAInstallPrompt = () => {
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handler);
+      if (promptTimer) clearTimeout(promptTimer);
     };
   }, []);
 

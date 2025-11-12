@@ -157,6 +157,8 @@ const Chat = () => {
       });
 
     // Listen for typing events
+    const typingTimers = new Map<string, NodeJS.Timeout>();
+    
     channel.on('broadcast', { event: 'typing' }, ({ payload }: any) => {
       if (payload.user_id !== user.id) {
         setTypingUsers(prev => {
@@ -166,9 +168,19 @@ const Chat = () => {
           return prev;
         });
 
-        setTimeout(() => {
+        // Clear existing timer for this user
+        const existingTimer = typingTimers.get(payload.username);
+        if (existingTimer) {
+          clearTimeout(existingTimer);
+        }
+
+        // Set new timer
+        const timer = setTimeout(() => {
           setTypingUsers(prev => prev.filter(u => u !== payload.username));
+          typingTimers.delete(payload.username);
         }, TYPING_TIMEOUT);
+        
+        typingTimers.set(payload.username, timer);
       }
     });
 
@@ -287,6 +299,9 @@ const Chat = () => {
 
     return () => {
       supabase.removeChannel(channel);
+      // Cleanup all typing timers
+      typingTimers.forEach(timer => clearTimeout(timer));
+      typingTimers.clear();
     };
   }, [user, toast]);
 
