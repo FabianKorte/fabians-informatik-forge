@@ -107,7 +107,9 @@ const App = () => (
             </ClickSpark>
           </BrowserRouter>
           <Suspense fallback={null}>
-            <AIChatbot />
+            <ChatErrorBoundary>
+              <AIChatbot />
+            </ChatErrorBoundary>
           </Suspense>
         </TooltipProvider>
       </AuthProvider>

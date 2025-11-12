@@ -67,8 +67,23 @@ export const useAdminCounts = () => {
       )
       .subscribe();
 
+    // Realtime-Updates für neue User (Profile)
+    const userChannel = supabase
+      .channel('admin-users-count')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'profiles',
+        },
+        () => fetchCounts()
+      )
+      .subscribe();
+
     return () => {
       supabase.removeChannel(feedbackChannel);
+      supabase.removeChannel(userChannel);
     };
   }, [isAdmin]);
 

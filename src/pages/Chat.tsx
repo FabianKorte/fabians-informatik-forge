@@ -202,7 +202,7 @@ const Chat = () => {
       }
     );
 
-    // Listen for message updates
+    // Listen for message updates (including soft deletes)
     channel.on(
       'postgres_changes',
       {
@@ -211,13 +211,18 @@ const Chat = () => {
         table: 'chat_messages',
       },
       (payload) => {
-        setMessages(prev =>
-          prev.map(msg =>
+        setMessages(prev => {
+          // If message was soft deleted, filter it out
+          if (payload.new.deleted_at) {
+            return prev.filter(msg => msg.id !== payload.new.id);
+          }
+          // Otherwise update the message
+          return prev.map(msg =>
             msg.id === payload.new.id
               ? { ...msg, ...payload.new }
               : msg
-          )
-        );
+          );
+        });
       }
     );
 

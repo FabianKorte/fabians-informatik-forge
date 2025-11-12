@@ -109,7 +109,7 @@ export const NavigationDrawer = () => {
       <SheetContent side="left" className="w-80 p-0 bg-gradient-to-b from-background to-background/95">
         <SheetHeader className="p-6 pb-4 border-b border-border/50">
           <div className="flex items-center gap-3">
-            <img src={logo} alt="Logo" className="h-10 w-10 rounded-lg shadow-md" />
+            <img src={logo} alt="Logo" className="h-8 w-8 rounded-md object-contain shadow-sm" />
             <div>
               <SheetTitle className="text-xl font-semibold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
                 Navigation
