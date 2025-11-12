@@ -21,6 +21,7 @@ import { SkipToContent } from "@/components/SkipToContent";
 import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
 import ClickSpark from "@/components/ui/ClickSpark";
+import { TentacleBackground } from "@/components/TentacleBackground";
 
 // Lazy load heavy pages and components
 const LearnPage = lazy(() => import("./pages/Learn"));
@@ -90,6 +91,7 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <TentacleBackground />
             <ClickSpark
               sparkColor="hsl(var(--primary))"
               sparkSize={12}

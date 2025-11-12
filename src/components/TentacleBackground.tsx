@@ -1,0 +1,152 @@
+import { useEffect, useRef } from 'react';
+
+class TentacleDot {
+  x: number;
+  y: number;
+  size: number;
+  speedY: number;
+  speedX: number;
+  alpha: number;
+  baseAlpha: number;
+
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+    this.size = Math.random() * 2 + 1;
+    this.speedY = (Math.random() - 0.5) * 0.3;
+    this.speedX = (Math.random() - 0.5) * 0.3;
+    this.baseAlpha = Math.random() * 0.2 + 0.1;
+    this.alpha = this.baseAlpha;
+  }
+
+  update(mouse: { x: number; y: number }, bounds: { width: number; height: number }) {
+    // Sanfte zufällige Bewegung
+    this.x += this.speedX;
+    this.y += this.speedY;
+
+    // Sehr subtile Bewegung zur Maus
+    const dx = mouse.x - this.x;
+    const dy = mouse.y - this.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    
+    if (dist < 200) {
+      const force = (200 - dist) / 200 * 0.5;
+      this.x += (dx / dist) * force;
+      this.y += (dy / dist) * force;
+    }
+
+    // Sanfte Randabpraller
+    if (this.x < 0 || this.x > bounds.width) this.speedX *= -1;
+    if (this.y < 0 || this.y > bounds.height) this.speedY *= -1;
+    
+    // Bounds begrenzen
+    this.x = Math.max(0, Math.min(bounds.width, this.x));
+    this.y = Math.max(0, Math.min(bounds.height, this.y));
+
+    // Sanftes Pulsieren
+    this.alpha = this.baseAlpha + Math.sin(Date.now() * 0.001) * 0.05;
+  }
+
+  draw(ctx: CanvasRenderingContext2D) {
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.fillStyle = 'hsl(var(--primary))';
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+export const TentacleBackground = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const dotsRef = useRef<TentacleDot[]>([]);
+  const mouseRef = useRef({ x: 0, y: 0 });
+  const animationFrameRef = useRef<number>();
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      mouseRef.current = { x: canvas.width / 2, y: canvas.height / 2 };
+    };
+
+    resize();
+
+    // Erstelle 100 Partikel (weniger für sanfteren Effekt)
+    if (dotsRef.current.length === 0) {
+      for (let i = 0; i < 100; i++) {
+        dotsRef.current.push(
+          new TentacleDot(
+            Math.random() * canvas.width,
+            Math.random() * canvas.height
+          )
+        );
+      }
+    }
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const bounds = { width: canvas.width, height: canvas.height };
+
+      // Punkte aktualisieren & zeichnen
+      for (const dot of dotsRef.current) {
+        dot.update(mouseRef.current, bounds);
+        dot.draw(ctx);
+      }
+
+      // Sanfte Linien zwischen nahen Punkten
+      for (let i = 0; i < dotsRef.current.length; i++) {
+        for (let j = i + 1; j < dotsRef.current.length; j++) {
+          const dx = dotsRef.current[i].x - dotsRef.current[j].x;
+          const dy = dotsRef.current[i].y - dotsRef.current[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          
+          if (dist < 120) {
+            const opacity = (1 - dist / 120) * 0.08;
+            ctx.strokeStyle = `hsla(var(--primary) / ${opacity})`;
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(dotsRef.current[i].x, dotsRef.current[i].y);
+            ctx.lineTo(dotsRef.current[j].x, dotsRef.current[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      animationFrameRef.current = requestAnimationFrame(animate);
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseRef.current = { x: e.clientX, y: e.clientY };
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('resize', resize);
+    
+    animate();
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('resize', resize);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 pointer-events-none"
+      style={{ zIndex: 0, opacity: 0.4 }}
+    />
+  );
+};
