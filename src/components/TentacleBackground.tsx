@@ -62,6 +62,8 @@ export const TentacleBackground = () => {
   const primaryColorRef = useRef<string>('220, 9%, 20%');
   const [isPaused, setIsPaused] = useState(false);
   const dprRef = useRef<number>(1);
+  const isMobileRef = useRef<boolean>(false);
+  const lastFrameTimeRef = useRef<number>(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -90,19 +92,42 @@ export const TentacleBackground = () => {
     }
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      // Mobile Detection
+      isMobileRef.current = window.innerWidth < 768;
+      
+      // Reduzierte DPR auf Mobilgeräten für bessere Performance
+      const dpr = isMobileRef.current ? 1 : Math.min(window.devicePixelRatio || 1, 2);
       dprRef.current = dpr;
       canvas.width = Math.floor(window.innerWidth * dpr);
       canvas.height = Math.floor(window.innerHeight * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       mouseRef.current = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+      
+      // Partikelanzahl bei Resize anpassen
+      const targetCount = isMobileRef.current ? 40 : 180;
+      if (dotsRef.current.length > targetCount) {
+        dotsRef.current = dotsRef.current.slice(0, targetCount);
+      } else if (dotsRef.current.length < targetCount) {
+        const needed = targetCount - dotsRef.current.length;
+        for (let i = 0; i < needed; i++) {
+          dotsRef.current.push(
+            new TentacleDot(
+              Math.random() * window.innerWidth,
+              Math.random() * window.innerHeight
+            )
+          );
+        }
+      }
     };
 
     resize();
 
-    // Erstelle 220 Partikel (sichtbarer, aber noch sanft)
+    // Erstelle initiale Partikel basierend auf Bildschirmgröße
     if (dotsRef.current.length === 0) {
-      for (let i = 0; i < 220; i++) {
+      const isMobile = window.innerWidth < 768;
+      const particleCount = isMobile ? 40 : 180; // Deutlich weniger auf Mobile
+      
+      for (let i = 0; i < particleCount; i++) {
         dotsRef.current.push(
           new TentacleDot(
             Math.random() * window.innerWidth,
@@ -112,7 +137,17 @@ export const TentacleBackground = () => {
       }
     }
 
-    const animate = () => {
+    const animate = (timestamp: number) => {
+      // Frame-Throttling auf Mobile (30 FPS statt 60 FPS)
+      if (isMobileRef.current) {
+        const elapsed = timestamp - lastFrameTimeRef.current;
+        if (elapsed < 33) { // ~30 FPS
+          animationFrameRef.current = requestAnimationFrame(animate);
+          return;
+        }
+        lastFrameTimeRef.current = timestamp;
+      }
+
       if (!isPaused) {
         const w = canvas.width / dprRef.current;
         const h = canvas.height / dprRef.current;
@@ -132,21 +167,29 @@ export const TentacleBackground = () => {
           ctx.restore();
         }
 
-        // Sanfte Linien zwischen nahen Punkten
+        // Verbindungslinien - auf Mobile stark reduziert
+        const connectionDistance = isMobileRef.current ? 80 : 150; // Kürzere Distanz auf Mobile
+        const connectionOpacity = isMobileRef.current ? 0.08 : 0.15; // Transparentere Linien auf Mobile
+        const maxConnections = isMobileRef.current ? 2 : dotsRef.current.length; // Max 2 Verbindungen pro Punkt auf Mobile
+        
         for (let i = 0; i < dotsRef.current.length; i++) {
+          let connections = 0;
           for (let j = i + 1; j < dotsRef.current.length; j++) {
+            if (isMobileRef.current && connections >= maxConnections) break;
+            
             const dx = dotsRef.current[i].x - dotsRef.current[j].x;
             const dy = dotsRef.current[i].y - dotsRef.current[j].y;
             const dist = Math.sqrt(dx * dx + dy * dy);
             
-            if (dist < 150) {
-              const opacity = (1 - dist / 150) * 0.15; // Sichtbarere Linien
+            if (dist < connectionDistance) {
+              const opacity = (1 - dist / connectionDistance) * connectionOpacity;
               ctx.strokeStyle = `hsla(${primaryColorRef.current} / ${opacity})`;
               ctx.lineWidth = 1;
               ctx.beginPath();
               ctx.moveTo(dotsRef.current[i].x, dotsRef.current[i].y);
               ctx.lineTo(dotsRef.current[j].x, dotsRef.current[j].y);
               ctx.stroke();
+              connections++;
             }
           }
         }
@@ -159,10 +202,14 @@ export const TentacleBackground = () => {
       mouseRef.current = { x: e.clientX, y: e.clientY };
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    // Nur auf Desktop Maus-Tracking (auf Mobile nicht nötig)
+    if (!isMobileRef.current) {
+      window.addEventListener('mousemove', handleMouseMove);
+    }
+    
     window.addEventListener('resize', resize);
     
-    animate();
+    animate(0);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
