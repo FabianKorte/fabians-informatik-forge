@@ -14,6 +14,7 @@ const AdminUsers = lazy(() => import("@/components/admin/AdminUsers").then(m => 
 const AdminSuggestions = lazy(() => import("@/components/admin/AdminSuggestions").then(m => ({ default: m.AdminSuggestions })));
 const AdminNotes = lazy(() => import("@/components/admin/AdminNotes").then(m => ({ default: m.AdminNotes })));
 const AdminAuditLogs = lazy(() => import("@/components/admin/AdminAuditLogs").then(m => ({ default: m.AdminAuditLogs })));
+const AdminRoles = lazy(() => import("@/components/admin/AdminRoles").then(m => ({ default: m.AdminRoles })));
 const BulkEditModules = lazy(() => import("@/components/admin/BulkEditModules").then(m => ({ default: m.BulkEditModules })));
 const AnalyticsDashboard = lazy(() => import("@/components/admin/AnalyticsDashboard").then(m => ({ default: m.AnalyticsDashboard })));
 const CategoryManager = lazy(() => import("@/components/admin/CategoryManager").then(m => ({ default: m.CategoryManager })));
@@ -67,7 +68,7 @@ export default function Admin() {
           </CardHeader>
           <CardContent>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-5 lg:grid-cols-10 gap-1">
+              <TabsList className="grid w-full grid-cols-5 lg:grid-cols-11 gap-1">
                 <TabsTrigger value="learning" className="text-xs lg:text-sm">
                   <BookOpen className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
                   <span className="hidden sm:inline">Lerninhalte</span>
@@ -92,6 +93,11 @@ export default function Admin() {
                   <Users className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
                   <span className="hidden sm:inline">Benutzer</span>
                   <span className="sm:hidden">User</span>
+                </TabsTrigger>
+                <TabsTrigger value="roles" className="text-xs lg:text-sm">
+                  <Shield className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
+                  <span className="hidden sm:inline">Rollen</span>
+                  <span className="sm:hidden">Role</span>
                 </TabsTrigger>
                 <TabsTrigger value="notes" className="text-xs lg:text-sm">
                   <FileText className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
@@ -147,6 +153,12 @@ export default function Admin() {
               <TabsContent value="users" className="mt-6">
                 <Suspense fallback={<TabSkeleton />}>
                   <AdminUsers />
+                </Suspense>
+              </TabsContent>
+
+              <TabsContent value="roles" className="mt-6">
+                <Suspense fallback={<TabSkeleton />}>
+                  <AdminRoles />
                 </Suspense>
               </TabsContent>
 

@@ -1,9 +1,58 @@
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logger';
 
-// Cache admin status to reduce database calls
-const adminCache = new Map<string, { isAdmin: boolean; timestamp: number }>();
+export type AppRole = 'owner' | 'admin' | 'moderator' | 'user';
+
+// Cache admin/role status to reduce database calls
+const roleCache = new Map<string, { roles: AppRole[]; timestamp: number }>();
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
+/**
+ * Checks if a user has a specific role or any of the specified roles in the database.
+ * Results are cached for 5 minutes to reduce database queries.
+ * 
+ * @param {string} userId - The user ID to check
+ * @param {AppRole | AppRole[]} roles - Single role or array of roles to check
+ * @returns {Promise<boolean>} True if user has any of the specified roles, false otherwise
+ * 
+ * @example
+ * const isAdmin = await checkUserRole('user-id-123', 'admin');
+ * const isModerator = await checkUserRole('user-id-123', ['admin', 'moderator']);
+ */
+export async function checkUserRole(userId: string, roles: AppRole | AppRole[]): Promise<boolean> {
+  const rolesToCheck = Array.isArray(roles) ? roles : [roles];
+  
+  // Check cache first
+  const cached = roleCache.get(userId);
+  if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+    return cached.roles.some(role => rolesToCheck.includes(role));
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', userId);
+
+    if (error) {
+      logger.error('Error checking user role:', error);
+      return false;
+    }
+
+    const userRoles = (data || []).map(r => r.role as AppRole);
+
+    // Update cache
+    roleCache.set(userId, {
+      roles: userRoles,
+      timestamp: Date.now(),
+    });
+
+    return userRoles.some(role => rolesToCheck.includes(role));
+  } catch (error) {
+    logger.error('Exception checking user role:', error);
+    return false;
+  }
+}
 
 /**
  * Checks if a user has admin role in the database.
@@ -19,59 +68,51 @@ const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
  * }
  */
 export async function checkAdminStatus(userId: string): Promise<boolean> {
-  // Check cache first
-  const cached = adminCache.get(userId);
-  if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
-    return cached.isAdmin;
-  }
-
-  try {
-    const { data, error } = await supabase
-      .from('user_roles')
-      .select('role')
-      .eq('user_id', userId)
-      .eq('role', 'admin')
-      .maybeSingle();
-
-    if (error) {
-      logger.error('Error checking admin status:', error);
-      return false;
-    }
-
-    const isAdmin = !!data;
-
-    // Update cache
-    adminCache.set(userId, {
-      isAdmin,
-      timestamp: Date.now(),
-    });
-
-    return isAdmin;
-  } catch (error) {
-    logger.error('Exception checking admin status:', error);
-    return false;
-  }
+  return checkUserRole(userId, ['admin', 'owner']);
 }
 
 /**
- * Clears the admin status cache for a specific user or all users.
+ * Checks if a user is a moderator or higher (moderator, admin, or owner).
+ * 
+ * @param {string} userId - The user ID to check
+ * @returns {Promise<boolean>} True if user is moderator or higher
+ */
+export async function checkModeratorStatus(userId: string): Promise<boolean> {
+  return checkUserRole(userId, ['moderator', 'admin', 'owner']);
+}
+
+/**
+ * Checks if a user is an owner.
+ * 
+ * @param {string} userId - The user ID to check
+ * @returns {Promise<boolean>} True if user is owner
+ */
+export async function checkOwnerStatus(userId: string): Promise<boolean> {
+  return checkUserRole(userId, 'owner');
+}
+
+/**
+ * Clears the role cache for a specific user or all users.
  * Useful after role changes.
  * 
  * @param {string} [userId] - Optional user ID to clear. If omitted, clears all cache.
  * 
  * @example
  * // Clear specific user
- * clearAdminCache('user-id-123');
+ * clearRoleCache('user-id-123');
  * 
  * // Clear all cache
- * clearAdminCache();
+ * clearRoleCache();
  */
-export function clearAdminCache(userId?: string): void {
+export function clearRoleCache(userId?: string): void {
   if (userId) {
-    adminCache.delete(userId);
-    logger.info(`Cleared admin cache for user: ${userId}`);
+    roleCache.delete(userId);
+    logger.info(`Cleared role cache for user: ${userId}`);
   } else {
-    adminCache.clear();
-    logger.info('Cleared all admin cache');
+    roleCache.clear();
+    logger.info('Cleared all role cache');
   }
 }
+
+// Legacy function name for backwards compatibility
+export const clearAdminCache = clearRoleCache;
