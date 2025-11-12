@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
-import { Send, ArrowLeft, MessageCircle, Loader2 } from 'lucide-react';
+import { Send, ArrowLeft, MessageCircle, Loader2, X } from 'lucide-react';
 import { logger } from '@/lib/logger';
 import { sanitizeInput } from '@/lib/sanitization';
 import { ChatMessageComponent } from '@/components/chat/ChatMessage';
@@ -32,6 +32,15 @@ interface ChatMessage {
   created_at: string;
   edited_at?: string;
   deleted_at?: string;
+  quoted_message_id?: string | null;
+  quoted_message?: {
+    id: string;
+    message: string;
+    user_id: string;
+    profiles?: {
+      username: string;
+    };
+  } | null;
   profiles?: {
     username: string;
     avatar_url: string | null;
@@ -52,6 +61,7 @@ const Chat = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [reactions, setReactions] = useState<MessageReaction[]>([]);
   const [newMessage, setNewMessage] = useState('');
+  const [quotedMessage, setQuotedMessage] = useState<ChatMessage | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
   const [typingUsers, setTypingUsers] = useState<string[]>([]);
@@ -107,10 +117,29 @@ const Chat = () => {
 
       setReactions(reactionsData || []);
 
+      // Fetch quoted messages
+      const quotedMessageIds = [...new Set(messagesData?.map(msg => msg.quoted_message_id).filter(Boolean) || [])];
+      const quotedMessagesMap = new Map();
+      
+      if (quotedMessageIds.length > 0) {
+        const { data: quotedData } = await supabase
+          .from('chat_messages')
+          .select('id, message, user_id')
+          .in('id', quotedMessageIds);
+        
+        (quotedData || []).forEach(qm => {
+          quotedMessagesMap.set(qm.id, {
+            ...qm,
+            profiles: profilesMap.get(qm.user_id)
+          });
+        });
+      }
+
       const messagesWithData = (messagesData || []).map(msg => ({
         ...msg,
         profiles: profilesMap.get(msg.user_id),
         reactions: (reactionsData || []).filter(r => r.message_id === msg.id),
+        quoted_message: msg.quoted_message_id ? quotedMessagesMap.get(msg.quoted_message_id) : null,
       }));
 
       setMessages(messagesWithData as ChatMessage[]);
@@ -347,6 +376,7 @@ const Chat = () => {
       const { error } = await supabase.from('chat_messages').insert({
         user_id: user.id,
         message: sanitized,
+        quoted_message_id: quotedMessage?.id || null,
       });
 
       if (error) {
@@ -361,9 +391,14 @@ const Chat = () => {
 
       messageTimestampsRef.current = [...recentMessages, now];
       setNewMessage('');
+      setQuotedMessage(null);
     } catch (err) {
       logger.error('Unexpected error:', err);
     }
+  };
+
+  const handleQuoteMessage = (message: ChatMessage) => {
+    setQuotedMessage(message);
   };
 
   const handleEditMessage = async (messageId: string, newText: string) => {
@@ -463,6 +498,7 @@ const Chat = () => {
                   onEdit={handleEditMessage}
                   onDelete={handleDeleteMessage}
                   onReactionToggle={handleReactionToggle}
+                  onQuote={handleQuoteMessage}
                 />
               ))
             )}
@@ -471,26 +507,49 @@ const Chat = () => {
           </div>
         </ScrollArea>
 
-        <form onSubmit={handleSendMessage} className="flex gap-2">
-          <Input
-            value={newMessage}
-            onChange={(e) => {
-              setNewMessage(e.target.value);
-              handleTyping();
-            }}
-            placeholder="Nachricht eingeben..."
-            className="flex-1 rounded-xl"
-            maxLength={500}
-            autoFocus
-          />
-          <Button
-            type="submit"
-            size="icon"
-            disabled={!newMessage.trim()}
-            className="rounded-xl"
-          >
-            <Send className="h-4 w-4" />
-          </Button>
+        <form onSubmit={handleSendMessage} className="space-y-2">
+          {quotedMessage && (
+            <div className="bg-muted/50 border border-border rounded-lg p-2 flex items-start gap-2">
+              <div className="flex-1 text-sm">
+                <p className="font-semibold text-foreground">
+                  Antwort an {quotedMessage.profiles?.username || 'Unbekannt'}
+                </p>
+                <p className="text-muted-foreground line-clamp-1 italic">
+                  {quotedMessage.message}
+                </p>
+              </div>
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                onClick={() => setQuotedMessage(null)}
+                className="h-6 w-6 shrink-0"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
+          <div className="flex gap-2">
+            <Input
+              value={newMessage}
+              onChange={(e) => {
+                setNewMessage(e.target.value);
+                handleTyping();
+              }}
+              placeholder={quotedMessage ? "Antwort eingeben..." : "Nachricht eingeben... (Markdown wird unterstützt)"}
+              className="flex-1 rounded-xl"
+              maxLength={500}
+              autoFocus
+            />
+            <Button
+              type="submit"
+              size="icon"
+              disabled={!newMessage.trim()}
+              className="rounded-xl"
+            >
+              <Send className="h-4 w-4" />
+            </Button>
+          </div>
         </form>
         <p className="text-xs text-muted-foreground text-center mt-2">
           {newMessage.length}/500 Zeichen

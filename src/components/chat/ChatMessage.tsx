@@ -4,8 +4,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { Pencil, Trash2, Check, X, Smile } from 'lucide-react';
+import { Pencil, Trash2, Check, X, Smile, Quote } from 'lucide-react';
 import { logger } from '@/lib/logger';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import {
   Popover,
   PopoverContent,
@@ -19,6 +21,15 @@ interface ChatMessage {
   created_at: string;
   edited_at?: string;
   deleted_at?: string;
+  quoted_message_id?: string | null;
+  quoted_message?: {
+    id: string;
+    message: string;
+    user_id: string;
+    profiles?: {
+      username: string;
+    };
+  } | null;
   profiles?: {
     username: string;
     avatar_url: string | null;
@@ -39,6 +50,7 @@ interface ChatMessageProps {
   onEdit: (messageId: string, newText: string) => void;
   onDelete: (messageId: string) => void;
   onReactionToggle: (messageId: string, emoji: string) => void;
+  onQuote: (message: ChatMessage) => void;
 }
 
 const EMOJI_OPTIONS = ['👍', '❤️', '😂', '😮', '😢', '🎉', '🔥', '👏'];
@@ -49,6 +61,7 @@ export const ChatMessageComponent = ({
   onEdit,
   onDelete,
   onReactionToggle,
+  onQuote,
 }: ChatMessageProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(message.message);
@@ -128,6 +141,24 @@ export const ChatMessageComponent = ({
                 : 'bg-card border border-border rounded-bl-md'
             }`}
           >
+            {/* Quoted message display */}
+            {message.quoted_message && (
+              <div className={`mb-2 pb-2 border-l-2 pl-2 ${
+                isOwnMessage ? 'border-primary-foreground/30' : 'border-primary/30'
+              }`}>
+                <p className={`text-xs font-semibold ${
+                  isOwnMessage ? 'text-primary-foreground/70' : 'text-muted-foreground'
+                }`}>
+                  {message.quoted_message.profiles?.username || 'Unbekannt'}
+                </p>
+                <p className={`text-xs italic line-clamp-2 ${
+                  isOwnMessage ? 'text-primary-foreground/60' : 'text-muted-foreground'
+                }`}>
+                  {message.quoted_message.message}
+                </p>
+              </div>
+            )}
+            
             {isEditing ? (
               <div className="flex gap-2 items-center min-w-[200px]">
                 <Input
@@ -148,15 +179,47 @@ export const ChatMessageComponent = ({
                 </Button>
               </div>
             ) : (
-              <p className="text-sm break-words leading-relaxed">
-                {message.message}
-              </p>
+              <div className={`text-sm break-words leading-relaxed prose prose-sm max-w-none dark:prose-invert prose-p:my-1 prose-headings:my-2 ${isOwnMessage ? '[&>*]:text-primary-foreground' : ''}`}>
+                <ReactMarkdown 
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    p: ({ children }) => <p className="my-1">{children}</p>,
+                    strong: ({ children }) => <strong className="font-bold">{children}</strong>,
+                    em: ({ children }) => <em className="italic">{children}</em>,
+                    code: ({ children }) => (
+                      <code className={`px-1 py-0.5 rounded text-xs ${
+                        isOwnMessage ? 'bg-primary-foreground/20' : 'bg-muted'
+                      }`}>
+                        {children}
+                      </code>
+                    ),
+                    pre: ({ children }) => (
+                      <pre className={`p-2 rounded my-2 overflow-x-auto ${
+                        isOwnMessage ? 'bg-primary-foreground/20' : 'bg-muted'
+                      }`}>
+                        {children}
+                      </pre>
+                    ),
+                  }}
+                >
+                  {message.message}
+                </ReactMarkdown>
+              </div>
             )}
           </div>
 
           {/* Action buttons - positioned outside message bubble */}
           {isOwnMessage && !isEditing && (
-            <div className={`absolute ${isOwnMessage ? '-left-20' : '-right-20'} top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1`}>
+            <div className={`absolute ${isOwnMessage ? '-left-28' : '-right-28'} top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1`}>
+              <Button
+                size="icon"
+                variant="secondary"
+                onClick={() => onQuote(message)}
+                className="h-8 w-8 bg-card hover:bg-accent border border-border shadow-md hover:shadow-lg transition-all"
+                aria-label="Nachricht zitieren"
+              >
+                <Quote className="h-4 w-4" />
+              </Button>
               <Button
                 size="icon"
                 variant="secondary"
@@ -178,6 +241,21 @@ export const ChatMessageComponent = ({
             </div>
           )}
 
+          {/* Quote button for other users' messages */}
+          {!isOwnMessage && !isEditing && (
+            <div className={`absolute ${isOwnMessage ? '-left-10' : '-right-10'} top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity`}>
+              <Button
+                size="icon"
+                variant="secondary"
+                onClick={() => onQuote(message)}
+                className="h-8 w-8 bg-card hover:bg-accent border border-border shadow-md hover:shadow-lg transition-all"
+                aria-label="Nachricht zitieren"
+              >
+                <Quote className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
+
           {/* Emoji picker - positioned outside message bubble */}
           {!isEditing && (
             <Popover>
@@ -185,7 +263,7 @@ export const ChatMessageComponent = ({
                 <Button
                   size="icon"
                   variant="secondary"
-                  className={`absolute ${isOwnMessage ? '-left-10' : '-right-10'} top-1/2 -translate-y-1/2 h-8 w-8 bg-card hover:bg-accent border border-border shadow-md hover:shadow-lg opacity-0 group-hover:opacity-100 transition-all`}
+                  className={`absolute ${isOwnMessage ? '-left-10' : '-right-18'} top-1/2 -translate-y-1/2 h-8 w-8 bg-card hover:bg-accent border border-border shadow-md hover:shadow-lg opacity-0 group-hover:opacity-100 transition-all`}
                   aria-label="Reaktion hinzufügen"
                 >
                   <Smile className="h-4 w-4" />

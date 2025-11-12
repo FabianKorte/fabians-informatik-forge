@@ -294,6 +294,7 @@ export type Database = {
           edited_at: string | null
           id: string
           message: string
+          quoted_message_id: string | null
           updated_at: string
           user_id: string
         }
@@ -303,6 +304,7 @@ export type Database = {
           edited_at?: string | null
           id?: string
           message: string
+          quoted_message_id?: string | null
           updated_at?: string
           user_id: string
         }
@@ -312,10 +314,19 @@ export type Database = {
           edited_at?: string | null
           id?: string
           message?: string
+          quoted_message_id?: string | null
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_quoted_message_id_fkey"
+            columns: ["quoted_message_id"]
+            isOneToOne: false
+            referencedRelation: "chat_messages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       exam_sessions: {
         Row: {
