@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { useFeedbackReactions } from "@/hooks/useFeedbackReactions";
+
 import { MessageSquare, RefreshCw, User, Clock, Lock, Search, Bug, Lightbulb, Star, ThumbsUp, Heart, TrendingUp, Filter } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { de } from "date-fns/locale";
@@ -26,7 +26,7 @@ const FEEDBACK_CATEGORIES = {
   suggestion: { label: 'Verbesserungsvorschlag', icon: Lightbulb, color: 'text-blue-500' },
 };
 
-const REACTION_EMOJIS = ['👍', '❤️', '💡'];
+
 
 interface Feedback {
   id: string;
@@ -39,7 +39,7 @@ interface Feedback {
 }
 
 const FeedbackItem = ({ feedback, isAdmin }: { feedback: Feedback; isAdmin: boolean }) => {
-  const { toggleReaction, getReactionCount, hasUserReacted } = useFeedbackReactions(feedback.id);
+  
   const categoryConfig = FEEDBACK_CATEGORIES[feedback.category] || FEEDBACK_CATEGORIES.general;
   const CategoryIcon = categoryConfig.icon;
 
@@ -86,27 +86,6 @@ const FeedbackItem = ({ feedback, isAdmin }: { feedback: Feedback; isAdmin: bool
       
       <p className="text-sm leading-relaxed pl-6">{feedback.message}</p>
       
-      {isAdmin && (
-        <div className="flex gap-1 pl-6">
-          {REACTION_EMOJIS.map(emoji => {
-            const count = getReactionCount(emoji);
-            const isActive = hasUserReacted(emoji);
-            
-            return (
-              <Button
-                key={emoji}
-                variant={isActive ? "default" : "outline"}
-                size="sm"
-                onClick={() => toggleReaction(emoji)}
-                className="h-7 px-2 text-sm gap-1"
-              >
-                <span>{emoji}</span>
-                {count > 0 && <span>{count}</span>}
-              </Button>
-            );
-          })}
-        </div>
-      )}
     </div>
   );
 };
@@ -230,7 +209,7 @@ export const FeedbackList = ({ refreshTrigger }: { refreshTrigger?: number }) =>
           </CardHeader>
           <CardContent className="space-y-3">
             {topFeedbacks.map((feedback) => (
-              <FeedbackItem key={feedback.id} feedback={feedback} isAdmin={isAdmin} />
+              <FeedbackItem key={feedback.id} feedback={feedback} isAdmin={false} />
             ))}
           </CardContent>
         </Card>
@@ -322,7 +301,7 @@ export const FeedbackList = ({ refreshTrigger }: { refreshTrigger?: number }) =>
             </div>
           ) : (
             filteredFeedbacks.map((feedback) => (
-              <FeedbackItem key={feedback.id} feedback={feedback} isAdmin={isAdmin} />
+              <FeedbackItem key={feedback.id} feedback={feedback} isAdmin={false} />
             ))
           )}
         </CardContent>

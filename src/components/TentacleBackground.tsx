@@ -70,16 +70,23 @@ export const TentacleBackground = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Farben aus Design-Token lesen (bevorzugt Textfarbe des Hintergrunds)
+    // Farben aus Design-Token lesen (leuchtender Farbton bevorzugt)
     const computedStyle = getComputedStyle(document.documentElement);
-    const fgValue = computedStyle.getPropertyValue('--foreground').trim();
+    const glowValue = computedStyle.getPropertyValue('--primary-glow').trim();
+    const accentValue = computedStyle.getPropertyValue('--accent').trim();
     const primaryValue = computedStyle.getPropertyValue('--primary').trim();
-    if (fgValue) {
-      primaryColorRef.current = fgValue;
+    const fgValue = computedStyle.getPropertyValue('--foreground').trim();
+
+    if (glowValue) {
+      primaryColorRef.current = glowValue;
+    } else if (accentValue) {
+      primaryColorRef.current = accentValue;
     } else if (primaryValue) {
       primaryColorRef.current = primaryValue;
+    } else if (fgValue) {
+      primaryColorRef.current = fgValue;
     } else {
-      primaryColorRef.current = '220 9% 20%';
+      primaryColorRef.current = '217 75% 70%';
     }
 
     const resize = () => {
@@ -172,9 +179,9 @@ export const TentacleBackground = () => {
         ref={canvasRef}
         className="fixed inset-0 pointer-events-none"
         style={{ 
-          zIndex: 0,
-          opacity: 0.6,
-          mixBlendMode: 'normal'
+          zIndex: 10,
+          opacity: 0.7,
+          mixBlendMode: 'screen'
         }}
       />
       <Button

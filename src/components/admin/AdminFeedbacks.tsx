@@ -14,6 +14,7 @@ import { useAdminData } from "@/hooks/useAdminData";
 import { EmptyState } from "@/components/ui/empty-state";
 import { LoadingState } from "@/components/ui/loading-state";
 import { MessageSquare } from "lucide-react";
+import { useFeedbackReactions } from "@/hooks/useFeedbackReactions";
 
 interface Feedback {
   id: string;
@@ -24,6 +25,32 @@ interface Feedback {
 }
 
 const ITEMS_PER_PAGE = 10;
+
+const REACTION_EMOJIS = ['👍', '❤️', '💡'];
+
+const AdminFeedbackReactions = ({ feedbackId }: { feedbackId: string }) => {
+  const { toggleReaction, getReactionCount, hasUserReacted } = useFeedbackReactions(feedbackId);
+  return (
+    <div className="flex gap-1 py-1">
+      {REACTION_EMOJIS.map((emoji) => {
+        const count = getReactionCount(emoji);
+        const isActive = hasUserReacted(emoji);
+        return (
+          <Button
+            key={emoji}
+            variant={isActive ? "default" : "outline"}
+            size="sm"
+            onClick={() => toggleReaction(emoji)}
+            className="h-7 px-2 text-sm gap-1"
+          >
+            <span>{emoji}</span>
+            {count > 0 && <span>{count}</span>}
+          </Button>
+        );
+      })}
+    </div>
+  );
+};
 
 /**
  * AdminFeedbacks Component
@@ -206,6 +233,7 @@ export const AdminFeedbacks = () => {
                     </span>
                   </div>
                   <p className="text-sm mb-3">{feedback.message}</p>
+                  <AdminFeedbackReactions feedbackId={feedback.id} />
                   <Select 
                     value={feedback.status} 
                     onValueChange={(value) => handleStatusChange(feedback.id, value)}
