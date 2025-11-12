@@ -63,18 +63,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
 
     // Exchange OAuth code for session if present (handles Safari/3rd‑party cookies)
-    (async () => {
-      try {
-        const url = new URL(window.location.href);
-        if (url.searchParams.get('code')) {
-          await supabase.auth.exchangeCodeForSession(window.location.href);
+    const url = new URL(window.location.href);
+    const code = url.searchParams.get('code');
+    
+    if (code) {
+      supabase.auth.exchangeCodeForSession(url.toString()).then(({ data, error }) => {
+        if (!error && data?.session) {
+          // Clean URL after successful exchange
           url.searchParams.delete('code');
           url.searchParams.delete('state');
           const cleaned = url.pathname + (url.searchParams.toString() ? `?${url.searchParams.toString()}` : '');
           window.history.replaceState({}, '', cleaned);
         }
-      } catch {}
-    })();
+      }).catch(() => {
+        // Clean URL even on error to avoid repeated attempts
+        url.searchParams.delete('code');
+        url.searchParams.delete('state');
+        const cleaned = url.pathname + (url.searchParams.toString() ? `?${url.searchParams.toString()}` : '');
+        window.history.replaceState({}, '', cleaned);
+      });
+    }
 
     // THEN get the initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
