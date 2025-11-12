@@ -5,7 +5,6 @@ import { CategoryCard } from "@/components/CategoryCard";
 import SearchBar from "@/components/SearchBar";
 import FeedbackForm from "@/components/feedback/FeedbackForm";
 import { FeedbackList } from "@/components/feedback/FeedbackList";
-import RoadmapModal from "@/components/RoadmapModal";
 import { SEO } from "@/components/SEO";
 import { StructuredData } from "@/components/StructuredData";
 import { Button } from "@/components/ui/button";
@@ -15,7 +14,7 @@ import { getAllModules } from "@/lib/learnContentUtils";
 import { useKeyboardNavigation } from "@/hooks/useKeyboardNavigation";
 import { logger } from "@/lib/logger";
 import type { Category } from "@/data/categories";
-import { Download, MapPin, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import logo from "@/assets/logo.png";
 import type { LearnModule } from "@/types/learn";
 
@@ -142,54 +141,6 @@ const Index = () => {
       </a>
       
       <div className="min-h-screen bg-background">
-      {/* Floating Action Buttons */}
-      <div className="fixed top-3 sm:top-6 right-3 sm:right-6 z-50 flex flex-col gap-2">
-        {user && (
-          <Button
-            variant="outline"
-            size="sm"
-            className="shadow-lg backdrop-blur-sm bg-background/80 border-border/50 h-8 sm:h-9 px-2 sm:px-3"
-            onClick={() => navigate('/dashboard')}
-          >
-            <span className="hidden sm:inline text-xs">Dashboard</span>
-            <span className="sm:hidden text-sm">👤</span>
-          </Button>
-        )}
-        
-        {!user && (
-          <Button
-            variant="outline"
-            size="sm"
-            className="shadow-lg backdrop-blur-sm bg-background/80 border-border/50 h-8 sm:h-9 px-2 sm:px-3"
-            onClick={() => navigate('/auth')}
-          >
-            <span className="hidden sm:inline text-xs">Anmelden</span>
-            <span className="sm:hidden text-sm">🔐</span>
-          </Button>
-        )}
-        
-        <Button
-          variant="outline"
-          size="sm"
-          className="shadow-lg backdrop-blur-sm bg-background/80 border-border/50 h-8 sm:h-9 px-2 sm:px-3"
-          onClick={() => window.open('https://drive.google.com/drive/folders/1x_OJDgFV7z0XGMcSBPIvKe-fTTHqp1kR?usp=sharing', '_blank')}
-        >
-          <Download className="w-3 h-3 sm:w-4 sm:h-4" />
-          <span className="hidden sm:inline ml-2 text-xs">Downloads</span>
-        </Button>
-        
-        <RoadmapModal>
-          <Button
-            variant="outline"
-            size="sm"
-            className="shadow-lg backdrop-blur-sm bg-background/80 border-border/50 h-8 sm:h-9 px-2 sm:px-3"
-          >
-            <MapPin className="w-3 h-3 sm:w-4 sm:h-4" />
-            <span className="hidden sm:inline ml-2 text-xs">Roadmap</span>
-          </Button>
-        </RoadmapModal>
-      </div>
-
       <div className="transition-all duration-300">
         <Hero
           totalQuestions={stats.totalQuestions}
