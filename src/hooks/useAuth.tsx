@@ -82,6 +82,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const cleaned = url.pathname + (url.searchParams.toString() ? `?${url.searchParams.toString()}` : '');
         window.history.replaceState({}, '', cleaned);
       });
+    } else if (window.location.hash && (window.location.hash.includes('access_token') || window.location.hash.includes('refresh_token'))) {
+      // Fallback: handle implicit flow tokens returned in hash
+      const hashParams = new URLSearchParams(window.location.hash.slice(1));
+      const access_token = hashParams.get('access_token');
+      const refresh_token = hashParams.get('refresh_token');
+
+      if (access_token && refresh_token) {
+        supabase.auth.setSession({ access_token, refresh_token }).finally(() => {
+          const cleaned = url.pathname + (url.searchParams.toString() ? `?${url.searchParams.toString()}` : '');
+          window.history.replaceState({}, '', cleaned);
+        });
+      } else {
+        // Clean hash if tokens are incomplete
+        const cleaned = url.pathname + (url.searchParams.toString() ? `?${url.searchParams.toString()}` : '');
+        window.history.replaceState({}, '', cleaned);
+      }
     }
 
     // THEN get the initial session
