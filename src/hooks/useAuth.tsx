@@ -68,14 +68,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     
     if (code) {
       supabase.auth.exchangeCodeForSession(url.toString()).then(({ data, error }) => {
-        if (!error && data?.session) {
-          // Clean URL after successful exchange
-          url.searchParams.delete('code');
-          url.searchParams.delete('state');
-          const cleaned = url.pathname + (url.searchParams.toString() ? `?${url.searchParams.toString()}` : '');
-          window.history.replaceState({}, '', cleaned);
+        if (error) {
+          logger.error('OAuth session exchange failed:', error);
+          toast({
+            title: "OAuth-Anmeldung fehlgeschlagen",
+            description: error.message || "Die Sitzung konnte nicht wiederhergestellt werden. Bitte versuche es erneut.",
+            variant: "destructive",
+            duration: 6000,
+          });
         }
-      }).catch(() => {
+        
+        // Always clean URL after exchange attempt
+        url.searchParams.delete('code');
+        url.searchParams.delete('state');
+        const cleaned = url.pathname + (url.searchParams.toString() ? `?${url.searchParams.toString()}` : '');
+        window.history.replaceState({}, '', cleaned);
+      }).catch((err) => {
+        logger.error('OAuth exchange error:', err);
+        toast({
+          title: "OAuth-Fehler",
+          description: "Ein unerwarteter Fehler ist aufgetreten. Bitte versuche dich erneut anzumelden.",
+          variant: "destructive",
+          duration: 6000,
+        });
+        
         // Clean URL even on error to avoid repeated attempts
         url.searchParams.delete('code');
         url.searchParams.delete('state');
@@ -89,11 +105,40 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const refresh_token = hashParams.get('refresh_token');
 
       if (access_token && refresh_token) {
-        supabase.auth.setSession({ access_token, refresh_token }).finally(() => {
-          const cleaned = url.pathname + (url.searchParams.toString() ? `?${url.searchParams.toString()}` : '');
-          window.history.replaceState({}, '', cleaned);
-        });
+        supabase.auth.setSession({ access_token, refresh_token })
+          .then(({ data, error }) => {
+            if (error) {
+              logger.error('Token session setup failed:', error);
+              toast({
+                title: "Anmeldung fehlgeschlagen",
+                description: "Die Sitzung konnte nicht hergestellt werden. Bitte melde dich erneut an.",
+                variant: "destructive",
+                duration: 6000,
+              });
+            }
+          })
+          .catch((err) => {
+            logger.error('Token setup error:', err);
+            toast({
+              title: "Sitzungsfehler",
+              description: "Ein Fehler ist beim Einrichten der Sitzung aufgetreten.",
+              variant: "destructive",
+              duration: 6000,
+            });
+          })
+          .finally(() => {
+            const cleaned = url.pathname + (url.searchParams.toString() ? `?${url.searchParams.toString()}` : '');
+            window.history.replaceState({}, '', cleaned);
+          });
       } else {
+        logger.warn('Incomplete OAuth tokens in URL hash');
+        toast({
+          title: "OAuth-Fehler",
+          description: "Unvollständige Anmeldedaten empfangen. Bitte versuche es erneut.",
+          variant: "destructive",
+          duration: 6000,
+        });
+        
         // Clean hash if tokens are incomplete
         const cleaned = url.pathname + (url.searchParams.toString() ? `?${url.searchParams.toString()}` : '');
         window.history.replaceState({}, '', cleaned);
@@ -225,6 +270,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       },
     });
 
+    if (error) {
+      logger.error('Google OAuth initiation failed:', error);
+      return { error };
+    }
+
     if (data?.url) {
       const targetUrl = data.url;
       try {
@@ -235,6 +285,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           window.location.href = targetUrl;
         }
       } catch (e) {
+        logger.error('Google OAuth redirect failed:', e);
         // Fallback to opening a new tab if top navigation is blocked by the host
         const opened = window.open(targetUrl, '_blank', 'noopener,noreferrer');
         if (!opened) {
@@ -261,6 +312,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       },
     });
 
+    if (error) {
+      logger.error('Discord OAuth initiation failed:', error);
+      return { error };
+    }
+
     if (data?.url) {
       const targetUrl = data.url;
       try {
@@ -270,6 +326,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           window.location.href = targetUrl;
         }
       } catch (e) {
+        logger.error('Discord OAuth redirect failed:', e);
         const opened = window.open(targetUrl, '_blank', 'noopener,noreferrer');
         if (!opened) {
           window.location.href = targetUrl;
