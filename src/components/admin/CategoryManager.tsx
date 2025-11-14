@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { useToast } from "@/hooks/use-toast";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { logAuditAction } from "@/lib/auditLog";
@@ -27,6 +27,7 @@ const difficulties = ["Anfänger", "Fortgeschritten", "Experte"];
 const icons = ["Code", "Database", "Lock", "Server", "Globe", "Smartphone", "Users", "TrendingUp"];
 
 export default function CategoryManager() {
+  const { toast } = useToast();
   const { categories, isLoading } = useCategories();
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -88,7 +89,7 @@ export default function CategoryManager() {
           details: { type: 'category', title: formData.title },
         });
 
-        toast.success('Kategorie aktualisiert');
+        toast({ title: 'Kategorie aktualisiert' });
       } else {
         const { error } = await supabase
           .from('categories')
@@ -110,7 +111,7 @@ export default function CategoryManager() {
           details: { type: 'category', title: formData.title },
         });
 
-        toast.success('Kategorie erstellt');
+        toast({ title: 'Kategorie erstellt' });
       }
 
       // Refresh categories list
@@ -118,7 +119,7 @@ export default function CategoryManager() {
       setIsDialogOpen(false);
       resetForm();
     } catch (error: any) {
-      toast.error('Fehler: ' + error.message);
+      toast({ title: 'Fehler', description: error.message, variant: 'destructive' });
     }
   };
 
@@ -140,10 +141,10 @@ export default function CategoryManager() {
         details: { type: 'category' },
       });
 
-      toast.success('Kategorie gelöscht');
+      toast({ title: 'Kategorie gelöscht' });
       queryClient.invalidateQueries({ queryKey: ['categories'] });
     } catch (error: any) {
-      toast.error('Fehler: ' + error.message);
+      toast({ title: 'Fehler', description: error.message, variant: 'destructive' });
     }
   };
 

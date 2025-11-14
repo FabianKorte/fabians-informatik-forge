@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logger';
-import { toast } from 'sonner';
+import { toast } from '@/hooks/use-toast';
 
 export interface AIRecommendation {
   id: string;
@@ -51,11 +51,11 @@ export const useAIRecommendations = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['ai-recommendations'] });
-      toast.success('Neue Empfehlungen wurden generiert');
+      toast({ title: 'Neue Empfehlungen wurden generiert' });
     },
     onError: (error) => {
       logger.error('Error generating recommendations:', error);
-      toast.error('Fehler beim Generieren der Empfehlungen');
+      toast({ title: 'Fehler beim Generieren der Empfehlungen', variant: 'destructive' });
     },
   });
 
@@ -71,7 +71,7 @@ export const useAIRecommendations = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['ai-recommendations'] });
-      toast.success('Empfehlung wurde entfernt');
+      toast({ title: 'Empfehlung wurde entfernt' });
     },
   });
 
