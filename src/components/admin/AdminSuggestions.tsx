@@ -36,7 +36,7 @@ interface Suggestion {
   profiles?: Profile | null;
 }
 
-export const AdminSuggestions = () => {
+export default function AdminSuggestions() {
   const [selectedSuggestion, setSelectedSuggestion] = useState<Suggestion | null>(null);
   const [adminNotes, setAdminNotes] = useState("");
   const { toast } = useToast();

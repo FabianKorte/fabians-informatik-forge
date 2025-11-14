@@ -15,7 +15,7 @@ interface Message {
   content: string;
 }
 
-export const AIChatbot = () => {
+export default function AIChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {

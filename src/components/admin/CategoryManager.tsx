@@ -26,7 +26,7 @@ interface CategoryFormData {
 const difficulties = ["Anfänger", "Fortgeschritten", "Experte"];
 const icons = ["Code", "Database", "Lock", "Server", "Globe", "Smartphone", "Users", "TrendingUp"];
 
-export function CategoryManager() {
+export default function CategoryManager() {
   const { categories, isLoading } = useCategories();
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
