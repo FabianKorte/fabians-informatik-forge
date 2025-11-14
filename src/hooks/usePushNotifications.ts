@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { toast } from 'sonner';
+import { toast } from '@/hooks/use-toast';
 import { logger } from '@/lib/logger';
 
 export const usePushNotifications = () => {
@@ -16,7 +16,7 @@ export const usePushNotifications = () => {
 
   const requestPermission = async () => {
     if (!isSupported) {
-      toast.error('Push-Benachrichtigungen werden von diesem Browser nicht unterstützt');
+      toast({ title: 'Push-Benachrichtigungen werden von diesem Browser nicht unterstützt', variant: 'destructive' });
       return false;
     }
 
@@ -26,15 +26,15 @@ export const usePushNotifications = () => {
 
       if (result === 'granted') {
         await subscribeToPush();
-        toast.success('Push-Benachrichtigungen aktiviert!');
+        toast({ title: 'Push-Benachrichtigungen aktiviert!' });
         return true;
       } else {
-        toast.error('Push-Benachrichtigungen wurden abgelehnt');
+        toast({ title: 'Push-Benachrichtigungen wurden abgelehnt', variant: 'destructive' });
         return false;
       }
     } catch (error) {
       logger.error('Error requesting notification permission:', error);
-      toast.error('Fehler beim Aktivieren der Benachrichtigungen');
+      toast({ title: 'Fehler beim Aktivieren der Benachrichtigungen', variant: 'destructive' });
       return false;
     }
   };
@@ -65,11 +65,11 @@ export const usePushNotifications = () => {
       if (subscription) {
         await subscription.unsubscribe();
         setSubscription(null);
-        toast.success('Push-Benachrichtigungen deaktiviert');
+        toast({ title: 'Push-Benachrichtigungen deaktiviert' });
       }
     } catch (error) {
       logger.error('Error unsubscribing from push:', error);
-      toast.error('Fehler beim Deaktivieren der Benachrichtigungen');
+      toast({ title: 'Fehler beim Deaktivieren der Benachrichtigungen', variant: 'destructive' });
     }
   };
 
@@ -108,12 +108,12 @@ export const usePushNotifications = () => {
         });
       }, delay);
 
-      toast.success('Erinnerung eingerichtet');
+      toast({ title: 'Erinnerung eingerichtet' });
       
       // Return cleanup function
       return () => clearTimeout(timerId);
     } else if (delay >= 86400000) {
-      toast.error('Erinnerungen können maximal 24 Stunden im Voraus eingestellt werden');
+      toast({ title: 'Erinnerungen können maximal 24 Stunden im Voraus eingestellt werden', variant: 'destructive' });
     }
   };
 

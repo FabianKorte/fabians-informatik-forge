@@ -7,9 +7,10 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { errorTracker } from '@/lib/errorTracking';
 import { performanceMonitor } from '@/lib/performanceMonitoring';
 import { AlertCircle, Activity, Trash2, Download, RefreshCw } from 'lucide-react';
-import { toast } from 'sonner';
+import { useToast } from '@/hooks/use-toast';
 
 export default function ErrorConsole() {
+  const { toast } = useToast();
   const [errors, setErrors] = useState<any[]>([]);
   const [metrics, setMetrics] = useState<Record<string, number[]>>({});
   const [autoRefresh, setAutoRefresh] = useState(false);
@@ -36,13 +37,13 @@ export default function ErrorConsole() {
   const clearErrors = () => {
     errorTracker.clearErrors();
     loadData();
-    toast.success('Fehler-Log gelöscht');
+    toast({ title: 'Fehler-Log gelöscht' });
   };
 
   const clearMetrics = () => {
     performanceMonitor.clearMetrics();
     loadData();
-    toast.success('Performance-Metriken gelöscht');
+    toast({ title: 'Performance-Metriken gelöscht' });
   };
 
   const exportErrors = () => {
@@ -53,7 +54,7 @@ export default function ErrorConsole() {
     link.href = url;
     link.download = `error-log-${new Date().toISOString()}.json`;
     link.click();
-    toast.success('Fehler-Log exportiert');
+    toast({ title: 'Fehler-Log exportiert' });
   };
 
   const getErrorTypeColor = (message: string) => {

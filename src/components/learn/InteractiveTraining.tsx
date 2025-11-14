@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { AlertCircle, Lightbulb, Calculator, Clock, Trophy, Code, FileText, HelpCircle, Plus, Eye, CheckCircle2, RotateCcw, ChevronRight, Star, Brain } from "lucide-react";
 import type { InteractiveTask } from "@/types/learn";
-import { toast } from "sonner";
+import { useToast } from "@/hooks/use-toast";
 
 interface InteractiveTrainingProps {
   tasks: InteractiveTask[];
@@ -15,6 +15,7 @@ interface InteractiveTrainingProps {
 }
 
 export const InteractiveTraining = ({ tasks, categoryId }: InteractiveTrainingProps) => {
+  const { toast } = useToast();
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const [userAnswer, setUserAnswer] = useState<string>("");
   const [showHints, setShowHints] = useState<boolean[]>([]);
@@ -50,7 +51,7 @@ export const InteractiveTraining = ({ tasks, categoryId }: InteractiveTrainingPr
 
   const handleTimeUp = () => {
     setShowTimeUpHelp(true);
-    toast.info("⏰ Zeit abgelaufen! Möchtest du Hilfe oder weitermachen?");
+    toast({ title: "⏰ Zeit abgelaufen!", description: "Möchtest du Hilfe oder weitermachen?" });
   };
 
   const checkAnswer = () => {
@@ -78,7 +79,8 @@ export const InteractiveTraining = ({ tasks, categoryId }: InteractiveTrainingPr
       newCompleted[currentTaskIndex] = true;
       setCompleted(newCompleted);
       
-      toast.success(`🎉 Richtig! +${points} Punkte`, {
+      toast({ 
+        title: `🎉 Richtig! +${points} Punkte`,
         description: currentTask.gamification.badge ? `Badge erhalten: ${currentTask.gamification.badge}` : undefined
       });
     } else {
@@ -89,7 +91,7 @@ export const InteractiveTraining = ({ tasks, categoryId }: InteractiveTrainingPr
         setShowHints(newShowHints);
       }
       
-      toast.error("Nicht ganz richtig. Versuch es nochmal!");
+      toast({ title: "Nicht ganz richtig. Versuch es nochmal!", variant: "destructive" });
     }
   };
 
@@ -119,7 +121,7 @@ export const InteractiveTraining = ({ tasks, categoryId }: InteractiveTrainingPr
   };
 
   const addToFocusTraining = () => {
-    toast.success("🎯 Aufgabe zu Schwerpunkt-Training hinzugefügt!");
+    toast({ title: "🎯 Aufgabe zu Schwerpunkt-Training hinzugefügt!" });
   };
 
   const showHint = () => {

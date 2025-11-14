@@ -9,11 +9,12 @@ import { Search, Trash2, Shield } from "lucide-react";
 import { UserCard } from "./UserCard";
 import { useDebounce } from "@/hooks/useDebounce";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { useToast } from "@/hooks/use-toast";
 import { logAuditAction } from "@/lib/auditLog";
 import { Checkbox } from "@/components/ui/checkbox";
 
 export default function AdminUsers() {
+  const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const debouncedSearch = useDebounce(searchQuery, 300);
@@ -38,7 +39,7 @@ export default function AdminUsers() {
 
   const handleBulkDelete = async () => {
     if (selectedUsers.length === 0) {
-      toast.error('Keine Benutzer ausgewählt');
+      toast({ title: 'Keine Benutzer ausgewählt', variant: 'destructive' });
       return;
     }
 
@@ -60,17 +61,17 @@ export default function AdminUsers() {
         });
       }
 
-      toast.success(`${selectedUsers.length} Benutzer gelöscht`);
+      toast({ title: `${selectedUsers.length} Benutzer gelöscht` });
       setSelectedUsers([]);
       refetch();
     } catch (error: any) {
-      toast.error('Fehler beim Löschen: ' + error.message);
+      toast({ title: 'Fehler beim Löschen', description: error.message, variant: 'destructive' });
     }
   };
 
   const handleBulkRole = async (role: string) => {
     if (selectedUsers.length === 0) {
-      toast.error('Keine Benutzer ausgewählt');
+      toast({ title: 'Keine Benutzer ausgewählt', variant: 'destructive' });
       return;
     }
 
@@ -97,11 +98,11 @@ export default function AdminUsers() {
         });
       }
 
-      toast.success(`Rolle ${role} für ${selectedUsers.length} Benutzer gesetzt`);
+      toast({ title: `Rolle ${role} für ${selectedUsers.length} Benutzer gesetzt` });
       setSelectedUsers([]);
       refetch();
     } catch (error: any) {
-      toast.error('Fehler: ' + error.message);
+      toast({ title: 'Fehler', description: error.message, variant: 'destructive' });
     }
   };
 
