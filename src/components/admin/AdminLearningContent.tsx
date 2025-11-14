@@ -33,7 +33,7 @@ interface Category {
   title: string;
 }
 
-export const AdminLearningContent = () => {
+export default function AdminLearningContent() {
   const { modules, isLoading, createModule, updateModule, deleteModule, bulkDelete } = useLearningModules();
   const { categories } = useCategories();
   const [categoryId, setCategoryId] = useState("");

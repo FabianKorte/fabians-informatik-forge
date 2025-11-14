@@ -33,7 +33,7 @@ const ITEMS_PER_PAGE = 50;
  * AdminAuditLogs Component
  * Displays audit trail of admin actions with filtering and export
  */
-export const AdminAuditLogs = () => {
+export default function AdminAuditLogs() {
   const [profiles, setProfiles] = useState<Record<string, Profile>>({});
   const [filterAction, setFilterAction] = useState<string>("all");
   const [filterUser, setFilterUser] = useState("");

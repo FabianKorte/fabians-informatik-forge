@@ -34,7 +34,7 @@ const Chat = lazy(() => import("./pages/Chat"));
 const StudyGroups = lazy(() => import("./pages/StudyGroups"));
 const Install = lazy(() => import("./pages/Install"));
 const Lexikon = lazy(() => import("./pages/Lexikon"));
-const AIChatbot = lazy(() => import("@/components/AIChatbot").then(module => ({ default: module.AIChatbot })));
+const AIChatbot = lazy(() => import("@/components/AIChatbot"));
 
 const queryClient = new QueryClient();
 

@@ -5,7 +5,7 @@ import { Activity, Clock, Database, Zap } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
-export function PerformanceMonitor() {
+export default function PerformanceMonitor() {
   const { data: metrics, isLoading } = useQuery({
     queryKey: ['performance-metrics'],
     queryFn: async () => {

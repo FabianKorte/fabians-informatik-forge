@@ -13,7 +13,7 @@ import { toast } from "sonner";
 import { logAuditAction } from "@/lib/auditLog";
 import { Checkbox } from "@/components/ui/checkbox";
 
-export function AdminUsers() {
+export default function AdminUsers() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const debouncedSearch = useDebounce(searchQuery, 300);

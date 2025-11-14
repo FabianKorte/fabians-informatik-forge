@@ -9,7 +9,7 @@ import { performanceMonitor } from '@/lib/performanceMonitoring';
 import { AlertCircle, Activity, Trash2, Download, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 
-export const ErrorConsole = () => {
+export default function ErrorConsole() {
   const [errors, setErrors] = useState<any[]>([]);
   const [metrics, setMetrics] = useState<Record<string, number[]>>({});
   const [autoRefresh, setAutoRefresh] = useState(false);

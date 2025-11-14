@@ -20,7 +20,7 @@ interface Note {
   updated_at: string;
 }
 
-export const AdminNotes = () => {
+export default function AdminNotes() {
   const { user } = useAuth();
   const { toast } = useToast();
   const { data: notes, isLoading, refetch } = useAdminData<Note>({

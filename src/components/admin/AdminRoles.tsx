@@ -60,7 +60,7 @@ const ROLE_DESCRIPTIONS = {
   user: 'Standard-Benutzer',
 };
 
-export const AdminRoles = () => {
+export default function AdminRoles() {
   const { users, isLoading, assignRole, removeRole } = useRoles();
   const [selectedUser, setSelectedUser] = useState<string>('');
   const [selectedRole, setSelectedRole] = useState<AppRole>('user');

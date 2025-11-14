@@ -21,7 +21,7 @@ interface RoadmapItem {
   completion_date: string;
 }
 
-export const AdminRoadmap = () => {
+export default function AdminRoadmap() {
   const [isLoading, setIsLoading] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({

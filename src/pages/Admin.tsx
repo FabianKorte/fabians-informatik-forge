@@ -7,19 +7,19 @@ import { useAuth } from "@/hooks/useAuth";
 import { LogOut, BookOpen, MapPin, MessageSquare, Home, FileText, Users, Shield, TrendingUp, Activity } from "lucide-react";
 
 // Lazy load admin components
-const AdminLearningContent = lazy(() => import("@/components/admin/AdminLearningContent").then(m => ({ default: m.AdminLearningContent })));
-const AdminRoadmap = lazy(() => import("@/components/admin/AdminRoadmap").then(m => ({ default: m.AdminRoadmap })));
-const AdminFeedbacks = lazy(() => import("@/components/admin/AdminFeedbacks").then(m => ({ default: m.AdminFeedbacks })));
-const AdminUsers = lazy(() => import("@/components/admin/AdminUsers").then(m => ({ default: m.AdminUsers })));
-const AdminSuggestions = lazy(() => import("@/components/admin/AdminSuggestions").then(m => ({ default: m.AdminSuggestions })));
-const AdminNotes = lazy(() => import("@/components/admin/AdminNotes").then(m => ({ default: m.AdminNotes })));
-const AdminAuditLogs = lazy(() => import("@/components/admin/AdminAuditLogs").then(m => ({ default: m.AdminAuditLogs })));
-const AdminRoles = lazy(() => import("@/components/admin/AdminRoles").then(m => ({ default: m.AdminRoles })));
-const BulkEditModules = lazy(() => import("@/components/admin/BulkEditModules").then(m => ({ default: m.BulkEditModules })));
-const AnalyticsDashboard = lazy(() => import("@/components/admin/AnalyticsDashboard").then(m => ({ default: m.AnalyticsDashboard })));
-const CategoryManager = lazy(() => import("@/components/admin/CategoryManager").then(m => ({ default: m.CategoryManager })));
-const PerformanceMonitor = lazy(() => import("@/components/admin/PerformanceMonitor").then(m => ({ default: m.PerformanceMonitor })));
-const ErrorConsole = lazy(() => import("@/components/admin/ErrorConsole").then(m => ({ default: m.ErrorConsole })));
+const AdminLearningContent = lazy(() => import("@/components/admin/AdminLearningContent"));
+const AdminRoadmap = lazy(() => import("@/components/admin/AdminRoadmap"));
+const AdminFeedbacks = lazy(() => import("@/components/admin/AdminFeedbacks"));
+const AdminUsers = lazy(() => import("@/components/admin/AdminUsers"));
+const AdminSuggestions = lazy(() => import("@/components/admin/AdminSuggestions"));
+const AdminNotes = lazy(() => import("@/components/admin/AdminNotes"));
+const AdminAuditLogs = lazy(() => import("@/components/admin/AdminAuditLogs"));
+const AdminRoles = lazy(() => import("@/components/admin/AdminRoles"));
+const BulkEditModules = lazy(() => import("@/components/admin/BulkEditModules"));
+const AnalyticsDashboard = lazy(() => import("@/components/admin/AnalyticsDashboard"));
+const CategoryManager = lazy(() => import("@/components/admin/CategoryManager"));
+const PerformanceMonitor = lazy(() => import("@/components/admin/PerformanceMonitor"));
+const ErrorConsole = lazy(() => import("@/components/admin/ErrorConsole"));
 
 const TabSkeleton = () => (
   <div className="space-y-4">

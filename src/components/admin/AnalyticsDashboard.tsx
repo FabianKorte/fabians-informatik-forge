@@ -12,7 +12,7 @@ import {
   CartesianGrid,
 } from "recharts";
 
-export function AnalyticsDashboard() {
+export default function AnalyticsDashboard() {
   const { analytics, isLoading } = useAnalytics();
 
   if (isLoading) {

@@ -26,7 +26,7 @@ import { useLearningModules } from '@/hooks/useLearningModules';
 import { useTags } from '@/hooks/useTags';
 import { useToast } from '@/hooks/use-toast';
 
-export function BulkEditModules() {
+export default function BulkEditModules() {
   const { modules } = useLearningModules();
   const { tags, assignTagToModule } = useTags();
   const { bulkDelete } = useLearningModules();
