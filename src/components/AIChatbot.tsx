@@ -30,10 +30,20 @@ export default function AIChatbot() {
   const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const retryCountRef = useRef(0);
+  const retryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const MAX_RETRIES = 3;
 
   // Focus trap when chatbot is open
   useFocusTrap(isOpen, chatRef);
+
+  // Cleanup retry timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (retryTimeoutRef.current) {
+        clearTimeout(retryTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // Focus input when opened
   useEffect(() => {
@@ -136,7 +146,12 @@ export default function AIChatbot() {
           setMessages((prev) => prev.slice(0, -1));
         }
         
-        setTimeout(() => {
+        // Clear previous retry timeout if exists
+        if (retryTimeoutRef.current) {
+          clearTimeout(retryTimeoutRef.current);
+        }
+        
+        retryTimeoutRef.current = setTimeout(() => {
           streamChat(userMessage, retryCount + 1);
         }, delay);
       } else {

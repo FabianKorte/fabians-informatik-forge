@@ -65,7 +65,7 @@ export const MemoryGameComponent = ({ games }: MemoryGameProps) => {
       
       setMoves(m => m + 1);
       
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         if (firstCard && secondCard) {
           const firstPairId = firstCard.id.split('-')[0];
           const secondPairId = secondCard.id.split('-')[0];
@@ -88,6 +88,8 @@ export const MemoryGameComponent = ({ games }: MemoryGameProps) => {
         }
         setFlippedCards([]);
       }, 1000);
+
+      return () => clearTimeout(timeoutId);
     }
   }, [flippedCards, cards]);
 
