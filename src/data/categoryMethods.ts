@@ -1,37 +1,33 @@
 // Mapping of categories to their appropriate learning methods
 export const categoryLearningMethods: Record<string, string[]> = {
-  programmierung: ["flashcards", "quiz", "matching", "code", "dragdrop", "memory", "timeline", "scenario"],
-  datenbanken: ["flashcards", "quiz", "matching", "code", "dragdrop", "memory", "scenario"],
-  "it-sicherheit": ["flashcards", "quiz", "matching", "dragdrop", "memory", "timeline", "scenario"],
-  netzwerktechnik: ["flashcards", "quiz", "matching", "code", "dragdrop", "memory", "timeline", "scenario"],
-  netzwerke: ["flashcards", "quiz", "matching", "code", "dragdrop", "memory", "timeline", "scenario"], // Alias
-  systemadministration: ["flashcards", "quiz", "matching", "code", "dragdrop", "memory", "scenario"],
-  "mobile-entwicklung": ["flashcards", "quiz", "matching", "code", "dragdrop", "memory", "scenario"],
-  "web-technologien": ["flashcards", "quiz", "matching", "code", "dragdrop", "memory", "scenario"],
-  webentwicklung: ["flashcards", "quiz", "matching", "code", "dragdrop", "memory", "scenario"], // Alias
-  projektmanagement: ["flashcards", "quiz", "matching", "dragdrop", "memory", "timeline", "scenario"],
-  "grundlagen-it": ["flashcards", "quiz", "matching", "code", "dragdrop", "memory", "scenario"],
-  kommunikation: ["flashcards", "quiz", "matching", "dragdrop", "memory", "scenario"],
-  "rechtliche-grundlagen": ["flashcards", "quiz", "matching", "dragdrop", "memory", "scenario"],
-  rechtlichegrundlagen: ["flashcards", "quiz", "matching", "dragdrop", "memory", "scenario"], // Alias
-  pruefungsvorbereitung: ["flashcards", "quiz", "matching", "dragdrop", "memory", "timeline", "scenario"],
-  
-  // Business subjects - no code challenges for non-technical subjects
-  bwl: ["flashcards", "quiz", "matching", "dragdrop", "memory", "scenario"],
-  betriebswirtschaft: ["flashcards", "quiz", "matching", "dragdrop", "memory", "scenario"], 
-  wiso: ["flashcards", "quiz", "matching", "dragdrop", "scenario"],
-  datenschutz: ["flashcards", "quiz", "matching", "dragdrop", "memory", "scenario"],
-  "fachmodul-systemintegration": ["flashcards", "quiz", "matching", "code", "dragdrop", "memory", "scenario"],
-  "fachmodul-anwendungsentwicklung": ["flashcards", "quiz", "matching", "code", "dragdrop", "memory", "scenario"],
-  
-  // Add aliases for consistency
-  englischit: ["flashcards", "quiz", "matching", "dragdrop", "memory", "scenario"],
-  "englisch-it": ["flashcards", "quiz", "matching", "dragdrop", "memory", "scenario"],
-  mathematiklogik: ["flashcards", "quiz", "matching", "dragdrop", "memory", "scenario"],
-  "mathematik-logik": ["flashcards", "quiz", "matching", "dragdrop", "memory", "scenario"],
-  innovationtrends: ["flashcards", "quiz", "matching", "dragdrop", "memory", "scenario"],
-  "innovation-trends": ["flashcards", "quiz", "matching", "dragdrop", "memory", "scenario"],
-  qualitaetsmanagement: ["flashcards", "quiz", "matching", "dragdrop", "memory", "scenario"]
+  programmierung: ["flashcards", "quiz"],
+  datenbanken: ["flashcards", "quiz"],
+  "it-sicherheit": ["flashcards", "quiz"],
+  netzwerktechnik: ["flashcards", "quiz"],
+  netzwerke: ["flashcards", "quiz"],
+  systemadministration: ["flashcards", "quiz"],
+  "mobile-entwicklung": ["flashcards", "quiz"],
+  "web-technologien": ["flashcards", "quiz"],
+  webentwicklung: ["flashcards", "quiz"],
+  projektmanagement: ["flashcards", "quiz"],
+  "grundlagen-it": ["flashcards", "quiz"],
+  kommunikation: ["flashcards", "quiz"],
+  "rechtliche-grundlagen": ["flashcards", "quiz"],
+  rechtlichegrundlagen: ["flashcards", "quiz"],
+  pruefungsvorbereitung: ["flashcards", "quiz"],
+  bwl: ["flashcards", "quiz"],
+  betriebswirtschaft: ["flashcards", "quiz"], 
+  wiso: ["flashcards", "quiz"],
+  datenschutz: ["flashcards", "quiz"],
+  "fachmodul-systemintegration": ["flashcards", "quiz"],
+  "fachmodul-anwendungsentwicklung": ["flashcards", "quiz"],
+  englischit: ["flashcards", "quiz"],
+  "englisch-it": ["flashcards", "quiz"],
+  mathematiklogik: ["flashcards", "quiz"],
+  "mathematik-logik": ["flashcards", "quiz"],
+  innovationtrends: ["flashcards", "quiz"],
+  "innovation-trends": ["flashcards", "quiz"],
+  qualitaetsmanagement: ["flashcards", "quiz"]
 };
 
 export const getAvailableMethodsForCategory = (categoryId: string): string[] => {
