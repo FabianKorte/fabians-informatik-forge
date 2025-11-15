@@ -15,9 +15,11 @@ import { systemadministrationModules } from "./learn/systemadministration";
 import { mobileEntwicklungContent } from "./learn/mobile-entwicklung";
 import { grundlagenItContent } from "./learn/grundlagen-it";
 import { itSicherheitAdvancedContent } from "./learn/it-sicherheit-advanced";
+import { filterLearnContent } from "@/lib/moduleFilter";
 
 // Main learning content mapped to category IDs from the database
-export const learnContent: Record<string, LearnModule[]> = {
+// Filtered to only include supported module types (flashcards, quiz, interactive)
+const rawLearnContent: Record<string, LearnModule[]> = {
   "web-technologien": webentwicklungContent,
   projektmanagement: projektmanagementContent,
   pruefungsvorbereitung: pruefungsvorbereitungContent,
@@ -88,5 +90,12 @@ export const learnContent: Record<string, LearnModule[]> = {
     }
   ],
   programmierung: [],
-  zufallstraining: []
+  zufallstraining: [],
+  "englisch-it": englischItContent,
+  "mathematik-logik": mathematikLogikContent,
+  "innovation-trends": innovationTrendsContent,
 };
+
+// Filter out deprecated/unsupported module types (memory, matching, code, dragdrop, scenario, timeline)
+// and export the clean content
+export const learnContent = filterLearnContent(rawLearnContent);

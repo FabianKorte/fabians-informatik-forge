@@ -10,11 +10,16 @@ export interface QuizQuestion {
   explanation?: string;
 }
 
+// ===== DEPRECATED TYPES - Components removed but data still exists =====
+// These are filtered out at runtime by moduleFilter.ts
+
+/** @deprecated Component removed - will be filtered at runtime */
 export interface MatchingPair {
   left: string;
   right: string;
 }
 
+/** @deprecated Component removed - will be filtered at runtime */
 export interface CodeChallenge {
   title: string;
   description: string;
@@ -23,12 +28,14 @@ export interface CodeChallenge {
   tests: { input: string; expected: string }[];
 }
 
+/** @deprecated Component removed - will be filtered at runtime */
 export interface DragDropItem {
   id: string;
   content: string;
   category: string;
 }
 
+/** @deprecated Component removed - will be filtered at runtime */
 export interface DragDropGame {
   title: string;
   description: string;
@@ -36,18 +43,21 @@ export interface DragDropGame {
   categories: string[];
 }
 
+/** @deprecated Component removed - will be filtered at runtime */
 export interface MemoryGame {
   title: string;
   description: string;
   pairs: { id: string; content: string; match: string }[];
 }
 
+/** @deprecated Component removed - will be filtered at runtime */
 export interface Timeline {
   title: string;
   description: string;
   events: { year: string; event: string; description: string }[];
 }
 
+/** @deprecated Component removed - will be filtered at runtime */
 export interface InteractiveScenario {
   title: string;
   description: string;
@@ -109,10 +119,11 @@ export interface InteractiveTrainingModule {
 export type LearnModule = 
   | { type: "flashcards"; title: string; cards: Flashcard[] }
   | { type: "quiz"; title: string; questions: QuizQuestion[] }
+  | InteractiveTrainingModule
+  // Deprecated types - filtered at runtime
   | { type: "matching"; title: string; pairs: MatchingPair[] }
   | { type: "code"; title: string; challenges: CodeChallenge[] }
   | { type: "dragdrop"; title: string; games: DragDropGame[] }
   | { type: "memory"; title: string; games: MemoryGame[] }
   | { type: "timeline"; title: string; timelines: Timeline[] }
-  | { type: "scenario"; title: string; scenarios: InteractiveScenario[] }
-  | InteractiveTrainingModule;
+  | { type: "scenario"; title: string; scenarios: InteractiveScenario[] };
