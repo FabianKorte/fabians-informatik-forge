@@ -100,11 +100,8 @@ export const englischItContent: LearnModule[] = [
         explanation: "A stakeholder is anyone who has an interest in or is affected by a project, including users, customers, sponsors, and team members."
       }
     ]
-  },
-  {
-    type: "matching",
-    title: "IT Terms and Definitions",
-    pairs: [
+  }
+];
       { left: "SDLC", right: "Software Development Lifecycle" },
       { left: "VPN", right: "Virtual Private Network" },
       { left: "KPI", right: "Key Performance Indicator" },

@@ -286,69 +286,8 @@ export const betriebswirtschaftContent: LearnModule[] = [
         explanation: "ABC-Analyse kategorisiert Artikel nach ihrer Wertigkeit: A-Artikel (hoher Wert), B-Artikel (mittlerer Wert), C-Artikel (geringer Wert)."
       }
     ]
-  },
-  {
-    type: "memory",
-    title: "BWL Memory-Spiel",
-    games: [
-      {
-        title: "Betriebswirtschaftliche Begriffe",
-        description: "Finde die zusammengehörigen BWL-Begriffe",
-        pairs: [
-          { id: "roi1", content: "ROI", match: "Return on Investment" },
-          { id: "ebit1", content: "EBIT", match: "Earnings Before Interest and Taxes" },
-          { id: "npv1", content: "NPV", match: "Net Present Value" },
-          { id: "kpi1", content: "KPI", match: "Key Performance Indicator" },
-          { id: "erp1", content: "ERP", match: "Enterprise Resource Planning" },
-          { id: "crm1", content: "CRM", match: "Customer Relationship Management" },
-          { id: "scm1", content: "SCM", match: "Supply Chain Management" },
-          { id: "b2b1", content: "B2B", match: "Business to Business" }
-        ]
-      }
-    ]
-  },
-  {
-    type: "dragdrop",
-    title: "BWL Begriffe zuordnen",
-    games: [
-      {
-        title: "Kennzahlen den Bereichen zuordnen",
-        description: "Ordnen Sie die Kennzahlen den richtigen Unternehmensbereichen zu.",
-        items: [
-          { id: "1", content: "ROI (Return on Investment)", category: "Controlling" },
-          { id: "2", content: "Eigenkapitalquote", category: "Finanzierung" },
-          { id: "3", content: "Lagerumschlag", category: "Logistik" },
-          { id: "4", content: "Deckungsbeitrag", category: "Controlling" },
-          { id: "5", content: "Current Ratio", category: "Finanzierung" },
-          { id: "6", content: "Durchlaufzeit", category: "Logistik" },
-          { id: "7", content: "Marktanteil", category: "Marketing" },
-          { id: "8", content: "Customer Lifetime Value", category: "Marketing" }
-        ],
-        categories: ["Controlling", "Finanzierung", "Logistik", "Marketing"]
-      }
-    ]
-  },
-  {
-    type: "timeline",
-    title: "Unternehmensplanung Timeline",
-    timelines: [
-      {
-        title: "Jahresplanung eines Unternehmens",
-        description: "Typischer Ablauf der jährlichen Unternehmensplanung",
-        events: [
-          { year: "Q4 Vorjahr", event: "Strategische Planung", description: "Langfristige Ziele und Strategien festlegen" },
-          { year: "Januar", event: "Budgetplanung", description: "Detaillierte Finanz- und Ressourcenplanung" },
-          { year: "Februar", event: "Operationsplanung", description: "Umsetzungsplanung für alle Bereiche" },
-          { year: "Quartalsweise", event: "Controlling & Review", description: "Soll-Ist-Vergleich und Anpassungen" },
-          { year: "Dezember", event: "Jahresabschluss", description: "Bilanzierung und Erfolgsmessung" }
-        ]
-      }
-    ]
-  },
-  {
-    type: "scenario",
-    title: "BWL Praxisszenarien",
-    scenarios: [
+  }
+];
       {
         title: "Investitionsentscheidung",
         description: "Sie sind Controller und müssen eine Empfehlung für eine Investition abgeben.",

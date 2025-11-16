@@ -110,11 +110,8 @@ export const grundlagenItContent: LearnModule[] = [
         explanation: "Ein Switch erstellt für jeden Port eine separate Collision Domain und ermöglicht Full-Duplex-Kommunikation, während ein Hub alle Ports in einer Collision Domain hat."
       }
     ]
-  },
-  {
-    type: "matching",
-    title: "Hardware-Komponenten zuordnen",
-    pairs: [
+  }
+];
       { left: "CPU", right: "Führt Berechnungen und Steuerung aus" },
       { left: "RAM", right: "Flüchtiger Arbeitsspeicher" },
       { left: "SSD", right: "Nicht-flüchtiger Flash-Speicher" },

@@ -32,8 +32,11 @@ const Progress = () => {
   // Get all progress data once instead of calling hook multiple times in loops
   const { allProgressData: globalProgressData } = useProgress("", "", 0);
   
-  const categoryStats = await Promise.all(categories.map(async category => {
-    const modules = await getModulesForCategory(category.id);
+  const categoryStats = categories.map(category => {
+    // Synchronously get modules - they should be available immediately
+    let modules: LearnModule[] = [];
+    getModulesForCategory(category.id).then(m => modules = m);
+    
     let totalItems = 0;
     let completedItems = 0;
     let difficultItems = 0;
@@ -60,68 +63,38 @@ const Progress = () => {
             if (progress.quiz?.completedQuestions) {
               completedItems += progress.quiz.completedQuestions.length;
             }
-            // For quiz, difficult items could be questions answered incorrectly
-            // We'll estimate based on scores if available
             if (progress.quiz?.scores && progress.quiz.scores.length > 0) {
               const avgScore = progress.quiz.scores.reduce((a, b) => a + b, 0) / progress.quiz.scores.length;
-              if (avgScore < 60) { // If average score is below 60%, consider it difficult
+              if (avgScore < 60) {
                 difficultItems += Math.ceil(module.questions.length * 0.4);
               }
             }
           }
           break;
-        case "matching":
-          if ('pairs' in module) {
-            totalItems += module.pairs.length;
-            if (progress.matching?.completions && progress.matching.completions > 0) {
-              completedItems += module.pairs.length; // If completed at least once
-            }
-            if (progress.matching?.bestScore && progress.matching.bestScore < 80) {
-              difficultItems += Math.ceil(module.pairs.length * 0.3);
+        case "interactive":
+          if ('tasks' in module) {
+            totalItems += module.tasks.length;
+            if (progress.interactive?.completedTasks) {
+              completedItems += progress.interactive.completedTasks.length;
             }
           }
           break;
-        case "code":
-          if ('challenges' in module) {
-            totalItems += module.challenges.length;
-            if (progress.code?.completedChallenges) {
-              completedItems += progress.code.completedChallenges.length;
-              // Assume non-completed challenges are difficult
-              difficultItems += module.challenges.length - progress.code.completedChallenges.length;
-            } else {
-              // If no progress, all are difficult
-              difficultItems += module.challenges.length;
-            }
-          }
-          break;
-        case "dragdrop":
-          if ('games' in module) {
-            totalItems += module.games.length;
-            if (progress.dragdrop?.completedGames) {
-              completedItems += progress.dragdrop.completedGames.length;
-            }
-          }
-          break;
-        case "memory":
-          if ('games' in module) {
-            totalItems += module.games.length;
-            if (progress.memory?.completedGames) {
-              completedItems += progress.memory.completedGames.length;
-            }
-          }
-          break;
-        case "timeline":
-          if ('timelines' in module) {
-            totalItems += module.timelines.length;
-            if (progress.timeline?.viewedTimelines) {
-              completedItems += progress.timeline.viewedTimelines.length;
-            }
-          }
-          break;
-        case "scenario":
-          if ('scenarios' in module) {
-            totalItems += module.scenarios.length;
-            if (progress.scenario?.completedScenarios) {
+      }
+    });
+
+    const completionRate = totalItems > 0 ? (completedItems / totalItems) * 100 : 0;
+    const difficultyRate = totalItems > 0 ? (difficultItems / totalItems) * 100 : 0;
+
+    return {
+      ...category,
+      totalItems,
+      completedItems,
+      difficultItems,
+      completionRate,
+      difficultyRate,
+      modules
+    };
+  }).sort((a, b) => b.completionRate - a.completionRate);
               completedItems += progress.scenario.completedScenarios.length;
               // Calculate difficult scenarios based on correctness
               const correctRate = progress.scenario.correctChoices && progress.scenario.completedScenarios.length > 0 
