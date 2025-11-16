@@ -95,33 +95,6 @@ const Progress = () => {
       modules
     };
   }).sort((a, b) => b.completionRate - a.completionRate);
-              completedItems += progress.scenario.completedScenarios.length;
-              // Calculate difficult scenarios based on correctness
-              const correctRate = progress.scenario.correctChoices && progress.scenario.completedScenarios.length > 0 
-                ? progress.scenario.correctChoices / progress.scenario.completedScenarios.length 
-                : 0;
-              if (correctRate < 0.7) {
-                difficultItems += Math.ceil(progress.scenario.completedScenarios.length * 0.3);
-              }
-            }
-          }
-          break;
-      }
-    });
-
-    const completionRate = totalItems > 0 ? (completedItems / totalItems) * 100 : 0;
-    const difficultyRate = totalItems > 0 ? (difficultItems / totalItems) * 100 : 0;
-
-    return {
-      ...category,
-      totalItems,
-      completedItems,
-      difficultItems,
-      completionRate,
-      difficultyRate,
-      modules
-    };
-  }).sort((a, b) => b.completionRate - a.completionRate);
 
   const handleFocusLearning = (categoryId: string) => {
     navigate(`/learn/${categoryId}?focus=difficult`);

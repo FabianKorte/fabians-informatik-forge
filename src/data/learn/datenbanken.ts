@@ -153,8 +153,6 @@ export const datenbankenModules: LearnModule[] = [
     ]
   }
 ];
-      {
-        title: "Kundenbestellungen abfragen",
         description: "Erstellen Sie eine SQL-Abfrage, die alle Bestellungen mit Kundennamen anzeigt.",
         initialCode: "-- Tabellen: Kunden (KundenID, Name, Stadt)\n-- Bestellungen (BestellID, KundenID, Datum, Betrag)\n\nSELECT ",
         solution: "SELECT k.Name, b.BestellID, b.Datum, b.Betrag\nFROM Kunden k\nINNER JOIN Bestellungen b ON k.KundenID = b.KundenID\nORDER BY b.Datum DESC;",
