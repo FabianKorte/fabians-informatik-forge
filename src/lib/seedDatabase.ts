@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import { categories } from "@/data/categories";
-import { learnContent } from "@/data/learn/index";
+import { learnContent } from "@/data/learnContent";
 import { logger } from "@/lib/logger";
 
 const SEED_CACHE_KEY = 'db_seed_timestamp';
