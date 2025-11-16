@@ -151,11 +151,8 @@ export const datenbankenModules: LearnModule[] = [
         explanation: "B-Tree-Indizes sind optimal für Bereichsabfragen (BETWEEN, >, <)"
       }
     ]
-  },
-  {
-    type: "code",
-    title: "SQL Programmierung",
-    challenges: [
+  }
+];
       {
         title: "Kundenbestellungen abfragen",
         description: "Erstellen Sie eine SQL-Abfrage, die alle Bestellungen mit Kundennamen anzeigt.",
