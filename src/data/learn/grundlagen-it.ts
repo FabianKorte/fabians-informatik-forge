@@ -112,31 +112,3 @@ export const grundlagenItContent: LearnModule[] = [
     ]
   }
 ];
-      { left: "CPU", right: "Führt Berechnungen und Steuerung aus" },
-      { left: "RAM", right: "Flüchtiger Arbeitsspeicher" },
-      { left: "SSD", right: "Nicht-flüchtiger Flash-Speicher" },
-      { left: "GPU", right: "Grafikverarbeitung und Parallelcomputing" },
-      { left: "Mainboard", right: "Verbindet alle Komponenten" },
-      { left: "PSU", right: "Stromversorgung des Systems" }
-    ]
-  },
-  {
-    type: "dragdrop",
-    title: "Speicher-Hierarchie ordnen",
-    games: [
-      {
-        title: "Von schnell zu langsam sortieren",
-        description: "Ordne die Speichertypen nach Geschwindigkeit (schnellste zuerst)",
-        categories: ["Sehr schnell", "Schnell", "Mittel", "Langsam"],
-        items: [
-          { id: "reg", content: "CPU-Register", category: "Sehr schnell" },
-          { id: "l1", content: "L1-Cache", category: "Sehr schnell" },
-          { id: "l2", content: "L2-Cache", category: "Schnell" },
-          { id: "ram", content: "RAM", category: "Mittel" },
-          { id: "ssd", content: "SSD", category: "Langsam" },
-          { id: "hdd", content: "HDD", category: "Langsam" }
-        ]
-      }
-    ]
-  }
-];

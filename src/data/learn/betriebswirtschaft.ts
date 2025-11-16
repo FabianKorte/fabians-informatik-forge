@@ -288,28 +288,3 @@ export const betriebswirtschaftContent: LearnModule[] = [
     ]
   }
 ];
-      {
-        title: "Investitionsentscheidung",
-        description: "Sie sind Controller und müssen eine Empfehlung für eine Investition abgeben.",
-        scenario: "Ihr Unternehmen kann zwischen zwei Maschinen wählen: Maschine A kostet 100.000€ mit jährlichem Gewinn von 25.000€. Maschine B kostet 150.000€ mit jährlichem Gewinn von 35.000€. Beide haben 5 Jahre Nutzungsdauer.",
-        choices: [
-          { text: "Maschine A wählen (niedrigere Anfangsinvestition)", consequence: "ROI: 25%. Gute Wahl bei knapper Liquidität.", isCorrect: false },
-          { text: "Maschine B wählen (höhere Rendite)", consequence: "ROI: 23,3%. Trotz höherer Investition weniger rentabel.", isCorrect: false },
-          { text: "Detaillierte Kapitalwertrechnung durchführen", consequence: "Richtig! NPV-Analyse berücksichtigt Zinssatz und Zeitwert des Geldes.", isCorrect: true },
-          { text: "Keine Investition tätigen", consequence: "Verpasste Chance auf Wachstum und Modernisierung.", isCorrect: false }
-        ]
-      },
-      {
-        title: "Liquiditätskrise bewältigen",
-        description: "Als Geschäftsführer müssen Sie eine akute Liquiditätskrise lösen.",
-        scenario: "Ihr Unternehmen hat kurzfristige Verbindlichkeiten von 500.000€, aber nur 200.000€ liquide Mittel. Ein Großkunde zahlt erst in 3 Monaten.",
-        choices: [
-          { text: "Bankkredit aufnehmen", consequence: "Schnelle Lösung, aber Zinskosten und Kreditprüfung nötig.", isCorrect: true },
-          { text: "Factoring der Forderungen", consequence: "Gut! Sofortige Liquidität gegen Gebühr.", isCorrect: true },
-          { text: "Lieferanten um Zahlungsaufschub bitten", consequence: "Kann helfen, aber schadet der Reputation.", isCorrect: false },
-          { text: "Mitarbeiter entlassen", consequence: "Drastisch und schadet langfristig dem Unternehmen.", isCorrect: false }
-        ]
-      }
-    ]
-  }
-];
