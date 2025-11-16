@@ -53,12 +53,6 @@ const Index = () => {
       switch (m.type) {
         case "flashcards": return sum + (m.cards?.length || 0);
         case "quiz": return sum + (m.questions?.length || 0);
-        case "matching": return sum + (m.pairs?.length || 0);
-        case "code": return sum + (m.challenges?.length || 0);
-        case "dragdrop": return sum + (m.games?.reduce((a, g) => a + (g.items?.length || 0), 0) || 0);
-        case "memory": return sum + (m.games?.reduce((a, g) => a + (g.pairs?.length || 0), 0) || 0);
-        case "timeline": return sum + (m.timelines?.reduce((a, t) => a + (t.events?.length || 0), 0) || 0);
-        case "scenario": return sum + (m.scenarios?.length || 0);
         case "interactive": return sum + (m.tasks?.length || 0);
         default: return sum;
       }

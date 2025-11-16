@@ -42,30 +42,21 @@ export async function exportModuleToPDF(module: LearnModule, categoryTitle: stri
         </div>
       `).join('')}
     `;
-  } else if (module.type === 'matching') {
+  } else if (module.type === 'interactive') {
     content = `
       <h2>${module.title}</h2>
-      <table style="width: 100%; border-collapse: collapse;">
-        <thead>
-          <tr>
-            <th style="border: 1px solid #ddd; padding: 8px;">Begriff</th>
-            <th style="border: 1px solid #ddd; padding: 8px;">Zuordnung</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${module.pairs.map(pair => `
-            <tr>
-              <td style="border: 1px solid #ddd; padding: 8px;">${pair.left}</td>
-              <td style="border: 1px solid #ddd; padding: 8px;">${pair.right}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
+      ${module.tasks.map((task: any) => `
+        <div style="margin-bottom: 20px;">
+          <h3>${task.taskText}</h3>
+          <p><strong>Schwierigkeit:</strong> ${task.difficulty}</p>
+          <p><strong>Typ:</strong> ${task.taskType}</p>
+        </div>
+      `).join('')}
     `;
   } else {
     content = `
       <h2>${module.title}</h2>
-      <p>Dieser Modultyp unterstützt aktuell keinen PDF-Export.</p>
+      <p>Modultyp wird in PDF nicht unterstützt.</p>
     `;
   }
 

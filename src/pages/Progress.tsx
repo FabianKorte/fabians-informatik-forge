@@ -17,7 +17,7 @@ import {
   Clock
 } from "lucide-react";
 import { categories } from "@/data/categories";
-import { getModulesForCategory } from "@/data/learn";
+import { getModulesForCategory } from "@/lib/learnContentUtils";
 import { useProgress } from "@/hooks/useProgress";
 
 const Progress = () => {
@@ -32,8 +32,8 @@ const Progress = () => {
   // Get all progress data once instead of calling hook multiple times in loops
   const { allProgressData: globalProgressData } = useProgress("", "", 0);
   
-  const categoryStats = categories.map(category => {
-    const modules = getModulesForCategory(category.id);
+  const categoryStats = await Promise.all(categories.map(async category => {
+    const modules = await getModulesForCategory(category.id);
     let totalItems = 0;
     let completedItems = 0;
     let difficultItems = 0;
