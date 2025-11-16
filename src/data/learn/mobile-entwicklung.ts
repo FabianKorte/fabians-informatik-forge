@@ -42,45 +42,5 @@ export const mobileEntwicklungContent: LearnModule[] = [
         explanation: "HTTPS ist eine Sicherheitsvoraussetzung für PWA-Features wie Service Workers und App-Installation."
       }
     ]
-  },
-  {
-    type: "matching",
-    title: "Mobile Frameworks zuordnen",
-    pairs: [
-      { left: "React Native", right: "JavaScript Bridge zu nativen Komponenten" },
-      { left: "Flutter", right: "Dart-Sprache mit eigener Rendering-Engine" },
-      { left: "PWA", right: "Service Workers für Offline-Funktionalität" },
-      { left: "Xamarin", right: "C# Cross-Platform Framework" },
-      { left: "Cordova/PhoneGap", right: "WebView-basierte Hybrid-Apps" },
-      { left: "Ionic", right: "Web-Technologien mit nativen UI-Komponenten" }
-    ]
-  },
-  {
-    type: "scenario",
-    title: "Mobile Development Entscheidungen",
-    scenarios: [
-      {
-        title: "Startup-App Entwicklung",
-        description: "Ein Startup benötigt schnell eine App für iOS und Android mit begrenztem Budget.",
-        scenario: "Welche Technologie wählst du?",
-        choices: [
-          { text: "Separate native Apps entwickeln", consequence: "Hohe Kosten, längere Entwicklungszeit, aber beste Performance.", isCorrect: false },
-          { text: "React Native für Code-Sharing", consequence: "Richtig: Kosteneffizient, schnellere Markteinführung, gut für MVP.", isCorrect: true },
-          { text: "PWA statt native App", consequence: "Kann funktionieren, aber eingeschränkte native Features und App Store Präsenz.", isCorrect: false },
-          { text: "Nur für eine Plattform entwickeln", consequence: "Schränkt Zielgruppe ein, verpasst potentielle Nutzer.", isCorrect: false }
-        ]
-      },
-      {
-        title: "Performance-kritische Gaming-App",
-        description: "Entwicklung eines grafikintensiven Mobile-Spiels mit 60fps Anforderung.",
-        scenario: "Welcher Ansatz ist optimal?",
-        choices: [
-          { text: "Native Entwicklung mit Swift/Kotlin", consequence: "Richtig: Beste Performance, direkter Zugriff auf Gaming-APIs und GPU.", isCorrect: true },
-          { text: "Flutter mit Skia Rendering", consequence: "Gut möglich, aber für High-Performance Gaming nicht optimal.", isCorrect: false },
-          { text: "React Native mit nativen Gaming-Modulen", consequence: "JavaScript Bridge könnte Performance-Bottleneck sein.", isCorrect: false },
-          { text: "PWA mit WebGL", consequence: "Ungeeignet für grafikintensive Games mit hohen Performance-Anforderungen.", isCorrect: false }
-        ]
-      }
-    ]
   }
 ];
