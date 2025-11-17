@@ -19,6 +19,7 @@ import {
 import { categories } from "@/data/categories";
 import { getModulesForCategory } from "@/lib/learnContentUtils";
 import { useProgress } from "@/hooks/useProgress";
+import type { LearnModule } from "@/types/learn";
 
 const Progress = () => {
   const navigate = useNavigate();

@@ -100,40 +100,5 @@ export const kommunikationContent: LearnModule[] = [
         explanation: "Ein Moderator leitet den Prozess neutral, ohne inhaltlich zu entscheiden oder die eigene Meinung einzubringen."
       }
     ]
-  },
-  {
-    type: "scenario",
-    title: "Kommunikations-Szenarien",
-    scenarios: [
-      {
-        title: "Schwieriges Kundengespräch",
-        description: "Unzufriedener Kunde beschwert sich lautstark",
-        scenario: "Ein Kunde ruft wütend an, weil die Software seit drei Tagen nicht funktioniert und wichtige Geschäftsprozesse stillstehen. Er beschuldigt Ihr Unternehmen, inkompetent zu sein und droht mit Vertragsauflösung. Wie reagieren Sie professionell?",
-        choices: [
-          { text: "Sofort technische Details erklären", consequence: "**Verfehlt das Ziel:** Kunde ist emotional, will erst verstanden werden, bevor er Lösungen hören kann.", isCorrect: false },
-          { text: "Verständnis zeigen, aktiv zuhören, dann Lösungsweg", consequence: "**Professioneller Ansatz:** Emotion akzeptieren, Problem verstehen, strukturiert zur Lösung führen.", isCorrect: true },
-          { text: "Kunde an Kollegen weiterleiten", consequence: "**Flucht:** Zeigt keine Verantwortung und frustriert den Kunden zusätzlich.", isCorrect: false },
-          { text: "Gegenaggression oder Rechtfertigung", consequence: "**Eskalation:** Verschlechtert die Situation und gefährdet die Kundenbeziehung.", isCorrect: false }
-        ]
-      }
-    ]
-  },
-  {
-    type: "timeline",
-    title: "Geschichte der Kommunikationstheorie",
-    timelines: [
-      {
-        title: "Entwicklung der Kommunikationsmodelle",
-        description: "Von Shannon-Weaver bis zur digitalen Kommunikation",
-        events: [
-          { year: "1948", event: "Shannon-Weaver Modell", description: "Erstes mathematisches Kommunikationsmodell mit Sender, Kanal, Empfänger" },
-          { year: "1981", event: "Schulz von Thun 4-Ohren-Modell", description: "Jede Nachricht hat vier Seiten: Sach-, Selbstkundgabe-, Beziehungs- und Appellebene" },
-          { year: "1967", event: "Mehrabian-Regel", description: "55% Körpersprache, 38% Stimme, 7% Inhalt bei emotionalen Botschaften" },
-          { year: "1981", event: "Harvard-Verhandlungskonzept", description: "Sachbezogenes Verhandeln nach Fisher und Ury" },
-          { year: "1990er", event: "Interkulturelle Kommunikation", description: "Hofstedes Kulturdimensionen und globale Geschäftskommunikation" },
-          { year: "2000er", event: "Digitale Kommunikation", description: "E-Mail, Video-Calls und Social Media verändern Businesskommunikation" }
-        ]
-      }
-    ]
   }
 ];

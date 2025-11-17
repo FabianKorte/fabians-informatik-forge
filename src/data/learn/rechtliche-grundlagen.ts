@@ -100,40 +100,5 @@ export const rechtlicheGrundlagenContent: LearnModule[] = [
         explanation: "Bei Lizenzverträgen werden nur Nutzungsrechte eingeräumt, nicht das Eigentum an der Software übertragen."
       }
     ]
-  },
-  {
-    type: "matching",
-    title: "Rechtsbegriffe zuordnen",
-    pairs: [
-      { left: "§ 433 BGB", right: "Kaufvertrag" },
-      { left: "§ 611a BGB", right: "Arbeitsvertrag" },
-      { left: "Art. 6 DSGVO", right: "Rechtsgrundlagen Datenverarbeitung" },
-      { left: "§ 69a UrhG", right: "Computerprogramme" },
-      { left: "§ 48 HGB", right: "Prokura" },
-      { left: "§ 5 TMG", right: "Impressumspflicht" },
-      { left: "§ 305 BGB", right: "AGB-Kontrolle" },
-      { left: "§ 1 KSchG", right: "Kündigungsschutz" }
-    ]
-  },
-  {
-    type: "dragdrop",
-    title: "Rechtsgebiete und Beispiele",
-    games: [
-      {
-        title: "Rechtsbereiche zuordnen",
-        description: "Ordne die Rechtsbeispiele den entsprechenden Rechtsgebieten zu",
-        items: [
-          { id: "kauf1", content: "Laptop-Kauf online", category: "Kaufrecht" },
-          { id: "kauf2", content: "Gewährleistung defekte Software", category: "Kaufrecht" },
-          { id: "arbeit1", content: "Kündigung Arbeitnehmer", category: "Arbeitsrecht" },
-          { id: "arbeit2", content: "Betriebsrat Mitbestimmung", category: "Arbeitsrecht" },
-          { id: "daten1", content: "Cookie-Einwilligung", category: "Datenschutzrecht" },
-          { id: "daten2", content: "Auskunftsrecht Verbraucher", category: "Datenschutzrecht" },
-          { id: "urheber1", content: "Foto ohne Erlaubnis verwendet", category: "Urheberrecht" },
-          { id: "urheber2", content: "Software-Code kopiert", category: "Urheberrecht" }
-        ],
-        categories: ["Kaufrecht", "Arbeitsrecht", "Datenschutzrecht", "Urheberrecht"]
-      }
-    ]
   }
 ];
