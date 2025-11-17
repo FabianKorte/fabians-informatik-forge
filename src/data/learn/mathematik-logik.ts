@@ -168,33 +168,5 @@ export const mathematikLogikContent: LearnModule[] = [
         explanation: "Modus Ponens: Aus P→Q (Wenn P, dann Q) und P folgt Q."
       }
     ]
-  },
-  {
-    type: "code",
-    title: "Mathematische Algorithmen implementieren",
-    challenges: [
-      {
-        title: "Binär zu Dezimal Konverter",
-        description: "Implementiere eine Funktion, die eine Binärzahl (als String) in eine Dezimalzahl umwandelt",
-        initialCode: `function binaryToDecimal(binary) {
-  // Dein Code hier
-  return 0;
-}`,
-        solution: `function binaryToDecimal(binary) {
-  let result = 0;
-  for (let i = 0; i < binary.length; i++) {
-    if (binary[i] === '1') {
-      result += Math.pow(2, binary.length - 1 - i);
-    }
-  }
-  return result;
-}`,
-        tests: [
-          { input: "'1011'", expected: "11" },
-          { input: "'1111'", expected: "15" },
-          { input: "'1000'", expected: "8" }
-        ]
-      }
-    ]
   }
 ];

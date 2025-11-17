@@ -100,36 +100,5 @@ export const qualitaetsmanagementContent: LearnModule[] = [
         explanation: "System-Audits bewerten die Wirksamkeit des gesamten Qualitätsmanagementsystems gegen Standards wie ISO 9001."
       }
     ]
-  },
-  {
-    type: "matching",
-    title: "QM-Begriffe und Tools",
-    pairs: [
-      { left: "Ishikawa-Diagramm", right: "Ursache-Wirkungs-Analyse (Fischgräten-Diagramm)" },
-      { left: "Pareto-Prinzip", right: "80/20-Regel für Problempriorisierung" },
-      { left: "Poka Yoke", right: "Fehlervermeidung durch technische Lösungen" },
-      { left: "Gemba", right: "Ort der Wertschöpfung" },
-      { left: "Kanban", right: "Pull-System zur Bestandsreduzierung" },
-      { left: "FMEA", right: "Fehlermöglichkeits- und Einflussanalyse" },
-      { left: "SPC", right: "Statistische Prozesslenkung" },
-      { left: "MSA", right: "Messsystem-Analyse" }
-    ]
-  },
-  {
-    type: "scenario",
-    title: "Qualitätsmanagement Szenarien",
-    scenarios: [
-      {
-        title: "Reklamationswelle",
-        description: "Plötzlich viele Kundenreklamationen - systematische Lösung finden",
-        scenario: "Ein Produktionsbetrieb erhält plötzlich gehäuft Reklamationen über ein seit Jahren bewährtes Produkt. Die Fehlerrate ist von 0,1% auf 2,3% gestiegen. Das Vertriebsteam steht unter Druck und fordert sofortigen Produktionsstopp. Was ist der beste erste Schritt?",
-        choices: [
-          { text: "Sofort Produktion stoppen", consequence: "**Überreaktion:** Ohne Ursachenanalyse entstehen hohe Kosten und möglicherweise unnötige Störungen.", isCorrect: false },
-          { text: "8D-Report starten und Sofortmaßnahmen definieren", consequence: "**Systematischer Ansatz:** Containment-Maßnahmen + strukturierte Problemlösung. Beste Praxis.", isCorrect: true },
-          { text: "Mehr Endkontrollen einführen", consequence: "**Symptombehandlung:** Erhöht Kosten ohne Ursachenbehebung. Löst Grundproblem nicht.", isCorrect: false },
-          { text: "Kunden beruhigen und weiterproduzieren", consequence: "**Risiko:** Verschärft das Problem und kann zu Imageschaden führen.", isCorrect: false }
-        ]
-      }
-    ]
   }
 ];

@@ -100,41 +100,5 @@ export const innovationTrendsContent: LearnModule[] = [
         explanation: "RPA automatisiert repetitive, regelbasierte Aufgaben, die Menschen normalerweise am Computer ausführen würden."
       }
     ]
-  },
-  {
-    type: "timeline", 
-    title: "IT-Innovation Timeline",
-    timelines: [
-      {
-        title: "Durchbrüche der modernen IT",
-        description: "Von Cloud Computing bis Quantum Computing",
-        events: [
-          { year: "2006", event: "AWS startet", description: "Amazon Web Services revolutioniert Cloud Computing" },
-          { year: "2009", event: "Bitcoin Genesis Block", description: "Erste Blockchain-Anwendung geht live" },
-          { year: "2012", event: "Deep Learning Durchbruch", description: "AlexNet gewinnt ImageNet, Deep Learning wird mainstream" },
-          { year: "2016", event: "AlphaGo besiegt Lee Sedol", description: "KI schlägt Weltmeister im komplexesten Brettspiel" },
-          { year: "2019", event: "Google Quantum Supremacy", description: "Sycamore-Chip erreicht Quantenüberlegenheit" },
-          { year: "2020", event: "GPT-3 veröffentlicht", description: "Large Language Models zeigen beeindruckende Fähigkeiten" },
-          { year: "2022", event: "ChatGPT Launch", description: "Generative AI wird massentauglich" }
-        ]
-      }
-    ]
-  },
-  {
-    type: "scenario",
-    title: "Innovation Entscheidungsszenarien",
-    scenarios: [
-      {
-        title: "KI-Integration im Unternehmen",
-        description: "Ein Mittelständler überlegt KI-Einsatz - Strategieentwicklung",
-        scenario: "Ein mittelständisches Produktionsunternehmen möchte KI einführen. Die IT-Abteilung schlägt vor: 1) Predictive Maintenance für Maschinen, 2) Chatbot für Kundenservice, 3) Computer Vision für Qualitätskontrolle. Budget und Expertise sind begrenzt. Womit beginnen?",
-        choices: [
-          { text: "Alle Projekte parallel starten", consequence: "**Überforderung:** Ressourcen werden verzettelt, hohes Risiko von Fehlschlägen bei allen Projekten.", isCorrect: false },
-          { text: "Mit Predictive Maintenance beginnen - direkter ROI", consequence: "**Strategisch klug:** Direkter Nutzen, messbare Kosteneinsparung, aufbauende Expertise für weitere Projekte.", isCorrect: true },
-          { text: "Erstmal KI-Experten einstellen", consequence: "**Langwierig:** Recruiting dauert lange, ohne konkrete Anwendung bleibt Nutzen abstrakt.", isCorrect: false },
-          { text: "Externe Beratung beauftragen", consequence: "**Teuer:** Hohe Kosten ohne Wissensaufbau im Unternehmen, Abhängigkeit von Beratern.", isCorrect: false }
-        ]
-      }
-    ]
   }
 ];
