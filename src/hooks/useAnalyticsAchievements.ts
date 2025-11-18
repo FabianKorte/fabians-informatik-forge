@@ -1,14 +1,12 @@
 import { useEffect } from 'react';
 import { useGamification } from './useGamification';
 import { useLearningAnalytics } from './useLearningAnalytics';
-import { useAIRecommendations } from './useAIRecommendations';
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logger';
 
 export const useAnalyticsAchievements = () => {
   const { achievements, unlockAchievement } = useGamification();
   const { learningCurve, optimalTimes } = useLearningAnalytics();
-  const { recommendations } = useAIRecommendations();
 
   // Check "Data Nerd" achievement (100 sessions)
   useEffect(() => {
@@ -65,48 +63,4 @@ export const useAnalyticsAchievements = () => {
       checkPerfectTiming();
     }
   }, [achievements, optimalTimes, unlockAchievement]);
-
-  // Check "AI Student" achievement (10 recommendations followed)
-  useEffect(() => {
-    const checkAIStudent = async () => {
-      const aiStudentAchievement = achievements.find(a => a.key === 'ai_student');
-      if (aiStudentAchievement?.unlocked_at) return;
-
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
-
-        // Count deleted recommendations (user followed them)
-        const { count, error } = await supabase
-          .from('ai_recommendations')
-          .select('*', { count: 'exact', head: true })
-          .eq('user_id', user.id)
-          .lt('expires_at', new Date().toISOString());
-
-        if (error) throw error;
-
-        // Also check if user has learning sessions for recommended categories
-        const { data: analyticsData, error: analyticsError } = await supabase
-          .from('learning_analytics')
-          .select('category_id')
-          .eq('user_id', user.id)
-          .gte('created_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString());
-
-        if (analyticsError) throw analyticsError;
-
-        // Count unique categories learned recently (proxy for following recommendations)
-        const uniqueCategories = new Set(analyticsData?.map(d => d.category_id) || []);
-
-        if (uniqueCategories.size >= 10 || (count && count >= 10)) {
-          unlockAchievement('ai_student');
-        }
-      } catch (error) {
-        logger.error('Error checking AI Student achievement:', error);
-      }
-    };
-
-    if (achievements.length > 0) {
-      checkAIStudent();
-    }
-  }, [achievements, recommendations, unlockAchievement]);
 };
