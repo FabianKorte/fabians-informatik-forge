@@ -3,9 +3,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, BookOpen, Lightbulb, TrendingUp, Settings, LogOut, User, MessageCircle, Route } from "lucide-react";
+import { ArrowLeft, BookOpen, Lightbulb, TrendingUp, Settings, LogOut, User, MessageCircle } from "lucide-react";
 import { SimpleLearningContentForm } from "@/components/user/SimpleLearningContentForm";
-import { LearningPathsDashboard } from "@/components/learning-paths/LearningPathsDashboard";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
@@ -329,12 +328,8 @@ export default function UserDashboard() {
           </p>
         </div>
 
-        <Tabs defaultValue="learning-paths" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4 gap-1 sm:gap-2 h-auto">
-          <TabsTrigger value="learning-paths" className="text-sm px-2 py-2 whitespace-normal">
-            <Route className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
-            <span>Lernpfade</span>
-          </TabsTrigger>
+        <Tabs defaultValue="suggest" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-3 gap-1 sm:gap-2 h-auto">
           <TabsTrigger value="suggest" className="text-sm px-2 py-2 whitespace-normal">
             <Lightbulb className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
             <span>Vorschlagen</span>
@@ -348,10 +343,6 @@ export default function UserDashboard() {
             <span>Fortschritt</span>
           </TabsTrigger>
         </TabsList>
-
-          <TabsContent value="learning-paths">
-            <LearningPathsDashboard />
-          </TabsContent>
 
           <TabsContent value="suggest">
             <SimpleLearningContentForm />

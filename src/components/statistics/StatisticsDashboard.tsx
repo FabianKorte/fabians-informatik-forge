@@ -5,7 +5,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { LearningCurveChart } from './LearningCurveChart';
 import { WeaknessAnalysis } from './WeaknessAnalysis';
 import { OptimalTimesChart } from './OptimalTimesChart';
-import { AIRecommendations } from './AIRecommendations';
 import { AnalyticsAchievements } from './AnalyticsAchievements';
 import { useAnalyticsAchievements } from '@/hooks/useAnalyticsAchievements';
 
@@ -84,9 +83,6 @@ export const StatisticsDashboard = () => {
           <p className="text-2xl font-bold text-primary">{statistics.favorite_category}</p>
         </Card>
       )}
-
-      {/* AI Recommendations */}
-      <AIRecommendations />
 
       {/* Advanced Analytics */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

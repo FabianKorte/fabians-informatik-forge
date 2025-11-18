@@ -26,7 +26,6 @@ import { StreakDisplay } from "@/components/streaks/StreakDisplay";
 import { ModuleNotesEditor } from "@/components/notes/ModuleNotesEditor";
 import { ContentSearch } from "@/components/ContentSearch";
 import { ExamMode } from "@/components/ExamMode";
-import { AIExerciseGenerator } from "@/components/AIExerciseGenerator";
 
 const LearnPage = () => {
   const { categoryId } = useParams();
@@ -146,13 +145,6 @@ const LearnPage = () => {
                   <ContentSearch />
                 </Card>
               </div>
-
-              {/* AI Exercise Generator */}
-              {categoryId && (
-                <div className="md:col-span-3 mb-4">
-                  <AIExerciseGenerator categoryId={categoryId} />
-                </div>
-              )}
 
               {/* Exam Mode */}
               <div className="md:col-span-3 mb-4">
