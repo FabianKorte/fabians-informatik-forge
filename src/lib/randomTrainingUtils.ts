@@ -18,12 +18,6 @@ export async function generateRandomTrainingModules(): Promise<LearnModule[]> {
   const flashcards = modules.filter(m => m.type === 'flashcards');
   const quizzes = modules.filter(m => m.type === 'quiz');
   const interactive = modules.filter(m => m.type === 'interactive');
-  const matching = modules.filter(m => m.type === 'matching');
-  const code = modules.filter(m => m.type === 'code');
-  const dragdrop = modules.filter(m => m.type === 'dragdrop');
-  const memory = modules.filter(m => m.type === 'memory');
-  const timeline = modules.filter(m => m.type === 'timeline');
-  const scenario = modules.filter(m => m.type === 'scenario');
 
   const result: LearnModule[] = [];
 
@@ -52,60 +46,6 @@ export async function generateRandomTrainingModules(): Promise<LearnModule[]> {
       title: 'Zufallstraining: Interaktiv',
       tasks: allTasks
     });
-  }
-
-  if (matching.length > 0) {
-    const allPairs = matching.flatMap((m: any) => m.pairs || []);
-    result.push({
-      type: 'matching',
-      title: 'Zufallstraining: Matching',
-      pairs: allPairs
-    } as any);
-  }
-
-  if (code.length > 0) {
-    const allChallenges = code.flatMap((m: any) => m.challenges || []);
-    result.push({
-      type: 'code',
-      title: 'Zufallstraining: Code',
-      challenges: allChallenges
-    } as any);
-  }
-
-  if (dragdrop.length > 0) {
-    const allGames = dragdrop.flatMap((m: any) => m.games || []);
-    result.push({
-      type: 'dragdrop',
-      title: 'Zufallstraining: Drag & Drop',
-      games: allGames
-    } as any);
-  }
-
-  if (memory.length > 0) {
-    const allGames = memory.flatMap((m: any) => m.games || []);
-    result.push({
-      type: 'memory',
-      title: 'Zufallstraining: Memory',
-      games: allGames
-    } as any);
-  }
-
-  if (timeline.length > 0) {
-    const allTimelines = timeline.flatMap((m: any) => m.timelines || []);
-    result.push({
-      type: 'timeline',
-      title: 'Zufallstraining: Zeitleiste',
-      timelines: allTimelines
-    } as any);
-  }
-
-  if (scenario.length > 0) {
-    const allScenarios = scenario.flatMap((m: any) => m.scenarios || []);
-    result.push({
-      type: 'scenario',
-      title: 'Zufallstraining: Szenarien',
-      scenarios: allScenarios
-    } as any);
   }
 
   return result;

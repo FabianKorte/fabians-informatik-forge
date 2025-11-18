@@ -14,26 +14,9 @@ interface ProgressData {
     scores: number[];
     bestScore: number;
   };
-  matching?: {
-    completions: number;
-    bestScore: number;
-  };
-  code?: {
-    completedChallenges: number[];
-  };
-  dragdrop?: {
-    completedGames: number[];
-  };
-  memory?: {
-    completedGames: number[];
-    bestMoves: { [gameIndex: number]: number };
-  };
-  timeline?: {
-    viewedTimelines: number[];
-  };
-  scenario?: {
-    completedScenarios: number[];
-    correctChoices: number;
+  interactive?: {
+    completedTasks: number[];
+    scores?: number[];
   };
 }
 
@@ -285,84 +268,14 @@ export const useProgress = (categoryId: string, methodType: string, moduleIndex:
     saveProgressToStorage(updatedData);
   }, [progressData, saveProgressToStorage]);
 
-  const saveMatchingProgress = useCallback((score: number) => {
-    const current = progressData.matching || { completions: 0, bestScore: 0 };
+  const saveInteractiveProgress = useCallback((completedTasks: number[], scores?: number[]) => {
+    const current = progressData.interactive || { completedTasks: [], scores: [] };
     
     const updatedData = {
       ...progressData,
-      matching: {
-        completions: current.completions + 1,
-        bestScore: Math.max(current.bestScore, score)
-      }
-    };
-    setProgressData(updatedData);
-    saveProgressToStorage(updatedData);
-  }, [progressData, saveProgressToStorage]);
-
-  const saveCodeProgress = useCallback((challengeIndex: number) => {
-    const current = progressData.code || { completedChallenges: [] };
-    
-    const updatedData = {
-      ...progressData,
-      code: {
-        completedChallenges: [...new Set([...current.completedChallenges, challengeIndex])]
-      }
-    };
-    setProgressData(updatedData);
-    saveProgressToStorage(updatedData);
-  }, [progressData, saveProgressToStorage]);
-
-  const saveDragDropProgress = useCallback((gameIndex: number) => {
-    const current = progressData.dragdrop || { completedGames: [] };
-    
-    const updatedData = {
-      ...progressData,
-      dragdrop: {
-        completedGames: [...new Set([...current.completedGames, gameIndex])]
-      }
-    };
-    setProgressData(updatedData);
-    saveProgressToStorage(updatedData);
-  }, [progressData, saveProgressToStorage]);
-
-  const saveMemoryProgress = useCallback((gameIndex: number, moves: number) => {
-    const current = progressData.memory || { completedGames: [], bestMoves: {} };
-    
-    const updatedData = {
-      ...progressData,
-      memory: {
-        completedGames: [...new Set([...current.completedGames, gameIndex])],
-        bestMoves: {
-          ...current.bestMoves,
-          [gameIndex]: Math.min(current.bestMoves[gameIndex] || Infinity, moves)
-        }
-      }
-    };
-    setProgressData(updatedData);
-    saveProgressToStorage(updatedData);
-  }, [progressData, saveProgressToStorage]);
-
-  const saveTimelineProgress = useCallback((timelineIndex: number) => {
-    const current = progressData.timeline || { viewedTimelines: [] };
-    
-    const updatedData = {
-      ...progressData,
-      timeline: {
-        viewedTimelines: [...new Set([...current.viewedTimelines, timelineIndex])]
-      }
-    };
-    setProgressData(updatedData);
-    saveProgressToStorage(updatedData);
-  }, [progressData, saveProgressToStorage]);
-
-  const saveScenarioProgress = useCallback((scenarioIndex: number, wasCorrect: boolean) => {
-    const current = progressData.scenario || { completedScenarios: [], correctChoices: 0 };
-    
-    const updatedData = {
-      ...progressData,
-      scenario: {
-        completedScenarios: [...new Set([...current.completedScenarios, scenarioIndex])],
-        correctChoices: current.correctChoices + (wasCorrect ? 1 : 0)
+      interactive: {
+        completedTasks: [...new Set([...current.completedTasks, ...completedTasks])],
+        scores: scores || current.scores
       }
     };
     setProgressData(updatedData);
@@ -412,12 +325,7 @@ export const useProgress = (categoryId: string, methodType: string, moduleIndex:
     syncing,
     saveFlashcardProgress,
     saveQuizProgress,
-    saveMatchingProgress,
-    saveCodeProgress,
-    saveDragDropProgress,
-    saveMemoryProgress,
-    saveTimelineProgress,
-    saveScenarioProgress,
+    saveInteractiveProgress,
     overallProgress: getOverallProgress,
     clearAllProgress
   };
