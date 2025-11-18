@@ -53,11 +53,6 @@ export async function exportModuleToPDF(module: LearnModule, categoryTitle: stri
         </div>
       `).join('')}
     `;
-  } else {
-    content = `
-      <h2>${module.title}</h2>
-      <p>Modultyp wird in PDF nicht unterstützt.</p>
-    `;
   }
 
   const html = `
