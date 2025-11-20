@@ -25,7 +25,6 @@ import { GamificationBar } from "@/components/gamification/GamificationBar";
 import { StreakDisplay } from "@/components/streaks/StreakDisplay";
 import { ModuleNotesEditor } from "@/components/notes/ModuleNotesEditor";
 import { ContentSearch } from "@/components/ContentSearch";
-import { ExamMode } from "@/components/ExamMode";
 
 const LearnPage = () => {
   const { categoryId } = useParams();
@@ -301,11 +300,6 @@ const LearnPage = () => {
                   </div>
                 </div>
               )}
-            </div>
-          ) : selectedMethod === 'exam' ? (
-            <div className="space-y-4">
-              <Button variant="outline" onClick={() => setSelectedMethod(null)}>← Zurück</Button>
-              <ExamMode categoryId={categoryId || ''} modules={modules} timeLimitMinutes={60} />
             </div>
           ) : (
             // Learning Content View

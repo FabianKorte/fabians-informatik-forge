@@ -19,14 +19,14 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import RoadmapModal from "@/components/RoadmapModal";
+
 import { cn } from "@/lib/utils";
 
 const mainItems = [
   { title: "Home", url: "/", icon: Home },
-  { title: "Lernen", url: "/learn", icon: BookOpen },
   { title: "Fortschritt", url: "/progress", icon: TrendingUp },
   { title: "IT-Lexikon", url: "/lexikon", icon: BookOpen },
+  { title: "Roadmap", url: "/roadmap", icon: MapPin },
 ];
 
 const userItems = [
@@ -282,13 +282,6 @@ export const NavigationDrawer = () => {
                   </Button>
                 );
               })}
-
-              <RoadmapModal>
-                <Button variant="ghost" className="w-full justify-start gap-3 hover:bg-accent/10 transition-colors">
-                  <MapPin className="h-5 w-5" />
-                  <span>Roadmap</span>
-                </Button>
-              </RoadmapModal>
             </div>
           </div>
         </ScrollArea>
