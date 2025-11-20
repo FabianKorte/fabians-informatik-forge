@@ -52,16 +52,15 @@ export const useAdminCounts = () => {
 
     fetchCounts();
 
-    // Realtime-Updates für Feedbacks
+    // Realtime-Updates für Feedbacks - auf alle Events hören, da Status-Updates den Count beeinflussen
     const feedbackChannel = supabase
       .channel('admin-feedbacks-count')
       .on(
         'postgres_changes',
         {
-          event: '*',
+          event: '*', // INSERT, UPDATE, DELETE
           schema: 'public',
           table: 'feedbacks',
-          filter: 'status=eq.new',
         },
         () => fetchCounts()
       )
