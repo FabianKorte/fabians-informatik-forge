@@ -23,12 +23,15 @@ const FEEDBACK_CATEGORIES = {
   bug: { label: 'Fehlermeldung', icon: Bug, color: 'text-red-500' },
   feature: { label: 'Feature-Wunsch', icon: Star, color: 'text-yellow-500' },
   suggestion: { label: 'Verbesserungsvorschlag', icon: Lightbulb, color: 'text-blue-500' },
+  content: { label: 'Inhaltsfehler', icon: MessageSquare, color: 'text-orange-500' },
+  ui: { label: 'Design/UI', icon: Star, color: 'text-purple-500' },
+  performance: { label: 'Performance', icon: Bug, color: 'text-pink-500' },
 };
 
 const feedbackSchema = z.object({
   name: z.string().trim().max(100, "Name darf maximal 100 Zeichen lang sein"),
   message: z.string().trim().min(1, "Feedback ist erforderlich").max(1000, "Feedback darf maximal 1000 Zeichen lang sein"),
-  category: z.enum(['general', 'bug', 'feature', 'suggestion'])
+  category: z.enum(['general', 'bug', 'feature', 'suggestion', 'content', 'ui', 'performance'])
 });
 
 const FeedbackForm = ({ onFeedbackSubmitted }: { onFeedbackSubmitted?: () => void }) => {

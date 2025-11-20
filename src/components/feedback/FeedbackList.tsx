@@ -24,6 +24,9 @@ const FEEDBACK_CATEGORIES = {
   bug: { label: 'Fehlermeldung', icon: Bug, color: 'text-red-500' },
   feature: { label: 'Feature-Wunsch', icon: Star, color: 'text-yellow-500' },
   suggestion: { label: 'Verbesserungsvorschlag', icon: Lightbulb, color: 'text-blue-500' },
+  content: { label: 'Inhaltsfehler', icon: MessageSquare, color: 'text-orange-500' },
+  ui: { label: 'Design/UI', icon: Star, color: 'text-purple-500' },
+  performance: { label: 'Performance', icon: Bug, color: 'text-pink-500' },
 };
 
 
