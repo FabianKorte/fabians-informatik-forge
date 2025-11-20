@@ -1,9 +1,10 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Trash2, RefreshCw, Circle, Smile } from "lucide-react";
+import { logger } from "@/lib/logger";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -24,6 +25,7 @@ interface Feedback {
   message: string;
   created_at: string;
   status: string;
+  is_new: boolean;
 }
 
 const ITEMS_PER_PAGE = 10;
@@ -93,6 +95,27 @@ function AdminFeedbacks() {
     pageSize: ITEMS_PER_PAGE,
     currentPage,
   });
+
+  // Markiere alle sichtbaren Feedbacks als gesehen, wenn die Seite geladen wird
+  useEffect(() => {
+    if (feedbacks.length > 0) {
+      const newFeedbackIds = feedbacks.filter(f => f.is_new).map(f => f.id);
+      if (newFeedbackIds.length > 0) {
+        markFeedbacksAsViewed(newFeedbackIds);
+      }
+    }
+  }, [feedbacks]);
+
+  const markFeedbacksAsViewed = async (ids: string[]) => {
+    const { error } = await supabase
+      .from('feedbacks')
+      .update({ is_new: false })
+      .in('id', ids);
+
+    if (error) {
+      logger.error('Error marking feedbacks as viewed:', error);
+    }
+  };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Möchtest du dieses Feedback wirklich löschen?")) return;
@@ -243,6 +266,11 @@ function AdminFeedbacks() {
                   <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="font-semibold">{feedback.name}</span>
+                    {feedback.is_new && (
+                      <Badge variant="default" className="text-xs">
+                        Neu
+                      </Badge>
+                    )}
                     <Badge variant={
                       feedback.status === 'resolved' ? 'default' :
                       feedback.status === 'in_progress' ? 'secondary' :

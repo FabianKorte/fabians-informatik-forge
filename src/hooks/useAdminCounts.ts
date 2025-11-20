@@ -24,11 +24,11 @@ export const useAdminCounts = () => {
 
     const fetchCounts = async () => {
       try {
-        // Neue Feedbacks (status = 'new')
+        // Wirklich neue, ungesehene Feedbacks (is_new = true)
         const { count: feedbackCount } = await supabase
           .from('feedbacks')
           .select('*', { count: 'exact', head: true })
-          .eq('status', 'new');
+          .eq('is_new', true);
 
         // Neue Benutzer (created in letzten 7 Tagen)
         const sevenDaysAgo = new Date();

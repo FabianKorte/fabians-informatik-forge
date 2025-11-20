@@ -407,6 +407,7 @@ export type Database = {
           category: string | null
           created_at: string | null
           id: string
+          is_new: boolean | null
           message: string
           name: string
           status: string | null
@@ -416,6 +417,7 @@ export type Database = {
           category?: string | null
           created_at?: string | null
           id?: string
+          is_new?: boolean | null
           message: string
           name?: string
           status?: string | null
@@ -425,6 +427,7 @@ export type Database = {
           category?: string | null
           created_at?: string | null
           id?: string
+          is_new?: boolean | null
           message?: string
           name?: string
           status?: string | null
