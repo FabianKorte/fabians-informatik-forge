@@ -141,16 +141,6 @@ export const categories: Category[] = [
     gradient: "from-indigo-500 to-purple-600"
   },
   {
-    id: "pruefungsvorbereitung",
-    title: "Prüfungsvorbereitung",
-    description: "Abschlussprüfung, Prüfungsstrategien und Mock-Tests",
-    totalElements: 90,
-    completedElements: 0,
-    icon: Brain,
-    difficulty: "Experte",
-    gradient: "from-teal-500 to-cyan-600"
-  },
-  {
     id: "bwl",
     title: "BWL",
     description: "Kostenrechnung, Bilanz, Kennzahlen und Investitionen",

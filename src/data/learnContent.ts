@@ -2,7 +2,6 @@ import type { LearnModule } from "@/types/learn";
 import { webentwicklungContent } from "./learn/webentwicklung";
 import { projektmanagementContent } from "./learn/projektmanagement";
 import { qualitaetsmanagementContent } from "./learn/qualitaetsmanagement";
-import { pruefungsvorbereitungContent } from "./learn/pruefungsvorbereitung";
 import { betriebswirtschaftContent } from "./learn/betriebswirtschaft";
 import { rechtlicheGrundlagenContent } from "./learn/rechtliche-grundlagen";
 import { kommunikationContent } from "./learn/kommunikation";
@@ -20,7 +19,6 @@ import { itSicherheitAdvancedContent } from "./learn/it-sicherheit-advanced";
 export const learnContent: Record<string, LearnModule[]> = {
   "web-technologien": webentwicklungContent,
   projektmanagement: projektmanagementContent,
-  pruefungsvorbereitung: pruefungsvorbereitungContent,
   bwl: betriebswirtschaftContent,
   "rechtliche-grundlagen": rechtlicheGrundlagenContent,
   kommunikation: kommunikationContent,

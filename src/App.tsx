@@ -33,6 +33,7 @@ const Chat = lazy(() => import("./pages/Chat"));
 const StudyGroups = lazy(() => import("./pages/StudyGroups"));
 const Install = lazy(() => import("./pages/Install"));
 const Lexikon = lazy(() => import("./pages/Lexikon"));
+const Roadmap = lazy(() => import("./pages/Roadmap"));
 const AIChatbot = lazy(() => import("@/components/AIChatbot"));
 
 const queryClient = new QueryClient();
@@ -71,6 +72,7 @@ const AppRoutes = () => {
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/install" element={<Install />} />
             <Route path="/lexikon" element={<Lexikon />} />
+            <Route path="/roadmap" element={<Roadmap />} />
             <Route path="/chat" element={
               <ChatErrorBoundary>
                 <Chat />
