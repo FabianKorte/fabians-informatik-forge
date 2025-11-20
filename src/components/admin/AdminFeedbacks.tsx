@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Trash2, RefreshCw, Circle } from "lucide-react";
+import { Trash2, RefreshCw, Circle, Smile } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -15,6 +15,8 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { LoadingState } from "@/components/ui/loading-state";
 import { MessageSquare } from "lucide-react";
 import { useFeedbackReactions } from "@/hooks/useFeedbackReactions";
+import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 interface Feedback {
   id: string;
@@ -26,13 +28,21 @@ interface Feedback {
 
 const ITEMS_PER_PAGE = 10;
 
-const REACTION_EMOJIS = ['👍', '❤️', '💡'];
-
 const AdminFeedbackReactions = ({ feedbackId }: { feedbackId: string }) => {
-  const { toggleReaction, getReactionCount, hasUserReacted } = useFeedbackReactions(feedbackId);
+  const { toggleReaction, getReactionCount, hasUserReacted, reactions } = useFeedbackReactions(feedbackId);
+  const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
+
+  const handleEmojiClick = (emojiData: EmojiClickData) => {
+    toggleReaction(emojiData.emoji);
+    setEmojiPickerOpen(false);
+  };
+
+  // Get unique emojis from reactions
+  const uniqueEmojis = Array.from(new Set(reactions.map(r => r.emoji)));
+
   return (
-    <div className="flex gap-1 py-1">
-      {REACTION_EMOJIS.map((emoji) => {
+    <div className="flex gap-1 py-1 flex-wrap items-center">
+      {uniqueEmojis.map((emoji) => {
         const count = getReactionCount(emoji);
         const isActive = hasUserReacted(emoji);
         return (
@@ -44,10 +54,25 @@ const AdminFeedbackReactions = ({ feedbackId }: { feedbackId: string }) => {
             className="h-7 px-2 text-sm gap-1"
           >
             <span>{emoji}</span>
-            {count > 0 && <span>{count}</span>}
+            {count > 0 && <span className="text-xs">{count}</span>}
           </Button>
         );
       })}
+      
+      <Popover open={emojiPickerOpen} onOpenChange={setEmojiPickerOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-7 w-7 p-0"
+          >
+            <Smile className="w-4 h-4" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0 border-0" align="start">
+          <EmojiPicker onEmojiClick={handleEmojiClick} />
+        </PopoverContent>
+      </Popover>
     </div>
   );
 };
