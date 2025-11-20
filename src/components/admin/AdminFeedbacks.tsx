@@ -56,7 +56,7 @@ const AdminFeedbackReactions = ({ feedbackId }: { feedbackId: string }) => {
  * AdminFeedbacks Component
  * Manages feedback submissions with bulk actions and status updates
  */
-export default function AdminFeedbacks() {
+function AdminFeedbacks() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const { toast } = useToast();
@@ -289,4 +289,6 @@ export default function AdminFeedbacks() {
       )}
     </div>
   );
-};
+}
+
+export default AdminFeedbacks;
