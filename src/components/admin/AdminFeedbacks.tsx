@@ -276,6 +276,7 @@ function AdminFeedbacks() {
                       feedback.status === 'in_progress' ? 'secondary' :
                       feedback.status === 'rejected' ? 'destructive' :
                       feedback.status === 'planned' ? 'default' :
+                      feedback.status === 'thanks' ? 'default' :
                       'outline'
                     }>
                       <Circle className="w-2 h-2 mr-1 fill-current" />
@@ -287,6 +288,7 @@ function AdminFeedbacks() {
                        feedback.status === 'rejected' ? 'Abgelehnt' :
                        feedback.status === 'duplicate' ? 'Duplikat' :
                        feedback.status === 'planned' ? 'Geplant' :
+                       feedback.status === 'thanks' ? 'Dankeschön' :
                        feedback.status}
                     </Badge>
                     <span className="text-xs text-muted-foreground">
@@ -311,6 +313,7 @@ function AdminFeedbacks() {
                       <SelectItem value="resolved">Erledigt</SelectItem>
                       <SelectItem value="duplicate">Duplikat</SelectItem>
                       <SelectItem value="rejected">Abgelehnt</SelectItem>
+                      <SelectItem value="thanks">Dankeschön</SelectItem>
                     </SelectContent>
                   </Select>
                   </div>

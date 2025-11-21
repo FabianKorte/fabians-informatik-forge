@@ -14,7 +14,10 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 
-import { MessageSquare, RefreshCw, User, Clock, Lock, Search, Bug, Lightbulb, Star, Filter } from "lucide-react";
+import { MessageSquare, RefreshCw, User, Clock, Lock, Search, Bug, Lightbulb, Star, Filter, Smile } from "lucide-react";
+import { useFeedbackReactions } from "@/hooks/useFeedbackReactions";
+import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { formatDistanceToNow } from "date-fns";
 import { de } from "date-fns/locale";
 import { logger } from "@/lib/logger";
@@ -41,6 +44,57 @@ interface Feedback {
   upvotes: number;
 }
 
+const FeedbackReactions = ({ feedbackId, isAdmin }: { feedbackId: string; isAdmin: boolean }) => {
+  const { toggleReaction, getReactionCount, hasUserReacted, reactions } = useFeedbackReactions(feedbackId);
+  const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
+
+  const handleEmojiClick = (emojiData: EmojiClickData) => {
+    toggleReaction(emojiData.emoji);
+    setEmojiPickerOpen(false);
+  };
+
+  const uniqueEmojis = Array.from(new Set(reactions.map(r => r.emoji)));
+
+  return (
+    <div className="flex gap-1 py-2 flex-wrap items-center pl-6">
+      {uniqueEmojis.map((emoji) => {
+        const count = getReactionCount(emoji);
+        const isActive = hasUserReacted(emoji);
+        return (
+          <Button
+            key={emoji}
+            variant={isActive ? "default" : "outline"}
+            size="sm"
+            onClick={() => isAdmin && toggleReaction(emoji)}
+            className="h-7 px-2 text-sm gap-1"
+            disabled={!isAdmin}
+          >
+            <span>{emoji}</span>
+            {count > 0 && <span className="text-xs">{count}</span>}
+          </Button>
+        );
+      })}
+      
+      {isAdmin && (
+        <Popover open={emojiPickerOpen} onOpenChange={setEmojiPickerOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 w-7 p-0"
+            >
+              <Smile className="w-4 h-4" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0 border-0" align="start">
+            <EmojiPicker onEmojiClick={handleEmojiClick} />
+          </PopoverContent>
+        </Popover>
+      )}
+    </div>
+  );
+};
+
 const FeedbackItem = ({ feedback, isAdmin }: { feedback: Feedback; isAdmin: boolean }) => {
   
   const categoryConfig = FEEDBACK_CATEGORIES[feedback.category] || FEEDBACK_CATEGORIES.general;
@@ -64,6 +118,7 @@ const FeedbackItem = ({ feedback, isAdmin }: { feedback: Feedback; isAdmin: bool
               feedback.status === 'in_progress' ? 'secondary' :
               feedback.status === 'rejected' ? 'destructive' :
               feedback.status === 'planned' ? 'default' :
+              feedback.status === 'thanks' ? 'default' :
               'outline'
             } className="text-xs">
               {feedback.status === 'new' ? 'Neu' :
@@ -74,6 +129,7 @@ const FeedbackItem = ({ feedback, isAdmin }: { feedback: Feedback; isAdmin: bool
                feedback.status === 'rejected' ? 'Abgelehnt' :
                feedback.status === 'duplicate' ? 'Duplikat' :
                feedback.status === 'planned' ? 'Geplant' :
+               feedback.status === 'thanks' ? 'Dankeschön' :
                feedback.status}
             </Badge>
           )}
@@ -89,7 +145,7 @@ const FeedbackItem = ({ feedback, isAdmin }: { feedback: Feedback; isAdmin: bool
       </div>
       
       <p className="text-sm leading-relaxed pl-6">{feedback.message}</p>
-      
+      <FeedbackReactions feedbackId={feedback.id} isAdmin={isAdmin} />
     </div>
   );
 };
@@ -267,7 +323,7 @@ export const FeedbackList = ({ refreshTrigger }: { refreshTrigger?: number }) =>
             </div>
           ) : (
             filteredFeedbacks.map((feedback) => (
-              <FeedbackItem key={feedback.id} feedback={feedback} isAdmin={false} />
+              <FeedbackItem key={feedback.id} feedback={feedback} isAdmin={isAdmin} />
             ))
           )}
         </CardContent>
