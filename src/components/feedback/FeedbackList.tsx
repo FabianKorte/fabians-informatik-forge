@@ -14,10 +14,8 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 
-import { MessageSquare, RefreshCw, User, Clock, Lock, Search, Bug, Lightbulb, Star, Filter, Smile } from "lucide-react";
+import { MessageSquare, RefreshCw, User, Clock, Lock, Search, Bug, Lightbulb, Star, Filter } from "lucide-react";
 import { useFeedbackReactions } from "@/hooks/useFeedbackReactions";
-import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { formatDistanceToNow } from "date-fns";
 import { de } from "date-fns/locale";
 import { logger } from "@/lib/logger";
@@ -44,58 +42,32 @@ interface Feedback {
   upvotes: number;
 }
 
-const FeedbackReactions = ({ feedbackId, isAdmin }: { feedbackId: string; isAdmin: boolean }) => {
-  const { toggleReaction, getReactionCount, hasUserReacted, reactions } = useFeedbackReactions(feedbackId);
-  const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
-
-  const handleEmojiClick = (emojiData: EmojiClickData) => {
-    toggleReaction(emojiData.emoji);
-    setEmojiPickerOpen(false);
-  };
+const FeedbackReactions = ({ feedbackId }: { feedbackId: string }) => {
+  const { getReactionCount, reactions } = useFeedbackReactions(feedbackId);
 
   const uniqueEmojis = Array.from(new Set(reactions.map(r => r.emoji)));
+
+  if (uniqueEmojis.length === 0) return null;
 
   return (
     <div className="flex gap-1 py-2 flex-wrap items-center pl-6">
       {uniqueEmojis.map((emoji) => {
         const count = getReactionCount(emoji);
-        const isActive = hasUserReacted(emoji);
         return (
-          <Button
+          <div
             key={emoji}
-            variant={isActive ? "default" : "outline"}
-            size="sm"
-            onClick={() => isAdmin && toggleReaction(emoji)}
-            className="h-7 px-2 text-sm gap-1"
-            disabled={!isAdmin}
+            className="h-7 px-2 text-sm gap-1 rounded-md border bg-background flex items-center"
           >
             <span>{emoji}</span>
-            {count > 0 && <span className="text-xs">{count}</span>}
-          </Button>
+            {count > 0 && <span className="text-xs ml-1">{count}</span>}
+          </div>
         );
       })}
-      
-      {isAdmin && (
-        <Popover open={emojiPickerOpen} onOpenChange={setEmojiPickerOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-7 w-7 p-0"
-            >
-              <Smile className="w-4 h-4" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0 border-0" align="start">
-            <EmojiPicker onEmojiClick={handleEmojiClick} />
-          </PopoverContent>
-        </Popover>
-      )}
     </div>
   );
 };
 
-const FeedbackItem = ({ feedback, isAdmin }: { feedback: Feedback; isAdmin: boolean }) => {
+const FeedbackItem = ({ feedback }: { feedback: Feedback }) => {
   
   const categoryConfig = FEEDBACK_CATEGORIES[feedback.category] || FEEDBACK_CATEGORIES.general;
   const CategoryIcon = categoryConfig.icon;
@@ -145,7 +117,7 @@ const FeedbackItem = ({ feedback, isAdmin }: { feedback: Feedback; isAdmin: bool
       </div>
       
       <p className="text-sm leading-relaxed pl-6">{feedback.message}</p>
-      <FeedbackReactions feedbackId={feedback.id} isAdmin={isAdmin} />
+      <FeedbackReactions feedbackId={feedback.id} />
     </div>
   );
 };
@@ -323,7 +295,7 @@ export const FeedbackList = ({ refreshTrigger }: { refreshTrigger?: number }) =>
             </div>
           ) : (
             filteredFeedbacks.map((feedback) => (
-              <FeedbackItem key={feedback.id} feedback={feedback} isAdmin={isAdmin} />
+              <FeedbackItem key={feedback.id} feedback={feedback} />
             ))
           )}
         </CardContent>
