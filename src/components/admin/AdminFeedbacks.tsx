@@ -274,12 +274,20 @@ function AdminFeedbacks() {
                     <Badge variant={
                       feedback.status === 'resolved' ? 'default' :
                       feedback.status === 'in_progress' ? 'secondary' :
+                      feedback.status === 'rejected' ? 'destructive' :
+                      feedback.status === 'planned' ? 'default' :
                       'outline'
                     }>
                       <Circle className="w-2 h-2 mr-1 fill-current" />
                       {feedback.status === 'new' ? 'Neu' :
                        feedback.status === 'in_progress' ? 'In Arbeit' :
-                       'Erledigt'}
+                       feedback.status === 'resolved' ? 'Erledigt' :
+                       feedback.status === 'pending_review' ? 'Zur Überprüfung' :
+                       feedback.status === 'on_hold' ? 'Zurückgestellt' :
+                       feedback.status === 'rejected' ? 'Abgelehnt' :
+                       feedback.status === 'duplicate' ? 'Duplikat' :
+                       feedback.status === 'planned' ? 'Geplant' :
+                       feedback.status}
                     </Badge>
                     <span className="text-xs text-muted-foreground">
                       {format(new Date(feedback.created_at), "PPp", { locale: de })}
@@ -296,8 +304,13 @@ function AdminFeedbacks() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="new">Neu</SelectItem>
+                      <SelectItem value="pending_review">Zur Überprüfung</SelectItem>
                       <SelectItem value="in_progress">In Arbeit</SelectItem>
+                      <SelectItem value="on_hold">Zurückgestellt</SelectItem>
+                      <SelectItem value="planned">Geplant</SelectItem>
                       <SelectItem value="resolved">Erledigt</SelectItem>
+                      <SelectItem value="duplicate">Duplikat</SelectItem>
+                      <SelectItem value="rejected">Abgelehnt</SelectItem>
                     </SelectContent>
                   </Select>
                   </div>

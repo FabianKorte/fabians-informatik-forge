@@ -62,11 +62,19 @@ const FeedbackItem = ({ feedback, isAdmin }: { feedback: Feedback; isAdmin: bool
             <Badge variant={
               feedback.status === 'resolved' ? 'default' :
               feedback.status === 'in_progress' ? 'secondary' :
+              feedback.status === 'rejected' ? 'destructive' :
+              feedback.status === 'planned' ? 'default' :
               'outline'
             } className="text-xs">
               {feedback.status === 'new' ? 'Neu' :
                feedback.status === 'in_progress' ? 'In Arbeit' :
-               'Erledigt'}
+               feedback.status === 'resolved' ? 'Erledigt' :
+               feedback.status === 'pending_review' ? 'Zur Überprüfung' :
+               feedback.status === 'on_hold' ? 'Zurückgestellt' :
+               feedback.status === 'rejected' ? 'Abgelehnt' :
+               feedback.status === 'duplicate' ? 'Duplikat' :
+               feedback.status === 'planned' ? 'Geplant' :
+               feedback.status}
             </Badge>
           )}
         </div>
