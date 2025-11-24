@@ -46,10 +46,12 @@ export const useRoles = () => {
         'get-user-emails'
       );
 
-      if (emailsError) throw emailsError;
+      if (emailsError) {
+        logger.error('Error fetching emails:', emailsError);
+      }
 
-      const emailsMap = new Map(
-        emailsData?.users?.map((u: any) => [u.id, u.email]) || []
+      const emailsMap = new Map<string, string>(
+        Object.entries(emailsData?.emailMap || {})
       );
 
       // Combine data

@@ -52,8 +52,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (newSession?.user) {
         // Defer Supabase-dependent work to avoid deadlocks in the callback
+        // Clear cache first to ensure we get fresh data
+        clearAdminCache(newSession.user!.id);
         setTimeout(() => {
-          checkAdminStatus(newSession.user!.id).then(setIsAdmin);
+          checkAdminStatus(newSession.user!.id).then((isAdmin) => {
+            logger.info('Admin status for user:', isAdmin);
+            setIsAdmin(isAdmin);
+          });
         }, 0);
       } else {
         setIsAdmin(false);
@@ -152,8 +157,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(session?.user ?? null);
 
       if (session?.user) {
+        // Clear cache first to ensure we get fresh data
+        clearAdminCache(session.user!.id);
         setTimeout(() => {
-          checkAdminStatus(session.user!.id).then(setIsAdmin);
+          checkAdminStatus(session.user!.id).then((isAdmin) => {
+            logger.info('Admin status for user on init:', isAdmin);
+            setIsAdmin(isAdmin);
+          });
         }, 0);
 
         // Start session monitoring with a live session getter
