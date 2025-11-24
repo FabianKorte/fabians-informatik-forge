@@ -13,6 +13,7 @@ export const useKeyboardNavigation = (shortcuts: KeyboardShortcut[]) => {
   const handleKeyPress = useCallback((event: KeyboardEvent) => {
     const matchingShortcut = shortcuts.find(
       (shortcut) =>
+        shortcut.key && event.key &&
         shortcut.key.toLowerCase() === event.key.toLowerCase() &&
         (shortcut.ctrlKey === undefined || shortcut.ctrlKey === event.ctrlKey) &&
         (shortcut.altKey === undefined || shortcut.altKey === event.altKey) &&

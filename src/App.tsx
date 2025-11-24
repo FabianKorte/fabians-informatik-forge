@@ -45,6 +45,8 @@ const AppRoutes = () => {
     <div className="flex flex-col min-h-screen">
       <NavigationDrawer />
       <SkipToContent />
+      <PWAInstallPrompt />
+      <OfflineIndicator />
       <main id="main-content" className="flex-1" role="main">
         <Suspense fallback={<FallbackLoader />}>
           <Routes>
@@ -104,8 +106,6 @@ const App = () => (
               duration={500}
             >
               <AppRoutes />
-              <PWAInstallPrompt />
-              <OfflineIndicator />
             </ClickSpark>
           </BrowserRouter>
           <Suspense fallback={null}>
