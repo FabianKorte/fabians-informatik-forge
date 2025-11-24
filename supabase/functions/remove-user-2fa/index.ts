@@ -33,17 +33,16 @@ Deno.serve(async (req) => {
       )
     }
 
-    // Check if user is admin
+    // Check if user is admin or owner
     const { data: roleData } = await supabaseAdmin
       .from('user_roles')
       .select('role')
       .eq('user_id', user.id)
-      .eq('role', 'admin')
-      .single()
+      .in('role', ['admin', 'owner'])
 
-    if (!roleData) {
+    if (!roleData || roleData.length === 0) {
       return new Response(
-        JSON.stringify({ error: 'Not authorized - admin role required' }),
+        JSON.stringify({ error: 'Not authorized - admin or owner role required' }),
         { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
