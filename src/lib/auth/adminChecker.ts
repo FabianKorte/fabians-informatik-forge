@@ -20,12 +20,19 @@ const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
  * const isModerator = await checkUserRole('user-id-123', ['admin', 'moderator']);
  */
 export async function checkUserRole(userId: string, roles: AppRole | AppRole[]): Promise<boolean> {
+  if (!userId) {
+    logger.warn('checkUserRole called with empty userId');
+    return false;
+  }
+
   const rolesToCheck = Array.isArray(roles) ? roles : [roles];
   
   // Check cache first
   const cached = roleCache.get(userId);
   if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
-    return cached.roles.some(role => rolesToCheck.includes(role));
+    const hasRole = cached.roles.some(role => rolesToCheck.includes(role));
+    logger.info(`Cache hit for user ${userId.substring(0, 8)}. Has role ${rolesToCheck.join(',')}:`, hasRole, 'User roles:', cached.roles);
+    return hasRole;
   }
 
   try {
@@ -40,6 +47,7 @@ export async function checkUserRole(userId: string, roles: AppRole | AppRole[]):
     }
 
     const userRoles = (data || []).map(r => r.role as AppRole);
+    logger.info(`Fetched roles for user ${userId.substring(0, 8)}:`, userRoles);
 
     // Update cache
     roleCache.set(userId, {
@@ -47,7 +55,9 @@ export async function checkUserRole(userId: string, roles: AppRole | AppRole[]):
       timestamp: Date.now(),
     });
 
-    return userRoles.some(role => rolesToCheck.includes(role));
+    const hasRole = userRoles.some(role => rolesToCheck.includes(role));
+    logger.info(`User ${userId.substring(0, 8)} has role ${rolesToCheck.join(',')}:`, hasRole);
+    return hasRole;
   } catch (error) {
     logger.error('Exception checking user role:', error);
     return false;
