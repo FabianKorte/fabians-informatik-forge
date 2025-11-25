@@ -36,7 +36,16 @@ const Lexikon = lazy(() => import("./pages/Lexikon"));
 const Roadmap = lazy(() => import("./pages/Roadmap"));
 const AIChatbot = lazy(() => import("@/components/AIChatbot"));
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      gcTime: 10 * 60 * 1000, // 10 minutes
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const AppRoutes = () => {
   useViewTransition();

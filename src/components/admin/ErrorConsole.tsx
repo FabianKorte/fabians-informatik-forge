@@ -128,7 +128,7 @@ export default function ErrorConsole() {
               <ScrollArea className="h-[500px]">
                 <div className="space-y-3">
                   {errors.map((error, index) => (
-                    <Card key={index} className="border-l-4 border-l-destructive">
+                    <Card key={`${error.timestamp}-${index}`} className="border-l-4 border-l-destructive">
                       <CardContent className="pt-4">
                         <div className="space-y-2">
                           <div className="flex items-start justify-between">
