@@ -142,18 +142,23 @@ function AdminFeedbacks() {
   };
 
   const handleStatusChange = async (id: string, newStatus: string) => {
-    const { error } = await supabase
+    logger.info('Attempting to change feedback status', { id, newStatus });
+    
+    const { data, error } = await supabase
       .from('feedbacks')
       .update({ status: newStatus })
-      .eq('id', id);
+      .eq('id', id)
+      .select();
 
     if (error) {
+      logger.error('Error changing feedback status:', error);
       toast({
         title: "Fehler",
-        description: "Konnte Status nicht ändern",
+        description: `Konnte Status nicht ändern: ${error.message}`,
         variant: "destructive",
       });
     } else {
+      logger.info('Feedback status changed successfully', data);
       toast({
         title: "✓ Erfolg",
         description: "Status wurde aktualisiert",
