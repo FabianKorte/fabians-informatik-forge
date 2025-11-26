@@ -107,3 +107,38 @@ window.addEventListener('unhandledrejection', (event) => {
     { componentStack: 'Promise' }
   );
 });
+
+// Track console errors
+const originalConsoleError = console.error;
+console.error = (...args: any[]) => {
+  originalConsoleError.apply(console, args);
+  
+  // Create error from console.error arguments
+  const errorMessage = args.map(arg => {
+    if (arg instanceof Error) return arg.message;
+    if (typeof arg === 'object') return JSON.stringify(arg);
+    return String(arg);
+  }).join(' ');
+  
+  errorTracker.logError(
+    new Error(`Console Error: ${errorMessage}`),
+    { componentStack: 'Console' }
+  );
+};
+
+// Track React errors in development
+if (import.meta.env.DEV) {
+  const originalConsoleWarn = console.warn;
+  console.warn = (...args: any[]) => {
+    originalConsoleWarn.apply(console, args);
+    
+    // Only track React warnings
+    const message = String(args[0]);
+    if (message.includes('React') || message.includes('Warning:')) {
+      errorTracker.logError(
+        new Error(`React Warning: ${message}`),
+        { componentStack: 'React' }
+      );
+    }
+  };
+}

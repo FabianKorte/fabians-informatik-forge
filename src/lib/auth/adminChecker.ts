@@ -92,6 +92,37 @@ export async function checkModeratorStatus(userId: string): Promise<boolean> {
 }
 
 /**
+ * Check if user has at least the specified role level
+ * Role hierarchy: owner > admin > moderator > user
+ */
+export async function checkRoleLevel(userId: string, minRole: AppRole): Promise<boolean> {
+  const roleHierarchy: Record<AppRole, number> = {
+    owner: 4,
+    admin: 3,
+    moderator: 2,
+    user: 1,
+  };
+
+  try {
+    const { data, error } = await supabase
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', userId)
+      .single();
+
+    if (error || !data) return false;
+
+    const userRoleLevel = roleHierarchy[data.role as AppRole] || 0;
+    const minRoleLevel = roleHierarchy[minRole] || 0;
+
+    return userRoleLevel >= minRoleLevel;
+  } catch (error) {
+    logger.error('Error checking role level:', error);
+    return false;
+  }
+}
+
+/**
  * Checks if a user is an owner.
  * 
  * @param {string} userId - The user ID to check

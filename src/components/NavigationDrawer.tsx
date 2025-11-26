@@ -25,7 +25,6 @@ import { cn } from "@/lib/utils";
 const mainItems = [
   { title: "Home", url: "/", icon: Home },
   { title: "Fortschritt", url: "/progress", icon: TrendingUp },
-  { title: "IT-Lexikon", url: "/lexikon", icon: BookOpen },
   { title: "Roadmap", url: "/roadmap", icon: MapPin },
 ];
 
@@ -37,17 +36,19 @@ const userItems = [
 ];
 
 const resourceItems = [
+  { title: "IT-Lexikon", url: "/lexikon", icon: BookOpen, external: false },
   { title: "Downloads", url: "https://drive.google.com/drive/folders/1x_OJDgFV7z0XGMcSBPIvKe-fTTHqp1kR?usp=sharing", icon: Download, external: true },
   { title: "Datenschutz", url: "/privacy", icon: Shield, external: false },
 ];
 
 const adminSubItems = [
+  { title: "Ankündigungen", tab: "announcements", icon: MessageSquare },
   { title: "Lerninhalte", tab: "learning", icon: BookOpen },
+  { title: "Kategorien", tab: "categories", icon: BookOpen },
   { title: "Vorschläge", tab: "suggestions", icon: MessageSquare },
   { title: "Roadmap", tab: "roadmap", icon: MapPin },
   { title: "Feedbacks", tab: "feedbacks", icon: MessageSquare },
   { title: "Benutzer", tab: "users", icon: Users },
-  { title: "Rollen", tab: "roles", icon: Shield },
   { title: "Notizen", tab: "notes", icon: FileText },
   { title: "Audit-Log", tab: "audit", icon: Shield },
   { title: "Analytics", tab: "analytics", icon: TrendingUp },

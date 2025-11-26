@@ -22,6 +22,7 @@ import { OfflineIndicator } from "@/components/OfflineIndicator";
 import ClickSpark from "@/components/ui/ClickSpark";
 import { TentacleBackground } from "@/components/TentacleBackground";
 import { NavigationDrawer } from "@/components/NavigationDrawer";
+import { SiteAnnouncementBanner } from "@/components/SiteAnnouncementBanner";
 
 // Lazy load heavy pages and components
 const LearnPage = lazy(() => import("./pages/Learn"));
@@ -56,6 +57,11 @@ const AppRoutes = () => {
       <SkipToContent />
       <PWAInstallPrompt />
       <OfflineIndicator />
+      <div className="fixed top-0 left-0 right-0 z-40 p-4 pt-16 md:pt-4 pointer-events-none">
+        <div className="max-w-7xl mx-auto pointer-events-auto">
+          <SiteAnnouncementBanner />
+        </div>
+      </div>
       <main id="main-content" className="flex-1" role="main">
         <Suspense fallback={<FallbackLoader />}>
           <Routes>
