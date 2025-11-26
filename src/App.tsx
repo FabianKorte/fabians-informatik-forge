@@ -52,17 +52,17 @@ const AppRoutes = () => {
   useViewTransition();
   
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen relative z-10">
       <NavigationDrawer />
       <SkipToContent />
       <PWAInstallPrompt />
       <OfflineIndicator />
-      <div className="fixed top-0 left-0 right-0 z-40 p-4 pt-16 md:pt-4 pointer-events-none">
-        <div className="max-w-7xl mx-auto pointer-events-auto">
+      <div className="fixed top-16 md:top-4 left-0 right-0 z-40 px-4">
+        <div className="max-w-7xl mx-auto">
           <SiteAnnouncementBanner />
         </div>
       </div>
-      <main id="main-content" className="flex-1" role="main">
+      <main id="main-content" className="flex-1 relative" role="main">
         <Suspense fallback={<FallbackLoader />}>
           <Routes>
             <Route path="/" element={<Index />} />
