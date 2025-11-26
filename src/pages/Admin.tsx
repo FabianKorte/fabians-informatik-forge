@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { LogOut, BookOpen, MapPin, MessageSquare, Home, FileText, Users, Shield, TrendingUp, Activity } from "lucide-react";
 
 // Lazy load admin components
+const AdminAnnouncements = lazy(() => import("@/components/admin/AdminAnnouncements"));
 const AdminLearningContent = lazy(() => import("@/components/admin/AdminLearningContent"));
 const AdminRoadmap = lazy(() => import("@/components/admin/AdminRoadmap"));
 const AdminFeedbacks = lazy(() => import("@/components/admin/AdminFeedbacks"));
@@ -75,11 +76,21 @@ export default function Admin() {
           </CardHeader>
           <CardContent>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-5 lg:grid-cols-10 gap-1">
+              <TabsList className="grid w-full grid-cols-3 md:grid-cols-5 lg:grid-cols-12 gap-1 h-auto">
+                <TabsTrigger value="announcements" className="text-xs lg:text-sm">
+                  <MessageSquare className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
+                  <span className="hidden sm:inline">Ankündigungen</span>
+                  <span className="sm:hidden">Ank.</span>
+                </TabsTrigger>
                 <TabsTrigger value="learning" className="text-xs lg:text-sm">
                   <BookOpen className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
                   <span className="hidden sm:inline">Lerninhalte</span>
                   <span className="sm:hidden">Inhalte</span>
+                </TabsTrigger>
+                <TabsTrigger value="categories" className="text-xs lg:text-sm">
+                  <BookOpen className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
+                  <span className="hidden sm:inline">Kategorien</span>
+                  <span className="sm:hidden">Kat.</span>
                 </TabsTrigger>
                 <TabsTrigger value="suggestions" className="text-xs lg:text-sm">
                   <MessageSquare className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
@@ -128,9 +139,21 @@ export default function Admin() {
                 </TabsTrigger>
               </TabsList>
 
+              <TabsContent value="announcements" className="mt-6">
+                <Suspense fallback={<TabSkeleton />}>
+                  <AdminAnnouncements />
+                </Suspense>
+              </TabsContent>
+
               <TabsContent value="learning" className="mt-6">
                 <Suspense fallback={<TabSkeleton />}>
                   <AdminLearningContent />
+                </Suspense>
+              </TabsContent>
+
+              <TabsContent value="categories" className="mt-6">
+                <Suspense fallback={<TabSkeleton />}>
+                  <CategoryManager />
                 </Suspense>
               </TabsContent>
 
