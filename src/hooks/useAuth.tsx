@@ -272,11 +272,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
    * @returns {Promise<{error: any}>} Error object if sign in fails
    */
   const signInWithGoogle = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/`,
-        skipBrowserRedirect: true,
+        redirectTo: `${window.location.origin}/auth`,
       },
     });
 
@@ -285,27 +284,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return { error };
     }
 
-    if (data?.url) {
-      const targetUrl = data.url;
-      try {
-        // Prefer top-level navigation to escape iframe blockers
-        if (window.top && window.top !== window.self) {
-          window.top.location.href = targetUrl;
-        } else {
-          window.location.href = targetUrl;
-        }
-      } catch (e) {
-        logger.error('Google OAuth redirect failed:', e);
-        // Fallback to opening a new tab if top navigation is blocked by the host
-        const opened = window.open(targetUrl, '_blank', 'noopener,noreferrer');
-        if (!opened) {
-          // Final fallback: same-frame navigation
-          window.location.href = targetUrl;
-        }
-      }
-    }
-
-    return { error };
+    return { error: null };
   };
 
   /**
@@ -314,11 +293,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
    * @returns {Promise<{error: any}>} Error object if sign in fails
    */
   const signInWithDiscord = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: 'discord',
       options: {
-        redirectTo: `${window.location.origin}/`,
-        skipBrowserRedirect: true,
+        redirectTo: `${window.location.origin}/auth`,
       },
     });
 
@@ -327,24 +305,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return { error };
     }
 
-    if (data?.url) {
-      const targetUrl = data.url;
-      try {
-        if (window.top && window.top !== window.self) {
-          window.top.location.href = targetUrl;
-        } else {
-          window.location.href = targetUrl;
-        }
-      } catch (e) {
-        logger.error('Discord OAuth redirect failed:', e);
-        const opened = window.open(targetUrl, '_blank', 'noopener,noreferrer');
-        if (!opened) {
-          window.location.href = targetUrl;
-        }
-      }
-    }
-
-    return { error };
+    return { error: null };
   };
 
   return (
