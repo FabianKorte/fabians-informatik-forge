@@ -223,9 +223,9 @@ export const TentacleBackground = () => {
         ref={canvasRef}
         className="fixed inset-0 pointer-events-none"
         style={{ 
-          zIndex: 0,
-          opacity: window.innerWidth < 768 ? 0.3 : 0.5,
-          mixBlendMode: 'normal'
+          zIndex: -1,
+          opacity: window.innerWidth < 768 ? 0.4 : 0.7,
+          mixBlendMode: 'screen'
         }}
       />
       <Button
