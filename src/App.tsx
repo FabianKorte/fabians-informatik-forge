@@ -112,7 +112,7 @@ const App = () => (
         <TooltipProvider>
           <Toaster />
           <BrowserRouter>
-            {/* TentacleBackground temporarily disabled for debugging */}
+            <TentacleBackground />
             <ClickSpark
               sparkColor="hsl(var(--primary))"
               sparkSize={12}

@@ -72,37 +72,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const code = url.searchParams.get('code');
     
     if (code) {
-      supabase.auth.exchangeCodeForSession(url.toString()).then(({ data, error }) => {
-        if (error) {
-          logger.error('OAuth session exchange failed:', error);
-          toast({
-            title: "OAuth-Anmeldung fehlgeschlagen",
-            description: error.message || "Die Sitzung konnte nicht wiederhergestellt werden. Bitte versuche es erneut.",
-            variant: "destructive",
-            duration: 6000,
-          });
-        }
-        
-        // Always clean URL after exchange attempt
-        url.searchParams.delete('code');
-        url.searchParams.delete('state');
-        const cleaned = url.pathname + (url.searchParams.toString() ? `?${url.searchParams.toString()}` : '');
-        window.history.replaceState({}, '', cleaned);
-      }).catch((err) => {
-        logger.error('OAuth exchange error:', err);
-        toast({
-          title: "OAuth-Fehler",
-          description: "Ein unerwarteter Fehler ist aufgetreten. Bitte versuche dich erneut anzumelden.",
-          variant: "destructive",
-          duration: 6000,
+      supabase.auth.exchangeCodeForSession(url.toString())
+        .then(({ data, error }) => {
+          if (error) {
+            logger.error('OAuth session exchange failed:', error);
+            // Only show toast for user-facing errors, not technical ones
+            if (error.status === 400 || error.status === 401) {
+              toast({
+                title: "Anmeldung fehlgeschlagen",
+                description: "Bitte versuche dich erneut anzumelden.",
+                variant: "destructive",
+              });
+            }
+          }
+        })
+        .catch((err) => {
+          logger.error('OAuth exchange error:', err);
+        })
+        .finally(() => {
+          // Always clean URL to prevent repeated attempts
+          url.searchParams.delete('code');
+          url.searchParams.delete('state');
+          const cleaned = url.pathname + (url.searchParams.toString() ? `?${url.searchParams.toString()}` : '');
+          window.history.replaceState({}, '', cleaned);
         });
-        
-        // Clean URL even on error to avoid repeated attempts
-        url.searchParams.delete('code');
-        url.searchParams.delete('state');
-        const cleaned = url.pathname + (url.searchParams.toString() ? `?${url.searchParams.toString()}` : '');
-        window.history.replaceState({}, '', cleaned);
-      });
     } else if (window.location.hash && (window.location.hash.includes('access_token') || window.location.hash.includes('refresh_token'))) {
       // Fallback: handle implicit flow tokens returned in hash
       const hashParams = new URLSearchParams(window.location.hash.slice(1));
@@ -114,22 +107,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           .then(({ data, error }) => {
             if (error) {
               logger.error('Token session setup failed:', error);
-              toast({
-                title: "Anmeldung fehlgeschlagen",
-                description: "Die Sitzung konnte nicht hergestellt werden. Bitte melde dich erneut an.",
-                variant: "destructive",
-                duration: 6000,
-              });
             }
           })
           .catch((err) => {
             logger.error('Token setup error:', err);
-            toast({
-              title: "Sitzungsfehler",
-              description: "Ein Fehler ist beim Einrichten der Sitzung aufgetreten.",
-              variant: "destructive",
-              duration: 6000,
-            });
           })
           .finally(() => {
             const cleaned = url.pathname + (url.searchParams.toString() ? `?${url.searchParams.toString()}` : '');
@@ -137,14 +118,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           });
       } else {
         logger.warn('Incomplete OAuth tokens in URL hash');
-        toast({
-          title: "OAuth-Fehler",
-          description: "Unvollständige Anmeldedaten empfangen. Bitte versuche es erneut.",
-          variant: "destructive",
-          duration: 6000,
-        });
-        
-        // Clean hash if tokens are incomplete
+        // Clean hash silently
         const cleaned = url.pathname + (url.searchParams.toString() ? `?${url.searchParams.toString()}` : '');
         window.history.replaceState({}, '', cleaned);
       }

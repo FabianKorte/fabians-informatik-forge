@@ -108,37 +108,58 @@ window.addEventListener('unhandledrejection', (event) => {
   );
 });
 
-// Track console errors
+// Track console errors with guard to prevent infinite loops
+let isTrackingError = false;
 const originalConsoleError = console.error;
 console.error = (...args: any[]) => {
   originalConsoleError.apply(console, args);
   
-  // Create error from console.error arguments
-  const errorMessage = args.map(arg => {
-    if (arg instanceof Error) return arg.message;
-    if (typeof arg === 'object') return JSON.stringify(arg);
-    return String(arg);
-  }).join(' ');
+  // Guard against infinite loops
+  if (isTrackingError) return;
   
-  errorTracker.logError(
-    new Error(`Console Error: ${errorMessage}`),
-    { componentStack: 'Console' }
-  );
+  try {
+    isTrackingError = true;
+    const errorMessage = args.map(arg => {
+      if (arg instanceof Error) return arg.message;
+      if (typeof arg === 'object') {
+        try {
+          return JSON.stringify(arg);
+        } catch {
+          return String(arg);
+        }
+      }
+      return String(arg);
+    }).join(' ');
+    
+    errorTracker.logError(
+      new Error(`Console Error: ${errorMessage}`),
+      { componentStack: 'Console' }
+    );
+  } finally {
+    isTrackingError = false;
+  }
 };
 
-// Track React errors in development
+// Track React errors in development with guard
 if (import.meta.env.DEV) {
+  let isTrackingWarning = false;
   const originalConsoleWarn = console.warn;
   console.warn = (...args: any[]) => {
     originalConsoleWarn.apply(console, args);
     
-    // Only track React warnings
-    const message = String(args[0]);
-    if (message.includes('React') || message.includes('Warning:')) {
-      errorTracker.logError(
-        new Error(`React Warning: ${message}`),
-        { componentStack: 'React' }
-      );
+    if (isTrackingWarning) return;
+    
+    try {
+      isTrackingWarning = true;
+      const message = String(args[0]);
+      if (message.includes('React') || message.includes('Warning:')) {
+        errorTracker.logError(
+          new Error(`React Warning: ${message}`),
+          { componentStack: 'React' }
+        );
+      }
+    } finally {
+      isTrackingWarning = false;
     }
   };
 }
