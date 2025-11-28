@@ -34,7 +34,7 @@ export const useOfflineMode = () => {
     if (isOnline && offlineData) {
       syncOfflineData();
     }
-  }, [isOnline]);
+  }, [isOnline, offlineData]);
 
   const loadOfflineData = () => {
     try {
