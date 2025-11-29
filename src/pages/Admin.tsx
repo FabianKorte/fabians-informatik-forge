@@ -1,10 +1,11 @@
-import { useState, lazy, Suspense, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useState, lazy, Suspense } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/useAuth";
-import { LogOut, BookOpen, MapPin, MessageSquare, Home, FileText, Users, Shield, TrendingUp, Activity } from "lucide-react";
+import { LogOut, BookOpen, MapPin, MessageSquare, Home, FileText, Users, Shield, TrendingUp, Activity, AlertCircle, Bell, BarChart3 } from "lucide-react";
+import { useAdminCounts } from "@/hooks/useAdminCounts";
+import { Badge } from "@/components/ui/badge";
 
 // Lazy load admin components
 const AdminAnnouncements = lazy(() => import("@/components/admin/AdminAnnouncements"));
@@ -15,7 +16,6 @@ const AdminUsers = lazy(() => import("@/components/admin/AdminUsers"));
 const AdminSuggestions = lazy(() => import("@/components/admin/AdminSuggestions"));
 const AdminNotes = lazy(() => import("@/components/admin/AdminNotes"));
 const AdminAuditLogs = lazy(() => import("@/components/admin/AdminAuditLogs"));
-const BulkEditModules = lazy(() => import("@/components/admin/BulkEditModules"));
 const AnalyticsDashboard = lazy(() => import("@/components/admin/AnalyticsDashboard"));
 const CategoryManager = lazy(() => import("@/components/admin/CategoryManager"));
 const PerformanceMonitor = lazy(() => import("@/components/admin/PerformanceMonitor"));
@@ -29,29 +29,119 @@ const TabSkeleton = () => (
   </div>
 );
 
+interface AdminCardProps {
+  title: string;
+  description: string;
+  icon: React.ElementType;
+  onClick: () => void;
+  badge?: number;
+  gradient?: string;
+}
+
+const AdminCard = ({ title, description, icon: Icon, onClick, badge, gradient = "from-primary/10 to-primary/5" }: AdminCardProps) => (
+  <Card 
+    className="group cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-[1.02] border-border/50 overflow-hidden"
+    onClick={onClick}
+  >
+    <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-100 transition-opacity`} />
+    <CardHeader className="relative">
+      <div className="flex items-start justify-between">
+        <div className="p-3 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
+          <Icon className="w-6 h-6 text-primary" />
+        </div>
+        {badge !== undefined && badge > 0 && (
+          <Badge variant="destructive" className="animate-pulse">
+            {badge}
+          </Badge>
+        )}
+      </div>
+      <CardTitle className="mt-4 group-hover:text-primary transition-colors">{title}</CardTitle>
+      <CardDescription>{description}</CardDescription>
+    </CardHeader>
+  </Card>
+);
+
 export default function Admin() {
   const { signOut } = useAuth();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const [activeTab, setActiveTab] = useState("learning");
-
-  useEffect(() => {
-    const tab = searchParams.get("tab");
-    if (tab) {
-      setActiveTab(tab);
-    }
-  }, [searchParams]);
+  const [activeSection, setActiveSection] = useState<string | null>(null);
+  const { counts } = useAdminCounts();
 
   const handleSignOut = async () => {
     await signOut();
     navigate("/");
   };
 
+  const renderSection = () => {
+    if (!activeSection) return null;
+
+    const sections: Record<string, JSX.Element> = {
+      announcements: <AdminAnnouncements />,
+      learning: <AdminLearningContent />,
+      categories: <CategoryManager />,
+      suggestions: <AdminSuggestions />,
+      feedbacks: <AdminFeedbacks />,
+      "error-reports": <AdminErrorReporting />,
+      users: <AdminUsers />,
+      notes: <AdminNotes />,
+      roadmap: <AdminRoadmap />,
+      audit: <AdminAuditLogs />,
+      analytics: <AnalyticsDashboard />,
+      performance: <PerformanceMonitor />,
+      console: <ErrorConsole />,
+    };
+
+    return (
+      <div className="space-y-4">
+        <Button 
+          variant="outline" 
+          onClick={() => setActiveSection(null)}
+          className="mb-4"
+        >
+          ← Zurück zum Dashboard
+        </Button>
+        <Suspense fallback={<TabSkeleton />}>
+          {sections[activeSection]}
+        </Suspense>
+      </div>
+    );
+  };
+
+  if (activeSection) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background to-muted/30">
+        <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-10">
+          <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Shield className="w-6 h-6 text-primary" />
+              <h1 className="text-2xl font-bold">Admin-Bereich</h1>
+            </div>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => navigate("/")}>
+                <Home className="w-4 h-4 mr-2" />
+                Zur Startseite
+              </Button>
+              <Button variant="outline" onClick={handleSignOut}>
+                <LogOut className="w-4 h-4 mr-2" />
+                Abmelden
+              </Button>
+            </div>
+          </div>
+        </header>
+
+        <main className="container mx-auto px-4 py-8">
+          {renderSection()}
+        </main>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted">
-      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted/30">
+      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
+            <Shield className="w-6 h-6 text-primary" />
             <h1 className="text-2xl font-bold">Admin-Bereich</h1>
           </div>
           <div className="flex gap-2">
@@ -68,163 +158,145 @@ export default function Admin() {
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Verwaltung</CardTitle>
-            <CardDescription>
-              Verwalte Lerninhalte, Roadmap und Feedbacks
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-3 md:grid-cols-5 lg:grid-cols-13 gap-1 h-auto">
-                <TabsTrigger value="announcements" className="text-xs lg:text-sm">
-                  <MessageSquare className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
-                  <span className="hidden sm:inline">Ankündigungen</span>
-                  <span className="sm:hidden">Ank.</span>
-                </TabsTrigger>
-                <TabsTrigger value="learning" className="text-xs lg:text-sm">
-                  <BookOpen className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
-                  <span className="hidden sm:inline">Lerninhalte</span>
-                  <span className="sm:hidden">Inhalte</span>
-                </TabsTrigger>
-                <TabsTrigger value="categories" className="text-xs lg:text-sm">
-                  <BookOpen className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
-                  <span className="hidden sm:inline">Kategorien</span>
-                  <span className="sm:hidden">Kat.</span>
-                </TabsTrigger>
-                <TabsTrigger value="suggestions" className="text-xs lg:text-sm">
-                  <MessageSquare className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
-                  <span className="hidden sm:inline">Vorschläge</span>
-                  <span className="sm:hidden">Vor.</span>
-                </TabsTrigger>
-                <TabsTrigger value="roadmap" className="text-xs lg:text-sm">
-                  <MapPin className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
-                  <span className="hidden sm:inline">Roadmap</span>
-                  <span className="sm:hidden">Road</span>
-                </TabsTrigger>
-                <TabsTrigger value="feedbacks" className="text-xs lg:text-sm">
-                  <MessageSquare className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
-                  <span className="hidden sm:inline">Feedbacks</span>
-                  <span className="sm:hidden">Feed</span>
-                </TabsTrigger>
-                <TabsTrigger value="users" className="text-xs lg:text-sm">
-                  <Users className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
-                  <span className="hidden sm:inline">Benutzer & Rollen</span>
-                  <span className="sm:hidden">User</span>
-                </TabsTrigger>
-                <TabsTrigger value="notes" className="text-xs lg:text-sm">
-                  <FileText className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
-                  <span className="hidden sm:inline">Notizen</span>
-                  <span className="sm:hidden">Note</span>
-                </TabsTrigger>
-                <TabsTrigger value="audit" className="text-xs lg:text-sm">
-                  <Shield className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
-                  <span className="hidden sm:inline">Audit-Log</span>
-                  <span className="sm:hidden">Audit</span>
-                </TabsTrigger>
-                <TabsTrigger value="analytics" className="text-xs lg:text-sm">
-                  <TrendingUp className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
-                  <span className="hidden sm:inline">Analytics</span>
-                  <span className="sm:hidden">Stats</span>
-                </TabsTrigger>
-                <TabsTrigger value="performance" className="text-xs lg:text-sm">
-                  <Activity className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
-                  <span className="hidden sm:inline">Performance</span>
-                  <span className="sm:hidden">Perf</span>
-                </TabsTrigger>
-                <TabsTrigger value="console" className="text-xs lg:text-sm">
-                  <Shield className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
-                  <span className="hidden sm:inline">Konsole</span>
-                  <span className="sm:hidden">Cons</span>
-                </TabsTrigger>
-                <TabsTrigger value="error-reports" className="text-xs lg:text-sm">
-                  <MessageSquare className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
-                  <span className="hidden sm:inline">Fehlerberichte</span>
-                  <span className="sm:hidden">Fehler</span>
-                </TabsTrigger>
-              </TabsList>
+        <div className="mb-8">
+          <h2 className="text-3xl font-bold mb-2">Dashboard</h2>
+          <p className="text-muted-foreground">
+            Verwalte alle Aspekte deiner Lernplattform
+          </p>
+        </div>
 
-              <TabsContent value="announcements" className="mt-6">
-                <Suspense fallback={<TabSkeleton />}>
-                  <AdminAnnouncements />
-                </Suspense>
-              </TabsContent>
+        {/* Content Management */}
+        <section className="mb-8">
+          <div className="flex items-center gap-2 mb-4">
+            <BookOpen className="w-5 h-5 text-primary" />
+            <h3 className="text-xl font-semibold">Inhalte</h3>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <AdminCard
+              title="Ankündigungen"
+              description="Verwalte System-Ankündigungen"
+              icon={Bell}
+              onClick={() => setActiveSection("announcements")}
+              gradient="from-blue-500/10 to-blue-500/5"
+            />
+            <AdminCard
+              title="Lerninhalte"
+              description="Verwalte Lernmodule und Quiz"
+              icon={BookOpen}
+              onClick={() => setActiveSection("learning")}
+              gradient="from-green-500/10 to-green-500/5"
+            />
+            <AdminCard
+              title="Kategorien"
+              description="Verwalte Lernkategorien"
+              icon={BarChart3}
+              onClick={() => setActiveSection("categories")}
+              gradient="from-purple-500/10 to-purple-500/5"
+            />
+            <AdminCard
+              title="Vorschläge"
+              description="Benutzervorschläge prüfen"
+              icon={MessageSquare}
+              onClick={() => setActiveSection("suggestions")}
+              gradient="from-orange-500/10 to-orange-500/5"
+            />
+          </div>
+        </section>
 
-              <TabsContent value="learning" className="mt-6">
-                <Suspense fallback={<TabSkeleton />}>
-                  <AdminLearningContent />
-                </Suspense>
-              </TabsContent>
+        {/* Community */}
+        <section className="mb-8">
+          <div className="flex items-center gap-2 mb-4">
+            <Users className="w-5 h-5 text-primary" />
+            <h3 className="text-xl font-semibold">Community</h3>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <AdminCard
+              title="Feedbacks"
+              description="Benutzerfeedback ansehen"
+              icon={MessageSquare}
+              onClick={() => setActiveSection("feedbacks")}
+              badge={counts.feedbacks}
+              gradient="from-pink-500/10 to-pink-500/5"
+            />
+            <AdminCard
+              title="Fehlerberichte"
+              description="Bug-Reports verwalten"
+              icon={AlertCircle}
+              onClick={() => setActiveSection("error-reports")}
+              gradient="from-red-500/10 to-red-500/5"
+            />
+            <AdminCard
+              title="Benutzer & Rollen"
+              description="Benutzerverwaltung"
+              icon={Users}
+              onClick={() => setActiveSection("users")}
+              badge={counts.users}
+              gradient="from-cyan-500/10 to-cyan-500/5"
+            />
+            <AdminCard
+              title="Notizen"
+              description="Admin-Notizen verwalten"
+              icon={FileText}
+              onClick={() => setActiveSection("notes")}
+              gradient="from-amber-500/10 to-amber-500/5"
+            />
+          </div>
+        </section>
 
-              <TabsContent value="categories" className="mt-6">
-                <Suspense fallback={<TabSkeleton />}>
-                  <CategoryManager />
-                </Suspense>
-              </TabsContent>
+        {/* Development */}
+        <section className="mb-8">
+          <div className="flex items-center gap-2 mb-4">
+            <MapPin className="w-5 h-5 text-primary" />
+            <h3 className="text-xl font-semibold">Entwicklung</h3>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
+            <AdminCard
+              title="Roadmap"
+              description="Feature-Roadmap planen"
+              icon={MapPin}
+              onClick={() => setActiveSection("roadmap")}
+              gradient="from-indigo-500/10 to-indigo-500/5"
+            />
+            <AdminCard
+              title="Audit-Log"
+              description="System-Aktivitäten prüfen"
+              icon={Shield}
+              onClick={() => setActiveSection("audit")}
+              gradient="from-slate-500/10 to-slate-500/5"
+            />
+          </div>
+        </section>
 
-              <TabsContent value="suggestions" className="mt-6">
-                <Suspense fallback={<TabSkeleton />}>
-                  <AdminSuggestions />
-                </Suspense>
-              </TabsContent>
-
-              <TabsContent value="roadmap" className="mt-6">
-                <Suspense fallback={<TabSkeleton />}>
-                  <AdminRoadmap />
-                </Suspense>
-              </TabsContent>
-
-              <TabsContent value="feedbacks" className="mt-6">
-                <Suspense fallback={<TabSkeleton />}>
-                  <AdminFeedbacks />
-                </Suspense>
-              </TabsContent>
-
-              <TabsContent value="users" className="mt-6">
-                <Suspense fallback={<TabSkeleton />}>
-                  <AdminUsers />
-                </Suspense>
-              </TabsContent>
-
-              <TabsContent value="notes" className="mt-6">
-                <Suspense fallback={<TabSkeleton />}>
-                  <AdminNotes />
-                </Suspense>
-              </TabsContent>
-
-              <TabsContent value="audit" className="mt-6">
-                <Suspense fallback={<TabSkeleton />}>
-                  <AdminAuditLogs />
-                </Suspense>
-              </TabsContent>
-
-              <TabsContent value="analytics" className="mt-6">
-                <Suspense fallback={<TabSkeleton />}>
-                  <AnalyticsDashboard />
-                </Suspense>
-              </TabsContent>
-
-              <TabsContent value="performance" className="mt-6">
-                <Suspense fallback={<TabSkeleton />}>
-                  <PerformanceMonitor />
-                </Suspense>
-              </TabsContent>
-
-              <TabsContent value="console" className="mt-6">
-                <Suspense fallback={<TabSkeleton />}>
-                  <ErrorConsole />
-                </Suspense>
-              </TabsContent>
-
-              <TabsContent value="error-reports" className="mt-6">
-                <Suspense fallback={<TabSkeleton />}>
-                  <AdminErrorReporting />
-                </Suspense>
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-        </Card>
+        {/* Monitoring */}
+        <section>
+          <div className="flex items-center gap-2 mb-4">
+            <Activity className="w-5 h-5 text-primary" />
+            <h3 className="text-xl font-semibold">Monitoring</h3>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <AdminCard
+              title="Analytics"
+              description="Nutzungsstatistiken ansehen"
+              icon={TrendingUp}
+              onClick={() => setActiveSection("analytics")}
+              gradient="from-emerald-500/10 to-emerald-500/5"
+            />
+            <AdminCard
+              title="Performance"
+              description="System-Performance überwachen"
+              icon={Activity}
+              onClick={() => setActiveSection("performance")}
+              gradient="from-violet-500/10 to-violet-500/5"
+            />
+            <AdminCard
+              title="Konsole"
+              description="Fehler-Konsole einsehen"
+              icon={Shield}
+              onClick={() => setActiveSection("console")}
+              gradient="from-rose-500/10 to-rose-500/5"
+            />
+          </div>
+        </section>
       </main>
     </div>
   );
