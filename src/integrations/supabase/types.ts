@@ -328,6 +328,60 @@ export type Database = {
           },
         ]
       }
+      error_reports: {
+        Row: {
+          actual_behavior: string | null
+          admin_notes: string | null
+          browser_info: string | null
+          created_at: string | null
+          description: string
+          expected_behavior: string | null
+          id: string
+          priority: string | null
+          resolved_at: string | null
+          screenshot_url: string | null
+          status: string | null
+          steps_to_reproduce: string | null
+          title: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          actual_behavior?: string | null
+          admin_notes?: string | null
+          browser_info?: string | null
+          created_at?: string | null
+          description: string
+          expected_behavior?: string | null
+          id?: string
+          priority?: string | null
+          resolved_at?: string | null
+          screenshot_url?: string | null
+          status?: string | null
+          steps_to_reproduce?: string | null
+          title: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          actual_behavior?: string | null
+          admin_notes?: string | null
+          browser_info?: string | null
+          created_at?: string | null
+          description?: string
+          expected_behavior?: string | null
+          id?: string
+          priority?: string | null
+          resolved_at?: string | null
+          screenshot_url?: string | null
+          status?: string | null
+          steps_to_reproduce?: string | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       exam_sessions: {
         Row: {
           category_id: string

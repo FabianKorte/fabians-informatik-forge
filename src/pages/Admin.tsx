@@ -20,6 +20,7 @@ const AnalyticsDashboard = lazy(() => import("@/components/admin/AnalyticsDashbo
 const CategoryManager = lazy(() => import("@/components/admin/CategoryManager"));
 const PerformanceMonitor = lazy(() => import("@/components/admin/PerformanceMonitor"));
 const ErrorConsole = lazy(() => import("@/components/admin/ErrorConsole"));
+const AdminErrorReporting = lazy(() => import("@/components/admin/AdminErrorReporting"));
 
 const TabSkeleton = () => (
   <div className="space-y-4">
@@ -76,7 +77,7 @@ export default function Admin() {
           </CardHeader>
           <CardContent>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-3 md:grid-cols-5 lg:grid-cols-12 gap-1 h-auto">
+              <TabsList className="grid w-full grid-cols-3 md:grid-cols-5 lg:grid-cols-13 gap-1 h-auto">
                 <TabsTrigger value="announcements" className="text-xs lg:text-sm">
                   <MessageSquare className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
                   <span className="hidden sm:inline">Ankündigungen</span>
@@ -136,6 +137,11 @@ export default function Admin() {
                   <Shield className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
                   <span className="hidden sm:inline">Konsole</span>
                   <span className="sm:hidden">Cons</span>
+                </TabsTrigger>
+                <TabsTrigger value="error-reports" className="text-xs lg:text-sm">
+                  <MessageSquare className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
+                  <span className="hidden sm:inline">Fehlerberichte</span>
+                  <span className="sm:hidden">Fehler</span>
                 </TabsTrigger>
               </TabsList>
 
@@ -208,6 +214,12 @@ export default function Admin() {
               <TabsContent value="console" className="mt-6">
                 <Suspense fallback={<TabSkeleton />}>
                   <ErrorConsole />
+                </Suspense>
+              </TabsContent>
+
+              <TabsContent value="error-reports" className="mt-6">
+                <Suspense fallback={<TabSkeleton />}>
+                  <AdminErrorReporting />
                 </Suspense>
               </TabsContent>
             </Tabs>

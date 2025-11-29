@@ -36,6 +36,7 @@ const Install = lazy(() => import("./pages/Install"));
 const Lexikon = lazy(() => import("./pages/Lexikon"));
 const Roadmap = lazy(() => import("./pages/Roadmap"));
 const AIChatbot = lazy(() => import("@/components/AIChatbot"));
+const ReportError = lazy(() => import("./pages/ReportError"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -90,6 +91,7 @@ const AppRoutes = () => {
             <Route path="/install" element={<Install />} />
             <Route path="/lexikon" element={<Lexikon />} />
             <Route path="/roadmap" element={<Roadmap />} />
+            <Route path="/report-error" element={<ReportError />} />
             <Route path="/chat" element={
               <ChatErrorBoundary>
                 <Chat />
