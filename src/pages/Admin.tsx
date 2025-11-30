@@ -1,5 +1,5 @@
-import { useState, lazy, Suspense } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, lazy, Suspense, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
@@ -64,8 +64,17 @@ const AdminCard = ({ title, description, icon: Icon, onClick, badge, gradient = 
 export default function Admin() {
   const { signOut } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const { counts } = useAdminCounts();
+
+  // Read tab parameter from URL and set active section
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab) {
+      setActiveSection(tab);
+    }
+  }, [searchParams]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -83,6 +92,7 @@ export default function Admin() {
       feedbacks: <AdminFeedbacks />,
       "error-reports": <AdminErrorReporting />,
       users: <AdminUsers />,
+      roles: <AdminUsers />, // alias for backward compatibility
       notes: <AdminNotes />,
       roadmap: <AdminRoadmap />,
       audit: <AdminAuditLogs />,
