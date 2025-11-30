@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Home, BookOpen, TrendingUp, User, MessageSquare, Users, Shield, Download, MapPin, LogIn, LogOut, Menu, FileText, Activity, ChevronDown, ChevronRight, AlertCircle } from "lucide-react";
+import { Home, BookOpen, TrendingUp, User, MessageSquare, Users, Shield, Download, MapPin, LogIn, LogOut, Menu, FileText, Activity, ChevronDown, ChevronRight, AlertCircle, BarChart3 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useAdminCounts } from "@/hooks/useAdminCounts";
@@ -45,10 +45,11 @@ const resourceItems = [
 const adminSubItems = [
   { title: "Ankündigungen", tab: "announcements", icon: MessageSquare },
   { title: "Lerninhalte", tab: "learning", icon: BookOpen },
-  { title: "Kategorien", tab: "categories", icon: BookOpen },
+  { title: "Kategorien", tab: "categories", icon: BarChart3 },
   { title: "Vorschläge", tab: "suggestions", icon: MessageSquare },
   { title: "Roadmap", tab: "roadmap", icon: MapPin },
   { title: "Feedbacks", tab: "feedbacks", icon: MessageSquare },
+  { title: "Fehlerberichte", tab: "error-reports", icon: AlertCircle },
   { title: "Benutzer", tab: "users", icon: Users },
   { title: "Notizen", tab: "notes", icon: FileText },
   { title: "Audit-Log", tab: "audit", icon: Shield },
