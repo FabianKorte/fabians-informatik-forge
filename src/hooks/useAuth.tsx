@@ -246,10 +246,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
    * @returns {Promise<{error: any}>} Error object if sign in fails
    */
   const signInWithGoogle = async () => {
+    const redirectUrl = `${window.location.origin}/auth`;
+    
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: 'https://informatik.fabiankorte.net/auth',
+        redirectTo: redirectUrl,
       },
     });
 
@@ -267,10 +269,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
    * @returns {Promise<{error: any}>} Error object if sign in fails
    */
   const signInWithDiscord = async () => {
+    const redirectUrl = `${window.location.origin}/auth`;
+    
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'discord',
       options: {
-        redirectTo: 'https://informatik.fabiankorte.net/auth',
+        redirectTo: redirectUrl,
       },
     });
 
