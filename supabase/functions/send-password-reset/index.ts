@@ -37,7 +37,7 @@ const handler = async (req: Request): Promise<Response> => {
     );
 
     const emailResponse = await resend.emails.send({
-      from: "IHK IT-Prüfungsvorbereitung <noreply@send.fabiankorte.net>",
+      from: "IHK IT-Prüfungsvorbereitung <noreply@mail.fabiankorte.net>",
       to: [email],
       subject: "Passwort zurücksetzen - IHK IT-Prüfungsvorbereitung",
       html,
