@@ -22,6 +22,9 @@ npx playwright test e2e/auth.spec.ts
 # Nur Accessibility-Tests
 npx playwright test e2e/accessibility.spec.ts
 
+# Nur Integration-Tests
+npx playwright test e2e/user-flow-integration.spec.ts
+
 # Im headed mode (Browser sichtbar)
 npx playwright test --headed
 
@@ -64,6 +67,14 @@ npx playwright show-report
 - Image Alt-Texte
 - Skip-to-Content Link
 
+### `user-flow-integration.spec.ts`
+- Vollständige User-Journeys über mehrere Seiten
+- Registrierung → Login → Profile bearbeiten
+- Session-Persistenz über Page-Reloads
+- Protected Routes Zugriffskontrolle
+- Multiple Login/Logout-Zyklen
+- Cross-Tab Session-Handling
+
 ## Accessibility Testing
 
 Die Accessibility-Tests verwenden **axe-core** um automatisch WCAG 2.1 Konformität zu prüfen:
@@ -89,6 +100,29 @@ Wenn Accessibility-Violations gefunden werden:
    - Beschreibung und Help-URL
    - Betroffene Elemente mit HTML und Selektoren
    - Konkrete Failure-Messages
+
+## Integration Testing
+
+Die Integration-Tests in `user-flow-integration.spec.ts` testen vollständige User-Flows:
+
+### Helper-Funktionen
+Die `e2e/helpers/auth-helpers.ts` bietet wiederverwendbare Auth-Funktionen:
+- `generateTestUser()` - Generiert eindeutige Test-User
+- `signUp()` - Registriert neuen User
+- `login()` - Meldet User an
+- `logout()` - Meldet User ab
+- `isLoggedIn()` - Prüft Login-Status
+- `goToProfile()` - Navigation zur Profil-Seite
+- `updateProfile()` - Aktualisiert Profil-Daten
+- `verifyProfileInfo()` - Verifiziert Profil-Anzeige
+
+### Test-Szenarien
+- **Complete User Journey**: Signup → Login → Profile Edit → Logout → Re-Login
+- **Error Handling**: Duplicate Email, Invalid Credentials
+- **Profile Management**: Username/Bio Updates
+- **Session Persistence**: Page Reloads, Multiple Tabs
+- **Protected Routes**: Zugriffskontrolle ohne Login
+- **Login/Logout Cycles**: Multiple Login-Sessions
 
 ## Best Practices
 
