@@ -53,6 +53,16 @@ export const SEO = ({
     updateMetaTag('twitter:description', description);
     updateMetaTag('twitter:image', ogImage);
 
+    // Security and Trust meta tags
+    updateMetaTag('referrer', 'strict-origin-when-cross-origin');
+    updateMetaTag('format-detection', 'telephone=no');
+    
+    // Additional trust signals
+    updateMetaTag('author', 'Fabian Korte');
+    updateMetaTag('revisit-after', '7 days');
+    updateMetaTag('rating', 'general');
+    updateMetaTag('distribution', 'global');
+
     // Canonical URL
     if (canonical) {
       let linkTag = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;

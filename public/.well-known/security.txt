@@ -1,0 +1,9 @@
+Contact: mailto:fabian.korte@example.com
+Expires: 2026-12-31T23:59:59.000Z
+Preferred-Languages: de, en
+Canonical: https://informatik.fabiankorte.net/.well-known/security.txt
+Policy: https://informatik.fabiankorte.net/privacy
+Hiring: https://informatik.fabiankorte.net/
+
+# This is a security policy for informatik.fabiankorte.net
+# If you discover any security issues, please report them to the contact above
