@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Progress as ProgressBar } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { SEO } from "@/components/SEO";
 import { 
   ArrowLeft, 
   BookOpen, 
@@ -106,7 +107,14 @@ const Progress = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <SEO 
+        title="Lernfortschritt & Statistiken | IHK IT-Prüfungsvorbereitung"
+        description="Verfolge deinen Lernfortschritt, sieh deine Statistiken und erkenne deine Stärken und Schwächen bei der IHK IT-Prüfungsvorbereitung."
+        keywords="Lernfortschritt, Statistiken, Prüfungsvorbereitung, IHK, IT-Ausbildung, Fachinformatiker"
+        canonical="https://informatik.fabiankorte.net/progress"
+      />
+      <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b border-border bg-card">
         <div className="max-w-6xl mx-auto px-6 py-4">
@@ -337,6 +345,7 @@ const Progress = () => {
         </Tabs>
       </div>
     </div>
+    </>
   );
 };
 

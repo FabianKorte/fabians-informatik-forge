@@ -31,6 +31,7 @@ import { StatisticsDashboard } from "@/components/statistics/StatisticsDashboard
 import { AchievementsList } from "@/components/gamification/AchievementsList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Trophy, BarChart3 } from "lucide-react";
+import { SEO } from "@/components/SEO";
 
 // Lazy load TwoFactorSetupDialog
 const TwoFactorSetupDialog = lazy(() => 
@@ -218,7 +219,14 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background p-4">
+    <>
+      <SEO 
+        title="Mein Profil | IHK IT-Prüfungsvorbereitung"
+        description="Verwalte dein Profil, deine Lernstatistiken, Achievements und Einstellungen für die IHK IT-Prüfungsvorbereitung."
+        keywords="Profil, Benutzer, Statistiken, Achievements, IHK, Fachinformatiker"
+        canonical="https://informatik.fabiankorte.net/profile"
+      />
+      <div className="min-h-screen bg-background p-4">
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")}>
@@ -440,6 +448,7 @@ const Profile = () => {
         />
       </Suspense>
     </div>
+    </>
   );
 };
 
