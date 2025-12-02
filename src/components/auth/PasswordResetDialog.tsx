@@ -32,11 +32,27 @@ export const PasswordResetDialog = () => {
 
     setIsLoading(true);
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      // Generate password reset link
+      const { data, error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/auth?reset=true`,
       });
 
-      if (error) throw error;
+      if (resetError) throw resetError;
+
+      // Send custom email via Resend
+      const resetLink = `${window.location.origin}/auth?reset=true`;
+      
+      const { error: emailError } = await supabase.functions.invoke('send-password-reset', {
+        body: { 
+          email,
+          resetLink 
+        }
+      });
+
+      if (emailError) {
+        console.error('Custom email error:', emailError);
+        // Still show success to user since Supabase sent the default email
+      }
 
       toast({
         title: "E-Mail versendet",
