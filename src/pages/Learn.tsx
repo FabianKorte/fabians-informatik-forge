@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SEO } from "@/components/SEO";
+import { CourseStructuredData } from "@/components/CourseStructuredData";
 import { getCategoriesFromDatabase } from "@/lib/categoryUtils";
 import { getModulesForCategory } from "@/lib/learnContentUtils";
 import { GradientShadowCard } from "@/components/ui/gradient-shadow-card";
@@ -89,10 +90,12 @@ const LearnPage = () => {
   return (
     <>
       <SEO 
-        title={`${category?.title || 'Lernen'} | IHK IT-Prüfungsvorbereitung`}
-        description={category?.description || 'Lerne mit interaktiven Übungen für deine IHK IT-Prüfung'}
-        keywords={`${category?.title}, IHK, IT-Prüfung, Lernen, Übungen`}
+        title={`${category?.title || "Lernen"} | IHK IT-Prüfungsvorbereitung`}
+        description={category?.description || "Lerne mit interaktiven Übungen für deine IHK IT-Prüfung"}
+        keywords={`${category?.title}, IHK, IT-Prüfung, Lernen, Übungen, Fachinformatiker`}
+        canonical={`https://informatik.fabiankorte.net/learn/${categoryId}`}
       />
+      {category && <CourseStructuredData category={category} totalModules={modules.length} />}
       <main className="min-h-screen bg-background">
       <header className="px-6 pt-14 pb-10 bg-gradient-to-b from-background to-background">
         <div className="max-w-6xl mx-auto space-y-6">
