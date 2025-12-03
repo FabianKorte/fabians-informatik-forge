@@ -16,9 +16,29 @@ interface Announcement {
   updated_at: string;
 }
 
+const DISMISSED_STORAGE_KEY = 'dismissed_announcements';
+
+const getDismissedFromStorage = (): Record<string, string> => {
+  try {
+    const stored = localStorage.getItem(DISMISSED_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : {};
+  } catch {
+    return {};
+  }
+};
+
+const saveDismissedToStorage = (dismissed: Record<string, string>) => {
+  try {
+    localStorage.setItem(DISMISSED_STORAGE_KEY, JSON.stringify(dismissed));
+  } catch (error) {
+    logger.error('Error saving dismissed announcements:', error);
+  }
+};
+
 export const SiteAnnouncementBanner = () => {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
-  const [dismissed, setDismissed] = useState<Set<string>>(new Set());
+  // Store dismissed as { announcementId: updatedAt } to re-show if announcement is updated
+  const [dismissed, setDismissed] = useState<Record<string, string>>(() => getDismissedFromStorage());
 
   useEffect(() => {
     fetchAnnouncements();
@@ -59,8 +79,13 @@ export const SiteAnnouncementBanner = () => {
     }
   };
 
-  const handleDismiss = (id: string) => {
-    setDismissed(prev => new Set(prev).add(id));
+  const handleDismiss = (announcement: Announcement) => {
+    const newDismissed = {
+      ...dismissed,
+      [announcement.id]: announcement.updated_at
+    };
+    setDismissed(newDismissed);
+    saveDismissedToStorage(newDismissed);
   };
 
   const getIcon = (type: string) => {
@@ -85,7 +110,13 @@ export const SiteAnnouncementBanner = () => {
     }
   };
 
-  const visibleAnnouncements = announcements.filter(a => !dismissed.has(a.id));
+  // Only show announcements that haven't been dismissed OR have been updated since dismissal
+  const visibleAnnouncements = announcements.filter(a => {
+    const dismissedAt = dismissed[a.id];
+    if (!dismissedAt) return true;
+    // Show again if the announcement was updated after being dismissed
+    return a.updated_at > dismissedAt;
+  });
 
   if (visibleAnnouncements.length === 0) return null;
 
@@ -111,7 +142,7 @@ export const SiteAnnouncementBanner = () => {
               variant="ghost"
               size="icon"
               className="h-6 w-6 rounded-full hover:bg-background/50"
-              onClick={() => handleDismiss(announcement.id)}
+              onClick={() => handleDismiss(announcement)}
               aria-label="Banner schließen"
             >
               <X className="h-4 w-4" />
