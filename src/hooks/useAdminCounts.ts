@@ -35,10 +35,22 @@ export const useAdminCounts = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
 
-  const markUsersAsSeen = (userIds: string[]) => {
-    const seenUsers = getSeenUsers();
-    const allSeen = [...new Set([...seenUsers, ...userIds])];
-    saveSeenUsers(allSeen);
+const markUsersAsSeen = async () => {
+    // Fetch the IDs of new users from the last 7 days and mark them as seen
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    
+    const { data: newUsers } = await supabase
+      .from('profiles')
+      .select('id')
+      .gte('created_at', sevenDaysAgo.toISOString());
+    
+    if (newUsers && newUsers.length > 0) {
+      const userIds = newUsers.map(u => u.id);
+      const seenUsers = getSeenUsers();
+      const allSeen = [...new Set([...seenUsers, ...userIds])];
+      saveSeenUsers(allSeen);
+    }
     setCounts(prev => ({ ...prev, users: 0 }));
   };
 
