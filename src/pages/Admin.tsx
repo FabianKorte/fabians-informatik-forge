@@ -298,7 +298,7 @@ export default function Admin() {
               onClick={() => {
                 setActiveSection("users");
                 // Mark users as seen when clicking the card
-                markUsersAsSeen([]);
+                markUsersAsSeen();
               }}
               badge={counts.users}
               gradient="from-cyan-500/10 to-cyan-500/5"
