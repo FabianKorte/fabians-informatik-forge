@@ -239,9 +239,9 @@ export default function LiveAuditLog() {
           </div>
         </ScrollArea>
         
-        {/* Hidden audio element for notifications */}
+        {/* Hidden audio element for notifications - proper notification sound */}
         <audio ref={audioRef} preload="auto">
-          <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2teleAYAD4K35peqaBsJb6S4joJOFACLxdjf" type="audio/wav" />
+          <source src="data:audio/wav;base64,UklGRl9vT19teleWQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAZGF0YU5vT19teleAAAD//wMADQAWABcAEgAHAPv/6v/b/8//xv/B/8H/x//Q/97/7f/8/wcADwARAA8ABgD6/+v/2v/M/8P/v/+//8T/zv/d/+7//v8OABkAIAAhABsADwD//+z/2v/L/8H/vP+8/8H/y//a/+z//f8NABkAIAAhABsADgD9/+r/1//H/7v/tf+0/7f/v//M/93/8P8BABEAHAAjACQAHQAQAP//7P/Y/8b/uf+y/7D/sv+6/8j/2v/t//7/DQAYACABIQEcAQ8B/wDs/9n/yP+7/7T/sf+y/7j/xv/X/+n/+v8JABUAHgAkACMAHAAQAP//7f/Z/8b/uP+w/6z/rP+x/7z/y//d/+//AAAPABoAIgAlACAAFAAFAPP/4P/N/73/sv+r/6n/rP+0/8L/1P/m//f/BwATABwAIQAiABwAEQABAO//3P/J/7j/rP+k/6H/ov+o/7T/xf/X/+n/+f8IABQAHAAhACEAGgANAP3/6//X/8P/sv+l/5z/mP+Y/5z/pv+1/8f/2v/s//z/CgAVABwAHwAdABYACgD6/+f/0v+9/6z/n/+V/5D/j/+S/5z/q/+9/9D/4v/z/wIADwAYAB0AHQAWAA0A/v/s/9f/w/+w/6D/lf+N/4n/if+N/5j/p/+6/8z/3//x/wEADwAYAB4AHQAWAAwA/P/q/9X/wP+s/5z/j/+G/4H/gP+D/43/nP+v/8L/1f/o//n/CAASABkAGwAZABEABwD4/+b/0v+8/6j/l/+K/4D/ev95/3z/hf+T/6X/uP/M/9//8f8AAAwAFQAaABsAFgAOAAIA8f/f/8r/tf+j/5P/h/99/3f/dv94/4D/jv+g/7P/xv/Z/+v/+/8GAA8AFQAYABYADwAGAPn/6P/V/8H/rf+c/47/g/98/3n/eP97/4P/kP+h/7T/xv/Z/+v/+/8HAA8AFQAXABQADQADAPb/5v/U/8D/rf+c/47/hP99/3r/ef98/4T/kf+i/7T/xv/Y/+n/+f8GAA4AFAAXABQADQADAPb/5v/U/8D/rf+c/47/hP99/3r/ef98/4T/kf+i/7T/xv/Y" type="audio/wav" />
         </audio>
       </CardContent>
     </Card>
