@@ -93,21 +93,28 @@ export default function LiveAuditLog() {
   }, [isLive, soundEnabled]);
 
   const fetchProfiles = async (userIds: string[]) => {
-    const uniqueIds = [...new Set(userIds)].filter(id => !profiles[id]);
-    if (uniqueIds.length === 0) return;
+    // Use callback to access current state and avoid stale closure
+    setProfiles(prev => {
+      const uniqueIds = [...new Set(userIds)].filter(id => !prev[id]);
+      if (uniqueIds.length === 0) return prev;
 
-    const { data } = await supabase
-      .from('profiles')
-      .select('id, username')
-      .in('id', uniqueIds);
+      // Fetch profiles asynchronously
+      supabase
+        .from('profiles')
+        .select('id, username')
+        .in('id', uniqueIds)
+        .then(({ data }) => {
+          if (data && data.length > 0) {
+            setProfiles(current => {
+              const updated = { ...current };
+              data.forEach(p => { updated[p.id] = p; });
+              return updated;
+            });
+          }
+        });
 
-    if (data) {
-      setProfiles(prev => {
-        const updated = { ...prev };
-        data.forEach(p => { updated[p.id] = p; });
-        return updated;
-      });
-    }
+      return prev;
+    });
   };
 
   const getEntityIcon = (type: string) => {
