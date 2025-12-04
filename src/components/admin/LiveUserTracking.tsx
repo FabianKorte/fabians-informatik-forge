@@ -151,25 +151,31 @@ export default function LiveUserTracking() {
   };
 
   const fetchProfilesForIds = async (userIds: string[]) => {
-    const uniqueIds = [...new Set(userIds)].filter(id => !profiles[id]);
-    if (uniqueIds.length === 0) return;
+    // Use callback to access current state and avoid stale closure
+    setProfiles(prev => {
+      const uniqueIds = [...new Set(userIds)].filter(id => !prev[id]);
+      if (uniqueIds.length === 0) return prev;
 
-    const { data } = await supabase
-      .from('profiles')
-      .select('id, username, avatar_url')
-      .in('id', uniqueIds);
+      // Fetch profiles asynchronously
+      supabase
+        .from('profiles')
+        .select('id, username, avatar_url')
+        .in('id', uniqueIds)
+        .then(({ data }) => {
+          if (data && data.length > 0) {
+            setProfiles(current => {
+              const updated = { ...current };
+              data.forEach(p => { updated[p.id] = { username: p.username, avatar_url: p.avatar_url }; });
+              return updated;
+            });
+          }
+        });
 
-    if (data) {
-      setProfiles(prev => {
-        const updated = { ...prev };
-        data.forEach(p => { updated[p.id] = { username: p.username, avatar_url: p.avatar_url }; });
-        return updated;
-      });
-    }
+      return prev;
+    });
   };
 
-  const fetchProfileIfNeeded = async (userId: string) => {
-    if (profiles[userId]) return;
+  const fetchProfileIfNeeded = (userId: string) => {
     fetchProfilesForIds([userId]);
   };
 
