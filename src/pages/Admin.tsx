@@ -71,7 +71,6 @@ export default function Admin() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [activeSection, setActiveSection] = useState<string | null>(null);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { counts, markUsersAsSeen } = useAdminCounts();
 
   // Read tab parameter from URL and set active section
