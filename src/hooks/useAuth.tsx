@@ -5,6 +5,7 @@ import { useToast } from '@/hooks/use-toast';
 import { checkAdminStatus, clearAdminCache } from '@/lib/auth/adminChecker';
 import { checkSessionTimeout, createSessionCheckInterval } from '@/lib/auth/sessionManager';
 import { logger } from '@/lib/logger';
+import { isNetworkAvailable } from '@/lib/networkAwareFetch';
 
 /**
  * Authentication context type definition.
@@ -125,7 +126,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     // THEN get the initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
+      if (error) {
+        // Handle session retrieval errors gracefully
+        if (!isNetworkAvailable()) {
+          logger.info('Session check skipped - offline');
+        } else {
+          logger.error('Error getting session:', error);
+        }
+        setIsLoading(false);
+        return;
+      }
+
       setSession(session);
       sessionRef.current = session;
       setUser(session?.user ?? null);
@@ -134,10 +146,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // Clear cache first to ensure we get fresh data
         clearAdminCache(session.user!.id);
         setTimeout(() => {
-          checkAdminStatus(session.user!.id).then((isAdmin) => {
-            logger.info('Admin status for user on init:', isAdmin);
-            setIsAdmin(isAdmin);
-          });
+          // Only check admin status if we're online
+          if (isNetworkAvailable()) {
+            checkAdminStatus(session.user!.id).then((isAdmin) => {
+              logger.info('Admin status for user on init:', isAdmin);
+              setIsAdmin(isAdmin);
+            }).catch((err) => {
+              logger.error('Error checking admin status:', err);
+              setIsAdmin(false);
+            });
+          }
         }, 0);
 
         // Start session monitoring with a live session getter
@@ -148,13 +166,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setSession(null);
             sessionRef.current = null;
             setIsAdmin(false);
-            supabase.auth.signOut();
+            supabase.auth.signOut().catch(() => {
+              // Ignore signOut errors (e.g., when offline)
+            });
           }
         );
       } else {
         setIsAdmin(false);
       }
 
+      setIsLoading(false);
+    }).catch((err) => {
+      // Handle any unexpected errors
+      logger.error('Unexpected error in getSession:', err);
       setIsLoading(false);
     });
 
@@ -234,10 +258,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (user) {
       clearAdminCache(user.id);
     }
-    await supabase.auth.signOut();
+    
+    // Clear local state first to ensure immediate UI update
     setUser(null);
     setSession(null);
+    sessionRef.current = null;
     setIsAdmin(false);
+    
+    // Then attempt to sign out from Supabase (may fail if offline)
+    try {
+      await supabase.auth.signOut();
+    } catch (error) {
+      // Ignore network errors during signOut - local state is already cleared
+      if (!isNetworkAvailable()) {
+        logger.info('SignOut completed locally - offline, remote signout skipped');
+      } else {
+        logger.error('Error during signOut:', error);
+      }
+    }
   };
 
   /**
