@@ -102,11 +102,32 @@ window.addEventListener('error', (event) => {
 });
 
 window.addEventListener('unhandledrejection', (event) => {
+  const reason = String(event.reason);
+  // Skip expected network errors
+  if (reason.includes('Failed to fetch') || reason.includes('NetworkError') || reason.includes('Load failed')) {
+    return;
+  }
   errorTracker.logError(
-    new Error(`Unhandled Promise Rejection: ${event.reason}`),
+    new Error(`Unhandled Promise Rejection: ${reason}`),
     { componentStack: 'Promise' }
   );
 });
+
+// Patterns for errors that should be ignored (expected/harmless errors)
+const IGNORED_ERROR_PATTERNS = [
+  'Failed to fetch', // Network errors from Supabase auto-refresh when offline/tab inactive
+  'NetworkError',
+  'net::ERR_',
+  'Load failed', // Safari equivalent of Failed to fetch
+  'The operation was aborted', // Aborted requests
+  'AbortError',
+  'TypeError: cancelled', // Safari cancelled requests
+  'ResizeObserver loop', // Harmless ResizeObserver warnings
+];
+
+const shouldIgnoreError = (message: string): boolean => {
+  return IGNORED_ERROR_PATTERNS.some(pattern => message.includes(pattern));
+};
 
 // Track console errors with guard to prevent infinite loops
 let isTrackingError = false;
@@ -130,6 +151,11 @@ console.error = (...args: any[]) => {
       }
       return String(arg);
     }).join(' ');
+    
+    // Skip expected/harmless errors
+    if (shouldIgnoreError(errorMessage)) {
+      return;
+    }
     
     errorTracker.logError(
       new Error(`Console Error: ${errorMessage}`),
