@@ -1,5 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logger';
+import { isNetworkAvailable } from '@/lib/networkAwareFetch';
 
 export type AppRole = 'owner' | 'admin' | 'moderator' | 'user';
 
@@ -35,6 +36,16 @@ export async function checkUserRole(userId: string, roles: AppRole | AppRole[]):
     return hasRole;
   }
 
+  // Skip network request if offline
+  if (!isNetworkAvailable()) {
+    logger.info(`Skipping role check for ${userId.substring(0, 8)} - offline`);
+    // Return cached value if available, otherwise false
+    if (cached) {
+      return cached.roles.some(role => rolesToCheck.includes(role));
+    }
+    return false;
+  }
+
   try {
     const { data, error } = await supabase
       .from('user_roles')
@@ -43,6 +54,10 @@ export async function checkUserRole(userId: string, roles: AppRole | AppRole[]):
 
     if (error) {
       logger.error('Error checking user role:', error);
+      // Return cached value if available on error
+      if (cached) {
+        return cached.roles.some(role => rolesToCheck.includes(role));
+      }
       return false;
     }
 
@@ -60,6 +75,10 @@ export async function checkUserRole(userId: string, roles: AppRole | AppRole[]):
     return hasRole;
   } catch (error) {
     logger.error('Exception checking user role:', error);
+    // Return cached value if available on exception
+    if (cached) {
+      return cached.roles.some(role => rolesToCheck.includes(role));
+    }
     return false;
   }
 }
@@ -103,12 +122,23 @@ export async function checkRoleLevel(userId: string, minRole: AppRole): Promise<
     user: 1,
   };
 
+  // Skip network request if offline
+  if (!isNetworkAvailable()) {
+    logger.info(`Skipping role level check for ${userId.substring(0, 8)} - offline`);
+    const cached = roleCache.get(userId);
+    if (cached && cached.roles.length > 0) {
+      const userRoleLevel = Math.max(...cached.roles.map(r => roleHierarchy[r] || 0));
+      return userRoleLevel >= (roleHierarchy[minRole] || 0);
+    }
+    return false;
+  }
+
   try {
     const { data, error } = await supabase
       .from('user_roles')
       .select('role')
       .eq('user_id', userId)
-      .single();
+      .maybeSingle();
 
     if (error || !data) return false;
 
