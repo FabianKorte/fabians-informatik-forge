@@ -3,10 +3,32 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, ExternalLink, MessageCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { SEO } from "@/components/SEO";
-import krotzebuuuhProfile from "@/assets/krotzebuuuh-profile.png";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Skeleton } from "@/components/ui/skeleton";
+import krotzebuuuhFallback from "@/assets/krotzebuuuh-profile.png";
+
+const KROTZEBUUUH_USER_ID = "48f90875-a2f0-4fd2-824f-04224a5f1d78";
 
 const Lernmaterial = () => {
   const navigate = useNavigate();
+
+  const { data: profile, isLoading } = useQuery({
+    queryKey: ['krotzebuuuh-profile'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('username, avatar_url')
+        .eq('id', KROTZEBUUUH_USER_ID)
+        .maybeSingle();
+      
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const avatarUrl = profile?.avatar_url || krotzebuuuhFallback;
+  const username = profile?.username || "Kev_The_Dev";
 
   return (
     <>
@@ -60,13 +82,20 @@ const Lernmaterial = () => {
                 </p>
                 
                 <div className="flex flex-col sm:flex-row items-center gap-4 bg-card rounded-lg p-4 border border-border">
-                  <img 
-                    src={krotzebuuuhProfile}
-                    alt="krotzebuuuh Discord Profil"
-                    className="w-20 h-20 rounded-full object-cover"
-                  />
+                  {isLoading ? (
+                    <Skeleton className="w-20 h-20 rounded-full" />
+                  ) : (
+                    <img 
+                      src={avatarUrl}
+                      alt={`${username} Profil`}
+                      className="w-20 h-20 rounded-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.src = krotzebuuuhFallback;
+                      }}
+                    />
+                  )}
                   <div className="text-center sm:text-left">
-                    <p className="font-medium text-lg">Kev_The_Dev</p>
+                    <p className="font-medium text-lg">{username}</p>
                     <p className="text-muted-foreground text-sm">@krotzebuuuh</p>
                     <p className="text-muted-foreground text-xs mt-1">User ID: 100916329901694977</p>
                   </div>
