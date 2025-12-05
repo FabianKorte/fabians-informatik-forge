@@ -54,9 +54,9 @@ const Lernmaterial = () => {
 
               {/* Discord Contact */}
               <div className="bg-muted/50 rounded-lg p-4 sm:p-6">
-                <h3 className="text-lg font-medium mb-3">Kontakt bei Fragen</h3>
+                <h3 className="text-lg font-medium mb-3">Zugang & Kontakt</h3>
                 <p className="text-muted-foreground text-sm mb-4">
-                  Bei Fragen zum Lernmaterial kannst du dich an folgenden Discord-Nutzer wenden:
+                  Um Zugang zum Lernmaterial zu erhalten oder bei Fragen, melde dich bei folgendem Discord-Nutzer:
                 </p>
                 
                 <div className="flex flex-col sm:flex-row items-center gap-4 bg-card rounded-lg p-4 border border-border">
