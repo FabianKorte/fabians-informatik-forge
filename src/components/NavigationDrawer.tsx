@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Home, BookOpen, TrendingUp, User, MessageSquare, Users, Shield, Download, MapPin, LogIn, LogOut, Menu, FileText, Activity, ChevronDown, ChevronRight, AlertCircle, BarChart3 } from "lucide-react";
+import { Home, BookOpen, TrendingUp, User, MessageSquare, Users, Shield, Download, MapPin, LogIn, LogOut, Menu, FileText, Activity, ChevronDown, ChevronRight, AlertCircle, BarChart3, GraduationCap } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useAdminCounts } from "@/hooks/useAdminCounts";
@@ -38,6 +38,7 @@ const userItems = [
 const resourceItems = [
   { title: "IT-Lexikon", url: "/lexikon", icon: BookOpen, external: false },
   { title: "Downloads", url: "https://drive.google.com/drive/folders/1x_OJDgFV7z0XGMcSBPIvKe-fTTHqp1kR?usp=sharing", icon: Download, external: true },
+  { title: "Lernmaterial", url: "/lernmaterial", icon: GraduationCap, external: false },
   { title: "Fehler melden", url: "/report-error", icon: AlertCircle, external: false },
   { title: "Datenschutz", url: "/privacy", icon: Shield, external: false },
 ];

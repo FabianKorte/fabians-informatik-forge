@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { TrendingUp, BookOpen, Target, Download, GraduationCap } from "lucide-react";
+import { TrendingUp, BookOpen, Target, Download } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { useNavigate } from "react-router-dom";
 
@@ -152,19 +152,6 @@ export const Hero = ({
             </Button>
           </div>
         )}
-        
-        {/* Lernmaterial Button */}
-        <div className="mt-4 animate-fade-in" style={{ animationDelay: '1s' }}>
-          <Button
-            onClick={() => navigate('/lernmaterial')}
-            variant="ghost"
-            size="sm"
-            className="text-muted-foreground hover:text-foreground"
-          >
-            <GraduationCap className="w-4 h-4 mr-2" />
-            Lernmaterial
-          </Button>
-        </div>
       </div>
     </section>
   );
