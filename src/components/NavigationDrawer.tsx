@@ -35,6 +35,7 @@ const userItems = [
   { title: "Lerngruppen", url: "/study-groups", icon: Users },
 ];
 
+// Resource links visible to all users
 const resourceItems = [
   { title: "IT-Lexikon", url: "/lexikon", icon: BookOpen, external: false },
   { title: "Downloads", url: "https://drive.google.com/drive/folders/1x_OJDgFV7z0XGMcSBPIvKe-fTTHqp1kR?usp=sharing", icon: Download, external: true },
