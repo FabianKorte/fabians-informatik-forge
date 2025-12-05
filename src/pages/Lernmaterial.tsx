@@ -68,13 +68,13 @@ const Lernmaterial = () => {
                   <div className="text-center sm:text-left">
                     <p className="font-medium text-lg">Kev_The_Dev</p>
                     <p className="text-muted-foreground text-sm">@krotzebuuuh</p>
-                    <p className="text-muted-foreground text-xs mt-1">User ID: 1009163299016949770</p>
+                    <p className="text-muted-foreground text-xs mt-1">User ID: 100916329901694977</p>
                   </div>
                 </div>
 
                 <Button
                   variant="outline"
-                  onClick={() => window.open('https://discordapp.com/users/1009163299016949770', '_blank')}
+                  onClick={() => window.open('https://discordapp.com/users/100916329901694977', '_blank')}
                   className="w-full sm:w-auto mt-4"
                 >
                   <MessageCircle className="w-4 h-4 mr-2" />
