@@ -42,7 +42,7 @@ const resourceItems = [
   { title: "Lernmaterial", url: "/lernmaterial", icon: GraduationCap, external: false },
   { title: "Fehler melden", url: "/report-error", icon: AlertCircle, external: false },
   { title: "Datenschutz", url: "/privacy", icon: Shield, external: false },
-];
+] as const;
 
 const adminSubItems = [
   { title: "Ankündigungen", tab: "announcements", icon: MessageSquare },
