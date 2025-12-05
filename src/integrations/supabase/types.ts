@@ -1290,7 +1290,36 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      safe_site_announcements: {
+        Row: {
+          created_at: string | null
+          id: string | null
+          is_active: boolean | null
+          message: string | null
+          title: string | null
+          type: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string | null
+          is_active?: boolean | null
+          message?: string | null
+          title?: string | null
+          type?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string | null
+          is_active?: boolean | null
+          message?: string | null
+          title?: string | null
+          type?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       cleanup_old_rate_limits: { Args: never; Returns: undefined }

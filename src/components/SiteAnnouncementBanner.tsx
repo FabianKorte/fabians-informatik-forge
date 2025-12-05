@@ -10,9 +10,7 @@ interface Announcement {
   title: string;
   message: string;
   type: string;
-  is_active: boolean;
   created_at: string;
-  created_by: string;
   updated_at: string;
 }
 
@@ -62,10 +60,10 @@ export const SiteAnnouncementBanner = () => {
 
   const fetchAnnouncements = async () => {
     try {
+      // Use safe view that excludes sensitive admin IDs
       const { data, error } = await supabase
-        .from('site_announcements')
+        .from('safe_site_announcements')
         .select('*')
-        .eq('is_active', true)
         .order('created_at', { ascending: false });
 
       if (error) {
