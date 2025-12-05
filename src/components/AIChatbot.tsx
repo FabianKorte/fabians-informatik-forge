@@ -4,11 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { MessageCircle, X, Send, Loader2, Sparkles } from "lucide-react";
+import { MessageCircle, X, Send, Loader2, Sparkles, LogIn } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { logger } from "@/lib/logger";
 import { sanitizeInput } from "@/lib/sanitization";
 import { handleError } from "@/lib/errorHandler";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 interface Message {
   role: "user" | "assistant";
@@ -29,6 +31,7 @@ export default function AIChatbot() {
   const chatRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+  const { user } = useAuth();
   const retryCountRef = useRef(0);
   const retryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const MAX_RETRIES = 3;
@@ -70,13 +73,21 @@ export default function AIChatbot() {
     let assistantContent = "";
 
     try {
+      // Use supabase client which automatically includes auth headers
+      const { data: sessionData } = await supabase.auth.getSession();
+      const accessToken = sessionData?.session?.access_token;
+      
+      if (!accessToken) {
+        throw new Error("Nicht authentifiziert");
+      }
+
       const response = await fetch(
         `https://bjjxfcpxnoivjkplxktw.supabase.co/functions/v1/ai-tutor`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqanhmY3B4bm9pdmprcGx4a3R3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg2OTMyMzEsImV4cCI6MjA3NDI2OTIzMX0.Jfx5Hj3mUSAtDopLwXL1NNgA1In2zyahaM7AGTEby74`,
+            Authorization: `Bearer ${accessToken}`,
           },
           body: JSON.stringify({ messages: [...messages, userMsg] }),
         }
@@ -181,6 +192,11 @@ export default function AIChatbot() {
     setInput("");
     await streamChat(sanitized);
   };
+
+  // Only show chatbot button for authenticated users
+  if (!user) {
+    return null;
+  }
 
   if (!isOpen) {
     return (
