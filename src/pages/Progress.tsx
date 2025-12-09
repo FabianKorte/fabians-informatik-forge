@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -6,6 +6,7 @@ import { Progress as ProgressBar } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { SEO } from "@/components/SEO";
+import { Skeleton } from "@/components/ui/skeleton";
 import { 
   ArrowLeft, 
   BookOpen, 
@@ -18,38 +19,62 @@ import {
   Clock
 } from "lucide-react";
 import { categories } from "@/data/categories";
-import { getModulesForCategory } from "@/lib/learnContentUtils";
+import { getAllModules } from "@/lib/learnContentUtils";
 import { useProgress } from "@/hooks/useProgress";
 import type { LearnModule } from "@/types/learn";
 
+interface CategoryStat {
+  id: string;
+  title: string;
+  description: string;
+  icon: any;
+  difficulty: string;
+  totalItems: number;
+  completedItems: number;
+  difficultItems: number;
+  completionRate: number;
+  difficultyRate: number;
+  modules: LearnModule[];
+}
+
 const Progress = () => {
   const navigate = useNavigate();
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [allModules, setAllModules] = useState<Record<string, LearnModule[]>>({});
+  const [isLoadingModules, setIsLoadingModules] = useState(true);
 
   // Get overall progress data
-  const { overallProgress } = useProgress("", "", 0);
+  const { overallProgress, allProgressData: globalProgressData } = useProgress("", "", 0);
   const overallStats = overallProgress;
 
+  // Load all modules once
+  useEffect(() => {
+    const loadModules = async () => {
+      try {
+        const modules = await getAllModules();
+        setAllModules(modules);
+      } catch (error) {
+        console.error('Error loading modules:', error);
+      } finally {
+        setIsLoadingModules(false);
+      }
+    };
+    loadModules();
+  }, []);
+
   // Calculate real statistics for each category from actual progress data
-  // Get all progress data once instead of calling hook multiple times in loops
-  const { allProgressData: globalProgressData } = useProgress("", "", 0);
-  
-  const categoryStats = categories.map(category => {
-    // Synchronously get modules - they should be available immediately
-    let modules: LearnModule[] = [];
-    getModulesForCategory(category.id).then(m => modules = m);
+  const categoryStats: CategoryStat[] = categories.map(category => {
+    const modules = allModules[category.id] || [];
     
     let totalItems = 0;
     let completedItems = 0;
     let difficultItems = 0;
 
     modules.forEach((module, moduleIndex) => {
-      // Access progress data from global state instead of calling hook
       const progress = globalProgressData[category.id]?.[module.type]?.[moduleIndex.toString()] || {};
 
       switch (module.type) {
         case "flashcards":
-          if ('cards' in module) {
+          if ('cards' in module && module.cards) {
             totalItems += module.cards.length;
             if (progress.flashcards?.knownCards) {
               completedItems += progress.flashcards.knownCards.length;
@@ -60,13 +85,13 @@ const Progress = () => {
           }
           break;
         case "quiz":
-          if ('questions' in module) {
+          if ('questions' in module && module.questions) {
             totalItems += module.questions.length;
             if (progress.quiz?.completedQuestions) {
               completedItems += progress.quiz.completedQuestions.length;
             }
             if (progress.quiz?.scores && progress.quiz.scores.length > 0) {
-              const avgScore = progress.quiz.scores.reduce((a, b) => a + b, 0) / progress.quiz.scores.length;
+              const avgScore = progress.quiz.scores.reduce((a: number, b: number) => a + b, 0) / progress.quiz.scores.length;
               if (avgScore < 60) {
                 difficultItems += Math.ceil(module.questions.length * 0.4);
               }
@@ -74,7 +99,7 @@ const Progress = () => {
           }
           break;
         case "interactive":
-          if ('tasks' in module) {
+          if ('tasks' in module && module.tasks) {
             totalItems += module.tasks.length;
             if (progress.interactive?.completedTasks) {
               completedItems += progress.interactive.completedTasks.length;
@@ -88,7 +113,11 @@ const Progress = () => {
     const difficultyRate = totalItems > 0 ? (difficultItems / totalItems) * 100 : 0;
 
     return {
-      ...category,
+      id: category.id,
+      title: category.title,
+      description: category.description,
+      icon: category.icon,
+      difficulty: category.difficulty,
       totalItems,
       completedItems,
       difficultItems,
@@ -209,83 +238,91 @@ const Progress = () => {
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
-            <div className="grid gap-6">
-              {categoryStats.map((category) => (
-                <Card key={category.id} className="p-6">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-accent/10 rounded-lg">
-                        <category.icon className="w-6 h-6 text-accent" />
+            {isLoadingModules ? (
+              <div className="space-y-4">
+                {[1, 2, 3].map(i => (
+                  <Skeleton key={i} className="h-48 w-full" />
+                ))}
+              </div>
+            ) : (
+              <div className="grid gap-6">
+                {categoryStats.map((category) => (
+                  <Card key={category.id} className="p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-accent/10 rounded-lg">
+                          <category.icon className="w-6 h-6 text-accent" />
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-medium text-foreground">
+                            {category.title}
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            {category.description}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="text-lg font-medium text-foreground">
-                          {category.title}
-                        </h3>
-                        <p className="text-sm text-muted-foreground">
-                          {category.description}
-                        </p>
-                      </div>
-                    </div>
-                    <Badge variant={category.completionRate > 75 ? "default" : "secondary"}>
-                      {category.difficulty}
-                    </Badge>
-                  </div>
-
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">Fortschritt</span>
-                      <span className="font-medium">
-                        {category.completedItems} / {category.totalItems} 
-                        ({Math.round(category.completionRate)}%)
-                      </span>
-                    </div>
-                    <ProgressBar value={category.completionRate} className="h-2" />
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-                      <div className="flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4 text-success-foreground" />
-                        <span className="text-sm text-muted-foreground">
-                          {category.completedItems} abgeschlossen
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <AlertCircle className="w-4 h-4 text-destructive" />
-                        <span className="text-sm text-muted-foreground">
-                          {category.difficultItems} schwierig
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4 text-muted-foreground" />
-                        <span className="text-sm text-muted-foreground">
-                          {category.totalItems - category.completedItems} offen
-                        </span>
-                      </div>
+                      <Badge variant={category.completionRate > 75 ? "default" : "secondary"}>
+                        {category.difficulty}
+                      </Badge>
                     </div>
 
-                    <div className="flex gap-2 pt-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleContinueLearning(category.id)}
-                      >
-                        <BookOpen className="w-4 h-4" />
-                        Weiterlernen
-                      </Button>
-                      {category.difficultItems > 0 && (
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">Fortschritt</span>
+                        <span className="font-medium">
+                          {category.completedItems} / {category.totalItems} 
+                          ({Math.round(category.completionRate)}%)
+                        </span>
+                      </div>
+                      <ProgressBar value={category.completionRate} className="h-2" />
+
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-success-foreground" />
+                          <span className="text-sm text-muted-foreground">
+                            {category.completedItems} abgeschlossen
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <AlertCircle className="w-4 h-4 text-destructive" />
+                          <span className="text-sm text-muted-foreground">
+                            {category.difficultItems} schwierig
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Clock className="w-4 h-4 text-muted-foreground" />
+                          <span className="text-sm text-muted-foreground">
+                            {category.totalItems - category.completedItems} offen
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2 pt-2">
                         <Button
-                          variant="default"
+                          variant="outline"
                           size="sm"
-                          onClick={() => handleFocusLearning(category.id)}
+                          onClick={() => handleContinueLearning(category.id)}
                         >
-                          <Brain className="w-4 h-4" />
-                          Schwerpunkt-Training ({category.difficultItems})
+                          <BookOpen className="w-4 h-4" />
+                          Weiterlernen
                         </Button>
-                      )}
+                        {category.difficultItems > 0 && (
+                          <Button
+                            variant="default"
+                            size="sm"
+                            onClick={() => handleFocusLearning(category.id)}
+                          >
+                            <Brain className="w-4 h-4" />
+                            Schwerpunkt-Training ({category.difficultItems})
+                          </Button>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </Card>
-              ))}
-            </div>
+                  </Card>
+                ))}
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value="focus" className="space-y-6">
