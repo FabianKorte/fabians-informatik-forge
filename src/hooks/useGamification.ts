@@ -106,7 +106,7 @@ export const useGamification = () => {
 
       return { newXP, newLevel, leveledUp: newLevel > currentLevel };
     },
-    onSuccess: ({ newXP, newLevel, leveledUp }, { reason }) => {
+    onSuccess: ({ newXP, newLevel, leveledUp }, { xp, reason }) => {
       queryClient.invalidateQueries({ queryKey: ['gamification'] });
       
       if (leveledUp) {
@@ -116,7 +116,7 @@ export const useGamification = () => {
         });
       } else {
         toast({
-          title: `+${newXP} XP`,
+          title: `+${xp} XP`,
           description: reason,
         });
       }

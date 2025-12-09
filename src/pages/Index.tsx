@@ -47,13 +47,14 @@ const Index = () => {
   }, []);
 
   // Pure function to count elements in modules (memoized)
-  const countElements = useCallback((modules: LearnModule[]) => {
-    if (!modules || modules.length === 0) return 0;
+  const countElements = useCallback((modules: LearnModule[] | undefined) => {
+    if (!modules || !Array.isArray(modules) || modules.length === 0) return 0;
     return modules.reduce((sum, m) => {
+      if (!m) return sum;
       switch (m.type) {
-        case "flashcards": return sum + (m.cards?.length || 0);
-        case "quiz": return sum + (m.questions?.length || 0);
-        case "interactive": return sum + (m.tasks?.length || 0);
+        case "flashcards": return sum + (Array.isArray(m.cards) ? m.cards.length : 0);
+        case "quiz": return sum + (Array.isArray(m.questions) ? m.questions.length : 0);
+        case "interactive": return sum + (Array.isArray(m.tasks) ? m.tasks.length : 0);
         default: return sum;
       }
     }, 0);

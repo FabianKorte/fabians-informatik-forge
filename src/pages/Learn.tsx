@@ -330,7 +330,7 @@ const LearnPage = () => {
 
                     {selectedMethod === 'flashcards' && modules.filter(m => m.type === 'flashcards').length > 0 && (
                       <Flashcards 
-                        cards={modules.filter(m => m.type === 'flashcards').flatMap(m => m.cards)} 
+                        cards={modules.filter(m => m.type === 'flashcards').flatMap(m => m.cards || [])} 
                         categoryId={categoryId} 
                         moduleIndex={0} 
                       />
@@ -338,7 +338,7 @@ const LearnPage = () => {
 
                     {selectedMethod === 'quiz' && modules.filter(m => m.type === 'quiz').length > 0 && (
                       <Quiz 
-                        questions={modules.filter(m => m.type === 'quiz').flatMap(m => m.questions)} 
+                        questions={modules.filter(m => m.type === 'quiz').flatMap(m => m.questions || [])} 
                       />
                     )}
 
