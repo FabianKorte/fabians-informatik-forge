@@ -58,9 +58,10 @@ export function ContentVersioning({ moduleId }: VersionHistoryProps) {
         .from('learn_modules')
         .select('*')
         .eq('id', moduleId)
-        .single();
+        .maybeSingle();
 
       if (fetchError) throw fetchError;
+      if (!currentModule) throw new Error('Modul nicht gefunden');
 
       // Create history entry for current state
       const { data: { user } } = await supabase.auth.getUser();

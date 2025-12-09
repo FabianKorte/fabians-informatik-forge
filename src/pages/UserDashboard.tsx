@@ -69,7 +69,7 @@ const ProgressView = ({ userId }: { userId?: string }) => {
 
             switch (module.type) {
               case "flashcards":
-                if ('cards' in module) {
+                if ('cards' in module && Array.isArray(module.cards)) {
                   totalItems += module.cards.length;
                   if (progress.flashcards?.knownCards) {
                     completedItems += progress.flashcards.knownCards.length;
@@ -80,7 +80,7 @@ const ProgressView = ({ userId }: { userId?: string }) => {
                 }
                 break;
               case "quiz":
-                if ('questions' in module) {
+                if ('questions' in module && Array.isArray(module.questions)) {
                   totalItems += module.questions.length;
                   if (progress.quiz?.completedQuestions) {
                     completedItems += progress.quiz.completedQuestions.length;

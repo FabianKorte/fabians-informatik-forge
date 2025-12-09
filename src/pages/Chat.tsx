@@ -226,7 +226,7 @@ const Chat = () => {
           .from('profiles')
           .select('username, avatar_url')
           .eq('id', payload.new.user_id)
-          .single();
+          .maybeSingle();
 
         const newMsg: ChatMessage = {
           id: payload.new.id,
@@ -313,7 +313,7 @@ const Chat = () => {
           .from('profiles')
           .select('username, avatar_url')
           .eq('id', user.id)
-          .single();
+          .maybeSingle();
 
         await channel.track({
           user_id: user.id,
