@@ -148,12 +148,15 @@ const LearnPage = () => {
                 </Card>
               </div>
 
-              {/* Exam Mode */}
+              {/* Exam Mode - Coming Soon */}
               <div className="md:col-span-3 mb-4">
-                <Card className="p-6">
-                  <Button onClick={() => setSelectedMethod('exam')} className="w-full">
-                    Prüfungsmodus starten
+                <Card className="p-6 opacity-60">
+                  <Button disabled className="w-full" variant="outline">
+                    🚧 Prüfungsmodus (Coming Soon)
                   </Button>
+                  <p className="text-xs text-muted-foreground text-center mt-2">
+                    Der Prüfungsmodus wird derzeit entwickelt
+                  </p>
                 </Card>
               </div>
 
