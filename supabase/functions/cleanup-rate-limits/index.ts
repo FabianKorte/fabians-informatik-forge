@@ -12,9 +12,9 @@ Deno.serve(async (req) => {
     oneDayAgo.setHours(oneDayAgo.getHours() - 24);
 
     const { error, count } = await supabase
-      .from('rate_limits')
+      .from('login_rate_limits')
       .delete()
-      .lt('created_at', oneDayAgo.toISOString());
+      .lt('last_attempt_at', oneDayAgo.toISOString());
 
     if (error) {
       console.error('Error cleaning up rate limits:', error);

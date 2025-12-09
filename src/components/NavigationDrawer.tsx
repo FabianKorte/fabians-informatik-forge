@@ -68,9 +68,6 @@ export const NavigationDrawer = () => {
   const { user, isAdmin, signOut } = useAuth();
   const { counts } = useAdminCounts();
 
-  // Debug: Log resourceItems to verify they're loaded
-  console.log('NavigationDrawer resourceItems:', resourceItems.map(i => i.title));
-
   const handleNavigate = (url: string, tab?: string) => {
     if (tab) {
       navigate(`${url}?tab=${tab}`);
