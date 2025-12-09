@@ -10,15 +10,33 @@ export const Quiz = ({ questions }: QuizProps) => {
   const [qIndex, setQIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [score, setScore] = useState(0);
-  const [answered, setAnswered] = useState<boolean[]>(new Array(questions.length).fill(false));
+  const [answered, setAnswered] = useState<boolean[]>(new Array(questions?.length || 0).fill(false));
+
+  // Guard against empty or invalid questions array
+  if (!questions || questions.length === 0) {
+    return (
+      <div className="rounded-xl border border-border p-6 text-center text-muted-foreground">
+        Keine Quizfragen verfügbar.
+      </div>
+    );
+  }
 
   const q = questions[qIndex];
+  
+  // Guard against undefined question
+  if (!q) {
+    return (
+      <div className="rounded-xl border border-border p-6 text-center text-muted-foreground">
+        Frage konnte nicht geladen werden.
+      </div>
+    );
+  }
+
   const isAnswered = selected !== null;
   const isCorrect = isAnswered && selected === q.correctIndex;
   
   const totalAnswered = useMemo(() => answered.filter(Boolean).length, [answered]);
   const finished = useMemo(() => qIndex === questions.length - 1 && isAnswered, [qIndex, questions.length, isAnswered]);
-
   const handleSelect = (i: number) => {
     if (isAnswered) return;
     setSelected(i);

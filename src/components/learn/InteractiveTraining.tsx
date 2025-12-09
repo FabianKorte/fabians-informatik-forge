@@ -20,7 +20,7 @@ export const InteractiveTraining = ({ tasks, categoryId }: InteractiveTrainingPr
   const [userAnswer, setUserAnswer] = useState<string>("");
   const [showHints, setShowHints] = useState<boolean[]>([]);
   const [attempts, setAttempts] = useState(0);
-  const [completed, setCompleted] = useState<boolean[]>(new Array(tasks.length).fill(false));
+  const [completed, setCompleted] = useState<boolean[]>(new Array(tasks?.length || 0).fill(false));
   const [totalPoints, setTotalPoints] = useState(0);
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
@@ -30,7 +30,26 @@ export const InteractiveTraining = ({ tasks, categoryId }: InteractiveTrainingPr
   const [showTimeUpHelp, setShowTimeUpHelp] = useState(false);
   const [showSolution, setShowSolution] = useState(false);
 
+  // Guard against empty tasks
+  if (!tasks || tasks.length === 0) {
+    return (
+      <div className="rounded-xl border border-border p-6 text-center text-muted-foreground">
+        Keine interaktiven Aufgaben verfügbar.
+      </div>
+    );
+  }
+
   const currentTask = tasks[currentTaskIndex];
+  
+  // Guard against undefined task
+  if (!currentTask) {
+    return (
+      <div className="rounded-xl border border-border p-6 text-center text-muted-foreground">
+        Aufgabe konnte nicht geladen werden.
+      </div>
+    );
+  }
+
   const progress = (currentTaskIndex / tasks.length) * 100;
 
   // Timer effect
