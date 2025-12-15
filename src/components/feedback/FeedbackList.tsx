@@ -191,26 +191,27 @@ export const FeedbackList = ({ refreshTrigger }: { refreshTrigger?: number }) =>
     );
   }
 
-  // Show access restricted message for non-admins
+  // Show error message if data couldn't be loaded
   if (!isLoading && !hasAccess) {
     return (
       <Card className="w-full">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Lock className="w-5 h-5" />
-            Feedback-Übersicht
+            <MessageSquare className="w-5 h-5" />
+            Community Feedback
           </CardTitle>
           <CardDescription>
-            Feedbacks können nur von Administratoren eingesehen werden.
+            Feedback konnte nicht geladen werden.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="text-center py-8">
-            <Lock className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-            <p className="text-muted-foreground mb-2">Geschützter Bereich</p>
-            <p className="text-sm text-muted-foreground">
-              Um Feedbacks einzusehen, melde dich als Administrator an.
-            </p>
+            <MessageSquare className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+            <p className="text-muted-foreground mb-2">Verbindungsproblem</p>
+            <Button variant="outline" onClick={fetchFeedbacks}>
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Erneut versuchen
+            </Button>
           </div>
         </CardContent>
       </Card>
