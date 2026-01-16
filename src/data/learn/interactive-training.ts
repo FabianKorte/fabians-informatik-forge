@@ -1,89 +1,354 @@
 import type { InteractiveTask } from "@/types/learn";
 
-// Programmierung - Interactive Tasks
+// Programmierung - Java Interactive Tasks
 export const programmierungInteractiveTasks: InteractiveTask[] = [
   {
-    id: "prog-1",
+    id: "java-1",
+    category: "programmierung",
+    difficulty: "leicht",
+    taskType: "code-complete",
+    taskText: "Vervollständige die Java-Methode, die zwei Integer-Zahlen addiert und das Ergebnis zurückgibt.\n\npublic class Calculator {\n    public static int addiere(int a, int b) {\n        // Dein Code hier\n    }\n}",
+    inputFormat: "code",
+    tools: ["Java-Editor mit Syntax-Highlighting", "Java-Compiler"],
+    infoTexts: [
+      "In Java werden Methoden mit Rückgabetyp, Name und Parametern definiert.",
+      "Das Schlüsselwort 'return' gibt einen Wert zurück und beendet die Methode.",
+      "Der Rückgabetyp 'int' erwartet eine ganze Zahl als Rückgabewert.",
+      "Arithmetische Operatoren: + (Addition), - (Subtraktion), * (Multiplikation), / (Division)"
+    ],
+    helpButtons: [
+      { label: "Return-Syntax", content: "return ausdruck;\n\nBeispiel:\nreturn a + b;" },
+      { label: "Methoden-Aufbau", content: "public static rückgabetyp methodenname(parameter) {\n    // Code\n    return wert;\n}" }
+    ],
+    gamification: {
+      points: 15,
+      badge: "Java-Einsteiger",
+      timeLimit: 60,
+      level: 1
+    },
+    adaptiveHelp: {
+      hintsAfterFailures: 1,
+      hints: [
+        "Du musst die beiden Parameter a und b addieren",
+        "Verwende 'return a + b;' um das Ergebnis zurückzugeben"
+      ],
+      fallbackSolution: "return a + b;"
+    },
+    expectedSolution: "return a + b;",
+    feedback: {
+      correct: "Perfekt! Du hast deine erste Java-Methode erfolgreich vervollständigt. Das return-Statement gibt die Summe zurück.",
+      incorrect: "Nicht ganz richtig. Verwende 'return a + b;' um die Summe der beiden Parameter zurückzugeben.",
+      commonMistakes: [
+        "System.out.println() statt return verwenden",
+        "Das Semikolon am Ende vergessen",
+        "Falsche Operatoren verwenden"
+      ]
+    }
+  },
+  {
+    id: "java-2",
+    category: "programmierung",
+    difficulty: "leicht",
+    taskType: "code-complete",
+    taskText: "Erstelle eine for-Schleife, die die Zahlen 1 bis 10 ausgibt.\n\npublic class Schleife {\n    public static void main(String[] args) {\n        // Schreibe hier deine for-Schleife\n    }\n}",
+    inputFormat: "code",
+    tools: ["Java-Editor", "Konsolen-Ausgabe"],
+    infoTexts: [
+      "Eine for-Schleife besteht aus: Initialisierung; Bedingung; Inkrement",
+      "System.out.println() gibt Text auf der Konsole aus",
+      "i++ ist eine Kurzform für i = i + 1",
+      "Die Schleife läuft solange die Bedingung 'true' ist"
+    ],
+    helpButtons: [
+      { label: "For-Schleife Syntax", content: "for (int i = startwert; i <= endwert; i++) {\n    System.out.println(i);\n}" },
+      { label: "Ausgabe-Befehl", content: "System.out.println(variable);\n// Gibt den Wert der Variable aus" }
+    ],
+    gamification: {
+      points: 20,
+      badge: "Schleifen-Meister",
+      timeLimit: 90,
+      level: 1
+    },
+    adaptiveHelp: {
+      hintsAfterFailures: 2,
+      hints: [
+        "Starte mit 'for (int i = 1; ...'",
+        "Die Bedingung sollte 'i <= 10' sein",
+        "Vollständig: for (int i = 1; i <= 10; i++)"
+      ],
+      fallbackSolution: "for (int i = 1; i <= 10; i++) {\n    System.out.println(i);\n}"
+    },
+    expectedSolution: "for (int i = 1; i <= 10; i++) {\n    System.out.println(i);\n}",
+    feedback: {
+      correct: "Ausgezeichnet! Deine for-Schleife gibt korrekt die Zahlen 1-10 aus. Die drei Teile (Init, Bedingung, Inkrement) sind perfekt.",
+      incorrect: "Überprüfe deine Schleife: Start bei 1, Ende bei 10, und gib i mit System.out.println(i) aus.",
+      commonMistakes: [
+        "Mit 0 statt 1 starten",
+        "< statt <= verwenden (gibt nur 1-9 aus)",
+        "println falsch schreiben"
+      ]
+    }
+  },
+  {
+    id: "java-3",
     category: "programmierung",
     difficulty: "mittel",
     taskType: "code-complete",
-    taskText: "Eine Logistikfirma möchte ein Programm, das die Gesamtkosten einer Lieferung berechnet. Der Code ist unvollständig – ergänze die fehlenden Zeilen. Die Funktion soll Gewicht und Preis pro Kilogramm als Parameter nehmen und die Gesamtkosten zurückgeben.",
+    taskText: "Vervollständige die Methode, die prüft, ob eine Zahl gerade oder ungerade ist.\n\npublic class ParityCheck {\n    public static String pruefeGeradeUngerade(int zahl) {\n        // Wenn zahl gerade ist, gib \"gerade\" zurück\n        // Sonst gib \"ungerade\" zurück\n    }\n}",
     inputFormat: "code",
-    tools: ["Python-Editor mit Syntax-Highlighting", "Code-Ausführung und Test"],
+    tools: ["Java-Editor", "Modulo-Rechner", "Debugger"],
     infoTexts: [
-      "In Python werden Funktionen mit 'def' definiert, gefolgt vom Funktionsnamen und Parametern in Klammern.",
-      "Rückgabewerte erfolgen mit 'return'. Dies gibt das Ergebnis an den Aufrufer zurück.",
-      "Mathematische Operationen: + (Addition), - (Subtraktion), * (Multiplikation), / (Division)"
+      "Der Modulo-Operator % gibt den Rest einer Division zurück.",
+      "Eine Zahl ist gerade, wenn zahl % 2 == 0 (Rest 0 bei Division durch 2).",
+      "if-else Statements ermöglichen bedingte Ausführung von Code.",
+      "String-Literale werden in doppelten Anführungszeichen geschrieben: \"text\""
     ],
     helpButtons: [
-      { label: "Funktions-Syntax zeigen", content: "def funktionsname(parameter1, parameter2):\n    # Code hier\n    return ergebnis" },
-      { label: "Multiplikation-Hinweis", content: "Um zwei Zahlen zu multiplizieren, verwende den * Operator: ergebnis = zahl1 * zahl2" }
+      { label: "Modulo erklärt", content: "% gibt den Rest einer Division:\n10 % 3 = 1 (10 / 3 = 3 Rest 1)\n8 % 2 = 0 (8 / 2 = 4 Rest 0)\n7 % 2 = 1 (ungerade!)" },
+      { label: "If-Else Syntax", content: "if (bedingung) {\n    return \"wert1\";\n} else {\n    return \"wert2\";\n}" }
     ],
     gamification: {
       points: 25,
-      badge: "Code-Meister",
+      badge: "Logik-Experte",
       timeLimit: 120,
       level: 2
     },
     adaptiveHelp: {
       hintsAfterFailures: 2,
       hints: [
-        "Die Funktion braucht zwei Parameter: weight und price_per_kg",
-        "Multipliziere weight mit price_per_kg für die Gesamtkosten",
-        "Vergiss nicht das 'return' Statement am Ende!"
+        "Prüfe mit zahl % 2 ob der Rest 0 ist",
+        "Wenn zahl % 2 == 0, ist die Zahl gerade",
+        "Verwende if (zahl % 2 == 0) return \"gerade\"; else return \"ungerade\";"
       ],
-      fallbackSolution: "def delivery_cost(weight, price_per_kg):\n    return weight * price_per_kg"
+      fallbackSolution: "if (zahl % 2 == 0) {\n    return \"gerade\";\n} else {\n    return \"ungerade\";\n}"
     },
-    expectedSolution: "def delivery_cost(weight, price_per_kg):\n    return weight * price_per_kg",
+    expectedSolution: "if (zahl % 2 == 0) {\n    return \"gerade\";\n} else {\n    return \"ungerade\";\n}",
     feedback: {
-      correct: "Perfekt! Du hast eine korrekte Python-Funktion erstellt. Die Funktion nimmt zwei Parameter und gibt das Produkt zurück.",
-      incorrect: "Nicht ganz richtig. Überprüfe die Funktionssyntax und stelle sicher, dass du 'return' verwendest.",
+      correct: "Sehr gut! Du verstehst den Modulo-Operator und if-else Strukturen. Der Modulo-Operator ist fundamental für viele Algorithmen.",
+      incorrect: "Verwende zahl % 2 == 0 um zu prüfen, ob die Zahl gerade ist, und return entsprechend \"gerade\" oder \"ungerade\".",
       commonMistakes: [
-        "print() statt return verwenden - print zeigt nur an, return gibt Werte zurück",
-        "Falsche Funktionssyntax - vergesse nicht def und die Doppelpunkte",
-        "Parameter falsch benannt oder vergessen"
+        "/ statt % verwenden",
+        "== mit = verwechseln",
+        "String ohne Anführungszeichen schreiben"
       ]
     }
   },
   {
-    id: "prog-2",
+    id: "java-4",
     category: "programmierung",
-    difficulty: "schwer",
-    taskType: "error-finding",
-    taskText: "Ein Entwickler hat folgenden Code geschrieben, aber er enthält einen logischen Fehler. Finde und beschreibe den Fehler:\n\nfor i in range(10):\n    if i = 5:\n        print('Gefunden!')\n        break",
-    inputFormat: "text",
-    tools: ["Syntax-Checker", "Python-Dokumentation"],
+    difficulty: "mittel",
+    taskType: "code-complete",
+    taskText: "Erstelle eine Methode, die das Maximum aus einem Integer-Array findet.\n\npublic class ArrayMax {\n    public static int findeMaximum(int[] zahlen) {\n        // Finde und gib den größten Wert im Array zurück\n    }\n}",
+    inputFormat: "code",
+    tools: ["Java-Editor", "Array-Visualisierer", "Debugger"],
     infoTexts: [
-      "Der Zuweisungsoperator '=' weist einen Wert zu einer Variablen zu.",
-      "Der Vergleichsoperator '==' prüft, ob zwei Werte gleich sind.",
-      "In if-Statements werden Vergleichsoperatoren benötigt, keine Zuweisungsoperatoren."
+      "Arrays in Java haben eine feste Größe, abrufbar mit array.length",
+      "Elemente werden mit array[index] abgerufen (Index startet bei 0)",
+      "Eine for-Schleife eignet sich gut zum Durchlaufen eines Arrays",
+      "Vergleiche Zahlen mit < (kleiner) und > (größer)"
     ],
     helpButtons: [
-      { label: "Operatoren-Unterschied", content: "= ist Zuweisung (x = 5), == ist Vergleich (if x == 5)" },
-      { label: "If-Statement Syntax", content: "if bedingung:\n    # code hier\nDie Bedingung muss einen booleschen Wert (True/False) ergeben" }
+      { label: "Array durchlaufen", content: "for (int i = 0; i < zahlen.length; i++) {\n    int aktuelleZahl = zahlen[i];\n    // Verarbeitung\n}" },
+      { label: "Maximum-Algorithmus", content: "1. Setze max = erstes Element\n2. Durchlaufe alle Elemente\n3. Wenn Element > max, setze max = Element\n4. Gib max zurück" }
     ],
     gamification: {
       points: 30,
+      badge: "Array-Meister",
+      timeLimit: 180,
+      level: 2
+    },
+    adaptiveHelp: {
+      hintsAfterFailures: 2,
+      hints: [
+        "Starte mit int max = zahlen[0]; als Anfangswert",
+        "Durchlaufe das Array mit einer for-Schleife",
+        "In der Schleife: if (zahlen[i] > max) max = zahlen[i];"
+      ],
+      fallbackSolution: "int max = zahlen[0];\nfor (int i = 1; i < zahlen.length; i++) {\n    if (zahlen[i] > max) {\n        max = zahlen[i];\n    }\n}\nreturn max;"
+    },
+    expectedSolution: "int max = zahlen[0];\nfor (int i = 1; i < zahlen.length; i++) {\n    if (zahlen[i] > max) {\n        max = zahlen[i];\n    }\n}\nreturn max;",
+    feedback: {
+      correct: "Exzellent! Du hast einen klassischen Array-Algorithmus korrekt implementiert. Dieser Ansatz funktioniert für beliebig große Arrays.",
+      incorrect: "Initialisiere max mit dem ersten Element, durchlaufe dann das Array und aktualisiere max bei größeren Werten.",
+      commonMistakes: [
+        "max mit 0 initialisieren (funktioniert nicht bei negativen Zahlen)",
+        "Schleife bei i=0 statt i=1 starten (unnötiger Vergleich)",
+        "< statt > im Vergleich verwenden (findet Minimum statt Maximum)"
+      ]
+    }
+  },
+  {
+    id: "java-5",
+    category: "programmierung",
+    difficulty: "mittel",
+    taskType: "error-finding",
+    taskText: "Der folgende Java-Code enthält einen Fehler. Finde und beschreibe ihn:\n\npublic class StringVergleich {\n    public static void main(String[] args) {\n        String a = \"Hallo\";\n        String b = \"Hallo\";\n        if (a = b) {\n            System.out.println(\"Gleich!\");\n        }\n    }\n}",
+    inputFormat: "text",
+    tools: ["Java-Compiler", "Fehlermeldungen-Dokumentation"],
+    infoTexts: [
+      "In Java ist '=' der Zuweisungsoperator",
+      "'==' prüft bei primitiven Typen auf Gleichheit",
+      "Bei Strings sollte .equals() für Inhaltsvergleich verwendet werden",
+      "Ein if-Statement erwartet einen booleschen Ausdruck (true/false)"
+    ],
+    helpButtons: [
+      { label: "Operatoren-Unterschied", content: "= : Zuweisung (a = 5)\n== : Vergleich primitiver Typen\n.equals() : Inhaltsvergleich bei Objekten" },
+      { label: "String-Vergleich", content: "Richtig:\nif (a.equals(b)) { ... }\n\nFalsch:\nif (a == b) { ... } // Vergleicht Referenzen!" }
+    ],
+    gamification: {
+      points: 25,
       badge: "Bug-Hunter",
       timeLimit: 90,
-      level: 3
+      level: 2
     },
     adaptiveHelp: {
       hintsAfterFailures: 1,
       hints: [
-        "Schaue dir die if-Zeile genau an. Welcher Operator wird verwendet?",
-        "Soll hier ein Wert zugewiesen oder verglichen werden?",
-        "Der Operator '=' ist für Zuweisungen, '==' für Vergleiche"
+        "Schau dir die if-Bedingung genau an",
+        "Welcher Operator wird verwendet? Zuweisung oder Vergleich?",
+        "Für String-Vergleiche in Java: .equals() verwenden"
       ]
     },
-    expectedSolution: ["Der Fehler ist in Zeile 2: 'i = 5' sollte 'i == 5' sein", "Zeile 2: = sollte == sein", "Vergleichsoperator == statt Zuweisungsoperator = verwenden"],
+    expectedSolution: ["Der Fehler ist: 'a = b' sollte 'a.equals(b)' sein", "= statt .equals() verwendet", "Zuweisung statt Vergleich in der if-Bedingung"],
     feedback: {
-      correct: "Exzellent! Du hast den Unterschied zwischen Zuweisung (=) und Vergleich (==) erkannt. Das ist ein sehr häufiger Fehler!",
-      incorrect: "Der Fehler liegt im Unterschied zwischen Zuweisung und Vergleich. Schau dir die if-Zeile nochmal genau an.",
+      correct: "Richtig erkannt! In Java ist '=' eine Zuweisung, keine Prüfung. Für String-Vergleiche immer .equals() verwenden!",
+      incorrect: "Der Fehler liegt in der if-Bedingung. '=' ist Zuweisung, nicht Vergleich. Für Strings: .equals() verwenden.",
       commonMistakes: [
-        "Den Fehler in der falschen Zeile suchen",
-        "Syntaxfehler statt logischen Fehler vermuten",
-        "Die range()-Funktion verdächtigen"
+        "Den Fehler in der println-Zeile suchen",
+        "== vorschlagen (funktioniert bei Strings nicht zuverlässig)",
+        "Den Zuweisungsoperator übersehen"
+      ]
+    }
+  },
+  {
+    id: "java-6",
+    category: "programmierung",
+    difficulty: "schwer",
+    taskType: "code-complete",
+    taskText: "Implementiere eine rekursive Methode zur Berechnung der Fakultät (n!).\n\npublic class Fakultaet {\n    public static int fakultaet(int n) {\n        // Implementiere die rekursive Fakultätsberechnung\n        // Hinweis: 0! = 1, n! = n * (n-1)!\n    }\n}",
+    inputFormat: "code",
+    tools: ["Java-Editor", "Call-Stack-Visualisierer", "Debugger"],
+    infoTexts: [
+      "Rekursion: Eine Methode ruft sich selbst auf",
+      "Jede Rekursion braucht einen Basisfall (Abbruchbedingung)",
+      "Fakultät: 5! = 5 × 4 × 3 × 2 × 1 = 120",
+      "Basisfall: 0! = 1 und 1! = 1"
+    ],
+    helpButtons: [
+      { label: "Rekursions-Schema", content: "public static int rekursiv(int n) {\n    if (basisfall) {\n        return basiswert;\n    }\n    return n * rekursiv(n - 1);\n}" },
+      { label: "Fakultät-Beispiel", content: "fakultaet(4):\n= 4 * fakultaet(3)\n= 4 * 3 * fakultaet(2)\n= 4 * 3 * 2 * fakultaet(1)\n= 4 * 3 * 2 * 1 * fakultaet(0)\n= 4 * 3 * 2 * 1 * 1 = 24" }
+    ],
+    gamification: {
+      points: 40,
+      badge: "Rekursions-Experte",
+      timeLimit: 180,
+      level: 3
+    },
+    adaptiveHelp: {
+      hintsAfterFailures: 2,
+      hints: [
+        "Der Basisfall ist: wenn n <= 1, gib 1 zurück",
+        "Der rekursive Fall: gib n * fakultaet(n-1) zurück",
+        "Struktur: if (n <= 1) return 1; return n * fakultaet(n-1);"
+      ],
+      fallbackSolution: "if (n <= 1) {\n    return 1;\n}\nreturn n * fakultaet(n - 1);"
+    },
+    expectedSolution: "if (n <= 1) {\n    return 1;\n}\nreturn n * fakultaet(n - 1);",
+    feedback: {
+      correct: "Brillant! Du hast Rekursion verstanden. Der Basisfall verhindert unendliche Rekursion, der rekursive Fall berechnet das Ergebnis.",
+      incorrect: "Denke an: Basisfall (n <= 1 gibt 1 zurück) und rekursiver Fall (n * fakultaet(n-1)).",
+      commonMistakes: [
+        "Keinen Basisfall definieren (führt zu StackOverflow)",
+        "n statt n-1 im rekursiven Aufruf (unendliche Rekursion)",
+        "Basisfall bei n == 0 vergessen"
+      ]
+    }
+  },
+  {
+    id: "java-7",
+    category: "programmierung",
+    difficulty: "schwer",
+    taskType: "code-complete",
+    taskText: "Implementiere eine Methode, die einen String umkehrt (z.B. \"Hallo\" → \"ollaH\").\n\npublic class StringReverse {\n    public static String umkehren(String text) {\n        // Kehre den String um und gib ihn zurück\n    }\n}",
+    inputFormat: "code",
+    tools: ["Java-Editor", "String-Dokumentation", "Debugger"],
+    infoTexts: [
+      "String.length() gibt die Länge eines Strings zurück",
+      "String.charAt(index) gibt das Zeichen an Position index zurück",
+      "StringBuilder kann effizient Zeichen anhängen mit .append()",
+      "Strings sind in Java unveränderlich (immutable)"
+    ],
+    helpButtons: [
+      { label: "StringBuilder nutzen", content: "StringBuilder sb = new StringBuilder();\nsb.append('a');\nsb.append('b');\nString result = sb.toString(); // \"ab\"" },
+      { label: "Rückwärts durchlaufen", content: "for (int i = text.length() - 1; i >= 0; i--) {\n    char zeichen = text.charAt(i);\n    // zeichen verarbeiten\n}" }
+    ],
+    gamification: {
+      points: 35,
+      badge: "String-Manipulator",
+      timeLimit: 150,
+      level: 3
+    },
+    adaptiveHelp: {
+      hintsAfterFailures: 2,
+      hints: [
+        "Erstelle einen StringBuilder für das Ergebnis",
+        "Durchlaufe den String von hinten nach vorne",
+        "Füge jedes Zeichen zum StringBuilder hinzu und gib das Ergebnis zurück"
+      ],
+      fallbackSolution: "StringBuilder sb = new StringBuilder();\nfor (int i = text.length() - 1; i >= 0; i--) {\n    sb.append(text.charAt(i));\n}\nreturn sb.toString();"
+    },
+    expectedSolution: "StringBuilder sb = new StringBuilder();\nfor (int i = text.length() - 1; i >= 0; i--) {\n    sb.append(text.charAt(i));\n}\nreturn sb.toString();",
+    feedback: {
+      correct: "Perfekt! Du hast StringBuilder effizient genutzt und den String rückwärts aufgebaut. Das ist die performante Lösung in Java.",
+      incorrect: "Tipp: Nutze StringBuilder, durchlaufe den String rückwärts mit charAt(), und gib sb.toString() zurück.",
+      commonMistakes: [
+        "String-Konkatenation mit + in Schleife (ineffizient)",
+        "Off-by-one Fehler beim Index",
+        "toString() am Ende vergessen"
+      ]
+    }
+  },
+  {
+    id: "java-8",
+    category: "programmierung",
+    difficulty: "schwer",
+    taskType: "code-complete",
+    taskText: "Implementiere den Bubble-Sort Algorithmus zum Sortieren eines Arrays.\n\npublic class BubbleSort {\n    public static void sortiere(int[] arr) {\n        // Implementiere Bubble Sort\n        // Das Array soll aufsteigend sortiert werden\n    }\n}",
+    inputFormat: "code",
+    tools: ["Java-Editor", "Array-Visualisierer", "Sortier-Animation"],
+    infoTexts: [
+      "Bubble Sort vergleicht benachbarte Elemente und tauscht sie bei falscher Reihenfolge",
+      "Der Algorithmus durchläuft das Array mehrfach, bis es sortiert ist",
+      "Große Werte 'blubbern' nach oben (ans Ende des Arrays)",
+      "Zeitkomplexität: O(n²) - nicht optimal, aber einfach zu verstehen"
+    ],
+    helpButtons: [
+      { label: "Bubble Sort Prinzip", content: "1. Vergleiche arr[j] mit arr[j+1]\n2. Wenn arr[j] > arr[j+1], tausche sie\n3. Wiederhole für alle Paare\n4. Nach jedem Durchlauf ist das größte Element am Ende\n5. Wiederhole n-1 mal" },
+      { label: "Tausch-Operation", content: "// Elemente tauschen:\nint temp = arr[j];\narr[j] = arr[j+1];\narr[j+1] = temp;" }
+    ],
+    gamification: {
+      points: 50,
+      badge: "Sortier-Algorithmus-Profi",
+      timeLimit: 240,
+      level: 3
+    },
+    adaptiveHelp: {
+      hintsAfterFailures: 2,
+      hints: [
+        "Äußere Schleife: for (int i = 0; i < arr.length - 1; i++)",
+        "Innere Schleife: for (int j = 0; j < arr.length - i - 1; j++)",
+        "In der inneren Schleife: Vergleiche und tausche arr[j] und arr[j+1]"
+      ],
+      fallbackSolution: "for (int i = 0; i < arr.length - 1; i++) {\n    for (int j = 0; j < arr.length - i - 1; j++) {\n        if (arr[j] > arr[j + 1]) {\n            int temp = arr[j];\n            arr[j] = arr[j + 1];\n            arr[j + 1] = temp;\n        }\n    }\n}"
+    },
+    expectedSolution: "for (int i = 0; i < arr.length - 1; i++) {\n    for (int j = 0; j < arr.length - i - 1; j++) {\n        if (arr[j] > arr[j + 1]) {\n            int temp = arr[j];\n            arr[j] = arr[j + 1];\n            arr[j + 1] = temp;\n        }\n    }\n}",
+    feedback: {
+      correct: "Hervorragend! Du hast Bubble Sort korrekt implementiert. Obwohl O(n²), ist es ein wichtiger Lern-Algorithmus zum Verstehen von Sortierung.",
+      incorrect: "Bubble Sort braucht zwei verschachtelte Schleifen. Vergleiche benachbarte Elemente und tausche sie bei falscher Reihenfolge.",
+      commonMistakes: [
+        "Nur eine Schleife verwenden",
+        "Grenzen der inneren Schleife falsch setzen",
+        "Tausch-Logik vertauschen"
       ]
     }
   }
