@@ -1,10 +1,10 @@
 import type { InteractiveTask } from "@/types/learn";
 
-// Programmierung - Java Interactive Tasks
-export const programmierungInteractiveTasks: InteractiveTask[] = [
+// Java - Interactive Tasks (eigene Kategorie)
+export const javaInteractiveTasks: InteractiveTask[] = [
   {
     id: "java-1",
-    category: "programmierung",
+    category: "java",
     difficulty: "leicht",
     taskType: "code-complete",
     taskText: "Vervollständige die Java-Methode, die zwei Integer-Zahlen addiert und das Ergebnis zurückgibt.\n\npublic class Calculator {\n    public static int addiere(int a, int b) {\n        // Dein Code hier\n    }\n}",
@@ -47,7 +47,7 @@ export const programmierungInteractiveTasks: InteractiveTask[] = [
   },
   {
     id: "java-2",
-    category: "programmierung",
+    category: "java",
     difficulty: "leicht",
     taskType: "code-complete",
     taskText: "Erstelle eine for-Schleife, die die Zahlen 1 bis 10 ausgibt.\n\npublic class Schleife {\n    public static void main(String[] args) {\n        // Schreibe hier deine for-Schleife\n    }\n}",
@@ -91,7 +91,7 @@ export const programmierungInteractiveTasks: InteractiveTask[] = [
   },
   {
     id: "java-3",
-    category: "programmierung",
+    category: "java",
     difficulty: "mittel",
     taskType: "code-complete",
     taskText: "Vervollständige die Methode, die prüft, ob eine Zahl gerade oder ungerade ist.\n\npublic class ParityCheck {\n    public static String pruefeGeradeUngerade(int zahl) {\n        // Wenn zahl gerade ist, gib \"gerade\" zurück\n        // Sonst gib \"ungerade\" zurück\n    }\n}",
@@ -135,7 +135,7 @@ export const programmierungInteractiveTasks: InteractiveTask[] = [
   },
   {
     id: "java-4",
-    category: "programmierung",
+    category: "java",
     difficulty: "mittel",
     taskType: "code-complete",
     taskText: "Erstelle eine Methode, die das Maximum aus einem Integer-Array findet.\n\npublic class ArrayMax {\n    public static int findeMaximum(int[] zahlen) {\n        // Finde und gib den größten Wert im Array zurück\n    }\n}",
@@ -179,7 +179,7 @@ export const programmierungInteractiveTasks: InteractiveTask[] = [
   },
   {
     id: "java-5",
-    category: "programmierung",
+    category: "java",
     difficulty: "mittel",
     taskType: "error-finding",
     taskText: "Der folgende Java-Code enthält einen Fehler. Finde und beschreibe ihn:\n\npublic class StringVergleich {\n    public static void main(String[] args) {\n        String a = \"Hallo\";\n        String b = \"Hallo\";\n        if (a = b) {\n            System.out.println(\"Gleich!\");\n        }\n    }\n}",
@@ -222,7 +222,7 @@ export const programmierungInteractiveTasks: InteractiveTask[] = [
   },
   {
     id: "java-6",
-    category: "programmierung",
+    category: "java",
     difficulty: "schwer",
     taskType: "code-complete",
     taskText: "Implementiere eine rekursive Methode zur Berechnung der Fakultät (n!).\n\npublic class Fakultaet {\n    public static int fakultaet(int n) {\n        // Implementiere die rekursive Fakultätsberechnung\n        // Hinweis: 0! = 1, n! = n * (n-1)!\n    }\n}",
@@ -266,7 +266,7 @@ export const programmierungInteractiveTasks: InteractiveTask[] = [
   },
   {
     id: "java-7",
-    category: "programmierung",
+    category: "java",
     difficulty: "schwer",
     taskType: "code-complete",
     taskText: "Implementiere eine Methode, die einen String umkehrt (z.B. \"Hallo\" → \"ollaH\").\n\npublic class StringReverse {\n    public static String umkehren(String text) {\n        // Kehre den String um und gib ihn zurück\n    }\n}",
@@ -310,7 +310,7 @@ export const programmierungInteractiveTasks: InteractiveTask[] = [
   },
   {
     id: "java-8",
-    category: "programmierung",
+    category: "java",
     difficulty: "schwer",
     taskType: "code-complete",
     taskText: "Implementiere den Bubble-Sort Algorithmus zum Sortieren eines Arrays.\n\npublic class BubbleSort {\n    public static void sortiere(int[] arr) {\n        // Implementiere Bubble Sort\n        // Das Array soll aufsteigend sortiert werden\n    }\n}",
@@ -721,14 +721,10 @@ export const datenbankenInteractiveTasks: InteractiveTask[] = [
 
 // Export all interactive tasks by category
 export const interactiveTasksByCategory: Record<string, InteractiveTask[]> = {
-  programmierung: programmierungInteractiveTasks,
+  java: javaInteractiveTasks,
   "mathematik-logik": mathematikInteractiveTasks,
   "it-sicherheit": itSicherheitInteractiveTasks,
   betriebswirtschaft: bwlInteractiveTasks,
   webentwicklung: webentwicklungInteractiveTasks,
   datenbanken: datenbankenInteractiveTasks,
-  // Weitere Kategorien können hier hinzugefügt werden
-  // "it-sicherheit-advanced": itSicherheitInteractiveTasks,
-  // "grundlagen-it": grundlagenItInteractiveTasks,
-  // "mobile-entwicklung": mobileEntwicklungInteractiveTasks,
 };
