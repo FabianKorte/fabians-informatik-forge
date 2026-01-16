@@ -1,6 +1,7 @@
 // Mapping of categories to their appropriate learning methods
 export const categoryLearningMethods: Record<string, string[]> = {
-  programmierung: ["interactive", "flashcards", "quiz"],
+  java: ["interactive", "flashcards", "quiz"],
+  programmierung: ["flashcards", "quiz"],
   datenbanken: ["flashcards", "quiz"],
   "it-sicherheit": ["flashcards", "quiz"],
   netzwerktechnik: ["flashcards", "quiz"],

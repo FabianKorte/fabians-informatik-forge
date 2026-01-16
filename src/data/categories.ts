@@ -15,7 +15,8 @@ import {
   Scale,
   Lock,
   Cable,
-  Braces
+  Braces,
+  Coffee
 } from "lucide-react";
 
 export interface Category {
@@ -30,6 +31,16 @@ export interface Category {
 }
 
 export const categories: Category[] = [
+  {
+    id: "java",
+    title: "Java Programmierung",
+    description: "Lerne Java von Grund auf: Von Hello World bis zu fortgeschrittenen Konzepten wie OOP, Collections und Streams",
+    totalElements: 200,
+    completedElements: 0,
+    icon: Coffee,
+    difficulty: "Anfänger",
+    gradient: "from-orange-500 to-red-600"
+  },
   {
     id: "programmierung",
     title: "Programmierung",
