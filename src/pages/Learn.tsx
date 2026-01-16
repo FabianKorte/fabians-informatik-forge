@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SEO } from "@/components/SEO";
@@ -15,13 +15,12 @@ import { Quiz } from "@/components/learn/Quiz";
 import { FocusTraining } from "@/components/learn/FocusTraining";
 import { InteractiveTraining } from "@/components/learn/InteractiveTraining";
 import { interactiveTasksByCategory } from "@/data/learn/interactive-training";
-import { Target, Brain, Zap } from "lucide-react";
+import { Target, Brain, Zap, Coffee } from "lucide-react";
 import { MicrochipLoader } from "@/components/MicrochipLoader";
 import { logger } from "@/lib/logger";
 import { LearnErrorBoundary } from "@/components/ErrorBoundaries/LearnErrorBoundary";
 import { EmptyState } from "@/components/ui/empty-state";
-import { LoadingState } from "@/components/ui/loading-state";
-import { BookOpen } from "lucide-react";
+
 import { GamificationBar } from "@/components/gamification/GamificationBar";
 import { StreakDisplay } from "@/components/streaks/StreakDisplay";
 import { ModuleNotesEditor } from "@/components/notes/ModuleNotesEditor";
@@ -128,6 +127,46 @@ const LearnPage = () => {
                   Wähle zwischen verschiedenen Lernmethoden oder starte das interaktive Training für eine abwechslungsreiche Lernerfahrung.
                 </p>
               </div>
+
+              {/* Programmiersprachen (Unterkategorien) */}
+              {categoryId === "programmierung" && (
+                <div className="space-y-3">
+                  <h3 className="text-lg font-semibold text-foreground">Programmiersprachen</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                    <GradientShadowCard>
+                      <Card
+                        className="cursor-pointer p-6 hover:scale-[1.02] transition-transform bg-gradient-to-br from-primary/5 to-accent/5"
+                        onClick={() => navigate("/learn/java")}
+                        role="button"
+                        tabIndex={0}
+                        aria-label="Java Lernpfad öffnen"
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            navigate("/learn/java");
+                          }
+                        }}
+                      >
+                        <div className="flex items-start gap-4">
+                          <div className="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center shrink-0">
+                            <Coffee className="w-6 h-6 text-accent" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs uppercase tracking-wider text-muted-foreground">Eigene Kategorie</p>
+                            <h4 className="text-xl font-bold text-foreground">Java</h4>
+                            <p className="text-sm text-muted-foreground mt-1">
+                              Vom Einstieg bis Fortgeschritten: Syntax, Logik, OOP, Collections
+                            </p>
+                          </div>
+                        </div>
+                        <div className="mt-5">
+                          <Button variant="outline" className="w-full">Java öffnen</Button>
+                        </div>
+                      </Card>
+                    </GradientShadowCard>
+                  </div>
+                </div>
+              )}
 
               {interactiveTasks.length === 0 && modules.length === 0 ? (
                 <EmptyState
