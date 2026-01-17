@@ -3607,6 +3607,917 @@ Sortiere das Array [5, 2, 8, 1, 9] aufsteigend!
         }
       }
     ]
+  },
+  // ============================================
+  // KAPITEL 11: DATEI-EIN/AUSGABE (Theorie)
+  // ============================================
+  {
+    id: "chapter-11",
+    title: "Kapitel 11: Dateien (Theorie)",
+    description: "Verstehe wie Java mit Dateien arbeitet - Lesen, Schreiben, Verarbeiten",
+    order: 11,
+    isUnlocked: false,
+    lessons: [
+      {
+        id: "11-1",
+        chapterId: "chapter-11",
+        title: "Was ist File I/O?",
+        order: 1,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Dateien in Java 📁
+
+## Warum Dateien?
+
+Bisher sind unsere Daten nach Programmende verschwunden. Mit **Dateien** können wir Daten **dauerhaft speichern**!
+
+## Was ist File I/O?
+
+- **I/O** = Input/Output (Eingabe/Ausgabe)
+- **File I/O** = Daten von/zu Dateien lesen/schreiben
+
+## Typische Anwendungen
+
+| Anwendung | Beispiel |
+|-----------|----------|
+| 💾 Speicherstände | Spielfortschritt speichern |
+| ⚙️ Konfiguration | Einstellungen laden |
+| 📊 Datenverarbeitung | CSV-Dateien analysieren |
+| 📝 Protokolle | Log-Dateien schreiben |
+
+## Java Klassen für Dateien
+
+\`\`\`java
+import java.io.File;           // Datei-Referenz
+import java.io.FileReader;     // Text lesen
+import java.io.FileWriter;     // Text schreiben
+import java.io.BufferedReader; // Effizient lesen
+import java.io.BufferedWriter; // Effizient schreiben
+import java.nio.file.Files;    // Moderne API
+import java.nio.file.Path;     // Dateipfad
+\`\`\`
+
+## Wichtig zu wissen
+
+⚠️ **Hinweis**: In dieser Online-Umgebung können wir keine echten Dateien erstellen. 
+Wir lernen die **Konzepte** und **Syntax**, die du später auf deinem Computer anwenden kannst!
+
+---
+
+**Klicke auf "Code ausführen" um fortzufahren!**`,
+          codeTemplate: `// In dieser Lektion lernst du die Theorie!
+// Dateizugriff funktioniert nur auf echten Computern.
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Datei-Ein/Ausgabe verstanden!");
+    }
+}`,
+          expectedOutput: "Datei-Ein/Ausgabe verstanden!",
+          hints: [
+            "Klicke einfach auf 'Code ausführen'",
+            "Diese Lektion ist zum Lesen gedacht"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("Datei-Ein/Ausgabe verstanden!");
+    }
+}`
+        }
+      },
+      {
+        id: "11-2",
+        chapterId: "chapter-11",
+        title: "Dateien lesen",
+        order: 2,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Dateien lesen 📖
+
+## BufferedReader - Der klassische Weg
+
+\`\`\`java
+import java.io.*;
+
+public class DateiLesen {
+    public static void main(String[] args) {
+        try {
+            BufferedReader reader = new BufferedReader(
+                new FileReader("daten.txt")
+            );
+            
+            String zeile;
+            while ((zeile = reader.readLine()) != null) {
+                System.out.println(zeile);
+            }
+            
+            reader.close();
+        } catch (IOException e) {
+            System.out.println("Fehler: " + e.getMessage());
+        }
+    }
+}
+\`\`\`
+
+## Files.readAllLines - Der moderne Weg
+
+\`\`\`java
+import java.nio.file.*;
+import java.util.List;
+
+public class DateiLesen {
+    public static void main(String[] args) {
+        try {
+            List<String> zeilen = Files.readAllLines(
+                Path.of("daten.txt")
+            );
+            
+            for (String zeile : zeilen) {
+                System.out.println(zeile);
+            }
+        } catch (IOException e) {
+            System.out.println("Fehler: " + e.getMessage());
+        }
+    }
+}
+\`\`\`
+
+## Try-with-Resources (Best Practice)
+
+\`\`\`java
+try (BufferedReader reader = new BufferedReader(
+        new FileReader("daten.txt"))) {
+    
+    String zeile;
+    while ((zeile = reader.readLine()) != null) {
+        System.out.println(zeile);
+    }
+    // reader wird automatisch geschlossen!
+    
+} catch (IOException e) {
+    e.printStackTrace();
+}
+\`\`\`
+
+---
+
+**Klicke auf "Code ausführen" um fortzufahren!**`,
+          codeTemplate: `// Beispiel: So würde das Lesen aussehen
+// (Funktioniert nur auf echten Computern)
+
+public class Main {
+    public static void main(String[] args) {
+        // Simulierte Dateiinhalte
+        String[] dateiInhalt = {
+            "Zeile 1: Hallo",
+            "Zeile 2: Welt",
+            "Zeile 3: Java ist toll!"
+        };
+        
+        System.out.println("Simuliertes Dateilesen:");
+        for (String zeile : dateiInhalt) {
+            System.out.println(zeile);
+        }
+    }
+}`,
+          expectedOutput: `Simuliertes Dateilesen:
+Zeile 1: Hallo
+Zeile 2: Welt
+Zeile 3: Java ist toll!`,
+          hints: [
+            "Klicke auf 'Code ausführen'",
+            "Dies simuliert das Lesen einer Datei"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        String[] dateiInhalt = {
+            "Zeile 1: Hallo",
+            "Zeile 2: Welt",
+            "Zeile 3: Java ist toll!"
+        };
+        
+        System.out.println("Simuliertes Dateilesen:");
+        for (String zeile : dateiInhalt) {
+            System.out.println(zeile);
+        }
+    }
+}`
+        }
+      },
+      {
+        id: "11-3",
+        chapterId: "chapter-11",
+        title: "Dateien schreiben",
+        order: 3,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Dateien schreiben ✍️
+
+## BufferedWriter - Der klassische Weg
+
+\`\`\`java
+import java.io.*;
+
+public class DateiSchreiben {
+    public static void main(String[] args) {
+        try (BufferedWriter writer = new BufferedWriter(
+                new FileWriter("ausgabe.txt"))) {
+            
+            writer.write("Erste Zeile");
+            writer.newLine();
+            writer.write("Zweite Zeile");
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+\`\`\`
+
+## Files.write - Der moderne Weg
+
+\`\`\`java
+import java.nio.file.*;
+import java.util.List;
+
+public class DateiSchreiben {
+    public static void main(String[] args) {
+        try {
+            List<String> zeilen = List.of(
+                "Erste Zeile",
+                "Zweite Zeile",
+                "Dritte Zeile"
+            );
+            
+            Files.write(Path.of("ausgabe.txt"), zeilen);
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+\`\`\`
+
+## Anhängen statt Überschreiben
+
+\`\`\`java
+// Mit FileWriter - true = append mode
+new FileWriter("log.txt", true)
+
+// Mit Files.write
+Files.write(
+    Path.of("log.txt"), 
+    zeilen, 
+    StandardOpenOption.APPEND
+);
+\`\`\`
+
+## Wichtig
+
+- 📝 \`FileWriter("datei.txt")\` - Überschreibt die Datei!
+- ➕ \`FileWriter("datei.txt", true)\` - Hängt an
+
+---
+
+**Klicke auf "Code ausführen" um fortzufahren!**`,
+          codeTemplate: `// Beispiel: So würde das Schreiben aussehen
+
+public class Main {
+    public static void main(String[] args) {
+        // Simuliertes Dateischreiben
+        String[] zuSchreiben = {
+            "Name: Max Mustermann",
+            "Alter: 25",
+            "Stadt: Berlin"
+        };
+        
+        System.out.println("Würde in Datei schreiben:");
+        for (String zeile : zuSchreiben) {
+            System.out.println("> " + zeile);
+        }
+        System.out.println("Datei erfolgreich geschrieben!");
+    }
+}`,
+          expectedOutput: `Würde in Datei schreiben:
+> Name: Max Mustermann
+> Alter: 25
+> Stadt: Berlin
+Datei erfolgreich geschrieben!`,
+          hints: [
+            "Klicke auf 'Code ausführen'",
+            "Dies simuliert das Schreiben in eine Datei"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        String[] zuSchreiben = {
+            "Name: Max Mustermann",
+            "Alter: 25",
+            "Stadt: Berlin"
+        };
+        
+        System.out.println("Würde in Datei schreiben:");
+        for (String zeile : zuSchreiben) {
+            System.out.println("> " + zeile);
+        }
+        System.out.println("Datei erfolgreich geschrieben!");
+    }
+}`
+        }
+      },
+      {
+        id: "11-4",
+        chapterId: "chapter-11",
+        title: "CSV-Dateien verarbeiten",
+        order: 4,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# CSV-Dateien 📊
+
+## Was ist CSV?
+
+**CSV** = Comma-Separated Values (Komma-getrennte Werte)
+
+\`\`\`
+Name,Alter,Stadt
+Max,25,Berlin
+Anna,30,München
+Tom,22,Hamburg
+\`\`\`
+
+## CSV parsen
+
+\`\`\`java
+String zeile = "Max,25,Berlin";
+String[] teile = zeile.split(",");
+
+String name = teile[0];    // "Max"
+String alter = teile[1];   // "25"
+String stadt = teile[2];   // "Berlin"
+\`\`\`
+
+## Aufgabe
+
+Wir simulieren das Verarbeiten einer CSV-Datei. Parse die CSV-Zeilen und gib die Daten formatiert aus.
+
+**Erwartete Ausgabe:**
+\`\`\`
+Person: Max (25 Jahre) aus Berlin
+Person: Anna (30 Jahre) aus Muenchen
+\`\`\``,
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        // Simulierte CSV-Daten
+        String[] csvZeilen = {
+            "Max,25,Berlin",
+            "Anna,30,Muenchen"
+        };
+        
+        // Parse jede Zeile und gib sie formatiert aus
+        for (String zeile : csvZeilen) {
+            // Teile die Zeile bei Kommas
+            
+            // Gib aus: "Person: [Name] ([Alter] Jahre) aus [Stadt]"
+            
+        }
+    }
+}`,
+          expectedOutput: `Person: Max (25 Jahre) aus Berlin
+Person: Anna (30 Jahre) aus Muenchen`,
+          hints: [
+            "String[] teile = zeile.split(\",\");",
+            "teile[0] = Name, teile[1] = Alter, teile[2] = Stadt",
+            "System.out.println(\"Person: \" + teile[0] + \" (\" + teile[1] + \" Jahre) aus \" + teile[2]);"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        String[] csvZeilen = {
+            "Max,25,Berlin",
+            "Anna,30,Muenchen"
+        };
+        
+        for (String zeile : csvZeilen) {
+            String[] teile = zeile.split(",");
+            System.out.println("Person: " + teile[0] + " (" + teile[1] + " Jahre) aus " + teile[2]);
+        }
+    }
+}`
+        }
+      }
+    ]
+  },
+  // ============================================
+  // KAPITEL 12: MINI-PROJEKT
+  // ============================================
+  {
+    id: "chapter-12",
+    title: "Kapitel 12: Mini-Projekt",
+    description: "Wende alles Gelernte in einem kompletten Projekt an!",
+    order: 12,
+    isUnlocked: false,
+    lessons: [
+      {
+        id: "12-1",
+        chapterId: "chapter-12",
+        title: "Projekt: Notenverwaltung",
+        order: 1,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Mini-Projekt: Notenverwaltung 📚
+
+## Projektbeschreibung
+
+Du erstellst ein kleines **Notenverwaltungssystem**! Es kann:
+
+- ✅ Noten speichern
+- ✅ Durchschnitt berechnen
+- ✅ Beste/schlechteste Note finden
+- ✅ Notenstatistik ausgeben
+
+## Was du lernst
+
+In diesem Projekt wendest du an:
+
+| Konzept | Anwendung |
+|---------|-----------|
+| Arrays | Noten speichern |
+| Schleifen | Durch Noten iterieren |
+| Methoden | Code strukturieren |
+| Algorithmen | Min, Max, Durchschnitt |
+
+## Projektstruktur
+
+Wir bauen das Projekt **Schritt für Schritt** auf:
+
+1. **Teil 1**: Grundstruktur mit Array
+2. **Teil 2**: Durchschnitt berechnen
+3. **Teil 3**: Min/Max finden
+4. **Teil 4**: Alles zusammenfügen
+
+---
+
+**Lass uns starten! Klicke auf "Code ausführen".**`,
+          codeTemplate: `// Mini-Projekt: Notenverwaltung
+// In den nächsten Lektionen bauen wir das System auf!
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== Notenverwaltung ===");
+        System.out.println("Projekt gestartet!");
+    }
+}`,
+          expectedOutput: `=== Notenverwaltung ===
+Projekt gestartet!`,
+          hints: [
+            "Klicke auf 'Code ausführen'",
+            "Dies ist die Projekteinführung"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== Notenverwaltung ===");
+        System.out.println("Projekt gestartet!");
+    }
+}`
+        }
+      },
+      {
+        id: "12-2",
+        chapterId: "chapter-12",
+        title: "Teil 1: Noten speichern",
+        order: 2,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Teil 1: Noten speichern 📝
+
+## Aufgabe
+
+Erstelle ein Array mit 5 Noten und gib sie alle aus.
+
+## Anforderungen
+
+1. Erstelle ein \`double[]\` Array namens \`noten\`
+2. Fülle es mit diesen Werten: 1.3, 2.7, 1.0, 3.3, 2.0
+3. Gib jede Note mit "Note X: [Wert]" aus
+
+## Erwartete Ausgabe
+
+\`\`\`
+Note 1: 1.3
+Note 2: 2.7
+Note 3: 1.0
+Note 4: 3.3
+Note 5: 2.0
+\`\`\`
+
+## Tipp
+
+Nutze eine for-Schleife mit Index!`,
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        // 1. Erstelle das Noten-Array
+        
+        
+        // 2. Gib jede Note aus
+        
+    }
+}`,
+          expectedOutput: `Note 1: 1.3
+Note 2: 2.7
+Note 3: 1.0
+Note 4: 3.3
+Note 5: 2.0`,
+          hints: [
+            "double[] noten = {1.3, 2.7, 1.0, 3.3, 2.0};",
+            "for (int i = 0; i < noten.length; i++)",
+            "System.out.println(\"Note \" + (i+1) + \": \" + noten[i]);"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        double[] noten = {1.3, 2.7, 1.0, 3.3, 2.0};
+        
+        for (int i = 0; i < noten.length; i++) {
+            System.out.println("Note " + (i + 1) + ": " + noten[i]);
+        }
+    }
+}`
+        }
+      },
+      {
+        id: "12-3",
+        chapterId: "chapter-12",
+        title: "Teil 2: Durchschnitt berechnen",
+        order: 3,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Teil 2: Durchschnitt berechnen 📊
+
+## Aufgabe
+
+Erstelle eine Methode \`berechneDurchschnitt\`, die den Durchschnitt aller Noten berechnet.
+
+## Anforderungen
+
+1. Methode: \`static double berechneDurchschnitt(double[] noten)\`
+2. Berechne: Summe aller Noten / Anzahl der Noten
+3. Gib den Durchschnitt aus
+
+## Erwartete Ausgabe
+
+\`\`\`
+Durchschnitt: 2.06
+\`\`\`
+
+## Formel
+
+\`\`\`
+Durchschnitt = (1.3 + 2.7 + 1.0 + 3.3 + 2.0) / 5 = 2.06
+\`\`\``,
+          codeTemplate: `public class Main {
+    // Methode zum Berechnen des Durchschnitts
+    public static double berechneDurchschnitt(double[] noten) {
+        // Berechne die Summe aller Noten
+        
+        // Teile durch die Anzahl
+        
+    }
+    
+    public static void main(String[] args) {
+        double[] noten = {1.3, 2.7, 1.0, 3.3, 2.0};
+        
+        double durchschnitt = berechneDurchschnitt(noten);
+        System.out.println("Durchschnitt: " + durchschnitt);
+    }
+}`,
+          expectedOutput: "Durchschnitt: 2.06",
+          hints: [
+            "double summe = 0; for (double note : noten) { summe += note; }",
+            "return summe / noten.length;",
+            "Das Ergebnis ist automatisch gerundet"
+          ],
+          solution: `public class Main {
+    public static double berechneDurchschnitt(double[] noten) {
+        double summe = 0;
+        for (double note : noten) {
+            summe += note;
+        }
+        return summe / noten.length;
+    }
+    
+    public static void main(String[] args) {
+        double[] noten = {1.3, 2.7, 1.0, 3.3, 2.0};
+        
+        double durchschnitt = berechneDurchschnitt(noten);
+        System.out.println("Durchschnitt: " + durchschnitt);
+    }
+}`
+        }
+      },
+      {
+        id: "12-4",
+        chapterId: "chapter-12",
+        title: "Teil 3: Beste und schlechteste Note",
+        order: 4,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Teil 3: Beste & schlechteste Note 🏆
+
+## Aufgabe
+
+Erstelle zwei Methoden:
+- \`findeBeste(double[] noten)\` - findet die beste (kleinste) Note
+- \`findeSchlechteste(double[] noten)\` - findet die schlechteste (größte) Note
+
+## Erinnerung
+
+In Deutschland: 1.0 = beste Note, 6.0 = schlechteste Note
+
+## Erwartete Ausgabe
+
+\`\`\`
+Beste Note: 1.0
+Schlechteste Note: 3.3
+\`\`\``,
+          codeTemplate: `public class Main {
+    // Finde die beste (kleinste) Note
+    public static double findeBeste(double[] noten) {
+        
+    }
+    
+    // Finde die schlechteste (größte) Note
+    public static double findeSchlechteste(double[] noten) {
+        
+    }
+    
+    public static void main(String[] args) {
+        double[] noten = {1.3, 2.7, 1.0, 3.3, 2.0};
+        
+        System.out.println("Beste Note: " + findeBeste(noten));
+        System.out.println("Schlechteste Note: " + findeSchlechteste(noten));
+    }
+}`,
+          expectedOutput: `Beste Note: 1.0
+Schlechteste Note: 3.3`,
+          hints: [
+            "findeBeste: double beste = noten[0]; dann mit < vergleichen",
+            "findeSchlechteste: double schlechteste = noten[0]; dann mit > vergleichen",
+            "Beide nutzen eine for-each Schleife"
+          ],
+          solution: `public class Main {
+    public static double findeBeste(double[] noten) {
+        double beste = noten[0];
+        for (double note : noten) {
+            if (note < beste) {
+                beste = note;
+            }
+        }
+        return beste;
+    }
+    
+    public static double findeSchlechteste(double[] noten) {
+        double schlechteste = noten[0];
+        for (double note : noten) {
+            if (note > schlechteste) {
+                schlechteste = note;
+            }
+        }
+        return schlechteste;
+    }
+    
+    public static void main(String[] args) {
+        double[] noten = {1.3, 2.7, 1.0, 3.3, 2.0};
+        
+        System.out.println("Beste Note: " + findeBeste(noten));
+        System.out.println("Schlechteste Note: " + findeSchlechteste(noten));
+    }
+}`
+        }
+      },
+      {
+        id: "12-5",
+        chapterId: "chapter-12",
+        title: "Teil 4: Komplett-System",
+        order: 5,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Teil 4: Alles zusammen! 🎉
+
+## Finale Aufgabe
+
+Kombiniere alles zu einem vollständigen Notenverwaltungssystem!
+
+## Anforderungen
+
+Erstelle ein Programm mit:
+1. \`berechneDurchschnitt(double[] noten)\`
+2. \`findeBeste(double[] noten)\`
+3. \`findeSchlechteste(double[] noten)\`
+4. \`zeigeStatistik(double[] noten)\` - gibt alles formatiert aus
+
+## Erwartete Ausgabe
+
+\`\`\`
+=== NOTENSTATISTIK ===
+Anzahl Noten: 5
+Durchschnitt: 2.06
+Beste Note: 1.0
+Schlechteste Note: 3.3
+=====================
+\`\`\``,
+          codeTemplate: `public class Main {
+    public static double berechneDurchschnitt(double[] noten) {
+        double summe = 0;
+        for (double note : noten) {
+            summe += note;
+        }
+        return summe / noten.length;
+    }
+    
+    public static double findeBeste(double[] noten) {
+        double beste = noten[0];
+        for (double note : noten) {
+            if (note < beste) beste = note;
+        }
+        return beste;
+    }
+    
+    public static double findeSchlechteste(double[] noten) {
+        double schlechteste = noten[0];
+        for (double note : noten) {
+            if (note > schlechteste) schlechteste = note;
+        }
+        return schlechteste;
+    }
+    
+    // Erstelle die zeigeStatistik Methode
+    public static void zeigeStatistik(double[] noten) {
+        // Gib die formatierte Statistik aus
+        
+    }
+    
+    public static void main(String[] args) {
+        double[] noten = {1.3, 2.7, 1.0, 3.3, 2.0};
+        zeigeStatistik(noten);
+    }
+}`,
+          expectedOutput: `=== NOTENSTATISTIK ===
+Anzahl Noten: 5
+Durchschnitt: 2.06
+Schlechteste Note: 3.3
+Beste Note: 1.0
+=====================`,
+          hints: [
+            "System.out.println(\"=== NOTENSTATISTIK ===\");",
+            "Rufe die anderen Methoden auf und gib die Ergebnisse aus",
+            "Nutze noten.length für die Anzahl"
+          ],
+          solution: `public class Main {
+    public static double berechneDurchschnitt(double[] noten) {
+        double summe = 0;
+        for (double note : noten) {
+            summe += note;
+        }
+        return summe / noten.length;
+    }
+    
+    public static double findeBeste(double[] noten) {
+        double beste = noten[0];
+        for (double note : noten) {
+            if (note < beste) beste = note;
+        }
+        return beste;
+    }
+    
+    public static double findeSchlechteste(double[] noten) {
+        double schlechteste = noten[0];
+        for (double note : noten) {
+            if (note > schlechteste) schlechteste = note;
+        }
+        return schlechteste;
+    }
+    
+    public static void zeigeStatistik(double[] noten) {
+        System.out.println("=== NOTENSTATISTIK ===");
+        System.out.println("Anzahl Noten: " + noten.length);
+        System.out.println("Durchschnitt: " + berechneDurchschnitt(noten));
+        System.out.println("Schlechteste Note: " + findeSchlechteste(noten));
+        System.out.println("Beste Note: " + findeBeste(noten));
+        System.out.println("=====================");
+    }
+    
+    public static void main(String[] args) {
+        double[] noten = {1.3, 2.7, 1.0, 3.3, 2.0};
+        zeigeStatistik(noten);
+    }
+}`
+        }
+      },
+      {
+        id: "12-6",
+        chapterId: "chapter-12",
+        title: "Projekt abgeschlossen!",
+        order: 6,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# 🎉 Herzlichen Glückwunsch! 🎉
+
+## Du hast den Java-Kurs abgeschlossen!
+
+Du hast gelernt:
+
+### Grundlagen
+- ✅ Variablen und Datentypen
+- ✅ Operatoren und Ausdrücke
+- ✅ Ein- und Ausgabe
+
+### Kontrollstrukturen
+- ✅ if/else Verzweigungen
+- ✅ for und while Schleifen
+- ✅ switch Anweisungen
+
+### Datenstrukturen
+- ✅ Arrays
+- ✅ Strings und String-Methoden
+
+### Fortgeschritten
+- ✅ Methoden schreiben
+- ✅ Rekursion verstehen
+- ✅ Algorithmen implementieren
+
+### Praxis
+- ✅ Ein komplettes Mini-Projekt erstellt!
+
+## Was kommt als Nächstes?
+
+1. **Objektorientierung (OOP)** - Klassen, Objekte, Vererbung
+2. **Datenstrukturen** - ArrayList, HashMap, Sets
+3. **Exceptions** - Fehlerbehandlung
+4. **GUI** - Grafische Oberflächen mit JavaFX
+5. **Datenbanken** - SQL und JDBC
+
+## Tipps zum Weitermachen
+
+- 🔄 Nutze den **Übungsmodus** um dein Wissen zu festigen
+- 💻 Installiere Java auf deinem Computer
+- 🚀 Starte eigene kleine Projekte
+- 📚 Lies die offizielle Java-Dokumentation
+
+---
+
+**Du bist jetzt ein Java-Programmierer! 🚀**`,
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("=================================");
+        System.out.println("  JAVA-KURS ABGESCHLOSSEN!");
+        System.out.println("=================================");
+        System.out.println();
+        System.out.println("Du bist jetzt bereit fuer:");
+        System.out.println("- Eigene Projekte");
+        System.out.println("- Objektorientierung");
+        System.out.println("- Fortgeschrittene Themen");
+        System.out.println();
+        System.out.println("Weiter so! :)");
+    }
+}`,
+          expectedOutput: `=================================
+  JAVA-KURS ABGESCHLOSSEN!
+=================================
+
+Du bist jetzt bereit fuer:
+- Eigene Projekte
+- Objektorientierung
+- Fortgeschrittene Themen
+
+Weiter so! :)`,
+          hints: [
+            "Klicke auf 'Code ausführen' um den Kurs abzuschließen!",
+            "Herzlichen Glückwunsch!"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("=================================");
+        System.out.println("  JAVA-KURS ABGESCHLOSSEN!");
+        System.out.println("=================================");
+        System.out.println();
+        System.out.println("Du bist jetzt bereit fuer:");
+        System.out.println("- Eigene Projekte");
+        System.out.println("- Objektorientierung");
+        System.out.println("- Fortgeschrittene Themen");
+        System.out.println();
+        System.out.println("Weiter so! :)");
+    }
+}`
+        }
+      }
+    ]
   }
 ];
 
