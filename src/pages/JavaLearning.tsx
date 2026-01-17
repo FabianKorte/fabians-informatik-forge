@@ -1,41 +1,27 @@
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useMemo, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { SEO } from "@/components/SEO";
 import { javaCurriculum } from "@/data/java/curriculum";
 import { LessonView } from "@/components/java/LessonView";
 import { ChapterProgress } from "@/components/java/ChapterProgress";
-import { Coffee, ArrowLeft, Trophy, Flame, BookOpen } from "lucide-react";
+import { useJavaProgress } from "@/hooks/useJavaProgress";
+import { Coffee, ArrowLeft, Trophy, Flame, Loader2, Cloud } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function JavaLearning() {
-  // Load progress from localStorage
-  const [completedLessons, setCompletedLessons] = useState<Set<string>>(() => {
-    const saved = localStorage.getItem("java-progress");
-    return saved ? new Set(JSON.parse(saved)) : new Set();
-  });
-
-  const [currentChapterId, setCurrentChapterId] = useState(() => {
-    const saved = localStorage.getItem("java-current-chapter");
-    return saved || javaCurriculum[0].id;
-  });
-
-  const [currentLessonId, setCurrentLessonId] = useState(() => {
-    const saved = localStorage.getItem("java-current-lesson");
-    return saved || javaCurriculum[0].lessons[0].id;
-  });
-
-  // Save progress
-  useEffect(() => {
-    localStorage.setItem("java-progress", JSON.stringify([...completedLessons]));
-  }, [completedLessons]);
-
-  useEffect(() => {
-    localStorage.setItem("java-current-chapter", currentChapterId);
-    localStorage.setItem("java-current-lesson", currentLessonId);
-  }, [currentChapterId, currentLessonId]);
+  const {
+    completedLessons,
+    currentChapterId,
+    currentLessonId,
+    isLoading,
+    isSyncing,
+    markLessonComplete,
+    navigateToLesson,
+    streak,
+    totalLessons,
+    completedCount,
+  } = useJavaProgress();
 
   // Get current lesson
   const currentChapter = useMemo(() => 
@@ -76,42 +62,30 @@ export default function JavaLearning() {
   }, [currentChapterId, currentLessonId, currentChapter]);
 
   const handleComplete = useCallback(() => {
-    setCompletedLessons(prev => new Set([...prev, currentLessonId]));
-  }, [currentLessonId]);
+    markLessonComplete(currentLessonId);
+  }, [currentLessonId, markLessonComplete]);
 
   const handleNext = useCallback(() => {
     if (hasNext) {
-      setCurrentChapterId(nextChapterId);
-      setCurrentLessonId(nextLessonId);
+      navigateToLesson(nextChapterId, nextLessonId);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
-  }, [hasNext, nextChapterId, nextLessonId]);
+  }, [hasNext, nextChapterId, nextLessonId, navigateToLesson]);
 
   const handleSelectLesson = useCallback((chapterId: string, lessonId: string) => {
-    setCurrentChapterId(chapterId);
-    setCurrentLessonId(lessonId);
-  }, []);
+    navigateToLesson(chapterId, lessonId);
+  }, [navigateToLesson]);
 
-  // Stats
-  const totalLessons = useMemo(() => 
-    javaCurriculum.reduce((acc, ch) => acc + ch.lessons.length, 0),
-    []
-  );
-
-  const streak = useMemo(() => {
-    // Simple streak calculation based on consecutive completed lessons
-    let count = 0;
-    for (const chapter of javaCurriculum) {
-      for (const lesson of chapter.lessons) {
-        if (completedLessons.has(lesson.id)) {
-          count++;
-        } else {
-          break;
-        }
-      }
-    }
-    return count;
-  }, [completedLessons]);
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-orange-950/20 via-background to-background">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="w-8 h-8 animate-spin text-orange-500" />
+          <p className="text-muted-foreground">Lade Fortschritt...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -146,13 +120,19 @@ export default function JavaLearning() {
 
             {/* Stats */}
             <div className="flex items-center gap-4">
+              {isSyncing && (
+                <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                  <Cloud className="w-3 h-3 animate-pulse" />
+                  <span>Speichern...</span>
+                </div>
+              )}
               <div className="flex items-center gap-2 text-sm">
                 <Flame className="w-4 h-4 text-orange-500" />
                 <span>{streak} Streak</span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <Trophy className="w-4 h-4 text-yellow-500" />
-                <span>{completedLessons.size}/{totalLessons}</span>
+                <span>{completedCount}/{totalLessons}</span>
               </div>
             </div>
           </div>
