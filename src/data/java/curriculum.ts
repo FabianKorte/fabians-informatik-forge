@@ -1828,40 +1828,40 @@ meinAuto.fahren();  // Ausgabe: Das Auto fährt!
 ## Aufgabe
 
 Erstelle eine Klasse \`Hund\` mit dem Attribut \`name\` und der Methode \`bellen()\`, die "Wuff!" ausgibt.`,
-          codeTemplate: `class Hund {
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        Hund meinHund = new Hund();
+        meinHund.name = "Bello";
+        meinHund.bellen();
+    }
+}
+
+class Hund {
     String name;
     
     // Ergaenze hier die Methode bellen()
     // die "Wuff!" ausgibt
     
-}
-
-public class Main {
-    public static void main(String[] args) {
-        Hund meinHund = new Hund();
-        meinHund.name = "Bello";
-        meinHund.bellen();
-    }
 }`,
           expectedOutput: "Wuff!",
           hints: [
             "public void bellen() { ... }",
             "System.out.println(\"Wuff!\"); in der Methode",
-            "Die Methode muss innerhalb der Hund-Klasse stehen"
+            "Wichtig für diese Plattform: Die Datei heißt Main.java, daher muss die erste Klasse 'public class Main' sein"
           ],
-          solution: `class Hund {
-    String name;
-    
-    public void bellen() {
-        System.out.println("Wuff!");
-    }
-}
-
-public class Main {
+          solution: `public class Main {
     public static void main(String[] args) {
         Hund meinHund = new Hund();
         meinHund.name = "Bello";
         meinHund.bellen();
+    }
+}
+
+class Hund {
+    String name;
+    
+    public void bellen() {
+        System.out.println("Wuff!");
     }
 }`
         }
@@ -1915,7 +1915,15 @@ public Person(String name, int alter) {
 ## Aufgabe
 
 Erstelle eine Klasse \`Buch\` mit Konstruktor für \`titel\` und \`autor\`. Gib "Titel von Autor" aus.`,
-          codeTemplate: `class Buch {
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        // Erstelle ein Buch "Java Basics" von "Max Mueller"
+        Buch buch = new Buch("Java Basics", "Max Mueller");
+        buch.info();
+    }
+}
+
+class Buch {
     String titel;
     String autor;
     
@@ -1925,14 +1933,6 @@ Erstelle eine Klasse \`Buch\` mit Konstruktor für \`titel\` und \`autor\`. Gib 
     public void info() {
         System.out.println(titel + " von " + autor);
     }
-}
-
-public class Main {
-    public static void main(String[] args) {
-        // Erstelle ein Buch "Java Basics" von "Max Mueller"
-        Buch buch = new Buch("Java Basics", "Max Mueller");
-        buch.info();
-    }
 }`,
           expectedOutput: "Java Basics von Max Mueller",
           hints: [
@@ -1940,7 +1940,14 @@ public class Main {
             "Nutze this.titel = titel;",
             "Der Konstruktor hat den gleichen Namen wie die Klasse"
           ],
-          solution: `class Buch {
+          solution: `public class Main {
+    public static void main(String[] args) {
+        Buch buch = new Buch("Java Basics", "Max Mueller");
+        buch.info();
+    }
+}
+
+class Buch {
     String titel;
     String autor;
     
@@ -1951,13 +1958,6 @@ public class Main {
     
     public void info() {
         System.out.println(titel + " von " + autor);
-    }
-}
-
-public class Main {
-    public static void main(String[] args) {
-        Buch buch = new Buch("Java Basics", "Max Mueller");
-        buch.info();
     }
 }`
         }
@@ -2009,7 +2009,15 @@ public void setKontostand(double betrag) {
 ## Aufgabe
 
 Erstelle eine Klasse \`Spieler\` mit privatem \`punkte\`-Attribut, Getter und Setter. Der Setter soll nur positive Werte akzeptieren.`,
-          codeTemplate: `class Spieler {
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        Spieler spieler = new Spieler();
+        spieler.setPunkte(100);
+        System.out.println(spieler.getPunkte());
+    }
+}
+
+class Spieler {
     // Private Variable punkte
     
     
@@ -2018,14 +2026,6 @@ Erstelle eine Klasse \`Spieler\` mit privatem \`punkte\`-Attribut, Getter und Se
     
     // Setter für punkte (nur positive Werte erlauben)
     
-}
-
-public class Main {
-    public static void main(String[] args) {
-        Spieler spieler = new Spieler();
-        spieler.setPunkte(100);
-        System.out.println(spieler.getPunkte());
-    }
 }`,
           expectedOutput: "100",
           hints: [
@@ -2033,7 +2033,15 @@ public class Main {
             "public int getPunkte() { return punkte; }",
             "if (wert >= 0) { punkte = wert; }"
           ],
-          solution: `class Spieler {
+          solution: `public class Main {
+    public static void main(String[] args) {
+        Spieler spieler = new Spieler();
+        spieler.setPunkte(100);
+        System.out.println(spieler.getPunkte());
+    }
+}
+
+class Spieler {
     private int punkte;
     
     public int getPunkte() {
@@ -2044,14 +2052,6 @@ public class Main {
         if (wert >= 0) {
             punkte = wert;
         }
-    }
-}
-
-public class Main {
-    public static void main(String[] args) {
-        Spieler spieler = new Spieler();
-        spieler.setPunkte(100);
-        System.out.println(spieler.getPunkte());
     }
 }`
         }
@@ -2102,7 +2102,15 @@ hund.bellen();  // Eigene Methode
 ## Aufgabe
 
 Erstelle eine Klasse \`Fahrzeug\` mit Methode \`starten()\`. Erstelle \`Auto\` das von \`Fahrzeug\` erbt und eine eigene Methode \`hupen()\` hat.`,
-          codeTemplate: `class Fahrzeug {
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        Auto auto = new Auto();
+        auto.starten();
+        auto.hupen();
+    }
+}
+
+class Fahrzeug {
     // Methode starten() die "Fahrzeug startet..." ausgibt
     
 }
@@ -2110,14 +2118,6 @@ Erstelle eine Klasse \`Fahrzeug\` mit Methode \`starten()\`. Erstelle \`Auto\` d
 class Auto extends Fahrzeug {
     // Methode hupen() die "Huuup!" ausgibt
     
-}
-
-public class Main {
-    public static void main(String[] args) {
-        Auto auto = new Auto();
-        auto.starten();
-        auto.hupen();
-    }
 }`,
           expectedOutput: `Fahrzeug startet...
 Huuup!`,
@@ -2126,7 +2126,15 @@ Huuup!`,
             "class Auto extends Fahrzeug",
             "public void hupen() { ... }"
           ],
-          solution: `class Fahrzeug {
+          solution: `public class Main {
+    public static void main(String[] args) {
+        Auto auto = new Auto();
+        auto.starten();
+        auto.hupen();
+    }
+}
+
+class Fahrzeug {
     public void starten() {
         System.out.println("Fahrzeug startet...");
     }
@@ -2135,14 +2143,6 @@ Huuup!`,
 class Auto extends Fahrzeug {
     public void hupen() {
         System.out.println("Huuup!");
-    }
-}
-
-public class Main {
-    public static void main(String[] args) {
-        Auto auto = new Auto();
-        auto.starten();
-        auto.hupen();
     }
 }`
         }
@@ -2174,7 +2174,17 @@ Erstelle ein kleines OOP-System!
 \`\`\`
 Name: Anna, Gehalt: 3500.0€
 \`\`\``,
-          codeTemplate: `class Mitarbeiter {
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        // Erstelle Mitarbeiter "Anna" mit Gehalt 3500.0
+        Mitarbeiter anna = new Mitarbeiter("Anna", 3500.0);
+        
+        // Rufe info() auf
+        anna.info();
+    }
+}
+
+class Mitarbeiter {
     // Private Attribute
     
     
@@ -2186,15 +2196,6 @@ Name: Anna, Gehalt: 3500.0€
     
     // info() Methode
     
-}
-
-public class Main {
-    public static void main(String[] args) {
-        // Erstelle Mitarbeiter "Anna" mit Gehalt 3500.0
-        
-        // Rufe info() auf
-        
-    }
 }`,
           expectedOutput: "Name: Anna, Gehalt: 3500.0€",
           hints: [
@@ -2202,7 +2203,14 @@ public class Main {
             "public Mitarbeiter(String name, double gehalt)",
             "System.out.println(\"Name: \" + name + \", Gehalt: \" + gehalt + \"€\");"
           ],
-          solution: `class Mitarbeiter {
+          solution: `public class Main {
+    public static void main(String[] args) {
+        Mitarbeiter anna = new Mitarbeiter("Anna", 3500.0);
+        anna.info();
+    }
+}
+
+class Mitarbeiter {
     private String name;
     private double gehalt;
     
@@ -2221,13 +2229,6 @@ public class Main {
     
     public void info() {
         System.out.println("Name: " + name + ", Gehalt: " + gehalt + "€");
-    }
-}
-
-public class Main {
-    public static void main(String[] args) {
-        Mitarbeiter anna = new Mitarbeiter("Anna", 3500.0);
-        anna.info();
     }
 }`
         }

@@ -66,6 +66,7 @@ jobs:
           name: java-validation-results
           path: |
             validation-results.json
+          if-no-files-found: ignore
           retention-days: 7
 
   notify-failure:
