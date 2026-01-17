@@ -6,12 +6,16 @@ import { javaCurriculum } from "@/data/java/curriculum";
 import { LessonView } from "@/components/java/LessonView";
 import { ChapterProgress } from "@/components/java/ChapterProgress";
 import { PracticeMode } from "@/components/java/PracticeMode";
+import { ProgressOverview } from "@/components/java/ProgressOverview";
 import { useJavaProgress } from "@/hooks/useJavaProgress";
-import { Coffee, ArrowLeft, Trophy, Flame, Loader2, Cloud, Shuffle } from "lucide-react";
+import { Coffee, ArrowLeft, Trophy, Flame, Loader2, Cloud, Shuffle, BarChart3 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Progress } from "@/components/ui/progress";
+
+type ViewMode = "learning" | "practice" | "progress";
 
 export default function JavaLearning() {
-  const [showPracticeMode, setShowPracticeMode] = useState(false);
+  const [viewMode, setViewMode] = useState<ViewMode>("learning");
   
   const {
     completedLessons,
@@ -25,6 +29,8 @@ export default function JavaLearning() {
     totalLessons,
     completedCount,
   } = useJavaProgress();
+
+  const progressPercentage = Math.round((completedCount / totalLessons) * 100);
 
   // Get current lesson
   const currentChapter = useMemo(() => 
@@ -101,60 +107,81 @@ export default function JavaLearning() {
       <div className="min-h-screen bg-gradient-to-b from-orange-950/20 via-background to-background">
         {/* Header */}
         <header className="border-b bg-background/80 backdrop-blur-sm sticky top-0 z-40">
-          <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" size="sm" asChild>
-                <Link to="/">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Zurück
-                </Link>
-              </Button>
-              <div className="h-6 w-px bg-border" />
-              <div className="flex items-center gap-2">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
-                  <Coffee className="w-5 h-5 text-white" />
+          <div className="max-w-7xl mx-auto px-4 py-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/">
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    Zurück
+                  </Link>
+                </Button>
+                <div className="h-6 w-px bg-border" />
+                <div className="flex items-center gap-2">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
+                    <Coffee className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h1 className="font-bold">Java Programmierung</h1>
+                    <p className="text-xs text-muted-foreground">Interaktiver Lernpfad</p>
+                  </div>
                 </div>
-                <div>
-                  <h1 className="font-bold">Java Programmierung</h1>
-                  <p className="text-xs text-muted-foreground">Interaktiver Lernpfad</p>
+              </div>
+
+              {/* Stats & Buttons */}
+              <div className="flex items-center gap-3">
+                {isSyncing && (
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <Cloud className="w-3 h-3 animate-pulse" />
+                    <span>Speichern...</span>
+                  </div>
+                )}
+                
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setViewMode("progress")}
+                  className="hidden sm:flex"
+                >
+                  <BarChart3 className="w-4 h-4 mr-2" />
+                  Statistik
+                </Button>
+                
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setViewMode("practice")}
+                  className="hidden sm:flex"
+                >
+                  <Shuffle className="w-4 h-4 mr-2" />
+                  Üben
+                </Button>
+                
+                <div className="flex items-center gap-2 text-sm">
+                  <Flame className="w-4 h-4 text-orange-500" />
+                  <span>{streak}</span>
                 </div>
+                <button 
+                  onClick={() => setViewMode("progress")}
+                  className="flex items-center gap-2 text-sm hover:opacity-80 transition-opacity"
+                >
+                  <Trophy className="w-4 h-4 text-yellow-500" />
+                  <span>{completedCount}/{totalLessons}</span>
+                </button>
               </div>
             </div>
 
-            {/* Stats & Practice Mode Button */}
-            <div className="flex items-center gap-4">
-              {isSyncing && (
-                <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                  <Cloud className="w-3 h-3 animate-pulse" />
-                  <span>Speichern...</span>
-                </div>
-              )}
-              
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => setShowPracticeMode(true)}
-                className="hidden sm:flex"
-              >
-                <Shuffle className="w-4 h-4 mr-2" />
-                Übungsmodus
-              </Button>
-              
-              <div className="flex items-center gap-2 text-sm">
-                <Flame className="w-4 h-4 text-orange-500" />
-                <span>{streak} Streak</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <Trophy className="w-4 h-4 text-yellow-500" />
-                <span>{completedCount}/{totalLessons}</span>
-              </div>
+            {/* Progress Bar */}
+            <div className="mt-3 flex items-center gap-3">
+              <Progress value={progressPercentage} className="h-1.5 flex-1" />
+              <span className="text-xs text-muted-foreground w-10">{progressPercentage}%</span>
             </div>
           </div>
         </header>
 
         <main className="max-w-7xl mx-auto px-4 py-8">
           <AnimatePresence mode="wait">
-            {showPracticeMode ? (
+            {viewMode === "practice" && (
               <motion.div
                 key="practice"
                 initial={{ opacity: 0, y: 20 }}
@@ -163,10 +190,27 @@ export default function JavaLearning() {
               >
                 <PracticeMode 
                   completedLessons={completedLessons}
-                  onClose={() => setShowPracticeMode(false)}
+                  onClose={() => setViewMode("learning")}
                 />
               </motion.div>
-            ) : (
+            )}
+            
+            {viewMode === "progress" && (
+              <motion.div
+                key="progress"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+              >
+                <ProgressOverview 
+                  completedLessons={completedLessons}
+                  streak={streak}
+                  onClose={() => setViewMode("learning")}
+                />
+              </motion.div>
+            )}
+            
+            {viewMode === "learning" && (
               <motion.div
                 key="learning"
                 initial={{ opacity: 0 }}
@@ -175,7 +219,7 @@ export default function JavaLearning() {
               >
                 <div className="grid grid-cols-1 lg:grid-cols-[320px,1fr] gap-8">
                   {/* Sidebar - Chapter Progress */}
-                  <aside className="lg:sticky lg:top-24 lg:self-start">
+                  <aside className="lg:sticky lg:top-28 lg:self-start">
                     <ChapterProgress
                       chapters={javaCurriculum}
                       currentChapterId={currentChapterId}
@@ -184,15 +228,25 @@ export default function JavaLearning() {
                       onSelectLesson={handleSelectLesson}
                     />
                     
-                    {/* Mobile Practice Mode Button */}
-                    <Button 
-                      variant="outline" 
-                      className="w-full mt-4 sm:hidden"
-                      onClick={() => setShowPracticeMode(true)}
-                    >
-                      <Shuffle className="w-4 h-4 mr-2" />
-                      Übungsmodus
-                    </Button>
+                    {/* Mobile Buttons */}
+                    <div className="flex gap-2 mt-4 sm:hidden">
+                      <Button 
+                        variant="outline" 
+                        className="flex-1"
+                        onClick={() => setViewMode("progress")}
+                      >
+                        <BarChart3 className="w-4 h-4 mr-2" />
+                        Statistik
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        className="flex-1"
+                        onClick={() => setViewMode("practice")}
+                      >
+                        <Shuffle className="w-4 h-4 mr-2" />
+                        Üben
+                      </Button>
+                    </div>
                   </aside>
 
                   {/* Main Content - Lesson View */}
