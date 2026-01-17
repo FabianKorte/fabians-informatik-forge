@@ -248,12 +248,23 @@ export async function executeJavaCode(code: string, stdin?: string): Promise<Cod
 }
 
 /**
- * Normalize output for comparison - handles UTF-8 and line endings
+ * Normalize umlauts to their ASCII equivalent for comparison
+ * This handles encoding mismatches between browser input and Piston API output
+ */
+function normalizeUmlauts(text: string): string {
+  return text
+    .replace(/ä/g, "ae").replace(/Ä/g, "Ae")
+    .replace(/ö/g, "oe").replace(/Ö/g, "Oe")
+    .replace(/ü/g, "ue").replace(/Ü/g, "Ue")
+    .replace(/ß/g, "ss");
+}
+
+/**
+ * Normalize output for comparison - handles UTF-8, line endings, and umlauts
  */
 export function normalizeOutput(output: string): string {
-  // Ensure proper UTF-8 handling and normalize whitespace
   return output
-    .normalize("NFC") // Normalize Unicode characters (important for Umlauts)
+    .normalize("NFC")
     .trim()
     .replace(/\r\n/g, "\n")
     .replace(/\r/g, "\n")
@@ -263,7 +274,7 @@ export function normalizeOutput(output: string): string {
 }
 
 /**
- * Compare outputs with tolerance for encoding differences
+ * Compare outputs with tolerance for encoding differences and umlauts
  */
 export function compareOutputs(expected: string, actual: string): boolean {
   const normalizedExpected = normalizeOutput(expected);
@@ -274,9 +285,27 @@ export function compareOutputs(expected: string, actual: string): boolean {
     return true;
   }
   
-  // Fallback: Compare with normalized Unicode (handles Umlaut encoding variants)
+  // Fallback 1: Compare with NFD normalization (decomposed Unicode)
   const expectedNFD = normalizedExpected.normalize("NFD");
   const actualNFD = normalizedActual.normalize("NFD");
   
-  return expectedNFD === actualNFD;
+  if (expectedNFD === actualNFD) {
+    return true;
+  }
+  
+  // Fallback 2: Compare with umlauts converted to ASCII equivalents
+  // This handles cases where the Piston API returns different umlaut encoding
+  const expectedAscii = normalizeUmlauts(normalizedExpected);
+  const actualAscii = normalizeUmlauts(normalizedActual);
+  
+  if (expectedAscii === actualAscii) {
+    return true;
+  }
+  
+  // Fallback 3: Case-insensitive comparison with ASCII umlauts
+  if (expectedAscii.toLowerCase() === actualAscii.toLowerCase()) {
+    return true;
+  }
+  
+  return false;
 }
