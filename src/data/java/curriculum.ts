@@ -855,14 +855,14 @@ Größe: 1.75m
         
         // Zeile 3: Alter: 25
         
-        // Zeile 4: Größe: 1.75m
+        // Zeile 4: Groesse: 1.75m
         
     }
 }`,
           expectedOutput: `=== STECKBRIEF ===
 Name: Max
 Alter: 25
-Größe: 1.75m`,
+Groesse: 1.75m`,
           hints: [
             "Nutze System.out.println() für jede Zeile",
             "Verbinde Text und Variablen mit +",
@@ -877,7 +877,7 @@ Größe: 1.75m`,
         System.out.println("=== STECKBRIEF ===");
         System.out.println("Name: " + name);
         System.out.println("Alter: " + alter);
-        System.out.println("Größe: " + groesse + "m");
+        System.out.println("Groesse: " + groesse + "m");
     }
 }`
         }
@@ -1511,12 +1511,12 @@ Erstelle eine Klasse \`Buch\` mit Konstruktor für \`titel\` und \`autor\`. Gib 
 
 public class Main {
     public static void main(String[] args) {
-        // Erstelle ein Buch "Java Basics" von "Max Müller"
-        Buch buch = new Buch("Java Basics", "Max Müller");
+        // Erstelle ein Buch "Java Basics" von "Max Mueller"
+        Buch buch = new Buch("Java Basics", "Max Mueller");
         buch.info();
     }
 }`,
-          expectedOutput: "Java Basics von Max Müller",
+          expectedOutput: "Java Basics von Max Mueller",
           hints: [
             "public Buch(String titel, String autor)",
             "Nutze this.titel = titel;",
@@ -1538,7 +1538,7 @@ public class Main {
 
 public class Main {
     public static void main(String[] args) {
-        Buch buch = new Buch("Java Basics", "Max Müller");
+        Buch buch = new Buch("Java Basics", "Max Mueller");
         buch.info();
     }
 }`
@@ -1876,11 +1876,11 @@ Schreibe Code, der versucht durch 0 zu teilen und den Fehler abfängt. Gib "Divi
         
     }
 }`,
-          expectedOutput: "Division durch Null nicht möglich!",
+          expectedOutput: "Division durch Null nicht moeglich!",
           hints: [
             "try { int ergebnis = a / b; }",
             "catch (ArithmeticException e) { ... }",
-            "System.out.println(\"Division durch Null nicht möglich!\");"
+            "System.out.println(\"Division durch Null nicht moeglich!\");"
           ],
           solution: `public class Main {
     public static void main(String[] args) {
@@ -1891,7 +1891,7 @@ Schreibe Code, der versucht durch 0 zu teilen und den Fehler abfängt. Gib "Divi
             int ergebnis = a / b;
             System.out.println(ergebnis);
         } catch (ArithmeticException e) {
-            System.out.println("Division durch Null nicht möglich!");
+            System.out.println("Division durch Null nicht moeglich!");
         }
     }
 }`
@@ -2013,7 +2013,7 @@ catch (ArithmeticException e) { }  // Wird nie erreicht!
 
 ## Aufgabe
 
-Fange einen ArrayIndexOutOfBoundsException ab und gib "Ungültiger Index!" aus.`,
+Fange einen ArrayIndexOutOfBoundsException ab und gib "Ungueltiger Index!" aus.`,
           codeTemplate: `public class Main {
     public static void main(String[] args) {
         int[] zahlen = {1, 2, 3};
@@ -2023,11 +2023,11 @@ Fange einen ArrayIndexOutOfBoundsException ab und gib "Ungültiger Index!" aus.`
         
     }
 }`,
-          expectedOutput: "Ungültiger Index!",
+          expectedOutput: "Ungueltiger Index!",
           hints: [
             "try { int x = zahlen[10]; }",
             "catch (ArrayIndexOutOfBoundsException e)",
-            "System.out.println(\"Ungültiger Index!\");"
+            "System.out.println(\"Ungueltiger Index!\");"
           ],
           solution: `public class Main {
     public static void main(String[] args) {
@@ -2037,7 +2037,7 @@ Fange einen ArrayIndexOutOfBoundsException ab und gib "Ungültiger Index!" aus.`
             int x = zahlen[10];
             System.out.println(x);
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Ungültiger Index!");
+            System.out.println("Ungueltiger Index!");
         }
     }
 }`
