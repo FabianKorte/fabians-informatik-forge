@@ -28,7 +28,11 @@ export const categoryLearningMethods: Record<string, string[]> = {
   "mathematik-logik": ["flashcards", "quiz"],
   innovationtrends: ["flashcards", "quiz"],
   "innovation-trends": ["flashcards", "quiz"],
-  qualitaetsmanagement: ["flashcards", "quiz"]
+  qualitaetsmanagement: ["flashcards", "quiz"],
+  tabellenkalkulation: ["flashcards", "quiz"],
+  fachrechnen: ["flashcards", "quiz"],
+  "cloud-aws": ["flashcards", "quiz"],
+  digitaltechnik: ["flashcards", "quiz"]
 };
 
 export const getAvailableMethodsForCategory = (categoryId: string): string[] => {
