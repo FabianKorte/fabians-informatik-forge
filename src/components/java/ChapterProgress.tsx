@@ -20,6 +20,8 @@ export function ChapterProgress({
   completedLessons,
   onSelectLesson,
 }: ChapterProgressProps) {
+  // Sort chapters by order property
+  const sortedChapters = [...chapters].sort((a, b) => a.order - b.order);
   const getLessonIcon = (lesson: JavaLesson, isCompleted: boolean) => {
     if (isCompleted) {
       return <CheckCircle2 className="w-4 h-4 text-green-500" />;
@@ -35,7 +37,7 @@ export function ChapterProgress({
   };
 
   const getTotalProgress = () => {
-    const totalLessons = chapters.reduce((acc, ch) => acc + ch.lessons.length, 0);
+    const totalLessons = sortedChapters.reduce((acc, ch) => acc + ch.lessons.length, 0);
     return Math.round((completedLessons.size / totalLessons) * 100);
   };
 
@@ -45,20 +47,20 @@ export function ChapterProgress({
       <Card className="p-4">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-medium">Gesamtfortschritt</span>
-          <span className="text-sm text-muted-foreground">{completedLessons.size} / {chapters.reduce((acc, ch) => acc + ch.lessons.length, 0)}</span>
+          <span className="text-sm text-muted-foreground">{completedLessons.size} / {sortedChapters.reduce((acc, ch) => acc + ch.lessons.length, 0)}</span>
         </div>
         <Progress value={getTotalProgress()} className="h-2" />
       </Card>
 
       {/* Chapters */}
-      {chapters.map((chapter, chapterIndex) => {
+      {sortedChapters.map((chapter, chapterIndex) => {
         const chapterCompleted = chapter.lessons.filter(l => completedLessons.has(l.id)).length;
         const chapterProgress = Math.round((chapterCompleted / chapter.lessons.length) * 100);
         const isCurrentChapter = chapter.id === currentChapterId;
         const isLocked = !chapter.isUnlocked && chapterIndex > 0;
 
         // Unlock chapter if previous is complete
-        const previousChapter = chapters[chapterIndex - 1];
+        const previousChapter = sortedChapters[chapterIndex - 1];
         const previousComplete = previousChapter 
           ? previousChapter.lessons.every(l => completedLessons.has(l.id))
           : true;

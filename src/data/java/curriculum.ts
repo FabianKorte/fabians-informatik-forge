@@ -755,9 +755,9 @@ public class Main {
   // ============================================
   {
     id: "chapter-1",
-    title: "Kapitel 1: Erste Schritte",
-    description: "Lerne die Grundlagen von Java kennen - von der Installation bis zum ersten Programm",
-    order: 1,
+    title: "Kapitel 2: Erste Schritte",
+    description: "Lerne die Grundlagen von Java kennen - Variablen, Datentypen und dein erstes Programm",
+    order: 2,
     isUnlocked: true,
     lessons: [
       {
@@ -1307,9 +1307,9 @@ Groesse: 1.75m`,
   },
   {
     id: "chapter-2",
-    title: "Kapitel 2: Kontrollstrukturen",
+    title: "Kapitel 4: Kontrollstrukturen",
     description: "Lerne, wie du Entscheidungen triffst und Code wiederholst",
-    order: 2,
+    order: 4,
     isUnlocked: false,
     lessons: [
       {
@@ -1620,9 +1620,9 @@ FizzBuzz`,
   },
   {
     id: "chapter-3",
-    title: "Kapitel 3: Arrays & Methoden",
-    description: "Arbeite mit Datensammlungen und strukturiere deinen Code",
-    order: 3,
+    title: "Kapitel 5: Arrays",
+    description: "Arbeite mit Datensammlungen - Listen von Werten speichern und verarbeiten",
+    order: 5,
     isUnlocked: false,
     lessons: [
       {
@@ -1780,9 +1780,9 @@ Erstelle eine Methode \`quadrat\`, die eine Zahl mit sich selbst multipliziert u
   },
   {
     id: "chapter-4",
-    title: "Kapitel 4: Objektorientierte Programmierung",
-    description: "Lerne die Grundlagen von OOP: Klassen, Objekte, Vererbung und Polymorphismus",
-    order: 4,
+    title: "Kapitel 8: OOP Grundlagen",
+    description: "Lerne die Grundlagen von OOP: Klassen, Objekte und Vererbung",
+    order: 8,
     isUnlocked: false,
     lessons: [
       {
@@ -2237,9 +2237,9 @@ class Mitarbeiter {
   },
   {
     id: "chapter-5",
-    title: "Kapitel 5: Exception Handling",
+    title: "Kapitel 10: Exception Handling",
     description: "Lerne, wie du Fehler elegant behandelst",
-    order: 5,
+    order: 10,
     isUnlocked: false,
     lessons: [
       {
@@ -2466,9 +2466,9 @@ Fange einen ArrayIndexOutOfBoundsException ab und gib "Ungueltiger Index!" aus.`
   },
   {
     id: "chapter-6",
-    title: "Kapitel 6: Collections",
+    title: "Kapitel 11: Collections",
     description: "ArrayList, HashMap und andere nützliche Datenstrukturen",
-    order: 6,
+    order: 11,
     isUnlocked: false,
     lessons: [
       {
@@ -2786,9 +2786,9 @@ public class Main {
   },
   {
     id: "chapter-7",
-    title: "Kapitel 7: String-Methoden",
+    title: "Kapitel 12: String-Methoden",
     description: "Fortgeschrittene Textverarbeitung in Java",
-    order: 7,
+    order: 12,
     isUnlocked: false,
     lessons: [
       {
@@ -2929,9 +2929,9 @@ Orange`,
   // ============================================
   {
     id: "chapter-8",
-    title: "Kapitel 8: Methoden",
+    title: "Kapitel 6: Methoden",
     description: "Lerne eigene Methoden zu schreiben - Code wiederverwenden und strukturieren",
-    order: 8,
+    order: 6,
     isUnlocked: false,
     lessons: [
       {
@@ -3286,9 +3286,9 @@ Die Ausgabe soll 40 sein (10 * 4).
   // ============================================
   {
     id: "chapter-9",
-    title: "Kapitel 9: Rekursion",
+    title: "Kapitel 13: Rekursion",
     description: "Methoden, die sich selbst aufrufen - ein mächtiges Konzept meistern",
-    order: 9,
+    order: 13,
     isUnlocked: false,
     lessons: [
       {
@@ -3597,9 +3597,9 @@ Schreibe die Methode \`fib(int n)\` rekursiv.
   // ============================================
   {
     id: "chapter-10",
-    title: "Kapitel 10: Algorithmen",
+    title: "Kapitel 14: Algorithmen",
     description: "Klassische Algorithmen verstehen und implementieren",
-    order: 10,
+    order: 14,
     isUnlocked: false,
     lessons: [
       {
@@ -4032,9 +4032,9 @@ Sortiere das Array [5, 2, 8, 1, 9] aufsteigend!
   // ============================================
   {
     id: "chapter-11",
-    title: "Kapitel 11: Dateien (Theorie)",
+    title: "Kapitel 15: Dateien (Theorie)",
     description: "Verstehe wie Java mit Dateien arbeitet - Lesen, Schreiben, Verarbeiten",
-    order: 11,
+    order: 15,
     isUnlocked: false,
     lessons: [
       {
@@ -4433,9 +4433,9 @@ Person: Anna (30 Jahre) aus Muenchen`,
   // ============================================
   {
     id: "chapter-12",
-    title: "Kapitel 12: Mini-Projekt",
+    title: "Kapitel 19: Mini-Projekt",
     description: "Wende alles Gelernte in einem kompletten Projekt an!",
-    order: 12,
+    order: 19,
     isUnlocked: false,
     lessons: [
       {
@@ -4943,9 +4943,9 @@ Weiter so! :)`,
   // ============================================
   {
     id: "chapter-13",
-    title: "Kapitel 13: Speicherverwaltung",
+    title: "Kapitel 7: Speicherverwaltung",
     description: "Verstehe wie Java Variablen im Speicher verwaltet - Stack, Heap und Garbage Collection",
-    order: 13,
+    order: 7,
     isUnlocked: false,
     lessons: [
       {
@@ -5342,9 +5342,9 @@ Nachher: 100`,
   // ============================================
   {
     id: "chapter-14",
-    title: "Kapitel 14: Erweiterte OOP",
+    title: "Kapitel 9: Erweiterte OOP",
     description: "Interfaces, abstrakte Klassen, Polymorphismus und mehr",
-    order: 14,
+    order: 9,
     isUnlocked: false,
     lessons: [
       {
@@ -6094,9 +6094,9 @@ class Katze extends Tier {
   // ============================================
   {
     id: "chapter-15",
-    title: "Kapitel 15: Programmierlogik",
+    title: "Kapitel 3: Programmierlogik",
     description: "Struktogramme, Programmablaufpläne und logisches Denken",
-    order: 15,
+    order: 3,
     isUnlocked: false,
     lessons: [
       {
@@ -7257,9 +7257,9 @@ Admin kann:
   // ============================================
   {
     id: "chapter-17",
-    title: "Kapitel 17: Testverfahren",
+    title: "Kapitel 18: Testverfahren",
     description: "Black-Box, White-Box, Unit-Tests und mehr",
-    order: 17,
+    order: 18,
     isUnlocked: false,
     lessons: [
       {
@@ -8133,10 +8133,10 @@ Debugging hilft Fehler zu finden!`,
   // ============================================
   {
     id: "chapter-18",
-    title: "Kapitel 18: IDE & Anforderungsanalyse",
-    description: "Professionelle Entwicklungsumgebungen und Analysemethoden",
-    order: 18,
-    isUnlocked: false,
+    title: "Kapitel 1: IDE & Einrichtung",
+    description: "Professionelle Entwicklungsumgebungen installieren und nutzen",
+    order: 1,
+    isUnlocked: true,
     lessons: [
       {
         id: "18-1",
