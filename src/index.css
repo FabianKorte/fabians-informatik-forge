@@ -483,3 +483,89 @@ All colors MUST be HSL.
   }
 }
 
+/* Monaco Editor - Hide ALL widgets and fix styling */
+.monaco-editor .find-widget,
+.monaco-editor .findInput,
+.monaco-editor .find-widget.visible,
+.monaco-editor .rename-box,
+.monaco-editor .monaco-hover,
+.monaco-editor .parameter-hints-widget,
+.monaco-editor .suggest-widget,
+.monaco-editor .editor-widget.suggest-widget,
+.monaco-editor .monaco-editor-hover,
+.monaco-editor .go-to-definition-link,
+.monaco-editor .zone-widget,
+.monaco-editor .contentWidgets .editor-widget,
+.monaco-editor .overlayWidgets .editor-widget,
+.monaco-editor .monaco-inputbox {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Ensure the rename input is absolutely hidden */
+.monaco-editor .rename-box,
+.monaco-editor .rename-input,
+.monaco-editor input.rename-input,
+.monaco-editor .monaco-inputbox.rename-input {
+  display: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  left: -9999px !important;
+  top: -9999px !important;
+}
+
+/* Hide the IME composition box / textarea */
+.monaco-editor textarea.inputarea.ime-input,
+.monaco-editor .monaco-editor-background textarea,
+.monaco-editor .inputarea.monaco-mouse-cursor-text {
+  background: transparent !important;
+  color: transparent !important;
+  caret-color: white !important;
+  border: none !important;
+  outline: none !important;
+}
+
+/* Fix Monaco find widget */
+.monaco-editor .overflow-guard {
+  overflow: hidden !important;
+}
+
+/* Clean scrollbar styling */
+.monaco-editor .monaco-scrollable-element > .scrollbar {
+  background: transparent !important;
+}
+
+.monaco-editor .monaco-scrollable-element > .scrollbar > .slider {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-radius: 4px !important;
+}
+
+.monaco-editor .monaco-scrollable-element > .scrollbar > .slider:hover {
+  background: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Make editor text visible but hide any overlay inputs */
+.monaco-editor .view-overlays .current-line,
+.monaco-editor .cursors-layer .cursor {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Aggressive: hide ALL white input boxes over the editor */
+.monaco-editor .contentWidgets,
+.monaco-editor .overlayWidgets {
+  pointer-events: none !important;
+}
+
+.monaco-editor .contentWidgets input,
+.monaco-editor .overlayWidgets input,
+.monaco-editor .contentWidgets .monaco-inputbox,
+.monaco-editor .overlayWidgets .monaco-inputbox {
+  display: none !important;
+}
