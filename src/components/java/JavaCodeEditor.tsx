@@ -87,40 +87,33 @@ export function JavaCodeEditor({ value, onChange, readOnly = false, height = "30
   return (
     <div className="rounded-lg overflow-hidden border border-border java-code-editor-wrapper">
       <style>{`
-        /* Hide find widget and other dialogs */
-        .java-code-editor-wrapper .monaco-editor .find-widget,
-        .java-code-editor-wrapper .monaco-editor .editor-widget:not(.suggest-widget):not(.parameter-hints-widget) {
+        /* Hide find widget in the Java editor */
+        .java-code-editor-wrapper .monaco-editor .find-widget {
           display: none !important;
         }
-        /* Make the hidden textarea COMPLETELY invisible but functional */
-        .java-code-editor-wrapper .monaco-editor .inputarea,
+
+        /* Monaco uses a hidden textarea for input. Keep it FULL-SIZE for correct click-to-cursor,
+           but make it visually invisible so it can't appear as a white resizable box. */
+        .java-code-editor-wrapper .monaco-editor textarea,
         .java-code-editor-wrapper .monaco-editor textarea.inputarea,
-        .java-code-editor-wrapper .monaco-editor .inputarea.ime-input,
-        .java-code-editor-wrapper textarea {
+        .java-code-editor-wrapper .monaco-editor textarea.inputarea.ime-input,
+        .java-code-editor-wrapper .monaco-editor .inputarea {
           background: transparent !important;
           color: transparent !important;
-          border: none !important;
+          border: 0 !important;
           outline: none !important;
           box-shadow: none !important;
-          caret-color: transparent !important;
           resize: none !important;
           opacity: 0 !important;
-          width: 1px !important;
-          height: 1px !important;
-          overflow: hidden !important;
         }
-        /* Fix scrollbar styling */
+
+        /* Subtle scrollbar styling */
         .java-code-editor-wrapper .monaco-scrollable-element > .scrollbar > .slider {
-          background: rgba(255,255,255,0.15) !important;
+          background: rgba(255, 255, 255, 0.15) !important;
           border-radius: 4px !important;
         }
         .java-code-editor-wrapper .monaco-scrollable-element > .scrollbar > .slider:hover {
-          background: rgba(255,255,255,0.25) !important;
-        }
-        /* Ensure proper overflow handling */
-        .java-code-editor-wrapper .monaco-editor,
-        .java-code-editor-wrapper .monaco-editor .overflow-guard {
-          overflow: hidden !important;
+          background: rgba(255, 255, 255, 0.25) !important;
         }
       `}</style>
       <Editor
