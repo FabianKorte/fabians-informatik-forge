@@ -2165,14 +2165,14 @@ Erstelle ein kleines OOP-System!
    - Private Attribute: \`name\` (String), \`gehalt\` (double)
    - Konstruktor für beide Attribute
    - Getter für beide Attribute
-   - Methode \`info()\` die "Name: [name], Gehalt: [gehalt]€" ausgibt
+   - Methode \`info()\` die "Name: [name], Gehalt: [gehalt] Euro" ausgibt
 
 2. Erstelle ein Mitarbeiter-Objekt und rufe \`info()\` auf.
 
 ## Beispielausgabe
 
 \`\`\`
-Name: Anna, Gehalt: 3500.0€
+Name: Anna, Gehalt: 3500.0 Euro
 \`\`\``,
           codeTemplate: `public class Main {
     public static void main(String[] args) {
@@ -2197,11 +2197,11 @@ class Mitarbeiter {
     // info() Methode
     
 }`,
-          expectedOutput: "Name: Anna, Gehalt: 3500.0€",
+          expectedOutput: "Name: Anna, Gehalt: 3500.0 Euro",
           hints: [
             "private String name; private double gehalt;",
             "public Mitarbeiter(String name, double gehalt)",
-            "System.out.println(\"Name: \" + name + \", Gehalt: \" + gehalt + \"€\");"
+            "System.out.println(\"Name: \" + name + \", Gehalt: \" + gehalt + \" Euro\");"
           ],
           solution: `public class Main {
     public static void main(String[] args) {
@@ -2228,7 +2228,7 @@ class Mitarbeiter {
     }
     
     public void info() {
-        System.out.println("Name: " + name + ", Gehalt: " + gehalt + "€");
+        System.out.println("Name: " + name + ", Gehalt: " + gehalt + " Euro");
     }
 }`
         }

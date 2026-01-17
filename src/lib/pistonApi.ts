@@ -248,23 +248,32 @@ export async function executeJavaCode(code: string, stdin?: string): Promise<Cod
 }
 
 /**
- * Normalize umlauts to their ASCII equivalent for comparison
+ * Normalize umlauts and special characters to their ASCII equivalent for comparison
  * This handles encoding mismatches between browser input and Piston API output
  */
-function normalizeUmlauts(text: string): string {
+function normalizeSpecialChars(text: string): string {
   return text
     .replace(/ä/g, "ae").replace(/Ä/g, "Ae")
     .replace(/ö/g, "oe").replace(/Ö/g, "Oe")
     .replace(/ü/g, "ue").replace(/Ü/g, "Ue")
-    .replace(/ß/g, "ss");
+    .replace(/ß/g, "ss")
+    .replace(/€/g, "Euro")
+    .replace(/£/g, "GBP")
+    .replace(/¥/g, "Yen")
+    .replace(/©/g, "(c)")
+    .replace(/®/g, "(R)")
+    .replace(/™/g, "(TM)");
 }
 
 /**
  * Some runtimes replace non-ASCII chars with question marks.
- * In the reported case, one umlaut becomes "??".
+ * In the reported case, one umlaut becomes "??" and € becomes "???".
  */
-function normalizeLostUmlauts(text: string): string {
-  return text.replace(/[äöüÄÖÜß]/g, "??");
+function normalizeLostSpecialChars(text: string): string {
+  // Umlauts typically become "??" (2 chars), Euro becomes "???" (3 chars)
+  return text
+    .replace(/[äöüÄÖÜß]/g, "??")
+    .replace(/[€£¥©®™]/g, "???");
 }
 
 /**
@@ -296,17 +305,23 @@ export function compareOutputs(expected: string, actual: string): boolean {
   const actualNFD = normalizedActual.normalize("NFD");
   if (expectedNFD === actualNFD) return true;
 
-  // Fallback 2: Compare with umlauts converted to ASCII equivalents
-  const expectedAscii = normalizeUmlauts(normalizedExpected);
-  const actualAscii = normalizeUmlauts(normalizedActual);
+  // Fallback 2: Compare with special chars converted to ASCII equivalents
+  const expectedAscii = normalizeSpecialChars(normalizedExpected);
+  const actualAscii = normalizeSpecialChars(normalizedActual);
   if (expectedAscii === actualAscii) return true;
   if (expectedAscii.toLowerCase() === actualAscii.toLowerCase()) return true;
 
-  // Fallback 3: Handle broken runtime output like "n??tzlich" for "nützlich"
+  // Fallback 3: Handle broken runtime output like "n??tzlich" for "nützlich" or "???" for "€"
   // (data loss already happened; we can only accept it during comparison)
-  const expectedQuestionMarks = normalizeLostUmlauts(normalizedExpected);
+  const expectedQuestionMarks = normalizeLostSpecialChars(normalizedExpected);
   if (expectedQuestionMarks === normalizedActual) return true;
   if (expectedQuestionMarks.toLowerCase() === normalizedActual.toLowerCase()) return true;
+
+  // Fallback 4: Try matching ASCII-normalized expected against question-mark actual
+  // e.g., expected "3500.0 Euro" should match actual "3500.0???"
+  const actualWithoutQuestionMarks = normalizedActual.replace(/\?+/g, "");
+  const expectedWithoutSpecialChars = normalizeSpecialChars(normalizedExpected).replace(/Euro|GBP|Yen|\(c\)|\(R\)|\(TM\)/g, "");
+  if (actualWithoutQuestionMarks.trim() === expectedWithoutSpecialChars.trim()) return true;
 
   return false;
 }
