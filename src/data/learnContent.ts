@@ -18,6 +18,8 @@ import { tabellenkalkulationContent } from "./learn/tabellenkalkulation";
 import { fachrechnenContent } from "./learn/fachrechnen";
 import { cloudAwsContent } from "./learn/cloud-aws";
 import { digitaltechnikContent } from "./learn/digitaltechnik";
+import { systemintegrationVertiefungContent } from "./learn/systemintegration-vertiefung";
+import { speicherloesungenContent } from "./learn/speicherloesungen";
 
 // Main learning content mapped to category IDs from the database
 export const learnContent: Record<string, LearnModule[]> = {
@@ -69,16 +71,7 @@ export const learnContent: Record<string, LearnModule[]> = {
       ]
     }
   ],
-  "fachmodul-systemintegration": [
-    {
-      type: "flashcards",
-      title: "Fachmodul Systemintegration - IHK Vertiefung",
-      cards: [
-        { front: "Virtualisierung-Technologien", back: "**Typ 1 Hypervisor:** Bare-Metal (VMware vSphere, Hyper-V, Xen), direkt auf Hardware. **Typ 2:** Hosted (VirtualBox, VMware Workstation), auf Betriebssystem. **Container:** Docker, LXC - OS-Level Virtualisierung. **IHK-Vorteile:** Server-Konsolidierung, bessere Hardware-Auslastung, Disaster Recovery, Test-Umgebungen. **Grenzen:** Performance-Overhead, Lizenzkosten." },
-        { front: "SAN vs. NAS vs. DAS", back: "**DAS (Direct Attached Storage):** Direkt angeschlossene Festplatten, USB/SATA. **NAS (Network Attached Storage):** Datei-basiert, SMB/NFS-Protokolle, IP-Netzwerk. **SAN (Storage Area Network):** Block-basiert, Fibre Channel/iSCSI, dediziertes Storage-Netzwerk. **IHK-Anwendung:** DAS für Einzelplätze, NAS für Datei-Sharing, SAN für High-Performance Datenbanken." },
-      ]
-    }
-  ],
+  "fachmodul-systemintegration": systemintegrationVertiefungContent,
   "fachmodul-anwendungsentwicklung": [
     {
       type: "flashcards",
@@ -98,4 +91,5 @@ export const learnContent: Record<string, LearnModule[]> = {
   fachrechnen: fachrechnenContent,
   "cloud-aws": cloudAwsContent,
   digitaltechnik: digitaltechnikContent,
+  speicherloesungen: speicherloesungenContent,
 };
