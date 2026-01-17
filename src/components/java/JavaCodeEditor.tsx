@@ -1,4 +1,4 @@
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useEffect } from "react";
 import Editor, { OnMount } from "@monaco-editor/react";
 
 interface JavaCodeEditorProps {
@@ -10,19 +10,59 @@ interface JavaCodeEditorProps {
 
 export function JavaCodeEditor({ value, onChange, readOnly = false, height = "300px" }: JavaCodeEditorProps) {
   const editorRef = useRef<any>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Fix Monaco's hidden textarea styling after mount
+  useEffect(() => {
+    const fixTextareaStyles = () => {
+      if (!containerRef.current) return;
+      
+      const textareas = containerRef.current.querySelectorAll('textarea');
+      textareas.forEach((textarea) => {
+        textarea.style.cssText = `
+          background: transparent !important;
+          border: none !important;
+          outline: none !important;
+          box-shadow: none !important;
+          resize: none !important;
+          color: transparent !important;
+          caret-color: transparent !important;
+          opacity: 1 !important;
+        `;
+      });
+    };
+
+    // Run immediately and also after a delay to catch late-rendered elements
+    fixTextareaStyles();
+    const timer1 = setTimeout(fixTextareaStyles, 100);
+    const timer2 = setTimeout(fixTextareaStyles, 500);
+    const timer3 = setTimeout(fixTextareaStyles, 1000);
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+    };
+  }, []);
 
   const handleEditorMount: OnMount = useCallback((editor, monaco) => {
     editorRef.current = editor;
 
-    // Disable the find widget completely
-    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyF, () => {});
-    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyH, () => {});
-    
-    // Hide any widgets that might be visible
-    const findWidget = editor.getContribution('editor.contrib.findController');
-    if (findWidget && typeof (findWidget as any).closeFindWidget === 'function') {
-      (findWidget as any).closeFindWidget();
-    }
+    // Fix textarea styles after editor mounts
+    setTimeout(() => {
+      if (containerRef.current) {
+        const textareas = containerRef.current.querySelectorAll('textarea');
+        textareas.forEach((textarea) => {
+          textarea.style.background = 'transparent';
+          textarea.style.border = 'none';
+          textarea.style.outline = 'none';
+          textarea.style.boxShadow = 'none';
+          textarea.style.resize = 'none';
+          textarea.style.color = 'transparent';
+          textarea.style.caretColor = 'transparent';
+        });
+      }
+    }, 50);
 
     // Configure Java language completions
     monaco.languages.registerCompletionItemProvider("java", {
@@ -36,7 +76,6 @@ export function JavaCodeEditor({ value, onChange, readOnly = false, height = "30
         };
 
         const suggestions: any[] = [
-          // Keywords
           { label: "public", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "public", range },
           { label: "private", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "private", range },
           { label: "static", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "static", range },
@@ -48,16 +87,10 @@ export function JavaCodeEditor({ value, onChange, readOnly = false, height = "30
           { label: "while", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "while", range },
           { label: "return", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "return", range },
           { label: "new", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "new", range },
-          { label: "try", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "try", range },
-          { label: "catch", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "catch", range },
-          
-          // Types
           { label: "int", kind: monaco.languages.CompletionItemKind.TypeParameter, insertText: "int", range },
           { label: "String", kind: monaco.languages.CompletionItemKind.TypeParameter, insertText: "String", range },
           { label: "double", kind: monaco.languages.CompletionItemKind.TypeParameter, insertText: "double", range },
           { label: "boolean", kind: monaco.languages.CompletionItemKind.TypeParameter, insertText: "boolean", range },
-          
-          // Snippets
           {
             label: "sout",
             kind: monaco.languages.CompletionItemKind.Snippet,
@@ -80,42 +113,11 @@ export function JavaCodeEditor({ value, onChange, readOnly = false, height = "30
       },
     });
 
-    // Focus editor after short delay
-    setTimeout(() => editor.focus(), 100);
+    editor.focus();
   }, []);
 
   return (
-    <div className="rounded-lg overflow-hidden border border-border java-code-editor-wrapper">
-      <style>{`
-        /* Hide find widget in the Java editor */
-        .java-code-editor-wrapper .monaco-editor .find-widget {
-          display: none !important;
-        }
-
-        /* Monaco uses a hidden textarea for input. Keep it FULL-SIZE for correct click-to-cursor,
-           but make it visually invisible so it can't appear as a white resizable box. */
-        .java-code-editor-wrapper .monaco-editor textarea,
-        .java-code-editor-wrapper .monaco-editor textarea.inputarea,
-        .java-code-editor-wrapper .monaco-editor textarea.inputarea.ime-input,
-        .java-code-editor-wrapper .monaco-editor .inputarea {
-          background: transparent !important;
-          color: transparent !important;
-          border: 0 !important;
-          outline: none !important;
-          box-shadow: none !important;
-          resize: none !important;
-          opacity: 0 !important;
-        }
-
-        /* Subtle scrollbar styling */
-        .java-code-editor-wrapper .monaco-scrollable-element > .scrollbar > .slider {
-          background: rgba(255, 255, 255, 0.15) !important;
-          border-radius: 4px !important;
-        }
-        .java-code-editor-wrapper .monaco-scrollable-element > .scrollbar > .slider:hover {
-          background: rgba(255, 255, 255, 0.25) !important;
-        }
-      `}</style>
+    <div ref={containerRef} className="rounded-lg overflow-hidden border border-border">
       <Editor
         height={height}
         language="java"
@@ -136,21 +138,11 @@ export function JavaCodeEditor({ value, onChange, readOnly = false, height = "30
           padding: { top: 12, bottom: 12 },
           cursorBlinking: "smooth",
           bracketPairColorization: { enabled: true },
-          overviewRulerBorder: false,
-          overviewRulerLanes: 0,
-          hideCursorInOverviewRuler: true,
-          // Completely disable find widget
-          find: {
-            addExtraSpaceOnTop: false,
-            autoFindInSelection: "never",
-            seedSearchStringFromSelection: "never",
-          },
           scrollbar: {
             vertical: "auto",
             horizontal: "auto",
-            verticalScrollbarSize: 8,
-            horizontalScrollbarSize: 8,
-            useShadows: false,
+            verticalScrollbarSize: 10,
+            horizontalScrollbarSize: 10,
           },
         }}
         loading={

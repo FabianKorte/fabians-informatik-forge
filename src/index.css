@@ -483,22 +483,28 @@ All colors MUST be HSL.
   }
 }
 
-/* Monaco Editor (safe styling) */
-/* NOTE: Avoid disabling pointer-events / hiding internal layers; it breaks cursor placement. */
-.monaco-editor textarea,
+/* Monaco Editor - CRITICAL: Override Tailwind's global textarea styles */
+/* This must be very specific to beat Tailwind base layer */
 .monaco-editor textarea.inputarea,
 .monaco-editor textarea.inputarea.ime-input,
-.monaco-editor .inputarea {
+.monaco-editor .inputarea.monaco-mouse-cursor-text,
+.monaco-editor .monaco-editor-background textarea,
+textarea.inputarea.monaco-mouse-cursor-text {
+  all: unset !important;
+  position: absolute !important;
   background: transparent !important;
-  color: transparent !important;
-  border: 0 !important;
+  border: none !important;
   outline: none !important;
   box-shadow: none !important;
   resize: none !important;
-  opacity: 0 !important;
+  color: transparent !important;
+  caret-color: transparent !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
-/* Clean scrollbar styling */
+/* Scrollbar styling */
 .monaco-editor .monaco-scrollable-element > .scrollbar {
   background: transparent !important;
 }
