@@ -3830,7 +3830,7 @@ Durchschnitt = Summe aller Zahlen / Anzahl der Zahlen
 
 ---
 
-**Erwartete Ausgabe: 5.0**`,
+**Erwartete Ausgabe: 6.0**`,
           codeTemplate: `public class Main {
     public static void main(String[] args) {
         int[] zahlen = {2, 4, 6, 8, 10};
@@ -3846,11 +3846,11 @@ Durchschnitt = Summe aller Zahlen / Anzahl der Zahlen
         System.out.println("Durchschnitt: " + durchschnitt);
     }
 }`,
-          expectedOutput: "Durchschnitt: 5.0",
+          expectedOutput: "Durchschnitt: 6.0",
           hints: [
             "Erst Summe mit Schleife berechnen",
             "durchschnitt = (double) summe / zahlen.length;",
-            "(2+4+6+8+10) / 5 = 30 / 5 = 5.0"
+            "(2+4+6+8+10) / 5 = 30 / 5 = 6.0"
           ],
           solution: `public class Main {
     public static void main(String[] args) {
