@@ -755,8 +755,8 @@ public class Main {
   // ============================================
   {
     id: "chapter-1",
-    title: "Kapitel 2: Erste Schritte",
-    description: "Lerne die Grundlagen von Java kennen - Variablen, Datentypen und dein erstes Programm",
+    title: "Kapitel 2: Erste Schritte mit Java",
+    description: "Schreibe deine ersten Java-Programme - von Hello World bis zu eigenen Texten",
     order: 2,
     isUnlocked: true,
     lessons: [
@@ -1307,8 +1307,8 @@ Groesse: 1.75m`,
   },
   {
     id: "chapter-2",
-    title: "Kapitel 4: Kontrollstrukturen",
-    description: "Lerne, wie du Entscheidungen triffst und Code wiederholst",
+    title: "Kapitel 4: Kontrollstrukturen & Schleifen",
+    description: "Lerne Entscheidungen mit if-else zu treffen und Code mit for- und while-Schleifen zu wiederholen",
     order: 4,
     isUnlocked: false,
     lessons: [
@@ -1620,8 +1620,8 @@ FizzBuzz`,
   },
   {
     id: "chapter-3",
-    title: "Kapitel 5: Arrays",
-    description: "Arbeite mit Datensammlungen - Listen von Werten speichern und verarbeiten",
+    title: "Kapitel 5: Arrays & Methoden",
+    description: "Arbeite mit Datensammlungen und lerne eigene Methoden zu schreiben",
     order: 5,
     isUnlocked: false,
     lessons: [
@@ -1780,8 +1780,8 @@ Erstelle eine Methode \`quadrat\`, die eine Zahl mit sich selbst multipliziert u
   },
   {
     id: "chapter-4",
-    title: "Kapitel 8: OOP Grundlagen",
-    description: "Lerne die Grundlagen von OOP: Klassen, Objekte und Vererbung",
+    title: "Kapitel 8: OOP - Klassen & Objekte",
+    description: "Lerne die Grundlagen der objektorientierten Programmierung: Klassen, Objekte, Konstruktoren und Vererbung",
     order: 8,
     isUnlocked: false,
     lessons: [
@@ -2237,8 +2237,8 @@ class Mitarbeiter {
   },
   {
     id: "chapter-5",
-    title: "Kapitel 10: Exception Handling",
-    description: "Lerne, wie du Fehler elegant behandelst",
+    title: "Kapitel 10: Fehlerbehandlung (Exceptions)",
+    description: "Lerne, wie du Laufzeitfehler elegant mit try-catch behandelst und eigene Exceptions wirfst",
     order: 10,
     isUnlocked: false,
     lessons: [
@@ -2466,8 +2466,8 @@ Fange einen ArrayIndexOutOfBoundsException ab und gib "Ungueltiger Index!" aus.`
   },
   {
     id: "chapter-6",
-    title: "Kapitel 11: Collections",
-    description: "ArrayList, HashMap und andere nützliche Datenstrukturen",
+    title: "Kapitel 11: Collections & Datenstrukturen",
+    description: "ArrayList, HashMap und andere dynamische Datenstrukturen für flexible Datenverwaltung",
     order: 11,
     isUnlocked: false,
     lessons: [
@@ -2786,8 +2786,8 @@ public class Main {
   },
   {
     id: "chapter-7",
-    title: "Kapitel 12: String-Methoden",
-    description: "Fortgeschrittene Textverarbeitung in Java",
+    title: "Kapitel 12: String-Verarbeitung",
+    description: "Fortgeschrittene Textverarbeitung mit String-Methoden: split, join, replace und mehr",
     order: 12,
     isUnlocked: false,
     lessons: [
@@ -2929,8 +2929,8 @@ Orange`,
   // ============================================
   {
     id: "chapter-8",
-    title: "Kapitel 6: Methoden",
-    description: "Lerne eigene Methoden zu schreiben - Code wiederverwenden und strukturieren",
+    title: "Kapitel 6: Methoden & Funktionen",
+    description: "Lerne eigene Methoden zu schreiben - Parameter, Rückgabewerte und Code-Wiederverwendung",
     order: 6,
     isUnlocked: false,
     lessons: [
@@ -3286,8 +3286,8 @@ Die Ausgabe soll 40 sein (10 * 4).
   // ============================================
   {
     id: "chapter-9",
-    title: "Kapitel 13: Rekursion",
-    description: "Methoden, die sich selbst aufrufen - ein mächtiges Konzept meistern",
+    title: "Kapitel 13: Rekursion verstehen",
+    description: "Rekursive Algorithmen verstehen und anwenden - von Fakultät bis Fibonacci",
     order: 13,
     isUnlocked: false,
     lessons: [
@@ -3597,8 +3597,8 @@ Schreibe die Methode \`fib(int n)\` rekursiv.
   // ============================================
   {
     id: "chapter-10",
-    title: "Kapitel 14: Algorithmen",
-    description: "Klassische Algorithmen verstehen und implementieren",
+    title: "Kapitel 14: Algorithmen & Sortierung",
+    description: "Klassische Algorithmen verstehen: Suchen, Sortieren, Maximum und Durchschnitt",
     order: 14,
     isUnlocked: false,
     lessons: [
@@ -4032,8 +4032,8 @@ Sortiere das Array [5, 2, 8, 1, 9] aufsteigend!
   // ============================================
   {
     id: "chapter-11",
-    title: "Kapitel 15: Dateien (Theorie)",
-    description: "Verstehe wie Java mit Dateien arbeitet - Lesen, Schreiben, Verarbeiten",
+    title: "Kapitel 15: Datei-Ein/Ausgabe (Theorie)",
+    description: "Verstehe wie Java mit Dateien arbeitet - Lesen, Schreiben und CSV verarbeiten",
     order: 15,
     isUnlocked: false,
     lessons: [
@@ -4433,8 +4433,8 @@ Person: Anna (30 Jahre) aus Muenchen`,
   // ============================================
   {
     id: "chapter-12",
-    title: "Kapitel 19: Mini-Projekt",
-    description: "Wende alles Gelernte in einem kompletten Projekt an!",
+    title: "Kapitel 19: Praxisprojekt Notenverwaltung",
+    description: "Wende alle Konzepte in einem vollständigen Projekt an: Arrays, Schleifen, Methoden und Algorithmen",
     order: 19,
     isUnlocked: false,
     lessons: [
@@ -5342,8 +5342,8 @@ Nachher: 100`,
   // ============================================
   {
     id: "chapter-14",
-    title: "Kapitel 9: Erweiterte OOP",
-    description: "Interfaces, abstrakte Klassen, Polymorphismus und mehr",
+    title: "Kapitel 9: Fortgeschrittene OOP",
+    description: "Interfaces, abstrakte Klassen, Polymorphismus, Überladung und Überschreiben für flexible Architekturen",
     order: 9,
     isUnlocked: false,
     lessons: [
@@ -6094,8 +6094,8 @@ class Katze extends Tier {
   // ============================================
   {
     id: "chapter-15",
-    title: "Kapitel 3: Programmierlogik",
-    description: "Struktogramme, Programmablaufpläne und logisches Denken",
+    title: "Kapitel 3: Programmierlogik & Ablaufplanung",
+    description: "Struktogramme (Nassi-Shneiderman), Programmablaufpläne (PAP) und logisches Denken vor dem Code",
     order: 3,
     isUnlocked: false,
     lessons: [
@@ -6438,8 +6438,8 @@ Implementiere den Primzahl-Algorithmus für die Zahl 17.`,
   // ============================================
   {
     id: "chapter-16",
-    title: "Kapitel 16: UML-Diagramme",
-    description: "Unified Modeling Language für Softwaredesign",
+    title: "Kapitel 16: UML-Modellierung",
+    description: "Unified Modeling Language: Klassen-, Sequenz-, Aktivitäts- und Use-Case-Diagramme für Softwaredesign",
     order: 16,
     isUnlocked: false,
     lessons: [
@@ -7257,8 +7257,8 @@ Admin kann:
   // ============================================
   {
     id: "chapter-17",
-    title: "Kapitel 18: Testverfahren",
-    description: "Black-Box, White-Box, Unit-Tests und mehr",
+    title: "Kapitel 18: Softwaretests & Qualitätssicherung",
+    description: "Black-Box, White-Box, Unit-Tests und Debugging-Strategien für zuverlässige Software",
     order: 18,
     isUnlocked: false,
     lessons: [
@@ -8133,8 +8133,8 @@ Debugging hilft Fehler zu finden!`,
   // ============================================
   {
     id: "chapter-18",
-    title: "Kapitel 1: IDE & Einrichtung",
-    description: "Professionelle Entwicklungsumgebungen installieren und nutzen",
+    title: "Kapitel 1: IDE & Entwicklungsumgebung",
+    description: "Professionelle Entwicklungsumgebungen (Eclipse, IntelliJ) installieren, einrichten und effektiv nutzen",
     order: 1,
     isUnlocked: true,
     lessons: [
