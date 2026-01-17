@@ -2504,6 +2504,1109 @@ Orange`,
         }
       }
     ]
+  },
+  // ============================================
+  // KAPITEL 8: METHODEN
+  // ============================================
+  {
+    id: "chapter-8",
+    title: "Kapitel 8: Methoden",
+    description: "Lerne eigene Methoden zu schreiben - Code wiederverwenden und strukturieren",
+    order: 8,
+    isUnlocked: false,
+    lessons: [
+      {
+        id: "8-1",
+        chapterId: "chapter-8",
+        title: "Was sind Methoden?",
+        order: 1,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Methoden verstehen 📦
+
+## Was ist eine Methode?
+
+Eine **Methode** ist ein Codeblock, der eine bestimmte Aufgabe erledigt und wiederverwendet werden kann.
+
+Stell dir vor, du musst 10 Mal "Hallo" sagen. Statt es 10 Mal zu tippen, schreibst du eine Methode!
+
+## Vorteile von Methoden
+
+- 🔄 **Wiederverwendbar**: Einmal schreiben, oft benutzen
+- 📖 **Lesbar**: Code wird übersichtlicher
+- 🐛 **Wartbar**: Fehler nur an einer Stelle beheben
+- 🧩 **Modular**: Große Probleme in kleine Teile zerlegen
+
+## Aufbau einer Methode
+
+\`\`\`java
+public static void sagHallo() {
+    System.out.println("Hallo!");
+}
+\`\`\`
+
+- \`public static\` - Zugriffsmodifizierer (später mehr)
+- \`void\` - Gibt nichts zurück
+- \`sagHallo\` - Name der Methode
+- \`()\` - Parameter (hier leer)
+- \`{ }\` - Der Code der Methode
+
+## Methode aufrufen
+
+\`\`\`java
+sagHallo();  // Ausgabe: Hallo!
+sagHallo();  // Ausgabe: Hallo!
+\`\`\`
+
+---
+
+**Beobachte den Code unten und führe ihn aus!**`,
+          codeTemplate: `public class Main {
+    // Hier definieren wir eine Methode
+    public static void begruesse() {
+        System.out.println("Willkommen zum Methodenkurs!");
+    }
+    
+    public static void main(String[] args) {
+        // Hier rufen wir die Methode auf
+        begruesse();
+    }
+}`,
+          expectedOutput: "Willkommen zum Methodenkurs!",
+          hints: [
+            "Klicke auf 'Code ausführen'",
+            "Die Methode wird in main() aufgerufen"
+          ],
+          solution: `public class Main {
+    public static void begruesse() {
+        System.out.println("Willkommen zum Methodenkurs!");
+    }
+    
+    public static void main(String[] args) {
+        begruesse();
+    }
+}`
+        }
+      },
+      {
+        id: "8-2",
+        chapterId: "chapter-8",
+        title: "Eigene Methode erstellen",
+        order: 2,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Deine erste eigene Methode ✨
+
+## Aufgabe
+
+Erstelle eine Methode namens \`druckeInfo\`, die diesen Text ausgibt:
+
+\`\`\`
+Ich lerne Methoden!
+\`\`\`
+
+## Schritt für Schritt
+
+1. Schreibe die Methode **vor** der main-Methode
+2. Rufe sie in main() auf
+
+## Vorlage
+
+\`\`\`java
+public static void druckeInfo() {
+    // Dein Code hier
+}
+\`\`\`
+
+---
+
+**Erstelle die Methode und rufe sie auf!**`,
+          codeTemplate: `public class Main {
+    // Erstelle hier die Methode druckeInfo()
+    
+    
+    public static void main(String[] args) {
+        // Rufe die Methode hier auf
+        
+    }
+}`,
+          expectedOutput: "Ich lerne Methoden!",
+          hints: [
+            "public static void druckeInfo() { ... }",
+            "In der Methode: System.out.println(\"Ich lerne Methoden!\");",
+            "In main: druckeInfo();"
+          ],
+          solution: `public class Main {
+    public static void druckeInfo() {
+        System.out.println("Ich lerne Methoden!");
+    }
+    
+    public static void main(String[] args) {
+        druckeInfo();
+    }
+}`
+        }
+      },
+      {
+        id: "8-3",
+        chapterId: "chapter-8",
+        title: "Methoden mit Parametern",
+        order: 3,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Parameter übergeben 📨
+
+## Was sind Parameter?
+
+Parameter sind Werte, die wir an eine Methode übergeben können.
+
+\`\`\`java
+public static void begruesse(String name) {
+    System.out.println("Hallo, " + name + "!");
+}
+
+// Aufruf:
+begruesse("Max");    // Hallo, Max!
+begruesse("Anna");   // Hallo, Anna!
+\`\`\`
+
+## Mehrere Parameter
+
+\`\`\`java
+public static void addiere(int a, int b) {
+    System.out.println(a + b);
+}
+
+addiere(5, 3);  // 8
+\`\`\`
+
+## Aufgabe
+
+Erstelle eine Methode \`begruesse(String name)\`, die folgende Ausgabe erzeugt:
+
+\`\`\`
+Hallo, Java!
+\`\`\`
+
+---
+
+**Erstelle die Methode mit Parameter!**`,
+          codeTemplate: `public class Main {
+    // Methode mit Parameter erstellen
+    
+    
+    public static void main(String[] args) {
+        begruesse("Java");
+    }
+}`,
+          expectedOutput: "Hallo, Java!",
+          hints: [
+            "public static void begruesse(String name)",
+            "System.out.println(\"Hallo, \" + name + \"!\");",
+            "Der Parameter 'name' enthält den übergebenen Wert"
+          ],
+          solution: `public class Main {
+    public static void begruesse(String name) {
+        System.out.println("Hallo, " + name + "!");
+    }
+    
+    public static void main(String[] args) {
+        begruesse("Java");
+    }
+}`
+        }
+      },
+      {
+        id: "8-4",
+        chapterId: "chapter-8",
+        title: "Rückgabewerte",
+        order: 4,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Rückgabewerte mit return 🔙
+
+## Methoden können Werte zurückgeben
+
+Bisher hatten unsere Methoden \`void\` - sie geben nichts zurück. Aber Methoden können auch Ergebnisse liefern!
+
+\`\`\`java
+public static int verdopple(int zahl) {
+    return zahl * 2;
+}
+
+int ergebnis = verdopple(5);  // ergebnis = 10
+\`\`\`
+
+## Wichtig
+
+- Statt \`void\` steht der **Rückgabetyp** (int, String, boolean, etc.)
+- \`return\` gibt den Wert zurück und beendet die Methode
+
+## Beispiele
+
+\`\`\`java
+public static String macheGross(String text) {
+    return text.toUpperCase();
+}
+
+public static boolean istGerade(int zahl) {
+    return zahl % 2 == 0;
+}
+\`\`\`
+
+## Aufgabe
+
+Erstelle eine Methode \`addiere(int a, int b)\`, die die Summe zurückgibt.
+
+---
+
+**Erwartete Ausgabe: 15**`,
+          codeTemplate: `public class Main {
+    // Methode erstellen, die zwei Zahlen addiert und das Ergebnis zurückgibt
+    
+    
+    public static void main(String[] args) {
+        int summe = addiere(10, 5);
+        System.out.println(summe);
+    }
+}`,
+          expectedOutput: "15",
+          hints: [
+            "public static int addiere(int a, int b)",
+            "return a + b;",
+            "Die Methode muss 'int' statt 'void' haben"
+          ],
+          solution: `public class Main {
+    public static int addiere(int a, int b) {
+        return a + b;
+    }
+    
+    public static void main(String[] args) {
+        int summe = addiere(10, 5);
+        System.out.println(summe);
+    }
+}`
+        }
+      },
+      {
+        id: "8-5",
+        chapterId: "chapter-8",
+        title: "Methoden kombinieren",
+        order: 5,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Methoden rufen Methoden auf 🔗
+
+## Methoden können andere Methoden aufrufen
+
+\`\`\`java
+public static int quadrat(int x) {
+    return x * x;
+}
+
+public static int summeVonQuadraten(int a, int b) {
+    return quadrat(a) + quadrat(b);
+}
+\`\`\`
+
+## Aufgabe
+
+Erstelle zwei Methoden:
+
+1. \`verdopple(int zahl)\` - gibt \`zahl * 2\` zurück
+2. \`vervierfache(int zahl)\` - ruft \`verdopple\` zweimal auf
+
+Die Ausgabe soll 40 sein (10 * 4).
+
+---
+
+**Nutze Methoden innerhalb von Methoden!**`,
+          codeTemplate: `public class Main {
+    // verdopple: gibt zahl * 2 zurück
+    
+    
+    // vervierfache: ruft verdopple zweimal auf
+    
+    
+    public static void main(String[] args) {
+        int ergebnis = vervierfache(10);
+        System.out.println(ergebnis);
+    }
+}`,
+          expectedOutput: "40",
+          hints: [
+            "public static int verdopple(int zahl) { return zahl * 2; }",
+            "vervierfache ruft verdopple mit dem Ergebnis von verdopple auf",
+            "return verdopple(verdopple(zahl));"
+          ],
+          solution: `public class Main {
+    public static int verdopple(int zahl) {
+        return zahl * 2;
+    }
+    
+    public static int vervierfache(int zahl) {
+        return verdopple(verdopple(zahl));
+    }
+    
+    public static void main(String[] args) {
+        int ergebnis = vervierfache(10);
+        System.out.println(ergebnis);
+    }
+}`
+        }
+      }
+    ]
+  },
+  // ============================================
+  // KAPITEL 9: REKURSION
+  // ============================================
+  {
+    id: "chapter-9",
+    title: "Kapitel 9: Rekursion",
+    description: "Methoden, die sich selbst aufrufen - ein mächtiges Konzept meistern",
+    order: 9,
+    isUnlocked: false,
+    lessons: [
+      {
+        id: "9-1",
+        chapterId: "chapter-9",
+        title: "Was ist Rekursion?",
+        order: 1,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Rekursion verstehen 🔄
+
+## Definition
+
+**Rekursion** bedeutet, dass eine Methode sich selbst aufruft.
+
+## Ein Beispiel aus dem Alltag
+
+Stell dir russische Matroschka-Puppen vor 🪆:
+- Du öffnest eine Puppe
+- Darin ist eine kleinere Puppe
+- Du öffnest sie wieder...
+- Bis du die kleinste Puppe erreichst
+
+## In Code
+
+\`\`\`java
+public static void zaehleRunter(int zahl) {
+    if (zahl <= 0) {
+        System.out.println("Fertig!");
+        return;  // Abbruchbedingung!
+    }
+    
+    System.out.println(zahl);
+    zaehleRunter(zahl - 1);  // Ruft sich selbst auf
+}
+
+zaehleRunter(3);
+// Ausgabe: 3, 2, 1, Fertig!
+\`\`\`
+
+## Die zwei Regeln der Rekursion
+
+1. ⚠️ **Abbruchbedingung**: Wann soll aufgehört werden?
+2. 🔄 **Verkleinerung**: Das Problem muss kleiner werden!
+
+Ohne Abbruchbedingung → Endlosschleife → Programmabsturz!
+
+---
+
+**Beobachte den rekursiven Countdown!**`,
+          codeTemplate: `public class Main {
+    public static void countdown(int n) {
+        if (n <= 0) {
+            System.out.println("Start!");
+            return;
+        }
+        System.out.println(n);
+        countdown(n - 1);
+    }
+    
+    public static void main(String[] args) {
+        countdown(5);
+    }
+}`,
+          expectedOutput: `5
+4
+3
+2
+1
+Start!`,
+          hints: [
+            "Beobachte, wie die Methode sich selbst aufruft",
+            "Bei n <= 0 stoppt die Rekursion"
+          ],
+          solution: `public class Main {
+    public static void countdown(int n) {
+        if (n <= 0) {
+            System.out.println("Start!");
+            return;
+        }
+        System.out.println(n);
+        countdown(n - 1);
+    }
+    
+    public static void main(String[] args) {
+        countdown(5);
+    }
+}`
+        }
+      },
+      {
+        id: "9-2",
+        chapterId: "chapter-9",
+        title: "Fakultät berechnen",
+        order: 2,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Fakultät mit Rekursion 🧮
+
+## Was ist Fakultät?
+
+Die Fakultät von n (geschrieben n!) ist das Produkt aller Zahlen von 1 bis n.
+
+\`\`\`
+5! = 5 × 4 × 3 × 2 × 1 = 120
+3! = 3 × 2 × 1 = 6
+1! = 1
+0! = 1 (per Definition)
+\`\`\`
+
+## Rekursive Definition
+
+\`\`\`
+n! = n × (n-1)!
+\`\`\`
+
+Also: 5! = 5 × 4!
+
+## In Code
+
+\`\`\`java
+public static int fakultaet(int n) {
+    if (n <= 1) return 1;      // Abbruchbedingung
+    return n * fakultaet(n - 1); // Rekursiver Aufruf
+}
+\`\`\`
+
+## Aufgabe
+
+Vervollständige die Fakultät-Methode, sodass \`fakultaet(5)\` den Wert \`120\` ausgibt.
+
+---
+
+**Berechne 5! rekursiv!**`,
+          codeTemplate: `public class Main {
+    public static int fakultaet(int n) {
+        // Abbruchbedingung: wenn n <= 1, gib 1 zurück
+        
+        // Rekursiver Aufruf: n * fakultaet(n - 1)
+        
+    }
+    
+    public static void main(String[] args) {
+        System.out.println(fakultaet(5));
+    }
+}`,
+          expectedOutput: "120",
+          hints: [
+            "if (n <= 1) return 1;",
+            "return n * fakultaet(n - 1);",
+            "5! = 5 * 4 * 3 * 2 * 1 = 120"
+          ],
+          solution: `public class Main {
+    public static int fakultaet(int n) {
+        if (n <= 1) return 1;
+        return n * fakultaet(n - 1);
+    }
+    
+    public static void main(String[] args) {
+        System.out.println(fakultaet(5));
+    }
+}`
+        }
+      },
+      {
+        id: "9-3",
+        chapterId: "chapter-9",
+        title: "Summe berechnen",
+        order: 3,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Summe von 1 bis n ➕
+
+## Aufgabe
+
+Berechne die Summe aller Zahlen von 1 bis n rekursiv.
+
+\`\`\`
+summe(5) = 5 + 4 + 3 + 2 + 1 = 15
+summe(3) = 3 + 2 + 1 = 6
+summe(1) = 1
+\`\`\`
+
+## Rekursive Logik
+
+\`\`\`
+summe(n) = n + summe(n - 1)
+summe(1) = 1  // Abbruchbedingung
+\`\`\`
+
+## Aufgabe
+
+Schreibe eine Methode \`summe(int n)\`, die die Summe von 1 bis n berechnet.
+
+---
+
+**Erwartete Ausgabe: 55 (Summe von 1-10)**`,
+          codeTemplate: `public class Main {
+    public static int summe(int n) {
+        // Abbruchbedingung
+        
+        // Rekursiver Aufruf
+        
+    }
+    
+    public static void main(String[] args) {
+        System.out.println(summe(10));
+    }
+}`,
+          expectedOutput: "55",
+          hints: [
+            "Abbruchbedingung: if (n <= 1) return 1;",
+            "Rekursiv: return n + summe(n - 1);",
+            "1+2+3+4+5+6+7+8+9+10 = 55"
+          ],
+          solution: `public class Main {
+    public static int summe(int n) {
+        if (n <= 1) return 1;
+        return n + summe(n - 1);
+    }
+    
+    public static void main(String[] args) {
+        System.out.println(summe(10));
+    }
+}`
+        }
+      },
+      {
+        id: "9-4",
+        chapterId: "chapter-9",
+        title: "Fibonacci-Zahlen",
+        order: 4,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Fibonacci-Folge 🐚
+
+## Was ist Fibonacci?
+
+In der Fibonacci-Folge ist jede Zahl die Summe der zwei vorherigen:
+
+\`\`\`
+0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ...
+\`\`\`
+
+## Formel
+
+\`\`\`
+fib(0) = 0
+fib(1) = 1
+fib(n) = fib(n-1) + fib(n-2)
+\`\`\`
+
+## Beispiele
+
+\`\`\`
+fib(5) = fib(4) + fib(3) = 3 + 2 = 5
+fib(6) = fib(5) + fib(4) = 5 + 3 = 8
+\`\`\`
+
+## Aufgabe
+
+Schreibe die Methode \`fib(int n)\` rekursiv.
+
+---
+
+**Erwartete Ausgabe: 13 (fib(7))**`,
+          codeTemplate: `public class Main {
+    public static int fib(int n) {
+        // Abbruchbedingungen für n = 0 und n = 1
+        
+        // Rekursiver Aufruf
+        
+    }
+    
+    public static void main(String[] args) {
+        System.out.println(fib(7));
+    }
+}`,
+          expectedOutput: "13",
+          hints: [
+            "if (n <= 0) return 0;",
+            "if (n == 1) return 1;",
+            "return fib(n - 1) + fib(n - 2);"
+          ],
+          solution: `public class Main {
+    public static int fib(int n) {
+        if (n <= 0) return 0;
+        if (n == 1) return 1;
+        return fib(n - 1) + fib(n - 2);
+    }
+    
+    public static void main(String[] args) {
+        System.out.println(fib(7));
+    }
+}`
+        }
+      }
+    ]
+  },
+  // ============================================
+  // KAPITEL 10: ALGORITHMEN
+  // ============================================
+  {
+    id: "chapter-10",
+    title: "Kapitel 10: Algorithmen",
+    description: "Klassische Algorithmen verstehen und implementieren",
+    order: 10,
+    isUnlocked: false,
+    lessons: [
+      {
+        id: "10-1",
+        chapterId: "chapter-10",
+        title: "Was sind Algorithmen?",
+        order: 1,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Algorithmen verstehen 🧠
+
+## Definition
+
+Ein **Algorithmus** ist eine präzise Schritt-für-Schritt-Anleitung zur Lösung eines Problems.
+
+## Eigenschaften guter Algorithmen
+
+- ✅ **Eindeutig**: Jeder Schritt ist klar definiert
+- ✅ **Endlich**: Der Algorithmus endet irgendwann
+- ✅ **Effektiv**: Jeder Schritt ist ausführbar
+- ✅ **Eingabe/Ausgabe**: Nimmt Daten auf, gibt Ergebnis aus
+
+## Beispiele aus dem Alltag
+
+| Problem | Algorithmus |
+|---------|-------------|
+| Größte Zahl finden | Alle durchgehen, größte merken |
+| Namen sortieren | Alphabetisch ordnen |
+| Weg finden | Kürzesten Weg berechnen |
+
+## Klassische Algorithmen
+
+1. **Suchen**: Finde ein Element in einer Liste
+2. **Sortieren**: Ordne Elemente nach Kriterium
+3. **Maximum/Minimum**: Finde größten/kleinsten Wert
+
+---
+
+**Lass uns den Maximum-Algorithmus anschauen!**`,
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        int[] zahlen = {3, 7, 2, 9, 1, 5};
+        
+        // Maximum finden
+        int max = zahlen[0];
+        for (int zahl : zahlen) {
+            if (zahl > max) {
+                max = zahl;
+            }
+        }
+        
+        System.out.println("Maximum: " + max);
+    }
+}`,
+          expectedOutput: "Maximum: 9",
+          hints: [
+            "Der Algorithmus geht alle Zahlen durch",
+            "Er merkt sich immer die größte bisher gefundene"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        int[] zahlen = {3, 7, 2, 9, 1, 5};
+        
+        int max = zahlen[0];
+        for (int zahl : zahlen) {
+            if (zahl > max) {
+                max = zahl;
+            }
+        }
+        
+        System.out.println("Maximum: " + max);
+    }
+}`
+        }
+      },
+      {
+        id: "10-2",
+        chapterId: "chapter-10",
+        title: "Minimum finden",
+        order: 2,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Minimum-Algorithmus 📉
+
+## Aufgabe
+
+Finde die **kleinste Zahl** im Array!
+
+## Strategie
+
+1. Nimm das erste Element als "vorläufiges Minimum"
+2. Gehe alle anderen Elemente durch
+3. Wenn ein Element kleiner ist → neues Minimum
+4. Am Ende hast du das echte Minimum
+
+## Tipp
+
+Fast wie Maximum, aber mit \`<\` statt \`>\`!
+
+---
+
+**Finde das Minimum: 1**`,
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        int[] zahlen = {5, 3, 8, 1, 9, 2};
+        
+        // Minimum finden
+        int min = zahlen[0];
+        
+        // Gehe alle Zahlen durch und finde das Minimum
+        
+        
+        System.out.println("Minimum: " + min);
+    }
+}`,
+          expectedOutput: "Minimum: 1",
+          hints: [
+            "for (int zahl : zahlen)",
+            "if (zahl < min) { min = zahl; }",
+            "Vergleiche mit < statt >"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        int[] zahlen = {5, 3, 8, 1, 9, 2};
+        
+        int min = zahlen[0];
+        for (int zahl : zahlen) {
+            if (zahl < min) {
+                min = zahl;
+            }
+        }
+        
+        System.out.println("Minimum: " + min);
+    }
+}`
+        }
+      },
+      {
+        id: "10-3",
+        chapterId: "chapter-10",
+        title: "Summe berechnen",
+        order: 3,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Summen-Algorithmus ➕
+
+## Aufgabe
+
+Berechne die **Summe** aller Zahlen im Array!
+
+## Strategie
+
+1. Starte mit Summe = 0
+2. Addiere jede Zahl zur Summe
+3. Gib die Summe aus
+
+## Beispiel
+
+\`\`\`java
+int[] zahlen = {1, 2, 3, 4, 5};
+// 1 + 2 + 3 + 4 + 5 = 15
+\`\`\`
+
+---
+
+**Berechne die Summe: 30**`,
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        int[] zahlen = {4, 7, 3, 8, 6, 2};
+        
+        // Summe berechnen
+        int summe = 0;
+        
+        // Addiere alle Zahlen zur Summe
+        
+        
+        System.out.println("Summe: " + summe);
+    }
+}`,
+          expectedOutput: "Summe: 30",
+          hints: [
+            "for (int zahl : zahlen)",
+            "summe = summe + zahl; oder summe += zahl;",
+            "4 + 7 + 3 + 8 + 6 + 2 = 30"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        int[] zahlen = {4, 7, 3, 8, 6, 2};
+        
+        int summe = 0;
+        for (int zahl : zahlen) {
+            summe += zahl;
+        }
+        
+        System.out.println("Summe: " + summe);
+    }
+}`
+        }
+      },
+      {
+        id: "10-4",
+        chapterId: "chapter-10",
+        title: "Durchschnitt berechnen",
+        order: 4,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Durchschnitts-Algorithmus 📊
+
+## Aufgabe
+
+Berechne den **Durchschnitt** aller Zahlen!
+
+## Formel
+
+\`\`\`
+Durchschnitt = Summe aller Zahlen / Anzahl der Zahlen
+\`\`\`
+
+## Tipp
+
+- Erst die Summe berechnen
+- Dann durch \`zahlen.length\` teilen
+- Nutze \`double\` für genaues Ergebnis!
+
+---
+
+**Erwartete Ausgabe: 5.0**`,
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        int[] zahlen = {2, 4, 6, 8, 10};
+        
+        // 1. Summe berechnen
+        int summe = 0;
+        
+        
+        // 2. Durchschnitt berechnen (Summe / Anzahl)
+        double durchschnitt = 0;
+        
+        
+        System.out.println("Durchschnitt: " + durchschnitt);
+    }
+}`,
+          expectedOutput: "Durchschnitt: 5.0",
+          hints: [
+            "Erst Summe mit Schleife berechnen",
+            "durchschnitt = (double) summe / zahlen.length;",
+            "(2+4+6+8+10) / 5 = 30 / 5 = 5.0"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        int[] zahlen = {2, 4, 6, 8, 10};
+        
+        int summe = 0;
+        for (int zahl : zahlen) {
+            summe += zahl;
+        }
+        
+        double durchschnitt = (double) summe / zahlen.length;
+        
+        System.out.println("Durchschnitt: " + durchschnitt);
+    }
+}`
+        }
+      },
+      {
+        id: "10-5",
+        chapterId: "chapter-10",
+        title: "Lineare Suche",
+        order: 5,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Lineare Suche 🔍
+
+## Was ist lineare Suche?
+
+Der einfachste Suchalgorithmus: Gehe alle Elemente der Reihe nach durch, bis du das gesuchte findest.
+
+## Algorithmus
+
+\`\`\`java
+public static int suche(int[] arr, int gesucht) {
+    for (int i = 0; i < arr.length; i++) {
+        if (arr[i] == gesucht) {
+            return i;  // Gefunden! Gib Position zurück
+        }
+    }
+    return -1;  // Nicht gefunden
+}
+\`\`\`
+
+## Aufgabe
+
+Finde die Zahl 7 im Array und gib ihre Position aus!
+
+---
+
+**Erwartete Ausgabe: Position: 3**`,
+          codeTemplate: `public class Main {
+    public static int lineareSuche(int[] arr, int gesucht) {
+        // Gehe alle Elemente durch
+        // Wenn gefunden, gib die Position zurück
+        // Wenn nicht gefunden, gib -1 zurück
+        
+    }
+    
+    public static void main(String[] args) {
+        int[] zahlen = {2, 5, 1, 7, 3, 9};
+        int position = lineareSuche(zahlen, 7);
+        System.out.println("Position: " + position);
+    }
+}`,
+          expectedOutput: "Position: 3",
+          hints: [
+            "for (int i = 0; i < arr.length; i++)",
+            "if (arr[i] == gesucht) return i;",
+            "Am Ende: return -1;"
+          ],
+          solution: `public class Main {
+    public static int lineareSuche(int[] arr, int gesucht) {
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == gesucht) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    public static void main(String[] args) {
+        int[] zahlen = {2, 5, 1, 7, 3, 9};
+        int position = lineareSuche(zahlen, 7);
+        System.out.println("Position: " + position);
+    }
+}`
+        }
+      },
+      {
+        id: "10-6",
+        chapterId: "chapter-10",
+        title: "Bubble Sort",
+        order: 6,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Bubble Sort 🫧
+
+## Der bekannteste Sortieralgorithmus
+
+**Bubble Sort** vergleicht benachbarte Elemente und tauscht sie, wenn sie in falscher Reihenfolge sind.
+
+## Wie funktioniert es?
+
+\`\`\`
+Runde 1: [5, 3, 8, 1] → [3, 5, 1, 8]
+Runde 2: [3, 5, 1, 8] → [3, 1, 5, 8]
+Runde 3: [3, 1, 5, 8] → [1, 3, 5, 8] ✓
+\`\`\`
+
+## Algorithmus
+
+\`\`\`java
+for (int i = 0; i < arr.length - 1; i++) {
+    for (int j = 0; j < arr.length - 1 - i; j++) {
+        if (arr[j] > arr[j + 1]) {
+            // Tauschen
+            int temp = arr[j];
+            arr[j] = arr[j + 1];
+            arr[j + 1] = temp;
+        }
+    }
+}
+\`\`\`
+
+## Aufgabe
+
+Sortiere das Array [5, 2, 8, 1, 9] aufsteigend!
+
+---
+
+**Erwartete Ausgabe: 1 2 5 8 9**`,
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        int[] zahlen = {5, 2, 8, 1, 9};
+        
+        // Bubble Sort implementieren
+        
+        
+        
+        // Ausgabe
+        for (int zahl : zahlen) {
+            System.out.print(zahl + " ");
+        }
+    }
+}`,
+          expectedOutput: "1 2 5 8 9 ",
+          hints: [
+            "Zwei verschachtelte for-Schleifen",
+            "Vergleiche arr[j] > arr[j+1]",
+            "Tausche mit einer temp-Variable"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        int[] zahlen = {5, 2, 8, 1, 9};
+        
+        for (int i = 0; i < zahlen.length - 1; i++) {
+            for (int j = 0; j < zahlen.length - 1 - i; j++) {
+                if (zahlen[j] > zahlen[j + 1]) {
+                    int temp = zahlen[j];
+                    zahlen[j] = zahlen[j + 1];
+                    zahlen[j + 1] = temp;
+                }
+            }
+        }
+        
+        for (int zahl : zahlen) {
+            System.out.print(zahl + " ");
+        }
+    }
+}`
+        }
+      }
+    ]
   }
 ];
 
