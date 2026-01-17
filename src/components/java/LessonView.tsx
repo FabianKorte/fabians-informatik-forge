@@ -26,9 +26,10 @@ interface LessonViewProps {
   onComplete: () => void;
   onNext: () => void;
   hasNext: boolean;
+  isPracticeMode?: boolean;
 }
 
-export function LessonView({ lesson, onComplete, onNext, hasNext }: LessonViewProps) {
+export function LessonView({ lesson, onComplete, onNext, hasNext, isPracticeMode = false }: LessonViewProps) {
   const [code, setCode] = useState(lesson.content.codeTemplate);
   const [isRunning, setIsRunning] = useState(false);
   const [result, setResult] = useState<CodeExecutionResult | null>(null);
@@ -258,7 +259,7 @@ export function LessonView({ lesson, onComplete, onNext, hasNext }: LessonViewPr
           className="flex justify-end"
         >
           <Button onClick={onNext} size="lg" className="gap-2">
-            Weiter zur nächsten Lektion
+            {isPracticeMode ? "Nächste Übung" : "Weiter zur nächsten Lektion"}
             <ChevronRight className="w-5 h-5" />
           </Button>
         </motion.div>
