@@ -1,12 +1,17 @@
-import { useRef, useCallback, useState } from "react";
+import { useRef, useCallback } from "react";
 import Editor, { OnMount, loader } from "@monaco-editor/react";
+import * as monaco from "monaco-editor";
+import EditorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
 
-// Configure Monaco loader to use CDN
-loader.config({
-  paths: {
-    vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs'
-  }
-});
+// Force Monaco to use the locally bundled ESM build (no external CDN scripts)
+loader.config({ monaco });
+
+// Ensure Monaco can spawn its web worker in Vite
+if (typeof self !== "undefined") {
+  (self as any).MonacoEnvironment = {
+    getWorker: () => new EditorWorker(),
+  };
+}
 
 interface JavaCodeEditorProps {
   value: string;
@@ -17,11 +22,9 @@ interface JavaCodeEditorProps {
 
 export function JavaCodeEditor({ value, onChange, readOnly = false, height = "300px" }: JavaCodeEditorProps) {
   const editorRef = useRef<any>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
 
   const handleEditorMount: OnMount = useCallback((editor, monaco) => {
     editorRef.current = editor;
-    setIsLoaded(true);
 
     // Configure Java language
     monaco.languages.registerCompletionItemProvider("java", {
