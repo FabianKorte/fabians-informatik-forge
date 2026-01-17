@@ -136,14 +136,14 @@ const LearnPage = () => {
                     <GradientShadowCard>
                       <Card
                         className="cursor-pointer p-6 hover:scale-[1.02] transition-transform bg-gradient-to-br from-primary/5 to-accent/5"
-                        onClick={() => navigate("/learn/java")}
+                        onClick={() => navigate("/java")}
                         role="button"
                         tabIndex={0}
                         aria-label="Java Lernpfad öffnen"
                         onKeyDown={(e) => {
                           if (e.key === "Enter" || e.key === " ") {
                             e.preventDefault();
-                            navigate("/learn/java");
+                            navigate("/java");
                           }
                         }}
                       >
