@@ -4937,6 +4937,3196 @@ Weiter so! :)`,
         }
       }
     ]
+  },
+  // ============================================
+  // KAPITEL 13: SPEICHERVERWALTUNG (Stack & Heap)
+  // ============================================
+  {
+    id: "chapter-13",
+    title: "Kapitel 13: Speicherverwaltung",
+    description: "Verstehe wie Java Variablen im Speicher verwaltet - Stack, Heap und Garbage Collection",
+    order: 13,
+    isUnlocked: false,
+    lessons: [
+      {
+        id: "13-1",
+        chapterId: "chapter-13",
+        title: "Stack und Heap verstehen",
+        order: 1,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Speicherverwaltung in Java 🧠
+
+## Wo werden Daten gespeichert?
+
+Java verwendet zwei Speicherbereiche:
+
+### 1. Stack (Stapelspeicher) 📚
+
+Der **Stack** ist wie ein Stapel Bücher:
+- Schnell, aber begrenzt
+- LIFO-Prinzip (Last In, First Out)
+- Speichert: **Primitive Datentypen** und **Referenzen**
+
+\`\`\`java
+int zahl = 42;        // zahl liegt auf dem Stack
+double preis = 19.99; // preis liegt auf dem Stack
+\`\`\`
+
+### 2. Heap (Haldenspeicher) 🏔️
+
+Der **Heap** ist wie ein großes Lager:
+- Größer, aber langsamer
+- Speichert: **Objekte** und **Arrays**
+
+\`\`\`java
+String name = new String("Max");  // Objekt liegt auf dem Heap
+int[] zahlen = new int[10];       // Array liegt auf dem Heap
+\`\`\`
+
+## Visualisierung
+
+\`\`\`
+┌─────────────────────────────────────────────┐
+│                   STACK                      │
+├─────────────────────────────────────────────┤
+│  zahl = 42                                   │
+│  preis = 19.99                               │
+│  name = [Referenz auf Heap-Adresse 0x001]   │
+│  zahlen = [Referenz auf Heap-Adresse 0x002] │
+└─────────────────────────────────────────────┘
+         │                    │
+         ▼                    ▼
+┌─────────────────────────────────────────────┐
+│                   HEAP                       │
+├─────────────────────────────────────────────┤
+│  0x001: String-Objekt "Max"                 │
+│  0x002: int-Array [0,0,0,0,0,0,0,0,0,0]     │
+└─────────────────────────────────────────────┘
+\`\`\`
+
+## Warum ist das wichtig?
+
+- **Performance**: Stack ist schneller
+- **Speicherverbrauch**: Heap für große Daten
+- **Referenzen verstehen**: Objekte werden über Referenzen angesprochen
+
+---
+
+**Klicke auf "Code ausführen" um fortzufahren!**`,
+          codeTemplate: `// Stack vs. Heap Demonstration
+
+public class Main {
+    public static void main(String[] args) {
+        // Primitive Typen -> Stack
+        int a = 10;
+        int b = a;  // Kopie des Wertes
+        b = 20;
+        
+        System.out.println("a = " + a);  // 10 (unveraendert!)
+        System.out.println("b = " + b);  // 20
+        
+        // Das zeigt: Primitive werden kopiert
+        System.out.println("Primitive werden kopiert!");
+    }
+}`,
+          expectedOutput: `a = 10
+b = 20
+Primitive werden kopiert!`,
+          hints: [
+            "Beobachte: a bleibt 10, obwohl b geändert wurde",
+            "Primitive Typen werden als Kopie übergeben"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        int a = 10;
+        int b = a;
+        b = 20;
+        
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+        System.out.println("Primitive werden kopiert!");
+    }
+}`
+        }
+      },
+      {
+        id: "13-2",
+        chapterId: "chapter-13",
+        title: "Referenzen verstehen",
+        order: 2,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Referenzen in Java 🔗
+
+## Was ist eine Referenz?
+
+Eine **Referenz** ist wie eine Adresse:
+- Sie zeigt auf ein Objekt im Heap
+- Mehrere Referenzen können auf dasselbe Objekt zeigen
+
+## Beispiel: Primitive vs. Objekte
+
+\`\`\`java
+// Primitive (Kopie)
+int a = 5;
+int b = a;
+b = 10;
+// a ist immer noch 5!
+
+// Objekte (Referenz)
+int[] arr1 = {1, 2, 3};
+int[] arr2 = arr1;  // Beide zeigen auf dasselbe Array!
+arr2[0] = 99;
+// arr1[0] ist jetzt auch 99!
+\`\`\`
+
+## Visualisierung
+
+\`\`\`
+Primitive:
+┌─────┐    ┌─────┐
+│ a=5 │    │ b=10│   (Unabhaengige Kopien)
+└─────┘    └─────┘
+
+Objekte/Referenzen:
+┌───────┐    ┌───────┐
+│ arr1  │───►│{99,2,3}│◄───│ arr2  │
+└───────┘    └───────┘    └───────┘
+           (Beide zeigen auf dasselbe Array!)
+\`\`\`
+
+## Wichtige Konsequenzen
+
+1. **Änderungen betreffen alle Referenzen**
+2. **== vergleicht Referenzen, nicht Inhalte**
+3. **Für Inhaltsvergleich: .equals() nutzen**
+
+\`\`\`java
+String s1 = new String("Hallo");
+String s2 = new String("Hallo");
+System.out.println(s1 == s2);      // false (verschiedene Objekte)
+System.out.println(s1.equals(s2)); // true (gleicher Inhalt)
+\`\`\`
+
+---
+
+**Beobachte das Verhalten im Code!**`,
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        // Arrays sind Referenztypen!
+        int[] original = {1, 2, 3};
+        int[] kopie = original;  // Keine echte Kopie!
+        
+        kopie[0] = 999;
+        
+        System.out.println("original[0] = " + original[0]);
+        System.out.println("kopie[0] = " + kopie[0]);
+        System.out.println("Beide zeigen auf dasselbe Array!");
+    }
+}`,
+          expectedOutput: `original[0] = 999
+kopie[0] = 999
+Beide zeigen auf dasselbe Array!`,
+          hints: [
+            "Beide Variablen zeigen auf dasselbe Array",
+            "Änderungen über eine Variable betreffen beide"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        int[] original = {1, 2, 3};
+        int[] kopie = original;
+        
+        kopie[0] = 999;
+        
+        System.out.println("original[0] = " + original[0]);
+        System.out.println("kopie[0] = " + kopie[0]);
+        System.out.println("Beide zeigen auf dasselbe Array!");
+    }
+}`
+        }
+      },
+      {
+        id: "13-3",
+        chapterId: "chapter-13",
+        title: "Garbage Collection",
+        order: 3,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Garbage Collection 🗑️
+
+## Was ist Garbage Collection?
+
+**Garbage Collection (GC)** ist Javas automatische Speicherverwaltung:
+- Findet nicht mehr benötigte Objekte
+- Gibt deren Speicher automatisch frei
+- Du musst Speicher nicht manuell freigeben (wie in C/C++)
+
+## Wann wird ein Objekt "Müll"?
+
+Ein Objekt wird zur Garbage Collection freigegeben, wenn **keine Referenz** mehr darauf zeigt:
+
+\`\`\`java
+String name = new String("Max");  // Objekt erstellt
+name = new String("Anna");        // Neues Objekt, "Max" ist jetzt Müll!
+name = null;                      // "Anna" ist jetzt auch Müll!
+\`\`\`
+
+## Visualisierung
+
+\`\`\`
+Schritt 1: name = "Max"
+┌──────┐     ┌───────┐
+│ name │────►│ "Max" │
+└──────┘     └───────┘
+
+Schritt 2: name = "Anna"
+┌──────┐     ┌────────┐
+│ name │────►│ "Anna" │
+└──────┘     └────────┘
+             ┌───────┐
+             │ "Max" │  ← Keine Referenz mehr! → MÜLL
+             └───────┘
+
+Schritt 3: GC räumt auf
+┌──────┐     ┌────────┐
+│ name │────►│ "Anna" │
+└──────┘     └────────┘
+             (Max wurde entfernt)
+\`\`\`
+
+## Vorteile der Garbage Collection
+
+| Vorteil | Beschreibung |
+|---------|--------------|
+| 🛡️ **Sicherheit** | Keine Memory Leaks durch vergessenes Freigeben |
+| 🧹 **Einfachheit** | Entwickler muss sich nicht kümmern |
+| 🐛 **Weniger Bugs** | Keine Dangling Pointers |
+
+## Tipps für bessere Performance
+
+1. Setze nicht mehr benötigte Referenzen auf \`null\`
+2. Vermeide unnötige Objekterstellung in Schleifen
+3. Nutze primitive Typen wenn möglich
+
+---
+
+**Klicke auf "Code ausführen"!**`,
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== Garbage Collection ===");
+        System.out.println();
+        System.out.println("Java verwaltet Speicher automatisch!");
+        System.out.println("Nicht mehr referenzierte Objekte");
+        System.out.println("werden automatisch entfernt.");
+        System.out.println();
+        System.out.println("Kein manuelles 'free()' noetig!");
+    }
+}`,
+          expectedOutput: `=== Garbage Collection ===
+
+Java verwaltet Speicher automatisch!
+Nicht mehr referenzierte Objekte
+werden automatisch entfernt.
+
+Kein manuelles 'free()' noetig!`,
+          hints: [
+            "Dies ist eine Theorie-Lektion",
+            "Klicke auf 'Code ausführen'"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== Garbage Collection ===");
+        System.out.println();
+        System.out.println("Java verwaltet Speicher automatisch!");
+        System.out.println("Nicht mehr referenzierte Objekte");
+        System.out.println("werden automatisch entfernt.");
+        System.out.println();
+        System.out.println("Kein manuelles 'free()' noetig!");
+    }
+}`
+        }
+      },
+      {
+        id: "13-4",
+        chapterId: "chapter-13",
+        title: "Pass by Value vs. Reference",
+        order: 4,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Parameter-Übergabe in Java 📤
+
+## Java ist "Pass by Value"!
+
+In Java werden **immer Kopien** übergeben:
+- Bei Primitiven: Kopie des **Wertes**
+- Bei Objekten: Kopie der **Referenz** (nicht des Objekts!)
+
+## Beispiel mit Primitiven
+
+\`\`\`java
+public static void verdopple(int x) {
+    x = x * 2;  // Ändert nur die lokale Kopie!
+}
+
+int zahl = 5;
+verdopple(zahl);
+System.out.println(zahl);  // Immer noch 5!
+\`\`\`
+
+## Beispiel mit Objekten
+
+\`\`\`java
+public static void aendere(int[] arr) {
+    arr[0] = 999;  // Ändert das Original-Array!
+}
+
+int[] zahlen = {1, 2, 3};
+aendere(zahlen);
+System.out.println(zahlen[0]);  // 999!
+\`\`\`
+
+## Warum der Unterschied?
+
+- Primitive: Die **Kopie des Wertes** wird geändert
+- Objekte: Die **Kopie der Referenz** zeigt auf dasselbe Objekt
+
+## Aufgabe
+
+Vervollständige den Code um zu zeigen, dass Änderungen an Arrays in Methoden das Original beeinflussen.`,
+          codeTemplate: `public class Main {
+    // Diese Methode soll das erste Element auf 100 setzen
+    public static void setzeErstes(int[] arr) {
+        // Setze arr[0] auf 100
+        
+    }
+    
+    public static void main(String[] args) {
+        int[] zahlen = {1, 2, 3};
+        
+        System.out.println("Vorher: " + zahlen[0]);
+        setzeErstes(zahlen);
+        System.out.println("Nachher: " + zahlen[0]);
+    }
+}`,
+          expectedOutput: `Vorher: 1
+Nachher: 100`,
+          hints: [
+            "arr[0] = 100;",
+            "Die Referenz zeigt auf das Original-Array",
+            "Änderungen betreffen das Original"
+          ],
+          solution: `public class Main {
+    public static void setzeErstes(int[] arr) {
+        arr[0] = 100;
+    }
+    
+    public static void main(String[] args) {
+        int[] zahlen = {1, 2, 3};
+        
+        System.out.println("Vorher: " + zahlen[0]);
+        setzeErstes(zahlen);
+        System.out.println("Nachher: " + zahlen[0]);
+    }
+}`
+        }
+      }
+    ]
+  },
+  // ============================================
+  // KAPITEL 14: ERWEITERTE OOP
+  // ============================================
+  {
+    id: "chapter-14",
+    title: "Kapitel 14: Erweiterte OOP",
+    description: "Interfaces, abstrakte Klassen, Polymorphismus und mehr",
+    order: 14,
+    isUnlocked: false,
+    lessons: [
+      {
+        id: "14-1",
+        chapterId: "chapter-14",
+        title: "Prozedural vs. Objektorientiert",
+        order: 1,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Prozedurale vs. Objektorientierte Programmierung 🔄
+
+## Prozedurale Programmierung
+
+**Fokus auf Funktionen/Prozeduren**
+
+\`\`\`java
+// Prozedural: Funktionen arbeiten auf Daten
+static void autoStarten(String marke, int ps) {
+    System.out.println(marke + " mit " + ps + " PS startet");
+}
+
+static void autoBremsen(String marke) {
+    System.out.println(marke + " bremst");
+}
+
+// Aufruf
+autoStarten("BMW", 200);
+autoBremsen("BMW");
+\`\`\`
+
+**Merkmale:**
+- Daten und Funktionen sind getrennt
+- Funktionen erhalten Daten als Parameter
+- Gut für einfache, lineare Programme
+
+## Objektorientierte Programmierung
+
+**Fokus auf Objekte mit Daten UND Verhalten**
+
+\`\`\`java
+// OOP: Objekte kapseln Daten und Verhalten
+class Auto {
+    String marke;
+    int ps;
+    
+    void starten() {
+        System.out.println(marke + " mit " + ps + " PS startet");
+    }
+    
+    void bremsen() {
+        System.out.println(marke + " bremst");
+    }
+}
+
+// Aufruf
+Auto meinAuto = new Auto();
+meinAuto.marke = "BMW";
+meinAuto.ps = 200;
+meinAuto.starten();
+meinAuto.bremsen();
+\`\`\`
+
+**Merkmale:**
+- Daten und Funktionen gehören zusammen
+- Objekte sind eigenständige Einheiten
+- Gut für komplexe, erweiterbare Systeme
+
+## Vergleich
+
+| Aspekt | Prozedural | OOP |
+|--------|------------|-----|
+| Fokus | Funktionen | Objekte |
+| Daten | Global/Parameter | In Objekten gekapselt |
+| Wiederverwendung | Funktionen kopieren | Vererbung |
+| Erweiterbarkeit | Schwierig | Einfach |
+| Komplexität | Für kleine Programme | Für große Systeme |
+
+---
+
+**OOP ist der Standard für moderne Softwareentwicklung!**`,
+          codeTemplate: `// Vergleich: Prozedural vs. OOP
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== Prozedural vs. OOP ===");
+        System.out.println();
+        System.out.println("Prozedural: Funktionen + separate Daten");
+        System.out.println("OOP: Objekte = Daten + Verhalten");
+        System.out.println();
+        System.out.println("Java ist eine OOP-Sprache!");
+    }
+}`,
+          expectedOutput: `=== Prozedural vs. OOP ===
+
+Prozedural: Funktionen + separate Daten
+OOP: Objekte = Daten + Verhalten
+
+Java ist eine OOP-Sprache!`,
+          hints: [
+            "Dies ist eine Theorie-Lektion",
+            "Verstehe den Unterschied zwischen den Paradigmen"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== Prozedural vs. OOP ===");
+        System.out.println();
+        System.out.println("Prozedural: Funktionen + separate Daten");
+        System.out.println("OOP: Objekte = Daten + Verhalten");
+        System.out.println();
+        System.out.println("Java ist eine OOP-Sprache!");
+    }
+}`
+        }
+      },
+      {
+        id: "14-2",
+        chapterId: "chapter-14",
+        title: "Method Overloading (Überladen)",
+        order: 2,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Method Overloading (Überladen) 📦
+
+## Was ist Überladung?
+
+**Überladung** bedeutet: Mehrere Methoden mit **gleichem Namen** aber **unterschiedlichen Parametern**.
+
+## Beispiel
+
+\`\`\`java
+class Rechner {
+    // Addiere zwei int
+    static int addiere(int a, int b) {
+        return a + b;
+    }
+    
+    // Addiere drei int
+    static int addiere(int a, int b, int c) {
+        return a + b + c;
+    }
+    
+    // Addiere zwei double
+    static double addiere(double a, double b) {
+        return a + b;
+    }
+}
+\`\`\`
+
+## Regeln für Überladung
+
+| Erlaubt | Nicht erlaubt |
+|---------|---------------|
+| Unterschiedliche Parameteranzahl | Nur anderer Rückgabetyp |
+| Unterschiedliche Parametertypen | Nur andere Parameternamen |
+| Unterschiedliche Parameterreihenfolge | |
+
+## Vorteile
+
+- 🎯 **Intuitive API**: \`println(int)\`, \`println(String)\`, \`println(double)\`
+- 📖 **Lesbarkeit**: Ein Name für ähnliche Funktionen
+- 🔧 **Flexibilität**: Verschiedene Eingaben akzeptieren
+
+## Aufgabe
+
+Erstelle eine überladene Methode \`gruss\` die entweder einen Namen oder Name + Titel akzeptiert.`,
+          codeTemplate: `public class Main {
+    // Überladene Methode 1: nur Name
+    public static void gruss(String name) {
+        System.out.println("Hallo, " + name + "!");
+    }
+    
+    // Überladene Methode 2: Titel + Name
+    // Erstelle sie hier!
+    
+    
+    public static void main(String[] args) {
+        gruss("Max");
+        gruss("Dr.", "Mueller");
+    }
+}`,
+          expectedOutput: `Hallo, Max!
+Hallo, Dr. Mueller!`,
+          hints: [
+            "public static void gruss(String titel, String name)",
+            "System.out.println(\"Hallo, \" + titel + \" \" + name + \"!\");",
+            "Gleicher Name, andere Parameter = Überladung"
+          ],
+          solution: `public class Main {
+    public static void gruss(String name) {
+        System.out.println("Hallo, " + name + "!");
+    }
+    
+    public static void gruss(String titel, String name) {
+        System.out.println("Hallo, " + titel + " " + name + "!");
+    }
+    
+    public static void main(String[] args) {
+        gruss("Max");
+        gruss("Dr.", "Mueller");
+    }
+}`
+        }
+      },
+      {
+        id: "14-3",
+        chapterId: "chapter-14",
+        title: "Method Overriding (Überschreiben)",
+        order: 3,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Method Overriding (Überschreiben) 🔄
+
+## Was ist Überschreiben?
+
+**Überschreiben** bedeutet: Eine Methode der **Elternklasse** wird in der **Kindklasse** neu implementiert.
+
+## Beispiel
+
+\`\`\`java
+class Tier {
+    void sprechen() {
+        System.out.println("Das Tier macht ein Geräusch");
+    }
+}
+
+class Hund extends Tier {
+    @Override  // Annotation: zeigt Überschreibung an
+    void sprechen() {
+        System.out.println("Der Hund bellt: Wuff!");
+    }
+}
+
+class Katze extends Tier {
+    @Override
+    void sprechen() {
+        System.out.println("Die Katze miaut: Miau!");
+    }
+}
+\`\`\`
+
+## Die @Override Annotation
+
+| Mit @Override | Ohne @Override |
+|---------------|----------------|
+| Compiler prüft ob Methode existiert | Keine Prüfung |
+| Fehler bei Tippfehlern | Neue Methode statt Überschreibung |
+| **Best Practice!** | Fehleranfällig |
+
+## Regeln für Überschreiben
+
+1. **Gleiche Signatur** (Name + Parameter)
+2. **Gleicher oder weniger restriktiver Zugriff**
+3. **Gleicher oder kompatibler Rückgabetyp**
+
+## Aufgabe
+
+Überschreibe die \`info()\` Methode in der Klasse \`Auto\`.`,
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        Fahrzeug f = new Fahrzeug();
+        f.info();
+        
+        Auto a = new Auto();
+        a.info();
+    }
+}
+
+class Fahrzeug {
+    void info() {
+        System.out.println("Ich bin ein Fahrzeug");
+    }
+}
+
+class Auto extends Fahrzeug {
+    // Überschreibe info() mit @Override
+    // Ausgabe: "Ich bin ein Auto"
+    
+}`,
+          expectedOutput: `Ich bin ein Fahrzeug
+Ich bin ein Auto`,
+          hints: [
+            "@Override über der Methode",
+            "void info() { ... }",
+            "System.out.println(\"Ich bin ein Auto\");"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        Fahrzeug f = new Fahrzeug();
+        f.info();
+        
+        Auto a = new Auto();
+        a.info();
+    }
+}
+
+class Fahrzeug {
+    void info() {
+        System.out.println("Ich bin ein Fahrzeug");
+    }
+}
+
+class Auto extends Fahrzeug {
+    @Override
+    void info() {
+        System.out.println("Ich bin ein Auto");
+    }
+}`
+        }
+      },
+      {
+        id: "14-4",
+        chapterId: "chapter-14",
+        title: "Abstrakte Klassen",
+        order: 4,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Abstrakte Klassen 🎨
+
+## Was ist eine abstrakte Klasse?
+
+Eine **abstrakte Klasse** ist eine Klasse, die:
+- **Nicht direkt instanziiert** werden kann
+- **Abstrakte Methoden** haben kann (ohne Implementierung)
+- Als **Vorlage** für Unterklassen dient
+
+## Syntax
+
+\`\`\`java
+abstract class Tier {
+    String name;
+    
+    // Normale Methode
+    void schlafen() {
+        System.out.println(name + " schläft");
+    }
+    
+    // Abstrakte Methode (MUSS überschrieben werden!)
+    abstract void sprechen();
+}
+
+class Hund extends Tier {
+    @Override
+    void sprechen() {
+        System.out.println(name + " bellt: Wuff!");
+    }
+}
+\`\`\`
+
+## Wichtige Regeln
+
+| Abstrakte Klasse | Konkrete Klasse |
+|------------------|-----------------|
+| \`abstract class\` | \`class\` |
+| Kann abstrakte Methoden haben | Keine abstrakten Methoden |
+| Kann nicht instanziiert werden | Kann instanziiert werden |
+| Kann normale Methoden haben | Hat nur normale Methoden |
+
+## Wann abstrakte Klassen nutzen?
+
+- Du willst **gemeinsame Funktionalität** vererben
+- Einige Methoden **müssen** von Unterklassen implementiert werden
+- Du willst verhindern, dass die Basisklasse direkt verwendet wird
+
+## Beispiel aus der Praxis
+
+\`\`\`java
+abstract class Form {
+    abstract double berechneFlaeche();
+}
+
+class Kreis extends Form {
+    double radius;
+    
+    @Override
+    double berechneFlaeche() {
+        return Math.PI * radius * radius;
+    }
+}
+
+class Rechteck extends Form {
+    double breite, hoehe;
+    
+    @Override
+    double berechneFlaeche() {
+        return breite * hoehe;
+    }
+}
+\`\`\`
+
+---
+
+**Abstrakte Klassen definieren "was", Unterklassen definieren "wie"!**`,
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        // Tier tier = new Tier(); // FEHLER! Abstrakt!
+        
+        Hund hund = new Hund();
+        hund.name = "Bello";
+        hund.schlafen();
+        hund.sprechen();
+    }
+}
+
+abstract class Tier {
+    String name;
+    
+    void schlafen() {
+        System.out.println(name + " schlaeft");
+    }
+    
+    abstract void sprechen();
+}
+
+class Hund extends Tier {
+    @Override
+    void sprechen() {
+        System.out.println(name + " bellt: Wuff!");
+    }
+}`,
+          expectedOutput: `Bello schlaeft
+Bello bellt: Wuff!`,
+          hints: [
+            "abstract class kann nicht mit new erstellt werden",
+            "Unterklassen MÜSSEN abstrakte Methoden implementieren"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        Hund hund = new Hund();
+        hund.name = "Bello";
+        hund.schlafen();
+        hund.sprechen();
+    }
+}
+
+abstract class Tier {
+    String name;
+    
+    void schlafen() {
+        System.out.println(name + " schlaeft");
+    }
+    
+    abstract void sprechen();
+}
+
+class Hund extends Tier {
+    @Override
+    void sprechen() {
+        System.out.println(name + " bellt: Wuff!");
+    }
+}`
+        }
+      },
+      {
+        id: "14-5",
+        chapterId: "chapter-14",
+        title: "Interfaces",
+        order: 5,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Interfaces (Schnittstellen) 🔌
+
+## Was ist ein Interface?
+
+Ein **Interface** ist ein Vertrag:
+- Definiert **welche Methoden** eine Klasse haben muss
+- Enthält **keine Implementierung** (nur Methodensignaturen)
+- Eine Klasse kann **mehrere** Interfaces implementieren
+
+## Syntax
+
+\`\`\`java
+interface Fahrbar {
+    void fahren();
+    void bremsen();
+}
+
+class Auto implements Fahrbar {
+    @Override
+    public void fahren() {
+        System.out.println("Auto fährt");
+    }
+    
+    @Override
+    public void bremsen() {
+        System.out.println("Auto bremst");
+    }
+}
+\`\`\`
+
+## Interface vs. Abstrakte Klasse
+
+| Interface | Abstrakte Klasse |
+|-----------|------------------|
+| \`interface\` | \`abstract class\` |
+| Nur Methodensignaturen | Kann Implementierung haben |
+| Klasse kann mehrere implementieren | Nur eine Vererbung |
+| \`implements\` | \`extends\` |
+| Alle Methoden sind public | Verschiedene Zugriffsmodifizierer |
+
+## Mehrere Interfaces
+
+\`\`\`java
+interface Schwimmbar {
+    void schwimmen();
+}
+
+interface Fliegbar {
+    void fliegen();
+}
+
+class Ente implements Schwimmbar, Fliegbar {
+    @Override
+    public void schwimmen() {
+        System.out.println("Ente schwimmt");
+    }
+    
+    @Override
+    public void fliegen() {
+        System.out.println("Ente fliegt");
+    }
+}
+\`\`\`
+
+## Wann Interfaces nutzen?
+
+- Du willst **Fähigkeiten** definieren (nicht "ist-ein" sondern "kann")
+- Du brauchst **Mehrfachvererbung**
+- Du willst **lose Kopplung** zwischen Komponenten
+
+---
+
+**Interfaces = Verträge über Fähigkeiten!**`,
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        Auto auto = new Auto();
+        auto.fahren();
+        auto.bremsen();
+        auto.hupen();
+    }
+}
+
+interface Fahrbar {
+    void fahren();
+    void bremsen();
+}
+
+class Auto implements Fahrbar {
+    @Override
+    public void fahren() {
+        System.out.println("Auto faehrt los");
+    }
+    
+    @Override
+    public void bremsen() {
+        System.out.println("Auto bremst");
+    }
+    
+    // Eigene Methode (nicht vom Interface)
+    public void hupen() {
+        System.out.println("Huuup!");
+    }
+}`,
+          expectedOutput: `Auto faehrt los
+Auto bremst
+Huuup!`,
+          hints: [
+            "interface definiert den Vertrag",
+            "implements bedeutet: Klasse erfüllt den Vertrag",
+            "Alle Interface-Methoden müssen implementiert werden"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        Auto auto = new Auto();
+        auto.fahren();
+        auto.bremsen();
+        auto.hupen();
+    }
+}
+
+interface Fahrbar {
+    void fahren();
+    void bremsen();
+}
+
+class Auto implements Fahrbar {
+    @Override
+    public void fahren() {
+        System.out.println("Auto faehrt los");
+    }
+    
+    @Override
+    public void bremsen() {
+        System.out.println("Auto bremst");
+    }
+    
+    public void hupen() {
+        System.out.println("Huuup!");
+    }
+}`
+        }
+      },
+      {
+        id: "14-6",
+        chapterId: "chapter-14",
+        title: "Polymorphismus",
+        order: 6,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Polymorphismus 🦎
+
+## Was ist Polymorphismus?
+
+**Polymorphismus** = "Vielgestaltigkeit"
+
+Ein Objekt kann als sein eigener Typ ODER als Elterntyp behandelt werden.
+
+## Beispiel
+
+\`\`\`java
+class Tier {
+    void sprechen() {
+        System.out.println("Tier macht Geräusch");
+    }
+}
+
+class Hund extends Tier {
+    @Override
+    void sprechen() {
+        System.out.println("Wuff!");
+    }
+}
+
+class Katze extends Tier {
+    @Override
+    void sprechen() {
+        System.out.println("Miau!");
+    }
+}
+
+// Polymorphismus in Aktion:
+Tier tier1 = new Hund();  // Hund als Tier
+Tier tier2 = new Katze(); // Katze als Tier
+
+tier1.sprechen();  // "Wuff!"
+tier2.sprechen();  // "Miau!"
+\`\`\`
+
+## Warum ist das mächtig?
+
+\`\`\`java
+// Eine Methode für ALLE Tiere!
+void lasseSprechen(Tier tier) {
+    tier.sprechen();  // Richtige Methode wird automatisch aufgerufen
+}
+
+lasseSprechen(new Hund());   // "Wuff!"
+lasseSprechen(new Katze());  // "Miau!"
+\`\`\`
+
+## Generalisierung & Spezialisierung
+
+| Begriff | Richtung | Beispiel |
+|---------|----------|----------|
+| **Generalisierung** | Kind → Eltern | Hund → Tier |
+| **Spezialisierung** | Eltern → Kind | Tier → Hund |
+
+## Aufgabe
+
+Erstelle die Klassen Hund und Katze die von Tier erben und nutze Polymorphismus.`,
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        // Polymorphismus: Verschiedene Tiere als "Tier" behandeln
+        Tier[] tiere = new Tier[3];
+        tiere[0] = new Hund();
+        tiere[1] = new Katze();
+        tiere[2] = new Hund();
+        
+        for (Tier tier : tiere) {
+            tier.sprechen();
+        }
+    }
+}
+
+class Tier {
+    void sprechen() {
+        System.out.println("???");
+    }
+}
+
+// Erstelle Klasse Hund (extends Tier, sprechen -> "Wuff!")
+
+
+// Erstelle Klasse Katze (extends Tier, sprechen -> "Miau!")
+`,
+          expectedOutput: `Wuff!
+Miau!
+Wuff!`,
+          hints: [
+            "class Hund extends Tier { @Override void sprechen()... }",
+            "class Katze extends Tier { @Override void sprechen()... }",
+            "Jede Klasse überschreibt sprechen() mit eigenem Laut"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        Tier[] tiere = new Tier[3];
+        tiere[0] = new Hund();
+        tiere[1] = new Katze();
+        tiere[2] = new Hund();
+        
+        for (Tier tier : tiere) {
+            tier.sprechen();
+        }
+    }
+}
+
+class Tier {
+    void sprechen() {
+        System.out.println("???");
+    }
+}
+
+class Hund extends Tier {
+    @Override
+    void sprechen() {
+        System.out.println("Wuff!");
+    }
+}
+
+class Katze extends Tier {
+    @Override
+    void sprechen() {
+        System.out.println("Miau!");
+    }
+}`
+        }
+      }
+    ]
+  },
+  // ============================================
+  // KAPITEL 15: PROGRAMMIERLOGIK
+  // ============================================
+  {
+    id: "chapter-15",
+    title: "Kapitel 15: Programmierlogik",
+    description: "Struktogramme, Programmablaufpläne und logisches Denken",
+    order: 15,
+    isUnlocked: false,
+    lessons: [
+      {
+        id: "15-1",
+        chapterId: "chapter-15",
+        title: "Struktogramme (Nassi-Shneiderman)",
+        order: 1,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Struktogramme 📐
+
+## Was sind Struktogramme?
+
+**Struktogramme** (auch Nassi-Shneiderman-Diagramme) sind grafische Darstellungen von Algorithmen.
+
+Sie zeigen:
+- Anweisungen als Rechtecke
+- Verzweigungen als Dreiecke
+- Schleifen als spezielle Blöcke
+
+## Grundelemente
+
+### 1. Anweisung (Sequenz)
+\`\`\`
+┌─────────────────────┐
+│ Anweisung ausführen │
+└─────────────────────┘
+\`\`\`
+
+### 2. Verzweigung (if/else)
+\`\`\`
+┌─────────────────────────────┐
+│         Bedingung?          │
+├──────────────┬──────────────┤
+│    ja        │     nein     │
+├──────────────┼──────────────┤
+│ Aktion wenn  │ Aktion wenn  │
+│ wahr         │ falsch       │
+└──────────────┴──────────────┘
+\`\`\`
+
+### 3. Schleife (while/for)
+\`\`\`
+┌─────────────────────────────┐
+│    Solange Bedingung wahr   │
+├─────────────────────────────┤
+│                             │
+│    Schleifenkörper          │
+│                             │
+└─────────────────────────────┘
+\`\`\`
+
+## Beispiel: Maximum finden
+
+\`\`\`
+┌───────────────────────────┐
+│ max = erstes Element      │
+├───────────────────────────┤
+│ Für jedes Element e       │
+├───────────────────────────┤
+│ ┌───────────────────────┐ │
+│ │      e > max?         │ │
+│ ├───────────┬───────────┤ │
+│ │   ja      │   nein    │ │
+│ ├───────────┼───────────┤ │
+│ │ max = e   │   ---     │ │
+│ └───────────┴───────────┘ │
+├───────────────────────────┤
+│ Ausgabe: max              │
+└───────────────────────────┘
+\`\`\`
+
+## Vorteile von Struktogrammen
+
+- ✅ Strukturierte Darstellung
+- ✅ Keine "Spaghetti-Code" möglich
+- ✅ Leicht in Code übersetzbar
+- ✅ Sprachunabhängig
+
+---
+
+**Struktogramme helfen, Algorithmen zu planen!**`,
+          codeTemplate: `// Struktogramm -> Java Code
+
+// Das Struktogramm für Maximum:
+// 1. max = erstes Element
+// 2. Für jedes Element:
+//    - Wenn e > max: max = e
+// 3. Ausgabe max
+
+public class Main {
+    public static void main(String[] args) {
+        int[] zahlen = {5, 2, 9, 1, 7};
+        
+        int max = zahlen[0];
+        
+        for (int e : zahlen) {
+            if (e > max) {
+                max = e;
+            }
+        }
+        
+        System.out.println("Maximum: " + max);
+    }
+}`,
+          expectedOutput: "Maximum: 9",
+          hints: [
+            "Struktogramme werden von oben nach unten gelesen",
+            "Jeder Block entspricht einer Code-Struktur"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        int[] zahlen = {5, 2, 9, 1, 7};
+        
+        int max = zahlen[0];
+        
+        for (int e : zahlen) {
+            if (e > max) {
+                max = e;
+            }
+        }
+        
+        System.out.println("Maximum: " + max);
+    }
+}`
+        }
+      },
+      {
+        id: "15-2",
+        chapterId: "chapter-15",
+        title: "Programmablaufpläne (PAP)",
+        order: 2,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Programmablaufpläne (PAP) 📊
+
+## Was ist ein PAP?
+
+Ein **Programmablaufplan** (Flussdiagramm) zeigt den Ablauf eines Algorithmus mit standardisierten Symbolen.
+
+## Standardsymbole (DIN 66001)
+
+\`\`\`
+┌─────────────────────────────────────────────┐
+│ Symbol          │ Bedeutung                 │
+├─────────────────┼───────────────────────────┤
+│    ⬭           │ Start/Ende (Oval)         │
+├─────────────────┼───────────────────────────┤
+│    ▭           │ Anweisung (Rechteck)      │
+├─────────────────┼───────────────────────────┤
+│    ◇           │ Verzweigung (Raute)       │
+├─────────────────┼───────────────────────────┤
+│    ▱           │ Ein-/Ausgabe (Parallelogramm)│
+├─────────────────┼───────────────────────────┤
+│    →           │ Ablaufrichtung (Pfeil)    │
+└─────────────────┴───────────────────────────┘
+\`\`\`
+
+## Beispiel: Zahl gerade oder ungerade?
+
+\`\`\`
+        ╭───────╮
+        │ Start │
+        ╰───┬───╯
+            │
+        ╱───┴───╲
+       ╱ Eingabe ╲
+       ╲  Zahl   ╱
+        ╲───────╱
+            │
+        ◇───┴───◇
+       ╱ zahl % 2╲
+      ╱   == 0?   ╲
+     ◇─────┬─────◇
+    ja     │     nein
+     │     │      │
+┌────┴────┐│┌────┴────┐
+│ "gerade"│││"ungerade"│
+└────┬────┘│└────┬────┘
+     │     │      │
+     └─────┼──────┘
+           │
+        ╭──┴──╮
+        │ Ende │
+        ╰─────╯
+\`\`\`
+
+## PAP vs. Struktogramm
+
+| PAP | Struktogramm |
+|-----|--------------|
+| Freie Anordnung | Streng strukturiert |
+| Pfeile zeigen Fluss | Blöcke verschachtelt |
+| Flexibler | Verhindert goto/Sprünge |
+| Älterer Standard | Modernerer Ansatz |
+
+## Wann welches nutzen?
+
+- **PAP**: Für Präsentationen, einfache Übersichten
+- **Struktogramm**: Für Programmierung, strukturierte Analyse
+
+---
+
+**Beide Methoden helfen beim Verstehen von Algorithmen!**`,
+          codeTemplate: `// PAP -> Java Code
+
+// Flussdiagramm:
+// Start -> Eingabe Zahl -> Prüfung -> Ausgabe -> Ende
+
+public class Main {
+    public static void main(String[] args) {
+        int zahl = 7;
+        
+        if (zahl % 2 == 0) {
+            System.out.println(zahl + " ist gerade");
+        } else {
+            System.out.println(zahl + " ist ungerade");
+        }
+    }
+}`,
+          expectedOutput: "7 ist ungerade",
+          hints: [
+            "Folge den Pfeilen im Flussdiagramm",
+            "Rauten sind Entscheidungen (if/else)"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        int zahl = 7;
+        
+        if (zahl % 2 == 0) {
+            System.out.println(zahl + " ist gerade");
+        } else {
+            System.out.println(zahl + " ist ungerade");
+        }
+    }
+}`
+        }
+      },
+      {
+        id: "15-3",
+        chapterId: "chapter-15",
+        title: "Algorithmen formulieren",
+        order: 3,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Algorithmen formulieren 📝
+
+## Von der Idee zum Code
+
+### Schritt 1: Problem verstehen
+- Was ist die Eingabe?
+- Was ist die erwartete Ausgabe?
+- Welche Randfälle gibt es?
+
+### Schritt 2: Lösungsidee entwickeln
+- In eigenen Worten beschreiben
+- Schritt für Schritt aufschreiben
+
+### Schritt 3: Visualisieren
+- Struktogramm oder PAP erstellen
+- Logik überprüfen
+
+### Schritt 4: Implementieren
+- Code schreiben
+- Testen
+
+## Beispiel: Primzahl prüfen
+
+**Problem**: Ist eine Zahl eine Primzahl?
+
+**Algorithmus in Worten**:
+1. Eine Zahl ist prim, wenn sie nur durch 1 und sich selbst teilbar ist
+2. Prüfe alle Zahlen von 2 bis Zahl-1
+3. Wenn eine davon die Zahl teilt → keine Primzahl
+4. Wenn keine teilt → Primzahl
+
+**Pseudocode**:
+\`\`\`
+Eingabe: n
+Für i von 2 bis n-1:
+    Wenn n durch i teilbar:
+        Ausgabe "keine Primzahl"
+        Beende
+Ausgabe "Primzahl"
+\`\`\`
+
+## Aufgabe
+
+Implementiere den Primzahl-Algorithmus für die Zahl 17.`,
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        int n = 17;
+        boolean istPrim = true;
+        
+        // Prüfe ob n durch eine Zahl von 2 bis n-1 teilbar ist
+        
+        
+        if (istPrim) {
+            System.out.println(n + " ist eine Primzahl");
+        } else {
+            System.out.println(n + " ist keine Primzahl");
+        }
+    }
+}`,
+          expectedOutput: "17 ist eine Primzahl",
+          hints: [
+            "for (int i = 2; i < n; i++)",
+            "if (n % i == 0) { istPrim = false; }",
+            "17 ist nur durch 1 und 17 teilbar"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        int n = 17;
+        boolean istPrim = true;
+        
+        for (int i = 2; i < n; i++) {
+            if (n % i == 0) {
+                istPrim = false;
+                break;
+            }
+        }
+        
+        if (istPrim) {
+            System.out.println(n + " ist eine Primzahl");
+        } else {
+            System.out.println(n + " ist keine Primzahl");
+        }
+    }
+}`
+        }
+      }
+    ]
+  },
+  // ============================================
+  // KAPITEL 16: UML-DIAGRAMME
+  // ============================================
+  {
+    id: "chapter-16",
+    title: "Kapitel 16: UML-Diagramme",
+    description: "Unified Modeling Language für Softwaredesign",
+    order: 16,
+    isUnlocked: false,
+    lessons: [
+      {
+        id: "16-1",
+        chapterId: "chapter-16",
+        title: "Einführung in UML",
+        order: 1,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# UML - Unified Modeling Language 📐
+
+## Was ist UML?
+
+**UML** ist eine standardisierte Sprache zur Visualisierung von Software-Systemen.
+
+## Warum UML?
+
+- 🗣️ **Kommunikation**: Einheitliche Sprache für Entwickler
+- 📋 **Dokumentation**: Software visuell beschreiben
+- 🎯 **Planung**: Design vor der Implementierung
+- ✅ **Validierung**: Fehler früh erkennen
+
+## UML-Diagrammtypen
+
+### Strukturdiagramme (statisch)
+| Diagramm | Zeigt |
+|----------|-------|
+| **Klassendiagramm** | Klassen und ihre Beziehungen |
+| Objektdiagramm | Instanzen zu einem Zeitpunkt |
+| Komponentendiagramm | Softwarekomponenten |
+
+### Verhaltensdiagramme (dynamisch)
+| Diagramm | Zeigt |
+|----------|-------|
+| **Aktivitätsdiagramm** | Ablauf/Workflow |
+| **Sequenzdiagramm** | Nachrichtenaustausch über Zeit |
+| **Zustandsdiagramm** | Zustände und Übergänge |
+| **Use-Case-Diagramm** | Nutzeranforderungen |
+
+## Die wichtigsten für Entwickler
+
+1. **Klassendiagramm** - Struktur des Codes
+2. **Sequenzdiagramm** - Interaktion zwischen Objekten
+3. **Aktivitätsdiagramm** - Programmablauf
+4. **Use-Case** - Anforderungen
+
+---
+
+**In den nächsten Lektionen lernst du jedes Diagramm kennen!**`,
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== UML-Diagramme ===");
+        System.out.println();
+        System.out.println("Wichtige Diagrammtypen:");
+        System.out.println("1. Klassendiagramm");
+        System.out.println("2. Sequenzdiagramm");
+        System.out.println("3. Aktivitaetsdiagramm");
+        System.out.println("4. Use-Case-Diagramm");
+        System.out.println("5. Zustandsdiagramm");
+    }
+}`,
+          expectedOutput: `=== UML-Diagramme ===
+
+Wichtige Diagrammtypen:
+1. Klassendiagramm
+2. Sequenzdiagramm
+3. Aktivitaetsdiagramm
+4. Use-Case-Diagramm
+5. Zustandsdiagramm`,
+          hints: [
+            "UML ist ein Industriestandard",
+            "Jeder Softwareentwickler sollte UML lesen können"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== UML-Diagramme ===");
+        System.out.println();
+        System.out.println("Wichtige Diagrammtypen:");
+        System.out.println("1. Klassendiagramm");
+        System.out.println("2. Sequenzdiagramm");
+        System.out.println("3. Aktivitaetsdiagramm");
+        System.out.println("4. Use-Case-Diagramm");
+        System.out.println("5. Zustandsdiagramm");
+    }
+}`
+        }
+      },
+      {
+        id: "16-2",
+        chapterId: "chapter-16",
+        title: "Klassendiagramme",
+        order: 2,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# UML-Klassendiagramme 📦
+
+## Was zeigt ein Klassendiagramm?
+
+- Klassen mit Attributen und Methoden
+- Beziehungen zwischen Klassen
+- Sichtbarkeit (public, private, protected)
+
+## Notation einer Klasse
+
+\`\`\`
+┌────────────────────────────┐
+│        <<Klasse>>          │
+│         Person             │
+├────────────────────────────┤
+│ - name: String             │  ← Attribute
+│ - alter: int               │
+│ # adresse: String          │
+├────────────────────────────┤
+│ + getName(): String        │  ← Methoden
+│ + setName(n: String): void │
+│ - berechneAlter(): int     │
+└────────────────────────────┘
+\`\`\`
+
+## Sichtbarkeiten
+
+| Symbol | Bedeutung | Java |
+|--------|-----------|------|
+| + | public | \`public\` |
+| - | private | \`private\` |
+| # | protected | \`protected\` |
+| ~ | package | (default) |
+
+## Beziehungen
+
+\`\`\`
+Vererbung (extends):
+┌─────────┐       ┌─────────┐
+│  Tier   │◁──────│  Hund   │
+└─────────┘       └─────────┘
+
+Assoziation (hat/kennt):
+┌─────────┐       ┌─────────┐
+│ Person  │───────│ Adresse │
+└─────────┘       └─────────┘
+
+Aggregation (hat, aber unabhängig):
+┌─────────┐       ┌─────────┐
+│  Team   │◇──────│ Spieler │
+└─────────┘       └─────────┘
+
+Komposition (Teil von, abhängig):
+┌─────────┐       ┌─────────┐
+│  Haus   │◆──────│  Raum   │
+└─────────┘       └─────────┘
+\`\`\`
+
+## Beispiel: Bankensystem
+
+\`\`\`
+┌─────────────────────┐      ┌─────────────────────┐
+│       Kunde         │      │       Konto         │
+├─────────────────────┤      ├─────────────────────┤
+│ - name: String      │      │ - kontonr: String   │
+│ - kundennr: String  │      │ - saldo: double     │
+├─────────────────────┤      ├─────────────────────┤
+│ + getName(): String │1    *│ + einzahlen(b): void│
+└─────────────────────┴──────┴─────────────────────┘
+        1 Kunde hat mehrere (*) Konten
+\`\`\`
+
+---
+
+**Klassendiagramme sind das wichtigste UML-Diagramm!**`,
+          codeTemplate: `// UML Klassendiagramm -> Java Code
+
+public class Main {
+    public static void main(String[] args) {
+        Kunde k = new Kunde("Max Mustermann", "K001");
+        k.info();
+    }
+}
+
+class Kunde {
+    private String name;        // - name: String
+    private String kundennr;    // - kundennr: String
+    
+    public Kunde(String name, String kundennr) {
+        this.name = name;
+        this.kundennr = kundennr;
+    }
+    
+    public String getName() {   // + getName(): String
+        return name;
+    }
+    
+    public void info() {
+        System.out.println("Kunde: " + name + " (" + kundennr + ")");
+    }
+}`,
+          expectedOutput: "Kunde: Max Mustermann (K001)",
+          hints: [
+            "- bedeutet private",
+            "+ bedeutet public",
+            "Klassendiagramm zeigt Struktur, nicht Verhalten"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        Kunde k = new Kunde("Max Mustermann", "K001");
+        k.info();
+    }
+}
+
+class Kunde {
+    private String name;
+    private String kundennr;
+    
+    public Kunde(String name, String kundennr) {
+        this.name = name;
+        this.kundennr = kundennr;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public void info() {
+        System.out.println("Kunde: " + name + " (" + kundennr + ")");
+    }
+}`
+        }
+      },
+      {
+        id: "16-3",
+        chapterId: "chapter-16",
+        title: "Sequenzdiagramme",
+        order: 3,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# UML-Sequenzdiagramme 📨
+
+## Was zeigt ein Sequenzdiagramm?
+
+- **Zeitlicher Ablauf** von Interaktionen
+- **Nachrichten** zwischen Objekten
+- **Reihenfolge** der Methodenaufrufe
+
+## Notation
+
+\`\`\`
+  Benutzer        System         Datenbank
+     │               │               │
+     │  login(user)  │               │
+     │──────────────►│               │
+     │               │  findUser()   │
+     │               │──────────────►│
+     │               │   user        │
+     │               │◄──────────────│
+     │   "Erfolg"    │               │
+     │◄──────────────│               │
+     │               │               │
+\`\`\`
+
+## Elemente
+
+| Element | Symbol | Bedeutung |
+|---------|--------|-----------|
+| Objekt | Rechteck oben | Beteiligte Instanz |
+| Lebenslinie | Gestrichelte Linie | Existenz über Zeit |
+| Nachricht | Pfeil → | Methodenaufruf |
+| Rückgabe | Gestrichelter Pfeil ← | Return-Wert |
+| Aktivierung | Schmales Rechteck | Objekt ist aktiv |
+
+## Beispiel: Geld abheben
+
+\`\`\`
+  Kunde          Automat         Konto
+    │               │               │
+    │ karteEinfuegen│               │
+    │──────────────►│               │
+    │  PIN eingeben │               │
+    │──────────────►│               │
+    │               │ pruefePIN()   │
+    │               │──────────────►│
+    │               │    OK         │
+    │               │◄──────────────│
+    │ Betrag wählen │               │
+    │──────────────►│               │
+    │               │  abheben(100) │
+    │               │──────────────►│
+    │               │   Erfolg      │
+    │               │◄──────────────│
+    │  Geld ausgeben│               │
+    │◄──────────────│               │
+\`\`\`
+
+## Wann Sequenzdiagramme nutzen?
+
+- Komplexe Interaktionen dokumentieren
+- Schnittstellen zwischen Komponenten klären
+- Fehlerszenarien analysieren
+
+---
+
+**Sequenzdiagramme zeigen WER mit WEM WANN kommuniziert!**`,
+          codeTemplate: `// Sequenzdiagramm -> Java Code
+// Benutzer -> System -> Datenbank
+
+public class Main {
+    public static void main(String[] args) {
+        System sys = new System();
+        String ergebnis = sys.login("max", "geheim123");
+        java.lang.System.out.println("Ergebnis: " + ergebnis);
+    }
+}
+
+class System {
+    Datenbank db = new Datenbank();
+    
+    public String login(String user, String pass) {
+        java.lang.System.out.println("System: login() aufgerufen");
+        boolean gefunden = db.findUser(user, pass);
+        if (gefunden) {
+            return "Erfolg";
+        }
+        return "Fehler";
+    }
+}
+
+class Datenbank {
+    public boolean findUser(String user, String pass) {
+        java.lang.System.out.println("Datenbank: findUser() aufgerufen");
+        // Simulierte Prüfung
+        return user.equals("max") && pass.equals("geheim123");
+    }
+}`,
+          expectedOutput: `System: login() aufgerufen
+Datenbank: findUser() aufgerufen
+Ergebnis: Erfolg`,
+          hints: [
+            "Pfeile zeigen die Richtung der Kommunikation",
+            "Die zeitliche Reihenfolge ist von oben nach unten"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System sys = new System();
+        String ergebnis = sys.login("max", "geheim123");
+        java.lang.System.out.println("Ergebnis: " + ergebnis);
+    }
+}
+
+class System {
+    Datenbank db = new Datenbank();
+    
+    public String login(String user, String pass) {
+        java.lang.System.out.println("System: login() aufgerufen");
+        boolean gefunden = db.findUser(user, pass);
+        if (gefunden) {
+            return "Erfolg";
+        }
+        return "Fehler";
+    }
+}
+
+class Datenbank {
+    public boolean findUser(String user, String pass) {
+        java.lang.System.out.println("Datenbank: findUser() aufgerufen");
+        return user.equals("max") && pass.equals("geheim123");
+    }
+}`
+        }
+      },
+      {
+        id: "16-4",
+        chapterId: "chapter-16",
+        title: "Aktivitätsdiagramme",
+        order: 4,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# UML-Aktivitätsdiagramme 🏃
+
+## Was zeigt ein Aktivitätsdiagramm?
+
+- **Ablauf** von Aktivitäten/Prozessen
+- **Entscheidungen** und Verzweigungen
+- **Parallelität** von Aktionen
+
+## Notation
+
+\`\`\`
+Symbole:
+● = Startpunkt
+◉ = Endpunkt
+▭ = Aktivität/Aktion
+◇ = Entscheidung
+═ = Synchronisationsbalken (Parallelität)
+\`\`\`
+
+## Beispiel: Online-Bestellung
+
+\`\`\`
+          ●
+          │
+          ▼
+    ┌───────────┐
+    │ Warenkorb │
+    │  füllen   │
+    └─────┬─────┘
+          │
+          ▼
+    ┌───────────┐
+    │ Zur Kasse │
+    │   gehen   │
+    └─────┬─────┘
+          │
+          ◇ Eingeloggt?
+         ╱ ╲
+      ja╱   ╲nein
+       ╱     ╲
+      ▼       ▼
+┌─────────┐ ┌─────────┐
+│   ---   │ │ Login   │
+└────┬────┘ └────┬────┘
+     │           │
+     └─────┬─────┘
+           │
+           ▼
+    ┌───────────┐
+    │  Zahlung  │
+    │ ausführen │
+    └─────┬─────┘
+          │
+          ▼
+    ┌───────────┐
+    │Bestellung │
+    │bestätigen │
+    └─────┬─────┘
+          │
+          ▼
+          ◉
+\`\`\`
+
+## Parallelität
+
+\`\`\`
+          │
+    ══════╪══════  (Fork - Aufteilen)
+         ╱ ╲
+        ╱   ╲
+       ▼     ▼
+   ┌──────┐ ┌──────┐
+   │Aktion│ │Aktion│  (Parallel)
+   │  A   │ │  B   │
+   └──┬───┘ └──┬───┘
+      │        │
+    ══╪════════╪══  (Join - Zusammenführen)
+          │
+          ▼
+\`\`\`
+
+## Ähnlich zu Flussdiagrammen (PAP)
+
+Aktivitätsdiagramme sind UML-konforme, erweiterte Flussdiagramme!
+
+---
+
+**Aktivitätsdiagramme = Prozesse visualisieren!**`,
+          codeTemplate: `// Aktivitätsdiagramm -> Java Code
+// Online-Bestellung vereinfacht
+
+public class Main {
+    public static void main(String[] args) {
+        boolean eingeloggt = false;
+        
+        System.out.println("1. Warenkorb fuellen");
+        System.out.println("2. Zur Kasse gehen");
+        
+        if (!eingeloggt) {
+            System.out.println("3. Login durchfuehren");
+            eingeloggt = true;
+        }
+        
+        System.out.println("4. Zahlung ausfuehren");
+        System.out.println("5. Bestellung bestaetigt!");
+    }
+}`,
+          expectedOutput: `1. Warenkorb fuellen
+2. Zur Kasse gehen
+3. Login durchfuehren
+4. Zahlung ausfuehren
+5. Bestellung bestaetigt!`,
+          hints: [
+            "Aktivitäten werden nacheinander ausgeführt",
+            "Rauten sind Entscheidungspunkte"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        boolean eingeloggt = false;
+        
+        System.out.println("1. Warenkorb fuellen");
+        System.out.println("2. Zur Kasse gehen");
+        
+        if (!eingeloggt) {
+            System.out.println("3. Login durchfuehren");
+            eingeloggt = true;
+        }
+        
+        System.out.println("4. Zahlung ausfuehren");
+        System.out.println("5. Bestellung bestaetigt!");
+    }
+}`
+        }
+      },
+      {
+        id: "16-5",
+        chapterId: "chapter-16",
+        title: "Zustandsdiagramme",
+        order: 5,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# UML-Zustandsdiagramme 🔄
+
+## Was zeigt ein Zustandsdiagramm?
+
+- **Zustände** eines Objekts
+- **Übergänge** zwischen Zuständen
+- **Ereignisse** die Übergänge auslösen
+
+## Notation
+
+\`\`\`
+┌─────────────────┐
+│    Zustand      │  = Zustand (abgerundetes Rechteck)
+└─────────────────┘
+
+──────────────────►  = Übergang (Pfeil mit Ereignis)
+   Ereignis
+
+●  = Startzustand
+◉  = Endzustand
+\`\`\`
+
+## Beispiel: Bestellung
+
+\`\`\`
+    ●
+    │
+    ▼
+┌──────────┐   bestellen   ┌──────────┐
+│   Neu    │──────────────►│ Bestellt │
+└──────────┘               └────┬─────┘
+                                │
+                          bezahlen
+                                │
+                                ▼
+┌──────────┐   stornieren  ┌──────────┐
+│Storniert │◄──────────────│  Bezahlt │
+└──────────┘               └────┬─────┘
+     │                          │
+     │                     versenden
+     ▼                          │
+     ◉                          ▼
+                           ┌──────────┐
+                           │Versendet │
+                           └────┬─────┘
+                                │
+                            liefern
+                                │
+                                ▼
+                           ┌──────────┐
+                           │Geliefert │
+                           └────┬─────┘
+                                │
+                                ▼
+                                ◉
+\`\`\`
+
+## Bestandteile eines Übergangs
+
+\`\`\`
+Ereignis [Bedingung] / Aktion
+─────────────────────────────►
+\`\`\`
+
+Beispiel: \`bezahlen [betrag > 0] / sendeRechnung()\`
+
+## Wann Zustandsdiagramme nutzen?
+
+- Lebenszyklen von Objekten
+- Endliche Automaten (State Machines)
+- Workflows mit definierten Zuständen
+
+---
+
+**Zustandsdiagramme zeigen alle möglichen Zustände!**`,
+          codeTemplate: `// Zustandsdiagramm -> Java Code
+// Bestellungszustände
+
+public class Main {
+    public static void main(String[] args) {
+        Bestellung b = new Bestellung();
+        System.out.println("Status: " + b.status);
+        
+        b.bestellen();
+        System.out.println("Status: " + b.status);
+        
+        b.bezahlen();
+        System.out.println("Status: " + b.status);
+        
+        b.versenden();
+        System.out.println("Status: " + b.status);
+    }
+}
+
+class Bestellung {
+    String status = "NEU";
+    
+    void bestellen() {
+        if (status.equals("NEU")) {
+            status = "BESTELLT";
+        }
+    }
+    
+    void bezahlen() {
+        if (status.equals("BESTELLT")) {
+            status = "BEZAHLT";
+        }
+    }
+    
+    void versenden() {
+        if (status.equals("BEZAHLT")) {
+            status = "VERSENDET";
+        }
+    }
+}`,
+          expectedOutput: `Status: NEU
+Status: BESTELLT
+Status: BEZAHLT
+Status: VERSENDET`,
+          hints: [
+            "Jeder Zustand ist ein erlaubter Wert",
+            "Übergänge prüfen den aktuellen Zustand"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        Bestellung b = new Bestellung();
+        System.out.println("Status: " + b.status);
+        
+        b.bestellen();
+        System.out.println("Status: " + b.status);
+        
+        b.bezahlen();
+        System.out.println("Status: " + b.status);
+        
+        b.versenden();
+        System.out.println("Status: " + b.status);
+    }
+}
+
+class Bestellung {
+    String status = "NEU";
+    
+    void bestellen() {
+        if (status.equals("NEU")) {
+            status = "BESTELLT";
+        }
+    }
+    
+    void bezahlen() {
+        if (status.equals("BESTELLT")) {
+            status = "BEZAHLT";
+        }
+    }
+    
+    void versenden() {
+        if (status.equals("BEZAHLT")) {
+            status = "VERSENDET";
+        }
+    }
+}`
+        }
+      },
+      {
+        id: "16-6",
+        chapterId: "chapter-16",
+        title: "Use-Case-Diagramme",
+        order: 6,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# UML-Use-Case-Diagramme 👤
+
+## Was zeigt ein Use-Case-Diagramm?
+
+- **Akteure** (Benutzer, externe Systeme)
+- **Anwendungsfälle** (Funktionen des Systems)
+- **Beziehungen** zwischen Akteuren und Funktionen
+
+## Notation
+
+\`\`\`
+     👤        = Akteur (Strichmännchen)
+    
+    (   )      = Use Case (Ellipse)
+    
+    ─────      = Assoziation (Linie)
+    
+    ┌───────┐
+    │System │  = Systemgrenze (Rechteck)
+    └───────┘
+\`\`\`
+
+## Beispiel: Online-Shop
+
+\`\`\`
+        ┌─────────────────────────────────┐
+        │         Online-Shop             │
+        │                                 │
+  👤    │    (Produkte suchen)           │
+ Kunde ─┼───◯                            │
+        │    ╲                           │
+        │     ╲                          │
+        │    (Warenkorb verwalten)       │
+        │───◯                            │
+        │    ╲                           │
+        │     ╲                          │
+        │    (Bestellung aufgeben)       │    👤
+        │───◯                        ◯───│ Admin
+        │                              ╲ │
+        │                               ╲│
+        │         (Produkte verwalten)   │
+        │                            ◯───│
+        │                                │
+        │         (Bestellungen einsehen)│
+        │                            ◯───│
+        │                                │
+        └─────────────────────────────────┘
+\`\`\`
+
+## Spezielle Beziehungen
+
+### Include (<<include>>)
+Ein Use Case enthält einen anderen:
+\`\`\`
+(Bestellung aufgeben) ─ ─ ─ <<include>> ─ ─ ─► (Zahlung verarbeiten)
+\`\`\`
+
+### Extend (<<extend>>)
+Ein Use Case erweitert einen anderen optional:
+\`\`\`
+(Bestellung aufgeben) ◄─ ─ ─ <<extend>> ─ ─ ─ (Gutschein einlösen)
+\`\`\`
+
+## Wann Use-Case-Diagramme nutzen?
+
+- Anforderungsanalyse
+- Kommunikation mit Kunden
+- Überblick über Systemfunktionen
+- Testfallableitung
+
+---
+
+**Use Cases beschreiben WAS das System tut, nicht WIE!**`,
+          codeTemplate: `// Use-Case-Diagramm -> Funktionsübersicht
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== Online-Shop Use Cases ===");
+        System.out.println();
+        System.out.println("Kunde kann:");
+        System.out.println("  - Produkte suchen");
+        System.out.println("  - Warenkorb verwalten");
+        System.out.println("  - Bestellung aufgeben");
+        System.out.println();
+        System.out.println("Admin kann:");
+        System.out.println("  - Produkte verwalten");
+        System.out.println("  - Bestellungen einsehen");
+    }
+}`,
+          expectedOutput: `=== Online-Shop Use Cases ===
+
+Kunde kann:
+  - Produkte suchen
+  - Warenkorb verwalten
+  - Bestellung aufgeben
+
+Admin kann:
+  - Produkte verwalten
+  - Bestellungen einsehen`,
+          hints: [
+            "Use Cases beschreiben Funktionen aus Nutzersicht",
+            "Jeder Use Case ist eine abgeschlossene Funktion"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== Online-Shop Use Cases ===");
+        System.out.println();
+        System.out.println("Kunde kann:");
+        System.out.println("  - Produkte suchen");
+        System.out.println("  - Warenkorb verwalten");
+        System.out.println("  - Bestellung aufgeben");
+        System.out.println();
+        System.out.println("Admin kann:");
+        System.out.println("  - Produkte verwalten");
+        System.out.println("  - Bestellungen einsehen");
+    }
+}`
+        }
+      }
+    ]
+  },
+  // ============================================
+  // KAPITEL 17: TESTVERFAHREN
+  // ============================================
+  {
+    id: "chapter-17",
+    title: "Kapitel 17: Testverfahren",
+    description: "Black-Box, White-Box, Unit-Tests und mehr",
+    order: 17,
+    isUnlocked: false,
+    lessons: [
+      {
+        id: "17-1",
+        chapterId: "chapter-17",
+        title: "Warum Testen?",
+        order: 1,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Software-Tests 🧪
+
+## Warum ist Testen wichtig?
+
+- 🐛 **Fehler finden** bevor Nutzer sie finden
+- 💰 **Kosten sparen** (Fehler früh beheben ist billiger)
+- 🛡️ **Qualität sichern** des Produkts
+- 📖 **Dokumentation** wie der Code funktionieren soll
+- 🔄 **Refactoring ermöglichen** ohne Angst
+
+## Kosten von Bugs
+
+| Gefunden in | Relative Kosten |
+|-------------|-----------------|
+| Entwicklung | 1x |
+| Tests | 10x |
+| Produktion | 100x |
+
+Je später ein Fehler gefunden wird, desto teurer!
+
+## Testpyramide
+
+\`\`\`
+              /\\
+             /  \\
+            / E2E\\       (wenige, langsam, teuer)
+           /──────\\
+          /        \\
+         /Integration\\   (einige)
+        /──────────────\\
+       /                \\
+      /    Unit Tests    \\  (viele, schnell, günstig)
+     /────────────────────\\
+\`\`\`
+
+## Testarten im Überblick
+
+| Test | Prüft | Beispiel |
+|------|-------|----------|
+| **Unit Test** | Einzelne Methode/Klasse | addiere(2,3) == 5 |
+| **Integrationstest** | Zusammenspiel von Komponenten | DB + Backend |
+| **Systemtest** | Gesamtes System | Kompletter Workflow |
+| **Abnahmetest** | Erfüllung der Anforderungen | Kunde prüft |
+
+---
+
+**Gute Tests = Gute Software!**`,
+          codeTemplate: `// Warum Testen wichtig ist
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== Testpyramide ===");
+        System.out.println();
+        System.out.println("        /\\\\");
+        System.out.println("       / E2E \\\\");
+        System.out.println("      /________\\\\");
+        System.out.println("     /          \\\\");
+        System.out.println("    /Integration \\\\");
+        System.out.println("   /______________\\\\");
+        System.out.println("  /                \\\\");
+        System.out.println(" /   Unit Tests     \\\\");
+        System.out.println("/____________________\\\\");
+        System.out.println();
+        System.out.println("Viele Unit Tests, wenige E2E Tests!");
+    }
+}`,
+          expectedOutput: `=== Testpyramide ===
+
+        /\\
+       / E2E \\
+      /________\\
+     /          \\
+    /Integration \\
+   /______________\\
+  /                \\
+ /   Unit Tests     \\
+/____________________\\
+
+Viele Unit Tests, wenige E2E Tests!`,
+          hints: [
+            "Unit Tests bilden die Basis",
+            "Höhere Tests sind langsamer und teurer"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== Testpyramide ===");
+        System.out.println();
+        System.out.println("        /\\\\");
+        System.out.println("       / E2E \\\\");
+        System.out.println("      /________\\\\");
+        System.out.println("     /          \\\\");
+        System.out.println("    /Integration \\\\");
+        System.out.println("   /______________\\\\");
+        System.out.println("  /                \\\\");
+        System.out.println(" /   Unit Tests     \\\\");
+        System.out.println("/____________________\\\\");
+        System.out.println();
+        System.out.println("Viele Unit Tests, wenige E2E Tests!");
+    }
+}`
+        }
+      },
+      {
+        id: "17-2",
+        chapterId: "chapter-17",
+        title: "Black-Box-Tests",
+        order: 2,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Black-Box-Tests 📦
+
+## Was ist Black-Box-Testing?
+
+Bei **Black-Box-Tests** kennst du die **interne Implementierung nicht**!
+
+Du testest nur:
+- **Eingabe** → [Black Box] → **Ausgabe**
+
+## Visualisierung
+
+\`\`\`
+Eingabe        ┌─────────────┐        Ausgabe
+     ─────────►│ ■■■■■■■■■■■ │─────────►
+               │ ■ BLACK  ■ │
+               │ ■  BOX   ■ │
+               │ ■■■■■■■■■■■ │
+               └─────────────┘
+               (Code nicht sichtbar)
+\`\`\`
+
+## Techniken
+
+### 1. Äquivalenzklassen
+Eingaben in Gruppen einteilen, die gleich behandelt werden:
+
+\`\`\`
+Alter-Validierung (18-99 erlaubt):
+- Klasse 1: < 18 (ungültig)
+- Klasse 2: 18-99 (gültig)
+- Klasse 3: > 99 (ungültig)
+
+Tests: 17, 25, 100
+\`\`\`
+
+### 2. Grenzwertanalyse
+An den Grenzen der Äquivalenzklassen testen:
+
+\`\`\`
+Grenzwerte: 17, 18, 99, 100
+\`\`\`
+
+### 3. Entscheidungstabellen
+Alle Kombinationen von Bedingungen:
+
+| Bedingung A | Bedingung B | Ergebnis |
+|-------------|-------------|----------|
+| true | true | X |
+| true | false | Y |
+| false | true | Z |
+| false | false | W |
+
+## Vorteile
+
+- ✅ Tester braucht keinen Code-Zugang
+- ✅ Unabhängige Perspektive
+- ✅ Findet fehlende Funktionen
+
+## Nachteile
+
+- ❌ Kann interne Pfade nicht gezielt testen
+- ❌ Möglicherweise redundante Tests
+
+---
+
+**Black-Box = Aus Nutzersicht testen!**`,
+          codeTemplate: `// Black-Box-Test Beispiel
+// Wir testen eine Altersprüfung ohne den Code zu kennen
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== Black-Box-Test: Altersprüfung ===");
+        System.out.println();
+        
+        // Äquivalenzklassen-Tests
+        System.out.println("Aequivalenzklassen:");
+        testAlter(17);  // Klasse: < 18
+        testAlter(25);  // Klasse: 18-99
+        testAlter(100); // Klasse: > 99
+        
+        System.out.println();
+        
+        // Grenzwert-Tests
+        System.out.println("Grenzwerte:");
+        testAlter(18);  // Untere Grenze
+        testAlter(99);  // Obere Grenze
+    }
+    
+    static void testAlter(int alter) {
+        boolean gueltig = pruefenAlter(alter);
+        System.out.println("Alter " + alter + ": " + (gueltig ? "OK" : "UNGUELTIG"));
+    }
+    
+    // Diese Methode ist die "Black Box"
+    static boolean pruefenAlter(int alter) {
+        return alter >= 18 && alter <= 99;
+    }
+}`,
+          expectedOutput: `=== Black-Box-Test: Altersprüfung ===
+
+Aequivalenzklassen:
+Alter 17: UNGUELTIG
+Alter 25: OK
+Alter 100: UNGUELTIG
+
+Grenzwerte:
+Alter 18: OK
+Alter 99: OK`,
+          hints: [
+            "Bei Black-Box kennen wir die Implementierung nicht",
+            "Wir testen nur Eingabe -> Ausgabe"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== Black-Box-Test: Altersprüfung ===");
+        System.out.println();
+        
+        System.out.println("Aequivalenzklassen:");
+        testAlter(17);
+        testAlter(25);
+        testAlter(100);
+        
+        System.out.println();
+        
+        System.out.println("Grenzwerte:");
+        testAlter(18);
+        testAlter(99);
+    }
+    
+    static void testAlter(int alter) {
+        boolean gueltig = pruefenAlter(alter);
+        System.out.println("Alter " + alter + ": " + (gueltig ? "OK" : "UNGUELTIG"));
+    }
+    
+    static boolean pruefenAlter(int alter) {
+        return alter >= 18 && alter <= 99;
+    }
+}`
+        }
+      },
+      {
+        id: "17-3",
+        chapterId: "chapter-17",
+        title: "White-Box-Tests",
+        order: 3,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# White-Box-Tests 📋
+
+## Was ist White-Box-Testing?
+
+Bei **White-Box-Tests** kennst du die **interne Implementierung**!
+
+Du testest:
+- Alle **Code-Pfade**
+- Alle **Verzweigungen**
+- Alle **Schleifen**
+
+## Visualisierung
+
+\`\`\`
+               ┌─────────────┐
+     ─────────►│ ┌─────────┐ │─────────►
+               │ │ if (...) │ │
+               │ │   {...}  │ │
+               │ │ else     │ │
+               │ │   {...}  │ │
+               │ └─────────┘ │
+               └─────────────┘
+               (Code sichtbar!)
+\`\`\`
+
+## Überdeckungsarten
+
+### 1. Anweisungsüberdeckung (C0)
+Jede Anweisung mindestens einmal ausführen.
+
+\`\`\`java
+if (x > 0) {
+    doA();  // Muss getestet werden
+}
+doB();      // Muss getestet werden
+\`\`\`
+
+### 2. Zweigüberdeckung (C1)
+Jeder Zweig mindestens einmal durchlaufen.
+
+\`\`\`java
+if (x > 0) {   // Test 1: x = 5 (true-Zweig)
+    doA();
+} else {       // Test 2: x = -1 (false-Zweig)
+    doB();
+}
+\`\`\`
+
+### 3. Pfadüberdeckung (C2)
+Alle möglichen Pfade testen (oft unpraktisch).
+
+## Beispiel
+
+\`\`\`java
+int berechne(int a, int b) {
+    int result = 0;
+    if (a > 0) {
+        result = a + b;
+    }
+    if (b > 0) {
+        result = result * 2;
+    }
+    return result;
+}
+\`\`\`
+
+**Für volle Zweigüberdeckung brauchen wir:**
+| Test | a | b | Pfad |
+|------|---|---|------|
+| 1 | 5 | 5 | if1-true, if2-true |
+| 2 | -1 | 5 | if1-false, if2-true |
+| 3 | 5 | -1 | if1-true, if2-false |
+| 4 | -1 | -1 | if1-false, if2-false |
+
+---
+
+**White-Box = Code-Struktur testen!**`,
+          codeTemplate: `// White-Box-Test: Alle Pfade testen
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== White-Box-Test ===");
+        System.out.println();
+        
+        // Alle Pfade testen
+        System.out.println("Test 1 (a>0, b>0): " + berechne(5, 5));
+        System.out.println("Test 2 (a<=0, b>0): " + berechne(-1, 5));
+        System.out.println("Test 3 (a>0, b<=0): " + berechne(5, -1));
+        System.out.println("Test 4 (a<=0, b<=0): " + berechne(-1, -1));
+        
+        System.out.println();
+        System.out.println("Alle Zweige wurden getestet!");
+    }
+    
+    static int berechne(int a, int b) {
+        int result = 0;
+        if (a > 0) {
+            result = a + b;
+        }
+        if (b > 0) {
+            result = result * 2;
+        }
+        return result;
+    }
+}`,
+          expectedOutput: `=== White-Box-Test ===
+
+Test 1 (a>0, b>0): 20
+Test 2 (a<=0, b>0): 0
+Test 3 (a>0, b<=0): 4
+Test 4 (a<=0, b<=0): 0
+
+Alle Zweige wurden getestet!`,
+          hints: [
+            "Wir kennen den Code und testen alle Pfade",
+            "Jede if-Bedingung braucht true UND false Tests"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== White-Box-Test ===");
+        System.out.println();
+        
+        System.out.println("Test 1 (a>0, b>0): " + berechne(5, 5));
+        System.out.println("Test 2 (a<=0, b>0): " + berechne(-1, 5));
+        System.out.println("Test 3 (a>0, b<=0): " + berechne(5, -1));
+        System.out.println("Test 4 (a<=0, b<=0): " + berechne(-1, -1));
+        
+        System.out.println();
+        System.out.println("Alle Zweige wurden getestet!");
+    }
+    
+    static int berechne(int a, int b) {
+        int result = 0;
+        if (a > 0) {
+            result = a + b;
+        }
+        if (b > 0) {
+            result = result * 2;
+        }
+        return result;
+    }
+}`
+        }
+      },
+      {
+        id: "17-4",
+        chapterId: "chapter-17",
+        title: "Unit Tests",
+        order: 4,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Unit Tests 🧪
+
+## Was ist ein Unit Test?
+
+Ein **Unit Test** testet die **kleinste testbare Einheit** (meist eine Methode).
+
+## Aufbau: Arrange-Act-Assert (AAA)
+
+\`\`\`java
+@Test
+void testAddition() {
+    // Arrange - Vorbereitung
+    Rechner r = new Rechner();
+    
+    // Act - Ausführung
+    int ergebnis = r.addiere(2, 3);
+    
+    // Assert - Überprüfung
+    assertEquals(5, ergebnis);
+}
+\`\`\`
+
+## JUnit (in echten Projekten)
+
+\`\`\`java
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class RechnerTest {
+    @Test
+    void testAddition() {
+        assertEquals(5, Rechner.addiere(2, 3));
+    }
+    
+    @Test
+    void testDivision() {
+        assertThrows(ArithmeticException.class, () -> {
+            Rechner.dividiere(10, 0);
+        });
+    }
+}
+\`\`\`
+
+## Wichtige Assert-Methoden
+
+| Methode | Prüft |
+|---------|-------|
+| assertEquals(expected, actual) | Gleichheit |
+| assertTrue(condition) | Bedingung wahr |
+| assertFalse(condition) | Bedingung falsch |
+| assertNull(object) | Objekt ist null |
+| assertNotNull(object) | Objekt ist nicht null |
+| assertThrows(Exception, code) | Exception wird geworfen |
+
+## Gute Unit Tests sind:
+
+- ✅ **F**ast - Schnell
+- ✅ **I**ndependent - Unabhängig voneinander
+- ✅ **R**epeatable - Wiederholbar
+- ✅ **S**elf-validating - Selbstprüfend
+- ✅ **T**imely - Rechtzeitig geschrieben
+
+## Aufgabe
+
+Schreibe einfache "Unit Tests" für eine Rechner-Klasse.`,
+          codeTemplate: `// Einfache Unit Tests (ohne Framework)
+
+public class Main {
+    static int testsPassed = 0;
+    static int testsFailed = 0;
+    
+    public static void main(String[] args) {
+        System.out.println("=== Unit Tests: Rechner ===");
+        System.out.println();
+        
+        // Test 1: Addition
+        testAddition();
+        
+        // Test 2: Subtraktion
+        testSubtraktion();
+        
+        // Test 3: Multiplikation
+        // Schreibe diesen Test!
+        
+        
+        // Ergebnis
+        System.out.println();
+        System.out.println("Bestanden: " + testsPassed);
+        System.out.println("Fehlgeschlagen: " + testsFailed);
+    }
+    
+    static void testAddition() {
+        int result = Rechner.addiere(2, 3);
+        assertEquals(5, result, "testAddition");
+    }
+    
+    static void testSubtraktion() {
+        int result = Rechner.subtrahiere(10, 4);
+        assertEquals(6, result, "testSubtraktion");
+    }
+    
+    // Schreibe testMultiplikation()
+    // Teste: 4 * 5 == 20
+    
+    
+    static void assertEquals(int expected, int actual, String testName) {
+        if (expected == actual) {
+            System.out.println("OK: " + testName);
+            testsPassed++;
+        } else {
+            System.out.println("FAIL: " + testName + " - Erwartet: " + expected + ", War: " + actual);
+            testsFailed++;
+        }
+    }
+}
+
+class Rechner {
+    static int addiere(int a, int b) { return a + b; }
+    static int subtrahiere(int a, int b) { return a - b; }
+    static int multipliziere(int a, int b) { return a * b; }
+}`,
+          expectedOutput: `=== Unit Tests: Rechner ===
+
+OK: testAddition
+OK: testSubtraktion
+OK: testMultiplikation
+
+Bestanden: 3
+Fehlgeschlagen: 0`,
+          hints: [
+            "static void testMultiplikation() { ... }",
+            "int result = Rechner.multipliziere(4, 5);",
+            "assertEquals(20, result, \"testMultiplikation\");"
+          ],
+          solution: `public class Main {
+    static int testsPassed = 0;
+    static int testsFailed = 0;
+    
+    public static void main(String[] args) {
+        System.out.println("=== Unit Tests: Rechner ===");
+        System.out.println();
+        
+        testAddition();
+        testSubtraktion();
+        testMultiplikation();
+        
+        System.out.println();
+        System.out.println("Bestanden: " + testsPassed);
+        System.out.println("Fehlgeschlagen: " + testsFailed);
+    }
+    
+    static void testAddition() {
+        int result = Rechner.addiere(2, 3);
+        assertEquals(5, result, "testAddition");
+    }
+    
+    static void testSubtraktion() {
+        int result = Rechner.subtrahiere(10, 4);
+        assertEquals(6, result, "testSubtraktion");
+    }
+    
+    static void testMultiplikation() {
+        int result = Rechner.multipliziere(4, 5);
+        assertEquals(20, result, "testMultiplikation");
+    }
+    
+    static void assertEquals(int expected, int actual, String testName) {
+        if (expected == actual) {
+            System.out.println("OK: " + testName);
+            testsPassed++;
+        } else {
+            System.out.println("FAIL: " + testName + " - Erwartet: " + expected + ", War: " + actual);
+            testsFailed++;
+        }
+    }
+}
+
+class Rechner {
+    static int addiere(int a, int b) { return a + b; }
+    static int subtrahiere(int a, int b) { return a - b; }
+    static int multipliziere(int a, int b) { return a * b; }
+}`
+        }
+      },
+      {
+        id: "17-5",
+        chapterId: "chapter-17",
+        title: "Integrations- und Systemtests",
+        order: 5,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Integrations- & Systemtests 🔗
+
+## Integrationstest
+
+Testet das **Zusammenspiel** mehrerer Komponenten.
+
+\`\`\`
+┌─────────┐     ┌─────────┐     ┌─────────┐
+│ Modul A │────►│ Modul B │────►│ Modul C │
+└─────────┘     └─────────┘     └─────────┘
+       └──────────────────────────────┘
+              Integrationstest
+\`\`\`
+
+### Beispiele:
+- Backend + Datenbank
+- API + externer Service
+- Frontend + Backend
+
+### Strategien:
+| Strategie | Beschreibung |
+|-----------|--------------|
+| Big Bang | Alles auf einmal integrieren |
+| Top-Down | Von oben nach unten |
+| Bottom-Up | Von unten nach oben |
+| Sandwich | Kombination |
+
+## Systemtest
+
+Testet das **gesamte System** als Ganzes.
+
+\`\`\`
+┌────────────────────────────────────────┐
+│              GESAMTSYSTEM              │
+│  ┌────┐  ┌────┐  ┌────┐  ┌────┐       │
+│  │ UI │──│ API│──│ DB │──│ ...│       │
+│  └────┘  └────┘  └────┘  └────┘       │
+└────────────────────────────────────────┘
+              Systemtest
+\`\`\`
+
+### Testet:
+- Ende-zu-Ende Szenarien
+- Nicht-funktionale Anforderungen (Performance, Sicherheit)
+- Systemverhalten unter Last
+
+## Abnahmetest (User Acceptance Test)
+
+Der **Kunde** prüft, ob das System die Anforderungen erfüllt.
+
+| Typ | Wer testet | Was wird geprüft |
+|-----|------------|------------------|
+| Alpha-Test | Interne Tester | Frühe Version |
+| Beta-Test | Echte Nutzer | Fast fertige Version |
+| UAT | Kunde/Auftraggeber | Anforderungserfüllung |
+
+## Vergleich
+
+| Aspekt | Unit | Integration | System | Abnahme |
+|--------|------|-------------|--------|---------|
+| Umfang | Klein | Mittel | Groß | Komplett |
+| Geschwindigkeit | Schnell | Mittel | Langsam | Langsam |
+| Wer | Entwickler | Entwickler | Tester | Kunde |
+| Fokus | Code | Schnittstellen | Funktionalität | Anforderungen |
+
+---
+
+**Alle Testarten ergänzen sich!**`,
+          codeTemplate: `// Übersicht der Testebenen
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== Testebenen ===");
+        System.out.println();
+        System.out.println("1. UNIT TEST");
+        System.out.println("   -> Einzelne Methode/Klasse");
+        System.out.println("   -> Schnell, viele Tests");
+        System.out.println();
+        System.out.println("2. INTEGRATIONSTEST");
+        System.out.println("   -> Zusammenspiel von Modulen");
+        System.out.println("   -> Schnittstellen pruefen");
+        System.out.println();
+        System.out.println("3. SYSTEMTEST");
+        System.out.println("   -> Gesamtes System");
+        System.out.println("   -> Ende-zu-Ende Szenarien");
+        System.out.println();
+        System.out.println("4. ABNAHMETEST");
+        System.out.println("   -> Kunde prueft Anforderungen");
+        System.out.println("   -> Finale Freigabe");
+    }
+}`,
+          expectedOutput: `=== Testebenen ===
+
+1. UNIT TEST
+   -> Einzelne Methode/Klasse
+   -> Schnell, viele Tests
+
+2. INTEGRATIONSTEST
+   -> Zusammenspiel von Modulen
+   -> Schnittstellen pruefen
+
+3. SYSTEMTEST
+   -> Gesamtes System
+   -> Ende-zu-Ende Szenarien
+
+4. ABNAHMETEST
+   -> Kunde prueft Anforderungen
+   -> Finale Freigabe`,
+          hints: [
+            "Von Unit bis Abnahme wird der Testumfang größer",
+            "Alle Ebenen sind wichtig für Qualität"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== Testebenen ===");
+        System.out.println();
+        System.out.println("1. UNIT TEST");
+        System.out.println("   -> Einzelne Methode/Klasse");
+        System.out.println("   -> Schnell, viele Tests");
+        System.out.println();
+        System.out.println("2. INTEGRATIONSTEST");
+        System.out.println("   -> Zusammenspiel von Modulen");
+        System.out.println("   -> Schnittstellen pruefen");
+        System.out.println();
+        System.out.println("3. SYSTEMTEST");
+        System.out.println("   -> Gesamtes System");
+        System.out.println("   -> Ende-zu-Ende Szenarien");
+        System.out.println();
+        System.out.println("4. ABNAHMETEST");
+        System.out.println("   -> Kunde prueft Anforderungen");
+        System.out.println("   -> Finale Freigabe");
+    }
+}`
+        }
+      },
+      {
+        id: "17-6",
+        chapterId: "chapter-17",
+        title: "Debugging-Strategien",
+        order: 6,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Fehler systematisch finden 🔍
+
+## Debugging-Prozess
+
+1. **Reproduzieren** - Fehler wiederholbar machen
+2. **Lokalisieren** - Wo tritt der Fehler auf?
+3. **Analysieren** - Warum tritt er auf?
+4. **Beheben** - Korrektur implementieren
+5. **Testen** - Prüfen ob behoben
+
+## Debugging-Techniken
+
+### 1. Print-Debugging
+\`\`\`java
+System.out.println("Wert von x: " + x);
+System.out.println("Hier angekommen!");
+\`\`\`
+
+### 2. Divide and Conquer
+- Code-Bereiche auskommentieren
+- Problem eingrenzen durch Halbierung
+
+### 3. Rubber Duck Debugging 🦆
+- Problem laut erklären (an eine Gummiente)
+- Oft findet man den Fehler beim Erklären!
+
+### 4. Stack Trace lesen
+\`\`\`
+Exception in thread "main" java.lang.NullPointerException
+    at Main.berechne(Main.java:15)    <- Hier!
+    at Main.main(Main.java:5)
+\`\`\`
+
+### 5. IDE-Debugger
+- Breakpoints setzen
+- Variablen inspizieren
+- Schrittweise ausführen
+
+## Häufige Fehlerarten
+
+| Fehler | Symptom | Lösung |
+|--------|---------|--------|
+| NullPointerException | Zugriff auf null | Null-Check hinzufügen |
+| ArrayIndexOutOfBounds | Index zu groß/klein | Grenzen prüfen |
+| Off-by-One | Schleife 1x zu oft/wenig | < vs <= prüfen |
+| Endlosschleife | Programm hängt | Abbruchbedingung prüfen |
+| Logikfehler | Falsches Ergebnis | Algorithmus überprüfen |
+
+## Tipps
+
+- 🧪 **Hypothesen aufstellen und testen**
+- 📝 **Notizen machen**
+- ☕ **Pause machen bei Frustration**
+- 👥 **Kollegen fragen**
+- 🔄 **Version Control nutzen (git diff)**
+
+---
+
+**Systematisches Debugging spart Zeit!**`,
+          codeTemplate: `// Debugging-Beispiel: Finde den Fehler!
+
+public class Main {
+    public static void main(String[] args) {
+        int[] zahlen = {5, 10, 15, 20, 25};
+        
+        // Debug-Ausgaben helfen!
+        System.out.println("Array-Laenge: " + zahlen.length);
+        
+        int summe = 0;
+        for (int i = 0; i < zahlen.length; i++) {
+            System.out.println("i=" + i + ", zahlen[i]=" + zahlen[i]);
+            summe += zahlen[i];
+        }
+        
+        System.out.println();
+        System.out.println("Summe: " + summe);
+        System.out.println("Debugging hilft Fehler zu finden!");
+    }
+}`,
+          expectedOutput: `Array-Laenge: 5
+i=0, zahlen[i]=5
+i=1, zahlen[i]=10
+i=2, zahlen[i]=15
+i=3, zahlen[i]=20
+i=4, zahlen[i]=25
+
+Summe: 75
+Debugging hilft Fehler zu finden!`,
+          hints: [
+            "System.out.println() ist dein Freund",
+            "Zeige Variablenwerte an kritischen Stellen"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        int[] zahlen = {5, 10, 15, 20, 25};
+        
+        System.out.println("Array-Laenge: " + zahlen.length);
+        
+        int summe = 0;
+        for (int i = 0; i < zahlen.length; i++) {
+            System.out.println("i=" + i + ", zahlen[i]=" + zahlen[i]);
+            summe += zahlen[i];
+        }
+        
+        System.out.println();
+        System.out.println("Summe: " + summe);
+        System.out.println("Debugging hilft Fehler zu finden!");
+    }
+}`
+        }
+      }
+    ]
   }
 ];
 
