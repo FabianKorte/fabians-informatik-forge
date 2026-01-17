@@ -8127,6 +8127,922 @@ Debugging hilft Fehler zu finden!`,
         }
       }
     ]
+  },
+  // ============================================
+  // KAPITEL 18: ENTWICKLUNGSUMGEBUNG & ANALYSE
+  // ============================================
+  {
+    id: "chapter-18",
+    title: "Kapitel 18: IDE & Anforderungsanalyse",
+    description: "Professionelle Entwicklungsumgebungen und Analysemethoden",
+    order: 18,
+    isUnlocked: false,
+    lessons: [
+      {
+        id: "18-1",
+        chapterId: "chapter-18",
+        title: "Einführung in IDEs",
+        order: 1,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Entwicklungsumgebungen (IDE) 🖥️
+
+## Was ist eine IDE?
+
+**IDE** = **I**ntegrated **D**evelopment **E**nvironment (Integrierte Entwicklungsumgebung)
+
+Eine IDE ist ein Programm, das alle Werkzeuge zum Programmieren in einem vereint:
+- Code-Editor mit Syntax-Highlighting
+- Compiler/Interpreter
+- Debugger
+- Projektverwaltung
+- und vieles mehr!
+
+## Warum eine IDE nutzen?
+
+| Ohne IDE | Mit IDE |
+|----------|---------|
+| Mehrere Programme nötig | Alles in einem |
+| Manuelles Kompilieren | Ein-Klick-Ausführung |
+| Fehler schwer zu finden | Fehler werden markiert |
+| Keine Autovervollständigung | Intelligente Vorschläge |
+
+## Beliebte Java-IDEs
+
+### 1. IntelliJ IDEA ⭐
+- Von JetBrains
+- **Community Edition** ist kostenlos
+- Sehr intelligent und modern
+- Beste Autovervollständigung
+- **Empfehlung für Einsteiger!**
+
+### 2. Eclipse
+- Open Source und kostenlos
+- Sehr verbreitet in Unternehmen
+- Viele Plugins verfügbar
+- Etwas komplexer für Anfänger
+
+### 3. Visual Studio Code
+- Leichtgewichtig
+- Mit Java Extension Pack nutzbar
+- Gut für kleine Projekte
+- Weniger Java-spezifische Features
+
+### 4. NetBeans
+- Von Apache
+- Gut für Anfänger
+- Weniger verbreitet
+
+## Vergleich
+
+| Feature | IntelliJ | Eclipse | VS Code |
+|---------|----------|---------|---------|
+| Einsteigerfreundlich | ⭐⭐⭐ | ⭐⭐ | ⭐⭐ |
+| Performance | ⭐⭐ | ⭐⭐ | ⭐⭐⭐ |
+| Features | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐ |
+| Kostenlos | Teilweise | Ja | Ja |
+
+---
+
+**Empfehlung: Starte mit IntelliJ IDEA Community Edition!**`,
+          codeTemplate: `// IDEs machen das Programmieren einfacher!
+// Diese Plattform ist eine vereinfachte Online-IDE.
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== IDE-Vorteile ===");
+        System.out.println();
+        System.out.println("1. Syntax-Highlighting");
+        System.out.println("   -> Code ist farbig und lesbar");
+        System.out.println();
+        System.out.println("2. Autovervollstaendigung");
+        System.out.println("   -> Vorschlaege beim Tippen");
+        System.out.println();
+        System.out.println("3. Fehlermarkierung");
+        System.out.println("   -> Fehler werden rot unterstrichen");
+        System.out.println();
+        System.out.println("4. Debugging");
+        System.out.println("   -> Schrittweise Code ausfuehren");
+        System.out.println();
+        System.out.println("5. Refactoring");
+        System.out.println("   -> Code automatisch umstrukturieren");
+    }
+}`,
+          expectedOutput: `=== IDE-Vorteile ===
+
+1. Syntax-Highlighting
+   -> Code ist farbig und lesbar
+
+2. Autovervollstaendigung
+   -> Vorschlaege beim Tippen
+
+3. Fehlermarkierung
+   -> Fehler werden rot unterstrichen
+
+4. Debugging
+   -> Schrittweise Code ausfuehren
+
+5. Refactoring
+   -> Code automatisch umstrukturieren`,
+          hints: [
+            "IDE = Alle Werkzeuge in einem Programm",
+            "IntelliJ IDEA Community ist kostenlos und empfohlen"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== IDE-Vorteile ===");
+        System.out.println();
+        System.out.println("1. Syntax-Highlighting");
+        System.out.println("   -> Code ist farbig und lesbar");
+        System.out.println();
+        System.out.println("2. Autovervollstaendigung");
+        System.out.println("   -> Vorschlaege beim Tippen");
+        System.out.println();
+        System.out.println("3. Fehlermarkierung");
+        System.out.println("   -> Fehler werden rot unterstrichen");
+        System.out.println();
+        System.out.println("4. Debugging");
+        System.out.println("   -> Schrittweise Code ausfuehren");
+        System.out.println();
+        System.out.println("5. Refactoring");
+        System.out.println("   -> Code automatisch umstrukturieren");
+    }
+}`
+        }
+      },
+      {
+        id: "18-2",
+        chapterId: "chapter-18",
+        title: "IDE Installation & Einrichtung",
+        order: 2,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# IDE Installation 📥
+
+## Voraussetzung: JDK installieren
+
+Bevor du eine IDE nutzen kannst, brauchst du das **Java Development Kit (JDK)**:
+
+### JDK Installation
+
+1. **Download**: [https://adoptium.net](https://adoptium.net) (empfohlen: Temurin)
+2. **Version**: Mindestens JDK 17 (LTS)
+3. **Installer** ausführen und Standardeinstellungen akzeptieren
+4. **Prüfen**: Terminal öffnen und eingeben:
+   \`\`\`
+   java -version
+   javac -version
+   \`\`\`
+
+## IntelliJ IDEA installieren
+
+### Schritt 1: Download
+- Gehe zu: [https://www.jetbrains.com/idea/download](https://www.jetbrains.com/idea/download)
+- Wähle **Community Edition** (kostenlos!)
+- Lade den Installer für dein Betriebssystem
+
+### Schritt 2: Installation
+- **Windows**: .exe ausführen, "Next" klicken
+- **Mac**: .dmg öffnen, in Applications ziehen
+- **Linux**: .tar.gz entpacken oder snap/flatpak nutzen
+
+### Schritt 3: Erstes Projekt erstellen
+1. IntelliJ starten
+2. "New Project" wählen
+3. "Java" auswählen
+4. JDK auswählen (wird automatisch erkannt)
+5. Projektname eingeben
+6. "Create" klicken
+
+### Schritt 4: Erste Klasse erstellen
+1. Rechtsklick auf "src" Ordner
+2. New → Java Class
+3. Name: "Main"
+4. Code eingeben:
+   \`\`\`java
+   public class Main {
+       public static void main(String[] args) {
+           System.out.println("Hallo IntelliJ!");
+       }
+   }
+   \`\`\`
+5. Grüner Play-Button → "Run"
+
+## Wichtige IntelliJ-Shortcuts
+
+| Aktion | Windows/Linux | Mac |
+|--------|---------------|-----|
+| Ausführen | Shift+F10 | Ctrl+R |
+| Autovervollständigen | Ctrl+Space | Ctrl+Space |
+| Fehler beheben | Alt+Enter | Option+Enter |
+| Suchen | Ctrl+Shift+F | Cmd+Shift+F |
+| Umbenennen | Shift+F6 | Shift+F6 |
+| Formatieren | Ctrl+Alt+L | Cmd+Option+L |
+
+---
+
+**Nach der Installation bist du bereit für "echtes" Java-Programmieren!**`,
+          codeTemplate: `// Checkliste für die IDE-Installation
+// (Diese Plattform reicht zum Lernen - IDE ist optional)
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== IDE-Installations-Checkliste ===");
+        System.out.println();
+        
+        // Schritt 1
+        System.out.println("[_] 1. JDK installiert (adoptium.net)");
+        System.out.println("    -> java -version zeigt Version an");
+        System.out.println();
+        
+        // Schritt 2
+        System.out.println("[_] 2. IntelliJ IDEA Community heruntergeladen");
+        System.out.println("    -> jetbrains.com/idea/download");
+        System.out.println();
+        
+        // Schritt 3
+        System.out.println("[_] 3. IntelliJ installiert und gestartet");
+        System.out.println();
+        
+        // Schritt 4
+        System.out.println("[_] 4. Erstes Projekt erstellt");
+        System.out.println("    -> New Project -> Java");
+        System.out.println();
+        
+        // Schritt 5
+        System.out.println("[_] 5. Hello World ausgefuehrt!");
+        System.out.println("    -> Gruener Play-Button");
+    }
+}`,
+          expectedOutput: `=== IDE-Installations-Checkliste ===
+
+[_] 1. JDK installiert (adoptium.net)
+    -> java -version zeigt Version an
+
+[_] 2. IntelliJ IDEA Community heruntergeladen
+    -> jetbrains.com/idea/download
+
+[_] 3. IntelliJ installiert und gestartet
+
+[_] 4. Erstes Projekt erstellt
+    -> New Project -> Java
+
+[_] 5. Hello World ausgefuehrt!
+    -> Gruener Play-Button`,
+          hints: [
+            "JDK muss VOR der IDE installiert werden",
+            "Community Edition ist vollkommen ausreichend zum Lernen"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== IDE-Installations-Checkliste ===");
+        System.out.println();
+        System.out.println("[_] 1. JDK installiert (adoptium.net)");
+        System.out.println("    -> java -version zeigt Version an");
+        System.out.println();
+        System.out.println("[_] 2. IntelliJ IDEA Community heruntergeladen");
+        System.out.println("    -> jetbrains.com/idea/download");
+        System.out.println();
+        System.out.println("[_] 3. IntelliJ installiert und gestartet");
+        System.out.println();
+        System.out.println("[_] 4. Erstes Projekt erstellt");
+        System.out.println("    -> New Project -> Java");
+        System.out.println();
+        System.out.println("[_] 5. Hello World ausgefuehrt!");
+        System.out.println("    -> Gruener Play-Button");
+    }
+}`
+        }
+      },
+      {
+        id: "18-3",
+        chapterId: "chapter-18",
+        title: "IDE-Features im Detail",
+        order: 3,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# IDE-Features im Alltag 🛠️
+
+## 1. Autovervollständigung (Code Completion)
+
+Die IDE schlägt Code vor, während du tippst:
+
+\`\`\`java
+// Du tippst: "Sys"
+// IDE zeigt: System, SystemColor, ...
+// Du wählst: System
+
+// Du tippst: "System.out.pr"
+// IDE zeigt: print(), println(), printf()
+// Du wählst: println()
+\`\`\`
+
+**Shortcut**: Ctrl+Space (manuell auslösen)
+
+## 2. Quick Fixes (Schnellkorrekturen)
+
+Fehler werden markiert und können oft automatisch behoben werden:
+
+\`\`\`java
+// Fehler: Variable nicht deklariert
+summe = 10;  // rot unterstrichen
+
+// Alt+Enter drücken:
+// -> "Create local variable 'summe'"
+// -> IDE fügt "int summe = 10;" ein
+\`\`\`
+
+## 3. Refactoring
+
+Code automatisch umstrukturieren:
+
+| Refactoring | Beschreibung | Shortcut |
+|-------------|--------------|----------|
+| Rename | Variable/Methode umbenennen | Shift+F6 |
+| Extract Method | Code in Methode auslagern | Ctrl+Alt+M |
+| Extract Variable | Ausdruck in Variable | Ctrl+Alt+V |
+| Inline | Variable/Methode einbetten | Ctrl+Alt+N |
+
+## 4. Debugging
+
+Fehler schrittweise finden:
+
+1. **Breakpoint setzen** (Klick links neben Zeilennummer)
+2. **Debug starten** (Käfer-Symbol statt Play)
+3. **Schrittweise ausführen**:
+   - Step Over (F8): Nächste Zeile
+   - Step Into (F7): In Methode hinein
+   - Step Out (Shift+F8): Aus Methode heraus
+4. **Variablen inspizieren** im Debug-Fenster
+
+## 5. Navigation
+
+| Aktion | Shortcut |
+|--------|----------|
+| Zur Definition springen | Ctrl+Klick / Ctrl+B |
+| Alle Verwendungen finden | Alt+F7 |
+| Datei suchen | Ctrl+Shift+N |
+| Symbol suchen | Ctrl+Alt+Shift+N |
+| Letzte Position | Ctrl+Alt+← |
+
+## 6. Code-Generierung
+
+Die IDE kann Code für dich schreiben:
+
+- **Alt+Insert** (Generate):
+  - Konstruktor generieren
+  - Getter/Setter generieren
+  - toString() generieren
+  - equals()/hashCode() generieren
+
+---
+
+**Diese Features machen dich 10x produktiver!**`,
+          codeTemplate: `// IDE-Features in Aktion
+// (In einer echten IDE waeren diese automatisch)
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== IDE-Power-Features ===");
+        System.out.println();
+        
+        // Feature 1: Autovervollstaendigung
+        System.out.println("1. Autovervollstaendigung");
+        System.out.println("   Tippe 'sout' + Tab -> System.out.println()");
+        System.out.println();
+        
+        // Feature 2: Quick Fix
+        System.out.println("2. Quick Fix (Alt+Enter)");
+        System.out.println("   Fehler rot? -> Alt+Enter -> Automatisch beheben");
+        System.out.println();
+        
+        // Feature 3: Refactoring
+        System.out.println("3. Refactoring (Shift+F6)");
+        System.out.println("   Variable umbenennen -> Alle Stellen geaendert");
+        System.out.println();
+        
+        // Feature 4: Debugging
+        System.out.println("4. Debugging (Breakpoints)");
+        System.out.println("   Klick links -> Roter Punkt -> Debug starten");
+        System.out.println();
+        
+        // Feature 5: Navigation
+        System.out.println("5. Navigation (Ctrl+Klick)");
+        System.out.println("   Auf Methode klicken -> Zur Definition springen");
+    }
+}`,
+          expectedOutput: `=== IDE-Power-Features ===
+
+1. Autovervollstaendigung
+   Tippe 'sout' + Tab -> System.out.println()
+
+2. Quick Fix (Alt+Enter)
+   Fehler rot? -> Alt+Enter -> Automatisch beheben
+
+3. Refactoring (Shift+F6)
+   Variable umbenennen -> Alle Stellen geaendert
+
+4. Debugging (Breakpoints)
+   Klick links -> Roter Punkt -> Debug starten
+
+5. Navigation (Ctrl+Klick)
+   Auf Methode klicken -> Zur Definition springen`,
+          hints: [
+            "Live Templates: sout, psvm, fori sparen viel Tipparbeit",
+            "Alt+Enter ist der wichtigste Shortcut!"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== IDE-Power-Features ===");
+        System.out.println();
+        System.out.println("1. Autovervollstaendigung");
+        System.out.println("   Tippe 'sout' + Tab -> System.out.println()");
+        System.out.println();
+        System.out.println("2. Quick Fix (Alt+Enter)");
+        System.out.println("   Fehler rot? -> Alt+Enter -> Automatisch beheben");
+        System.out.println();
+        System.out.println("3. Refactoring (Shift+F6)");
+        System.out.println("   Variable umbenennen -> Alle Stellen geaendert");
+        System.out.println();
+        System.out.println("4. Debugging (Breakpoints)");
+        System.out.println("   Klick links -> Roter Punkt -> Debug starten");
+        System.out.println();
+        System.out.println("5. Navigation (Ctrl+Klick)");
+        System.out.println("   Auf Methode klicken -> Zur Definition springen");
+    }
+}`
+        }
+      },
+      {
+        id: "18-4",
+        chapterId: "chapter-18",
+        title: "Ist-Analyse",
+        order: 4,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Ist-Analyse: Den aktuellen Zustand verstehen 📊
+
+## Was ist eine Ist-Analyse?
+
+Die **Ist-Analyse** beschreibt den **aktuellen Zustand** eines Systems oder Prozesses:
+- Wie funktioniert es **jetzt**?
+- Welche **Probleme** gibt es?
+- Welche **Ressourcen** sind vorhanden?
+
+## Warum ist sie wichtig?
+
+> "Man kann nur verbessern, was man versteht."
+
+Ohne Ist-Analyse:
+- ❌ Lösungen für falsche Probleme
+- ❌ Übersehene Anforderungen
+- ❌ Unrealistische Schätzungen
+
+Mit Ist-Analyse:
+- ✅ Klares Verständnis der Ausgangslage
+- ✅ Identifizierte Schwachstellen
+- ✅ Fundierte Entscheidungsgrundlage
+
+## Methoden der Ist-Analyse
+
+### 1. Interviews
+- Gespräche mit Stakeholdern
+- Fragen: "Wie läuft der Prozess ab?"
+- Dokumentation der Antworten
+
+### 2. Beobachtung
+- Prozesse direkt beobachten
+- Ablaufzeiten messen
+- Schwachstellen notieren
+
+### 3. Dokumentenanalyse
+- Bestehende Dokumentation prüfen
+- Organigramme, Handbücher
+- Bestehenden Quellcode analysieren
+
+### 4. Fragebogen
+- Standardisierte Fragen
+- Für größere Nutzergruppen
+- Quantitative Auswertung möglich
+
+## Ergebnis der Ist-Analyse
+
+\`\`\`
+┌─────────────────────────────────────────┐
+│           IST-ANALYSE BERICHT           │
+├─────────────────────────────────────────┤
+│ 1. Beschreibung des aktuellen Systems   │
+│ 2. Identifizierte Probleme/Schwächen    │
+│ 3. Vorhandene Ressourcen                │
+│ 4. Schnittstellen zu anderen Systemen   │
+│ 5. Stakeholder und ihre Anforderungen   │
+└─────────────────────────────────────────┘
+\`\`\`
+
+---
+
+**Die Ist-Analyse ist der erste Schritt jedes Projekts!**`,
+          codeTemplate: `// Ist-Analyse Beispiel: Bibliothekssystem
+// Dokumentation des aktuellen Zustands
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== IST-ANALYSE: Bibliothekssystem ===");
+        System.out.println();
+        
+        // 1. Aktueller Zustand
+        System.out.println("1. AKTUELLER ZUSTAND");
+        System.out.println("   - Ausleihe wird auf Papier erfasst");
+        System.out.println("   - Katalog als Excel-Tabelle");
+        System.out.println("   - Mahnungen werden manuell geschrieben");
+        System.out.println();
+        
+        // 2. Identifizierte Probleme
+        System.out.println("2. PROBLEME");
+        System.out.println("   - Keine Echtzeit-Verfuegbarkeit");
+        System.out.println("   - Fehleranfaellige manuelle Erfassung");
+        System.out.println("   - Zeitaufwendige Mahnprozesse");
+        System.out.println("   - Keine Online-Recherche moeglich");
+        System.out.println();
+        
+        // 3. Ressourcen
+        System.out.println("3. VORHANDENE RESSOURCEN");
+        System.out.println("   - 2 Mitarbeiter");
+        System.out.println("   - 5000 Medien im Bestand");
+        System.out.println("   - PC mit Internetzugang");
+        System.out.println();
+        
+        // 4. Fazit
+        System.out.println("4. FAZIT");
+        System.out.println("   -> Digitalisierung dringend erforderlich!");
+    }
+}`,
+          expectedOutput: `=== IST-ANALYSE: Bibliothekssystem ===
+
+1. AKTUELLER ZUSTAND
+   - Ausleihe wird auf Papier erfasst
+   - Katalog als Excel-Tabelle
+   - Mahnungen werden manuell geschrieben
+
+2. PROBLEME
+   - Keine Echtzeit-Verfuegbarkeit
+   - Fehleranfaellige manuelle Erfassung
+   - Zeitaufwendige Mahnprozesse
+   - Keine Online-Recherche moeglich
+
+3. VORHANDENE RESSOURCEN
+   - 2 Mitarbeiter
+   - 5000 Medien im Bestand
+   - PC mit Internetzugang
+
+4. FAZIT
+   -> Digitalisierung dringend erforderlich!`,
+          hints: [
+            "Ist-Analyse = Aktueller Zustand dokumentieren",
+            "Probleme identifizieren ist der wichtigste Teil"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== IST-ANALYSE: Bibliothekssystem ===");
+        System.out.println();
+        System.out.println("1. AKTUELLER ZUSTAND");
+        System.out.println("   - Ausleihe wird auf Papier erfasst");
+        System.out.println("   - Katalog als Excel-Tabelle");
+        System.out.println("   - Mahnungen werden manuell geschrieben");
+        System.out.println();
+        System.out.println("2. PROBLEME");
+        System.out.println("   - Keine Echtzeit-Verfuegbarkeit");
+        System.out.println("   - Fehleranfaellige manuelle Erfassung");
+        System.out.println("   - Zeitaufwendige Mahnprozesse");
+        System.out.println("   - Keine Online-Recherche moeglich");
+        System.out.println();
+        System.out.println("3. VORHANDENE RESSOURCEN");
+        System.out.println("   - 2 Mitarbeiter");
+        System.out.println("   - 5000 Medien im Bestand");
+        System.out.println("   - PC mit Internetzugang");
+        System.out.println();
+        System.out.println("4. FAZIT");
+        System.out.println("   -> Digitalisierung dringend erforderlich!");
+    }
+}`
+        }
+      },
+      {
+        id: "18-5",
+        chapterId: "chapter-18",
+        title: "Soll-Konzept",
+        order: 5,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Soll-Konzept: Die Zielvorstellung 🎯
+
+## Was ist ein Soll-Konzept?
+
+Das **Soll-Konzept** beschreibt den **gewünschten Zustand** nach der Umsetzung:
+- Wie soll es **zukünftig** funktionieren?
+- Welche **Verbesserungen** sind geplant?
+- Welche **Anforderungen** müssen erfüllt werden?
+
+## Ist vs. Soll
+
+\`\`\`
+┌───────────────┐           ┌───────────────┐
+│    IST        │           │    SOLL       │
+│  (Aktuell)    │  ──────►  │  (Zukünftig)  │
+├───────────────┤           ├───────────────┤
+│ Papier-Ausleihe│          │ Digitale Ausleihe│
+│ Excel-Katalog │           │ Datenbank-Katalog│
+│ Manuelle Mahnung│         │ Automatische Email│
+└───────────────┘           └───────────────┘
+                   
+         GAP-ANALYSE
+    (Was muss geändert werden?)
+\`\`\`
+
+## Bestandteile des Soll-Konzepts
+
+### 1. Funktionale Anforderungen
+Was soll das System **tun**?
+- Medien suchen und anzeigen
+- Ausleihen und Rückgaben erfassen
+- Automatische Mahnungen versenden
+- Statistiken generieren
+
+### 2. Nicht-funktionale Anforderungen
+**Wie** soll das System sein?
+- **Performance**: Antwortzeit < 2 Sekunden
+- **Verfügbarkeit**: 99.5% Uptime
+- **Sicherheit**: Verschlüsselte Daten
+- **Benutzerfreundlichkeit**: Intuitive Bedienung
+
+### 3. Randbedingungen
+Was ist vorgegeben?
+- Budget: max. 10.000€
+- Zeitrahmen: 6 Monate
+- Technologie: Web-basiert
+- Personal: 1 Entwickler
+
+## SMART-Kriterien für Anforderungen
+
+| Buchstabe | Bedeutung | Beispiel |
+|-----------|-----------|----------|
+| S | Spezifisch | "Suche nach Titel UND Autor" |
+| M | Messbar | "Antwortzeit < 2 Sekunden" |
+| A | Akzeptiert | Mit Stakeholdern abgestimmt |
+| R | Realistisch | Technisch umsetzbar |
+| T | Terminiert | "Bis Q3 2024" |
+
+---
+
+**Das Soll-Konzept ist die Basis für die Umsetzung!**`,
+          codeTemplate: `// Soll-Konzept Beispiel: Bibliothekssystem
+// Definition des Zielzustands
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== SOLL-KONZEPT: Bibliothekssystem ===");
+        System.out.println();
+        
+        // 1. Funktionale Anforderungen
+        System.out.println("1. FUNKTIONALE ANFORDERUNGEN");
+        System.out.println("   [F1] Mediensuche nach Titel, Autor, ISBN");
+        System.out.println("   [F2] Online-Ausleihe mit Nutzerkonto");
+        System.out.println("   [F3] Automatische Mahnung per Email");
+        System.out.println("   [F4] Echtzeit-Verfuegbarkeitsanzeige");
+        System.out.println("   [F5] Statistik-Dashboard fuer Mitarbeiter");
+        System.out.println();
+        
+        // 2. Nicht-funktionale Anforderungen
+        System.out.println("2. NICHT-FUNKTIONALE ANFORDERUNGEN");
+        System.out.println("   [NF1] Antwortzeit < 2 Sekunden");
+        System.out.println("   [NF2] Verfuegbarkeit 99.5%");
+        System.out.println("   [NF3] Responsive Design (Mobile + Desktop)");
+        System.out.println("   [NF4] DSGVO-konforme Datenhaltung");
+        System.out.println();
+        
+        // 3. Randbedingungen
+        System.out.println("3. RANDBEDINGUNGEN");
+        System.out.println("   - Budget: 10.000 Euro");
+        System.out.println("   - Zeitrahmen: 6 Monate");
+        System.out.println("   - Technologie: Java + PostgreSQL");
+        System.out.println();
+        
+        // 4. Priorisierung
+        System.out.println("4. PRIORISIERUNG");
+        System.out.println("   Muss: F1, F2, F4, NF1");
+        System.out.println("   Soll: F3, NF2, NF3");
+        System.out.println("   Kann: F5, NF4");
+    }
+}`,
+          expectedOutput: `=== SOLL-KONZEPT: Bibliothekssystem ===
+
+1. FUNKTIONALE ANFORDERUNGEN
+   [F1] Mediensuche nach Titel, Autor, ISBN
+   [F2] Online-Ausleihe mit Nutzerkonto
+   [F3] Automatische Mahnung per Email
+   [F4] Echtzeit-Verfuegbarkeitsanzeige
+   [F5] Statistik-Dashboard fuer Mitarbeiter
+
+2. NICHT-FUNKTIONALE ANFORDERUNGEN
+   [NF1] Antwortzeit < 2 Sekunden
+   [NF2] Verfuegbarkeit 99.5%
+   [NF3] Responsive Design (Mobile + Desktop)
+   [NF4] DSGVO-konforme Datenhaltung
+
+3. RANDBEDINGUNGEN
+   - Budget: 10.000 Euro
+   - Zeitrahmen: 6 Monate
+   - Technologie: Java + PostgreSQL
+
+4. PRIORISIERUNG
+   Muss: F1, F2, F4, NF1
+   Soll: F3, NF2, NF3
+   Kann: F5, NF4`,
+          hints: [
+            "Soll-Konzept = Zielzustand definieren",
+            "SMART-Kriterien helfen bei guten Anforderungen"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== SOLL-KONZEPT: Bibliothekssystem ===");
+        System.out.println();
+        System.out.println("1. FUNKTIONALE ANFORDERUNGEN");
+        System.out.println("   [F1] Mediensuche nach Titel, Autor, ISBN");
+        System.out.println("   [F2] Online-Ausleihe mit Nutzerkonto");
+        System.out.println("   [F3] Automatische Mahnung per Email");
+        System.out.println("   [F4] Echtzeit-Verfuegbarkeitsanzeige");
+        System.out.println("   [F5] Statistik-Dashboard fuer Mitarbeiter");
+        System.out.println();
+        System.out.println("2. NICHT-FUNKTIONALE ANFORDERUNGEN");
+        System.out.println("   [NF1] Antwortzeit < 2 Sekunden");
+        System.out.println("   [NF2] Verfuegbarkeit 99.5%");
+        System.out.println("   [NF3] Responsive Design (Mobile + Desktop)");
+        System.out.println("   [NF4] DSGVO-konforme Datenhaltung");
+        System.out.println();
+        System.out.println("3. RANDBEDINGUNGEN");
+        System.out.println("   - Budget: 10.000 Euro");
+        System.out.println("   - Zeitrahmen: 6 Monate");
+        System.out.println("   - Technologie: Java + PostgreSQL");
+        System.out.println();
+        System.out.println("4. PRIORISIERUNG");
+        System.out.println("   Muss: F1, F2, F4, NF1");
+        System.out.println("   Soll: F3, NF2, NF3");
+        System.out.println("   Kann: F5, NF4");
+    }
+}`
+        }
+      },
+      {
+        id: "18-6",
+        chapterId: "chapter-18",
+        title: "Umsetzungskonzept erstellen",
+        order: 6,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Vom Soll zur Umsetzung 🔧
+
+## Was ist ein Umsetzungskonzept?
+
+Das **Umsetzungskonzept** beschreibt, **wie** das Soll-Konzept realisiert wird:
+- Welche **Technologien** werden verwendet?
+- Wie sieht die **Architektur** aus?
+- Was sind die **Meilensteine**?
+- Wer ist **verantwortlich**?
+
+## Bestandteile
+
+### 1. Technische Architektur
+\`\`\`
+┌─────────────────────────────────────────┐
+│               FRONTEND                   │
+│         (React / Angular / etc.)        │
+├─────────────────────────────────────────┤
+│                 API                      │
+│         (REST / GraphQL)                │
+├─────────────────────────────────────────┤
+│              BACKEND                     │
+│         (Java / Spring Boot)            │
+├─────────────────────────────────────────┤
+│             DATENBANK                    │
+│         (PostgreSQL / MySQL)            │
+└─────────────────────────────────────────┘
+\`\`\`
+
+### 2. Meilensteine & Zeitplan
+| Phase | Inhalt | Dauer |
+|-------|--------|-------|
+| 1 | Analyse & Design | 2 Wochen |
+| 2 | Basis-Entwicklung | 4 Wochen |
+| 3 | Features | 6 Wochen |
+| 4 | Testing | 2 Wochen |
+| 5 | Deployment | 1 Woche |
+
+### 3. Ressourcenplanung
+- Personal: 1 Entwickler, 1 Designer
+- Hardware: Server, Datenbank
+- Software: Lizenzen, Tools
+- Budget: Verteilung auf Phasen
+
+### 4. Risikomanagement
+| Risiko | Wahrscheinlichkeit | Maßnahme |
+|--------|-------------------|----------|
+| Zeitmangel | Mittel | Puffer einplanen |
+| Technik-Probleme | Niedrig | Prototyp zuerst |
+| Anforderungsänderung | Hoch | Agile Methoden |
+
+## Aufgabe
+
+Erstelle ein einfaches Umsetzungskonzept für das Bibliothekssystem!`,
+          codeTemplate: `// Umsetzungskonzept erstellen
+// Ergaenze die fehlenden Teile!
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== UMSETZUNGSKONZEPT ===");
+        System.out.println();
+        
+        // 1. Technologie-Stack
+        System.out.println("1. TECHNOLOGIE-STACK");
+        System.out.println("   Frontend: ");  // Ergaenze!
+        System.out.println("   Backend: Java + Spring Boot");
+        System.out.println("   Datenbank: ");  // Ergaenze!
+        System.out.println();
+        
+        // 2. Meilensteine
+        System.out.println("2. MEILENSTEINE");
+        System.out.println("   M1: Analyse abgeschlossen");
+        System.out.println("   M2: ");  // Ergaenze einen Meilenstein!
+        System.out.println("   M3: Testing abgeschlossen");
+        System.out.println("   M4: Go-Live");
+        System.out.println();
+        
+        // 3. Team
+        System.out.println("3. TEAM");
+        System.out.println("   - 1x Entwickler");
+        System.out.println("   - ");  // Ergaenze eine Rolle!
+        System.out.println();
+        
+        System.out.println("Konzept erstellt!");
+    }
+}`,
+          expectedOutput: `=== UMSETZUNGSKONZEPT ===
+
+1. TECHNOLOGIE-STACK
+   Frontend: React
+   Backend: Java + Spring Boot
+   Datenbank: PostgreSQL
+
+2. MEILENSTEINE
+   M1: Analyse abgeschlossen
+   M2: Entwicklung abgeschlossen
+   M3: Testing abgeschlossen
+   M4: Go-Live
+
+3. TEAM
+   - 1x Entwickler
+   - 1x Projektleiter
+
+Konzept erstellt!`,
+          hints: [
+            "Frontend: React, Angular oder Vue",
+            "Datenbank: PostgreSQL, MySQL oder MongoDB",
+            "Team: Projektleiter, Tester, Designer..."
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== UMSETZUNGSKONZEPT ===");
+        System.out.println();
+        
+        System.out.println("1. TECHNOLOGIE-STACK");
+        System.out.println("   Frontend: React");
+        System.out.println("   Backend: Java + Spring Boot");
+        System.out.println("   Datenbank: PostgreSQL");
+        System.out.println();
+        
+        System.out.println("2. MEILENSTEINE");
+        System.out.println("   M1: Analyse abgeschlossen");
+        System.out.println("   M2: Entwicklung abgeschlossen");
+        System.out.println("   M3: Testing abgeschlossen");
+        System.out.println("   M4: Go-Live");
+        System.out.println();
+        
+        System.out.println("3. TEAM");
+        System.out.println("   - 1x Entwickler");
+        System.out.println("   - 1x Projektleiter");
+        System.out.println();
+        
+        System.out.println("Konzept erstellt!");
+    }
+}`
+        }
+      }
+    ]
   }
 ];
 
