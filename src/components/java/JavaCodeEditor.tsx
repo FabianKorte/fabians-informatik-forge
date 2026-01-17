@@ -1,5 +1,12 @@
-import { useRef, useCallback } from "react";
-import Editor, { OnMount } from "@monaco-editor/react";
+import { useRef, useCallback, useState } from "react";
+import Editor, { OnMount, loader } from "@monaco-editor/react";
+
+// Configure Monaco loader to use CDN
+loader.config({
+  paths: {
+    vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs'
+  }
+});
 
 interface JavaCodeEditorProps {
   value: string;
@@ -10,9 +17,11 @@ interface JavaCodeEditorProps {
 
 export function JavaCodeEditor({ value, onChange, readOnly = false, height = "300px" }: JavaCodeEditorProps) {
   const editorRef = useRef<any>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const handleEditorMount: OnMount = useCallback((editor, monaco) => {
     editorRef.current = editor;
+    setIsLoaded(true);
 
     // Configure Java language
     monaco.languages.registerCompletionItemProvider("java", {
@@ -38,6 +47,13 @@ export function JavaCodeEditor({ value, onChange, readOnly = false, height = "30
           { label: "while", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "while", range },
           { label: "return", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "return", range },
           { label: "new", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "new", range },
+          { label: "try", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "try", range },
+          { label: "catch", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "catch", range },
+          { label: "finally", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "finally", range },
+          { label: "throw", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "throw", range },
+          { label: "extends", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "extends", range },
+          { label: "implements", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "implements", range },
+          { label: "import", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "import", range },
           
           // Types
           { label: "int", kind: monaco.languages.CompletionItemKind.TypeParameter, insertText: "int", range },
@@ -45,6 +61,8 @@ export function JavaCodeEditor({ value, onChange, readOnly = false, height = "30
           { label: "double", kind: monaco.languages.CompletionItemKind.TypeParameter, insertText: "double", range },
           { label: "boolean", kind: monaco.languages.CompletionItemKind.TypeParameter, insertText: "boolean", range },
           { label: "char", kind: monaco.languages.CompletionItemKind.TypeParameter, insertText: "char", range },
+          { label: "ArrayList", kind: monaco.languages.CompletionItemKind.Class, insertText: "ArrayList", range },
+          { label: "HashMap", kind: monaco.languages.CompletionItemKind.Class, insertText: "HashMap", range },
           
           // Snippets
           {
@@ -71,14 +89,32 @@ export function JavaCodeEditor({ value, onChange, readOnly = false, height = "30
             documentation: "For loop with index",
             range,
           },
+          {
+            label: "foreach",
+            kind: monaco.languages.CompletionItemKind.Snippet,
+            insertText: "for (${1:Type} ${2:item} : ${3:collection}) {\n\t$4\n}",
+            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+            documentation: "For-each loop",
+            range,
+          },
+          {
+            label: "trycatch",
+            kind: monaco.languages.CompletionItemKind.Snippet,
+            insertText: "try {\n\t$1\n} catch (${2:Exception} e) {\n\t$3\n}",
+            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+            documentation: "Try-catch block",
+            range,
+          },
         ];
 
         return { suggestions };
       },
     });
 
-    // Focus the editor
-    editor.focus();
+    // Focus the editor after a short delay
+    setTimeout(() => {
+      editor.focus();
+    }, 100);
   }, []);
 
   return (
@@ -115,8 +151,11 @@ export function JavaCodeEditor({ value, onChange, readOnly = false, height = "30
           },
         }}
         loading={
-          <div className="h-full flex items-center justify-center bg-[#1e1e1e] text-white">
-            <span className="animate-pulse">Editor lädt...</span>
+          <div className="h-full flex items-center justify-center bg-[#1e1e1e] text-white/70" style={{ height }}>
+            <div className="flex flex-col items-center gap-3">
+              <div className="w-8 h-8 border-2 border-white/20 border-t-white/70 rounded-full animate-spin" />
+              <span className="text-sm">Editor lädt...</span>
+            </div>
           </div>
         }
       />
