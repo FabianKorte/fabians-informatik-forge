@@ -326,6 +326,427 @@ Zeile 3`,
     }
 }`
         }
+      },
+      {
+        id: "0-5",
+        chapterId: "chapter-0",
+        title: "Das Semikolon - Der Punkt im Code",
+        order: 5,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Das Semikolon \`;\` - Der wichtigste Punkt! 🔴
+
+## Warum Semikolons?
+
+In der deutschen Sprache beenden wir Saetze mit einem **Punkt**.
+In Java beenden wir Anweisungen mit einem **Semikolon** \`;\`
+
+## Die Regel
+
+> **Jede Anweisung in Java endet mit einem Semikolon!**
+
+## Beispiele
+
+\`\`\`java
+System.out.println("Hallo");    // ✅ Richtig
+System.out.println("Hallo")     // ❌ Fehler! Semikolon fehlt
+
+int zahl = 5;                   // ✅ Richtig
+int zahl = 5                    // ❌ Fehler!
+\`\`\`
+
+## Was ist eine Anweisung?
+
+Eine **Anweisung** ist ein Befehl an den Computer:
+- Text ausgeben: \`System.out.println("...");\`
+- Variable erstellen: \`int x = 10;\`
+- Rechnen: \`int summe = 5 + 3;\`
+
+## Was braucht KEIN Semikolon?
+
+- \`class Main {\` - Klassendefinition
+- \`if (bedingung) {\` - Bedingungen
+- \`for (...) {\` - Schleifen
+- \`// Kommentare\` - Kommentare
+
+## Typischer Anfaengerfehler
+
+\`\`\`java
+System.out.println("Hallo")
+System.out.println("Welt");
+\`\`\`
+
+Java sagt: **"';' expected"** = "Semikolon erwartet!"
+
+---
+
+**Merke dir: Anweisung = Semikolon am Ende!**`,
+          codeTemplate: `// Achte auf die Semikolons!
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Semikolon verstanden!");
+    }
+}`,
+          expectedOutput: "Semikolon verstanden!",
+          hints: [
+            "Jede println-Anweisung braucht ein Semikolon",
+            "Klicke auf 'Code ausfuehren'"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("Semikolon verstanden!");
+    }
+}`
+        }
+      },
+      {
+        id: "0-6",
+        chapterId: "chapter-0",
+        title: "Geschweifte Klammern { }",
+        order: 6,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Geschweifte Klammern \`{ }\` - Die Gruppierung 📦
+
+## Was machen geschweifte Klammern?
+
+Geschweifte Klammern **gruppieren Code**, der zusammengehoert.
+
+Denke an einen Karton: Alles was zusammengehoert, kommt in den gleichen Karton.
+
+## In Java
+
+\`\`\`java
+public class Main {           // Klammer AUF fuer die Klasse
+    
+    public static void main(String[] args) {  // Klammer AUF fuer main
+        
+        System.out.println("Hallo");
+        
+    }  // Klammer ZU fuer main
+    
+}  // Klammer ZU fuer die Klasse
+\`\`\`
+
+## Die Regeln
+
+1. **Jede \`{\` braucht eine \`}\`** - Sie kommen immer als Paar!
+2. **Verschachtelung** - Klammern koennen ineinander sein
+3. **Einrueckung** - Code innerhalb von Klammern wird eingerueckt (Tab-Taste)
+
+## Visualisierung
+
+\`\`\`
+public class Main {
+    ╔══════════════════════════════════════╗
+    ║  public static void main(...) {      ║
+    ║      ╔════════════════════════════╗  ║
+    ║      ║  System.out.println(...);  ║  ║
+    ║      ╚════════════════════════════╝  ║
+    ║  }                                   ║
+    ╚══════════════════════════════════════╝
+}
+\`\`\`
+
+## Typische Fehler
+
+| Fehler | Meldung |
+|--------|---------|
+| \`{\` vergessen | "'{' expected" |
+| \`}\` vergessen | "'}' expected" oder "reached end of file" |
+| Falsche Reihenfolge | Verschiedene Fehler |
+
+## Tipp
+
+Wenn du \`{\` tippst, tippe sofort \`}\` und schreibe dann dazwischen!
+
+---
+
+**Klammern = Organisation des Codes!**`,
+          codeTemplate: `// Beachte die Klammerstruktur!
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Klammern verstanden!");
+    }
+}`,
+          expectedOutput: "Klammern verstanden!",
+          hints: [
+            "Zaehle die oeffnenden und schliessenden Klammern",
+            "Hier: 2x { und 2x }"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("Klammern verstanden!");
+    }
+}`
+        }
+      },
+      {
+        id: "0-7",
+        chapterId: "chapter-0",
+        title: "Runde Klammern ( )",
+        order: 7,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Runde Klammern \`( )\` - Fuer Methoden und Bedingungen 🎯
+
+## Wofuer runde Klammern?
+
+Runde Klammern haben in Java mehrere Aufgaben:
+
+### 1. Bei Methoden (Funktionen)
+
+\`\`\`java
+System.out.println("Hallo");
+//              ↑         ↑
+//              (  Text   )
+\`\`\`
+
+Die Klammern enthalten, **was** die Methode bearbeiten soll.
+
+### 2. Bei der main-Methode
+
+\`\`\`java
+public static void main(String[] args)
+//                    ↑            ↑
+//                    ( Parameter  )
+\`\`\`
+
+### 3. Bei Berechnungen (Prioritaet)
+
+\`\`\`java
+int ergebnis = (5 + 3) * 2;  // = 16
+int anders = 5 + 3 * 2;      // = 11
+\`\`\`
+
+Klammern werden **zuerst** berechnet!
+
+## Die Regeln
+
+1. **Jede \`(\` braucht eine \`)\`**
+2. Nach Methodennamen kommt **immer** \`(\`
+3. Auch leere Klammern sind erlaubt: \`()\`
+
+## Beispiele
+
+\`\`\`java
+System.out.println("Hallo");     // Text in Klammern
+Math.max(5, 10);                 // Zwei Werte in Klammern
+String name = "Max".toUpperCase(); // Leere Klammern
+\`\`\`
+
+## Typische Fehler
+
+\`\`\`java
+System.out.println"Hallo";   // ❌ Klammer vergessen
+System.out.println("Hallo";  // ❌ Schliessende Klammer fehlt
+\`\`\`
+
+---
+
+**Runde Klammern = Was soll verarbeitet werden?**`,
+          codeTemplate: `// Runde Klammern bei println
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Runde Klammern verstanden!");
+    }
+}`,
+          expectedOutput: "Runde Klammern verstanden!",
+          hints: [
+            "println braucht runde Klammern",
+            "Der Text steht IN den Klammern"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("Runde Klammern verstanden!");
+    }
+}`
+        }
+      },
+      {
+        id: "0-8",
+        chapterId: "chapter-0",
+        title: "Anfuehrungszeichen \" \"",
+        order: 8,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Anfuehrungszeichen \`" "\` - Text markieren ✏️
+
+## Warum Anfuehrungszeichen?
+
+Java muss unterscheiden zwischen:
+- **Code** (Befehle fuer den Computer)
+- **Text** (Daten, die angezeigt werden)
+
+Anfuehrungszeichen sagen: **"Das hier ist Text, kein Code!"**
+
+## Beispiel
+
+\`\`\`java
+System.out.println("Hallo Welt");
+//                 ↑         ↑
+//                 "  Text   "
+\`\`\`
+
+Ohne Anfuehrungszeichen wuerde Java denken, "Hallo" ist eine Variable!
+
+## Die Regeln
+
+1. **Text (Strings) immer in \`" "\`**
+2. **Doppelte** Anfuehrungszeichen (nicht einfache!)
+3. Anfuehrungszeichen kommen als **Paar**
+
+## Richtig vs. Falsch
+
+\`\`\`java
+System.out.println("Hallo");   // ✅ Richtig
+System.out.println('Hallo');   // ❌ Einfache = nur einzelne Zeichen
+System.out.println(Hallo);     // ❌ Java sucht Variable "Hallo"
+System.out.println("Hallo);    // ❌ Schliessendes " fehlt
+\`\`\`
+
+## Text mit Sonderzeichen
+
+Was wenn du ein \`"\` im Text brauchst?
+
+\`\`\`java
+System.out.println("Er sagte: \\"Hallo\\"");
+// Ausgabe: Er sagte: "Hallo"
+\`\`\`
+
+Der Backslash \`\\\` sagt: Das naechste Zeichen ist speziell!
+
+## Haeufige Escape-Sequenzen
+
+| Code | Bedeutung |
+|------|-----------|
+| \`\\"\` | Anfuehrungszeichen |
+| \`\\n\` | Neue Zeile |
+| \`\\\\\` | Backslash |
+| \`\\t\` | Tab (Einrueckung) |
+
+---
+
+**Anfuehrungszeichen = Das ist Text!**`,
+          codeTemplate: `// Text braucht Anfuehrungszeichen
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Anfuehrungszeichen verstanden!");
+    }
+}`,
+          expectedOutput: "Anfuehrungszeichen verstanden!",
+          hints: [
+            "Text immer in doppelten Anfuehrungszeichen",
+            "Achte auf das Paar: oeffnend und schliessend"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("Anfuehrungszeichen verstanden!");
+    }
+}`
+        }
+      },
+      {
+        id: "0-9",
+        chapterId: "chapter-0",
+        title: "Die Java-Grundstruktur",
+        order: 9,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Die Java-Grundstruktur - Alles zusammen! 🏗️
+
+## Jedes Java-Programm hat diese Struktur:
+
+\`\`\`java
+public class Main {                         // 1. Klasse
+    public static void main(String[] args) {  // 2. main-Methode
+        // 3. Dein Code hier
+    }
+}
+\`\`\`
+
+## Teil fuer Teil erklaert:
+
+### 1. \`public class Main { }\`
+
+- **class** = Wir erstellen eine Klasse (Container fuer Code)
+- **Main** = Der Name (muss mit Grossbuchstabe beginnen)
+- **{ }** = Hier kommt der Inhalt der Klasse
+
+### 2. \`public static void main(String[] args) { }\`
+
+- **main** = Der Startpunkt des Programms
+- **String[] args** = Moegliche Eingaben (spaeter mehr)
+- **{ }** = Hier kommt dein eigentlicher Code
+
+### 3. Dein Code
+
+\`\`\`java
+System.out.println("Hallo!");
+int zahl = 42;
+// etc.
+\`\`\`
+
+## Visualisierung
+
+\`\`\`
+┌─────────────────────────────────────────┐
+│  public class Main {                    │  ← Klasse (der Container)
+│    ┌─────────────────────────────────┐  │
+│    │  public static void main(...) { │  │  ← main-Methode (Startpunkt)
+│    │    ┌─────────────────────────┐  │  │
+│    │    │  System.out.println();  │  │  │  ← Dein Code
+│    │    │  int x = 5;             │  │  │
+│    │    └─────────────────────────┘  │  │
+│    │  }                              │  │
+│    └─────────────────────────────────┘  │
+│  }                                      │
+└─────────────────────────────────────────┘
+\`\`\`
+
+## Merksatz
+
+> Klasse → main-Methode → Dein Code
+> 
+> Jede Ebene hat ihre eigenen **{ }**
+
+## Checkliste fuer jedes Programm
+
+- [ ] \`public class Main {\` am Anfang
+- [ ] \`public static void main(String[] args) {\`
+- [ ] Dein Code mit Semikolons
+- [ ] Zwei schliessende \`}\` am Ende
+
+---
+
+**Diese Struktur wirst du in JEDEM Java-Programm sehen!**`,
+          codeTemplate: `// Die komplette Grundstruktur
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Ich verstehe die Struktur!");
+    }
+}`,
+          expectedOutput: "Ich verstehe die Struktur!",
+          hints: [
+            "Diese Struktur ist immer gleich",
+            "Merke: class -> main -> Code"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("Ich verstehe die Struktur!");
+    }
+}`
+        }
       }
     ]
   },
