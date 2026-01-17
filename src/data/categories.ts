@@ -20,7 +20,8 @@ import {
   Table2,
   Calculator,
   Cloud,
-  Cpu
+  Cpu,
+  HardDrive
 } from "lucide-react";
 
 export interface Category {
@@ -254,5 +255,15 @@ export const categories: Category[] = [
     icon: Cpu,
     difficulty: "Fortgeschritten",
     gradient: "from-purple-500 to-indigo-600"
+  },
+  {
+    id: "speicherloesungen",
+    title: "Speicherlösungen",
+    description: "DAS, NAS, SAN, RAID, Backup-Strategien und Archivierung",
+    totalElements: 70,
+    completedElements: 0,
+    icon: HardDrive,
+    difficulty: "Fortgeschritten",
+    gradient: "from-slate-500 to-zinc-600"
   }
 ];
