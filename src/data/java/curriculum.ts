@@ -395,6 +395,169 @@ System.out.println("Hallo Welt!");
         }
       },
       {
+        id: "1-0a",
+        chapterId: "chapter-1",
+        title: "Ändere den Text",
+        order: 0.1,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Text ändern ✏️
+
+Super, du hast "Hallo Welt!" ausgegeben! Jetzt ändern wir den Text.
+
+## Deine Aufgabe
+
+Ändere den Text so, dass stattdessen ausgegeben wird:
+
+\`\`\`
+Ich lerne Java!
+\`\`\`
+
+## Erinnerung
+
+Der Text steht **zwischen den Anführungszeichen**:
+
+\`\`\`java
+System.out.println("HIER STEHT DER TEXT");
+\`\`\`
+
+---
+
+**Ändere den Text und klicke "Code ausführen"!**`,
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        // Ändere "Hallo Welt!" zu "Ich lerne Java!"
+        System.out.println("Hallo Welt!");
+    }
+}`,
+          expectedOutput: "Ich lerne Java!",
+          hints: [
+            "Ersetze 'Hallo Welt!' durch 'Ich lerne Java!'",
+            "Achte auf die exakte Schreibweise",
+            "Das Ausrufezeichen gehört dazu!"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("Ich lerne Java!");
+    }
+}`
+        }
+      },
+      {
+        id: "1-0b",
+        chapterId: "chapter-1",
+        title: "Zwei Zeilen ausgeben",
+        order: 0.2,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Mehrere Zeilen ausgeben 📝
+
+Bisher hast du eine Zeile ausgegeben. Jetzt geben wir **zwei Zeilen** aus!
+
+## So geht's
+
+Für jede Zeile brauchst du ein eigenes \`println\`:
+
+\`\`\`java
+System.out.println("Erste Zeile");
+System.out.println("Zweite Zeile");
+\`\`\`
+
+## Deine Aufgabe
+
+Gib diese zwei Zeilen aus:
+
+\`\`\`
+Java ist cool
+Programmieren macht Spass
+\`\`\`
+
+## Wichtig
+- Jedes \`println\` erzeugt eine neue Zeile
+- Vergiss das Semikolon \`;\` am Ende nicht!
+
+---
+
+**Schreibe zwei println-Anweisungen!**`,
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        // Zeile 1: "Java ist cool"
+        
+        // Zeile 2: "Programmieren macht Spass"
+        
+    }
+}`,
+          expectedOutput: `Java ist cool
+Programmieren macht Spass`,
+          hints: [
+            "Du brauchst zwei System.out.println() Anweisungen",
+            "Erste Zeile: System.out.println(\"Java ist cool\");",
+            "Zweite Zeile: System.out.println(\"Programmieren macht Spass\");"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("Java ist cool");
+        System.out.println("Programmieren macht Spass");
+    }
+}`
+        }
+      },
+      {
+        id: "1-0c",
+        chapterId: "chapter-1",
+        title: "Dein eigener Text",
+        order: 0.3,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Kreativ werden! 🎨
+
+Jetzt darfst du kreativ sein! Schreibe deinen **eigenen** Text.
+
+## Deine Aufgabe
+
+Gib genau diesen Satz aus:
+
+\`\`\`
+Mein Name ist ein Java-Programmierer
+\`\`\`
+
+## Warum diese Aufgabe?
+
+Du übst:
+- Die richtige Syntax (Schreibweise)
+- Wo der Text hingehört
+- Das Semikolon nicht zu vergessen
+
+## Tipp
+
+Kopiere den Text nicht - **tippe ihn selbst**! So lernst du besser.
+
+---
+
+**Schreibe den Satz und führe den Code aus!**`,
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        // Gib aus: Mein Name ist ein Java-Programmierer
+        
+    }
+}`,
+          expectedOutput: "Mein Name ist ein Java-Programmierer",
+          hints: [
+            "System.out.println(\"Mein Name ist ein Java-Programmierer\");",
+            "Achte auf Groß- und Kleinschreibung",
+            "Vergiss das Semikolon am Ende nicht!"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("Mein Name ist ein Java-Programmierer");
+    }
+}`
+        }
+      },
+      {
         id: "1-1",
         chapterId: "chapter-1",
         title: "Dein erstes Java-Programm",
