@@ -1,17 +1,5 @@
 import { useRef, useCallback } from "react";
-import Editor, { OnMount, loader } from "@monaco-editor/react";
-import * as monaco from "monaco-editor";
-import EditorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
-
-// Force Monaco to use the locally bundled ESM build (no external CDN scripts)
-loader.config({ monaco });
-
-// Ensure Monaco can spawn its web worker in Vite
-if (typeof self !== "undefined") {
-  (self as any).MonacoEnvironment = {
-    getWorker: () => new EditorWorker(),
-  };
-}
+import Editor, { OnMount } from "@monaco-editor/react";
 
 interface JavaCodeEditorProps {
   value: string;
@@ -26,7 +14,7 @@ export function JavaCodeEditor({ value, onChange, readOnly = false, height = "30
   const handleEditorMount: OnMount = useCallback((editor, monaco) => {
     editorRef.current = editor;
 
-    // Configure Java language
+    // Configure Java language completions
     monaco.languages.registerCompletionItemProvider("java", {
       provideCompletionItems: (model, position) => {
         const word = model.getWordUntilPosition(position);
@@ -52,20 +40,12 @@ export function JavaCodeEditor({ value, onChange, readOnly = false, height = "30
           { label: "new", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "new", range },
           { label: "try", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "try", range },
           { label: "catch", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "catch", range },
-          { label: "finally", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "finally", range },
-          { label: "throw", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "throw", range },
-          { label: "extends", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "extends", range },
-          { label: "implements", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "implements", range },
-          { label: "import", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "import", range },
           
           // Types
           { label: "int", kind: monaco.languages.CompletionItemKind.TypeParameter, insertText: "int", range },
           { label: "String", kind: monaco.languages.CompletionItemKind.TypeParameter, insertText: "String", range },
           { label: "double", kind: monaco.languages.CompletionItemKind.TypeParameter, insertText: "double", range },
           { label: "boolean", kind: monaco.languages.CompletionItemKind.TypeParameter, insertText: "boolean", range },
-          { label: "char", kind: monaco.languages.CompletionItemKind.TypeParameter, insertText: "char", range },
-          { label: "ArrayList", kind: monaco.languages.CompletionItemKind.Class, insertText: "ArrayList", range },
-          { label: "HashMap", kind: monaco.languages.CompletionItemKind.Class, insertText: "HashMap", range },
           
           // Snippets
           {
@@ -84,40 +64,14 @@ export function JavaCodeEditor({ value, onChange, readOnly = false, height = "30
             documentation: "Main method",
             range,
           },
-          {
-            label: "fori",
-            kind: monaco.languages.CompletionItemKind.Snippet,
-            insertText: "for (int ${1:i} = 0; ${1:i} < ${2:length}; ${1:i}++) {\n\t$3\n}",
-            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-            documentation: "For loop with index",
-            range,
-          },
-          {
-            label: "foreach",
-            kind: monaco.languages.CompletionItemKind.Snippet,
-            insertText: "for (${1:Type} ${2:item} : ${3:collection}) {\n\t$4\n}",
-            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-            documentation: "For-each loop",
-            range,
-          },
-          {
-            label: "trycatch",
-            kind: monaco.languages.CompletionItemKind.Snippet,
-            insertText: "try {\n\t$1\n} catch (${2:Exception} e) {\n\t$3\n}",
-            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-            documentation: "Try-catch block",
-            range,
-          },
         ];
 
         return { suggestions };
       },
     });
 
-    // Focus the editor after a short delay
-    setTimeout(() => {
-      editor.focus();
-    }, 100);
+    // Focus editor
+    setTimeout(() => editor.focus(), 100);
   }, []);
 
   return (
@@ -142,16 +96,8 @@ export function JavaCodeEditor({ value, onChange, readOnly = false, height = "30
           padding: { top: 12, bottom: 12 },
           suggestOnTriggerCharacters: true,
           quickSuggestions: true,
-          formatOnPaste: true,
-          formatOnType: true,
           cursorBlinking: "smooth",
-          cursorSmoothCaretAnimation: "on",
-          smoothScrolling: true,
           bracketPairColorization: { enabled: true },
-          guides: {
-            bracketPairs: true,
-            indentation: true,
-          },
         }}
         loading={
           <div className="h-full flex items-center justify-center bg-[#1e1e1e] text-white/70" style={{ height }}>
