@@ -85,7 +85,44 @@ export function JavaCodeEditor({ value, onChange, readOnly = false, height = "30
   }, []);
 
   return (
-    <div className="rounded-lg overflow-hidden border border-border [&_.monaco-editor_.find-widget]:!hidden [&_.monaco-editor_.findInput]:!hidden [&_.monaco-editor-background]:!bg-[#1e1e1e]">
+    <div className="rounded-lg overflow-hidden border border-border java-code-editor-wrapper">
+      <style>{`
+        /* Hide find widget and other dialogs */
+        .java-code-editor-wrapper .monaco-editor .find-widget,
+        .java-code-editor-wrapper .monaco-editor .editor-widget:not(.suggest-widget):not(.parameter-hints-widget) {
+          display: none !important;
+        }
+        /* Make the hidden textarea COMPLETELY invisible but functional */
+        .java-code-editor-wrapper .monaco-editor .inputarea,
+        .java-code-editor-wrapper .monaco-editor textarea.inputarea,
+        .java-code-editor-wrapper .monaco-editor .inputarea.ime-input,
+        .java-code-editor-wrapper textarea {
+          background: transparent !important;
+          color: transparent !important;
+          border: none !important;
+          outline: none !important;
+          box-shadow: none !important;
+          caret-color: transparent !important;
+          resize: none !important;
+          opacity: 0 !important;
+          width: 1px !important;
+          height: 1px !important;
+          overflow: hidden !important;
+        }
+        /* Fix scrollbar styling */
+        .java-code-editor-wrapper .monaco-scrollable-element > .scrollbar > .slider {
+          background: rgba(255,255,255,0.15) !important;
+          border-radius: 4px !important;
+        }
+        .java-code-editor-wrapper .monaco-scrollable-element > .scrollbar > .slider:hover {
+          background: rgba(255,255,255,0.25) !important;
+        }
+        /* Ensure proper overflow handling */
+        .java-code-editor-wrapper .monaco-editor,
+        .java-code-editor-wrapper .monaco-editor .overflow-guard {
+          overflow: hidden !important;
+        }
+      `}</style>
       <Editor
         height={height}
         language="java"
@@ -109,24 +146,18 @@ export function JavaCodeEditor({ value, onChange, readOnly = false, height = "30
           overviewRulerBorder: false,
           overviewRulerLanes: 0,
           hideCursorInOverviewRuler: true,
-          // Disable all problematic features
-          renameOnType: false,
-          quickSuggestions: false,
-          parameterHints: { enabled: false },
-          hover: { enabled: false },
-          links: false,
-          contextmenu: false,
+          // Completely disable find widget
+          find: {
+            addExtraSpaceOnTop: false,
+            autoFindInSelection: "never",
+            seedSearchStringFromSelection: "never",
+          },
           scrollbar: {
             vertical: "auto",
             horizontal: "auto",
             verticalScrollbarSize: 8,
             horizontalScrollbarSize: 8,
             useShadows: false,
-          },
-          find: {
-            addExtraSpaceOnTop: false,
-            autoFindInSelection: "never",
-            seedSearchStringFromSelection: "never",
           },
         }}
         loading={
