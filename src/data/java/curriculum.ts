@@ -1828,29 +1828,26 @@ meinAuto.fahren();  // Ausgabe: Das Auto fährt!
 ## Aufgabe
 
 Erstelle eine Klasse \`Hund\` mit dem Attribut \`name\` und der Methode \`bellen()\`, die "Wuff!" ausgibt.`,
-          codeTemplate: `// Definiere die Klasse Hund hier (vor der Main-Klasse)
-class Hund {
-    // Attribut name
+          codeTemplate: `class Hund {
+    String name;
     
-    // Methode bellen() die "Wuff!" ausgibt
+    // Ergaenze hier die Methode bellen()
+    // die "Wuff!" ausgibt
     
 }
 
 public class Main {
     public static void main(String[] args) {
-        // Erstelle einen Hund namens "Bello"
         Hund meinHund = new Hund();
         meinHund.name = "Bello";
-        
-        // Rufe die bellen() Methode auf
         meinHund.bellen();
     }
 }`,
           expectedOutput: "Wuff!",
           hints: [
-            "String name; für das Attribut",
             "public void bellen() { ... }",
-            "System.out.println(\"Wuff!\"); in der Methode"
+            "System.out.println(\"Wuff!\"); in der Methode",
+            "Die Methode muss innerhalb der Hund-Klasse stehen"
           ],
           solution: `class Hund {
     String name;
