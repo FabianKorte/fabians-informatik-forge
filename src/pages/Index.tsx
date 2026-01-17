@@ -97,7 +97,14 @@ const Index = () => {
   }, []);
 
   const handleShowProgress = useCallback(() => navigate('/progress'), [navigate]);
-  const handleCategoryStart = useCallback((categoryId: string) => navigate(`/learn/${categoryId}`), [navigate]);
+  const handleCategoryStart = useCallback((categoryId: string) => {
+    // Java hat eine eigene spezielle Lernplattform
+    if (categoryId === 'java') {
+      navigate('/java');
+    } else {
+      navigate(`/learn/${categoryId}`);
+    }
+  }, [navigate]);
   const handleFeedbackSubmitted = useCallback(() => setFeedbackRefreshTrigger(prev => prev + 1), []);
 
   // Keyboard shortcuts

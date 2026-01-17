@@ -807,6 +807,1154 @@ Erstelle eine Methode \`quadrat\`, die eine Zahl mit sich selbst multipliziert u
         }
       }
     ]
+  },
+  {
+    id: "chapter-4",
+    title: "Kapitel 4: Objektorientierte Programmierung",
+    description: "Lerne die Grundlagen von OOP: Klassen, Objekte, Vererbung und Polymorphismus",
+    order: 4,
+    isUnlocked: false,
+    lessons: [
+      {
+        id: "4-1",
+        chapterId: "chapter-4",
+        title: "Klassen und Objekte",
+        order: 1,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Klassen und Objekte 🏗️
+
+In Java ist alles ein **Objekt**. Objekte werden aus **Klassen** erstellt.
+
+## Was ist eine Klasse?
+
+Eine Klasse ist wie ein Bauplan. Sie definiert:
+- **Attribute** (Eigenschaften/Variablen)
+- **Methoden** (Verhalten/Funktionen)
+
+\`\`\`java
+public class Auto {
+    // Attribute
+    String marke;
+    int baujahr;
+    
+    // Methode
+    public void fahren() {
+        System.out.println("Das Auto fährt!");
+    }
+}
+\`\`\`
+
+## Objekte erstellen
+
+\`\`\`java
+Auto meinAuto = new Auto();
+meinAuto.marke = "BMW";
+meinAuto.baujahr = 2020;
+meinAuto.fahren();  // Ausgabe: Das Auto fährt!
+\`\`\`
+
+## Aufgabe
+
+Erstelle eine Klasse \`Hund\` mit dem Attribut \`name\` und der Methode \`bellen()\`, die "Wuff!" ausgibt.`,
+          codeTemplate: `// Definiere die Klasse Hund hier (vor der Main-Klasse)
+class Hund {
+    // Attribut name
+    
+    // Methode bellen() die "Wuff!" ausgibt
+    
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Erstelle einen Hund namens "Bello"
+        Hund meinHund = new Hund();
+        meinHund.name = "Bello";
+        
+        // Rufe die bellen() Methode auf
+        meinHund.bellen();
+    }
+}`,
+          expectedOutput: "Wuff!",
+          hints: [
+            "String name; für das Attribut",
+            "public void bellen() { ... }",
+            "System.out.println(\"Wuff!\"); in der Methode"
+          ],
+          solution: `class Hund {
+    String name;
+    
+    public void bellen() {
+        System.out.println("Wuff!");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Hund meinHund = new Hund();
+        meinHund.name = "Bello";
+        meinHund.bellen();
+    }
+}`
+        }
+      },
+      {
+        id: "4-2",
+        chapterId: "chapter-4",
+        title: "Konstruktoren",
+        order: 2,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Konstruktoren 🔨
+
+Ein **Konstruktor** ist eine spezielle Methode, die beim Erstellen eines Objekts aufgerufen wird.
+
+## Warum Konstruktoren?
+
+Konstruktoren initialisieren Objekte mit Startwerten.
+
+\`\`\`java
+public class Person {
+    String name;
+    int alter;
+    
+    // Konstruktor
+    public Person(String n, int a) {
+        name = n;
+        alter = a;
+    }
+}
+\`\`\`
+
+## Objekt mit Konstruktor erstellen
+
+\`\`\`java
+Person max = new Person("Max", 25);
+System.out.println(max.name);  // Max
+System.out.println(max.alter); // 25
+\`\`\`
+
+## Das Schlüsselwort "this"
+
+\`\`\`java
+public Person(String name, int alter) {
+    this.name = name;   // this bezieht sich auf das Objekt
+    this.alter = alter;
+}
+\`\`\`
+
+## Aufgabe
+
+Erstelle eine Klasse \`Buch\` mit Konstruktor für \`titel\` und \`autor\`. Gib "Titel von Autor" aus.`,
+          codeTemplate: `class Buch {
+    String titel;
+    String autor;
+    
+    // Erstelle einen Konstruktor mit titel und autor
+    
+    
+    public void info() {
+        System.out.println(titel + " von " + autor);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Erstelle ein Buch "Java Basics" von "Max Müller"
+        Buch buch = new Buch("Java Basics", "Max Müller");
+        buch.info();
+    }
+}`,
+          expectedOutput: "Java Basics von Max Müller",
+          hints: [
+            "public Buch(String titel, String autor)",
+            "Nutze this.titel = titel;",
+            "Der Konstruktor hat den gleichen Namen wie die Klasse"
+          ],
+          solution: `class Buch {
+    String titel;
+    String autor;
+    
+    public Buch(String titel, String autor) {
+        this.titel = titel;
+        this.autor = autor;
+    }
+    
+    public void info() {
+        System.out.println(titel + " von " + autor);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Buch buch = new Buch("Java Basics", "Max Müller");
+        buch.info();
+    }
+}`
+        }
+      },
+      {
+        id: "4-3",
+        chapterId: "chapter-4",
+        title: "Getter und Setter",
+        order: 3,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Getter und Setter (Enkapsulierung) 🔐
+
+**Enkapsulierung** bedeutet, Attribute vor direktem Zugriff zu schützen.
+
+## Private Attribute
+
+\`\`\`java
+public class Konto {
+    private double kontostand;  // private = geschützt
+}
+\`\`\`
+
+## Getter - Wert lesen
+
+\`\`\`java
+public double getKontostand() {
+    return kontostand;
+}
+\`\`\`
+
+## Setter - Wert setzen
+
+\`\`\`java
+public void setKontostand(double betrag) {
+    if (betrag >= 0) {
+        kontostand = betrag;
+    }
+}
+\`\`\`
+
+## Vorteile
+
+- Kontrolle über Wertzuweisung
+- Validierung möglich
+- Interne Implementierung änderbar
+
+## Aufgabe
+
+Erstelle eine Klasse \`Spieler\` mit privatem \`punkte\`-Attribut, Getter und Setter. Der Setter soll nur positive Werte akzeptieren.`,
+          codeTemplate: `class Spieler {
+    // Private Variable punkte
+    
+    
+    // Getter für punkte
+    
+    
+    // Setter für punkte (nur positive Werte erlauben)
+    
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Spieler spieler = new Spieler();
+        spieler.setPunkte(100);
+        System.out.println(spieler.getPunkte());
+    }
+}`,
+          expectedOutput: "100",
+          hints: [
+            "private int punkte;",
+            "public int getPunkte() { return punkte; }",
+            "if (wert >= 0) { punkte = wert; }"
+          ],
+          solution: `class Spieler {
+    private int punkte;
+    
+    public int getPunkte() {
+        return punkte;
+    }
+    
+    public void setPunkte(int wert) {
+        if (wert >= 0) {
+            punkte = wert;
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Spieler spieler = new Spieler();
+        spieler.setPunkte(100);
+        System.out.println(spieler.getPunkte());
+    }
+}`
+        }
+      },
+      {
+        id: "4-4",
+        chapterId: "chapter-4",
+        title: "Vererbung",
+        order: 4,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Vererbung 👨‍👧
+
+**Vererbung** ermöglicht es einer Klasse, Eigenschaften einer anderen Klasse zu übernehmen.
+
+## Basisklasse (Superklasse)
+
+\`\`\`java
+public class Tier {
+    String name;
+    
+    public void essen() {
+        System.out.println(name + " isst.");
+    }
+}
+\`\`\`
+
+## Abgeleitete Klasse (Subklasse)
+
+\`\`\`java
+public class Hund extends Tier {
+    public void bellen() {
+        System.out.println(name + " bellt!");
+    }
+}
+\`\`\`
+
+## Verwendung
+
+\`\`\`java
+Hund hund = new Hund();
+hund.name = "Bello";
+hund.essen();   // Von Tier geerbt
+hund.bellen();  // Eigene Methode
+\`\`\`
+
+## Aufgabe
+
+Erstelle eine Klasse \`Fahrzeug\` mit Methode \`starten()\`. Erstelle \`Auto\` das von \`Fahrzeug\` erbt und eine eigene Methode \`hupen()\` hat.`,
+          codeTemplate: `class Fahrzeug {
+    // Methode starten() die "Fahrzeug startet..." ausgibt
+    
+}
+
+class Auto extends Fahrzeug {
+    // Methode hupen() die "Huuup!" ausgibt
+    
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Auto auto = new Auto();
+        auto.starten();
+        auto.hupen();
+    }
+}`,
+          expectedOutput: `Fahrzeug startet...
+Huuup!`,
+          hints: [
+            "public void starten() { ... }",
+            "class Auto extends Fahrzeug",
+            "public void hupen() { ... }"
+          ],
+          solution: `class Fahrzeug {
+    public void starten() {
+        System.out.println("Fahrzeug startet...");
+    }
+}
+
+class Auto extends Fahrzeug {
+    public void hupen() {
+        System.out.println("Huuup!");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Auto auto = new Auto();
+        auto.starten();
+        auto.hupen();
+    }
+}`
+        }
+      },
+      {
+        id: "4-5",
+        chapterId: "chapter-4",
+        title: "Challenge: Mitarbeiterverwaltung",
+        order: 5,
+        type: "challenge",
+        isCompleted: false,
+        content: {
+          explanation: `# 🏆 Challenge: Mitarbeiterverwaltung
+
+Erstelle ein kleines OOP-System!
+
+## Anforderungen
+
+1. Erstelle eine Klasse \`Mitarbeiter\` mit:
+   - Private Attribute: \`name\` (String), \`gehalt\` (double)
+   - Konstruktor für beide Attribute
+   - Getter für beide Attribute
+   - Methode \`info()\` die "Name: [name], Gehalt: [gehalt]€" ausgibt
+
+2. Erstelle ein Mitarbeiter-Objekt und rufe \`info()\` auf.
+
+## Beispielausgabe
+
+\`\`\`
+Name: Anna, Gehalt: 3500.0€
+\`\`\``,
+          codeTemplate: `class Mitarbeiter {
+    // Private Attribute
+    
+    
+    // Konstruktor
+    
+    
+    // Getter
+    
+    
+    // info() Methode
+    
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Erstelle Mitarbeiter "Anna" mit Gehalt 3500.0
+        
+        // Rufe info() auf
+        
+    }
+}`,
+          expectedOutput: "Name: Anna, Gehalt: 3500.0€",
+          hints: [
+            "private String name; private double gehalt;",
+            "public Mitarbeiter(String name, double gehalt)",
+            "System.out.println(\"Name: \" + name + \", Gehalt: \" + gehalt + \"€\");"
+          ],
+          solution: `class Mitarbeiter {
+    private String name;
+    private double gehalt;
+    
+    public Mitarbeiter(String name, double gehalt) {
+        this.name = name;
+        this.gehalt = gehalt;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public double getGehalt() {
+        return gehalt;
+    }
+    
+    public void info() {
+        System.out.println("Name: " + name + ", Gehalt: " + gehalt + "€");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Mitarbeiter anna = new Mitarbeiter("Anna", 3500.0);
+        anna.info();
+    }
+}`
+        }
+      }
+    ]
+  },
+  {
+    id: "chapter-5",
+    title: "Kapitel 5: Exception Handling",
+    description: "Lerne, wie du Fehler elegant behandelst",
+    order: 5,
+    isUnlocked: false,
+    lessons: [
+      {
+        id: "5-1",
+        chapterId: "chapter-5",
+        title: "Try-Catch Grundlagen",
+        order: 1,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Exception Handling: Fehler abfangen 🛡️
+
+Fehler können Programme zum Absturz bringen. Mit **try-catch** fangen wir sie ab.
+
+## Grundstruktur
+
+\`\`\`java
+try {
+    // Code der einen Fehler verursachen könnte
+} catch (ExceptionTyp e) {
+    // Was passieren soll wenn der Fehler auftritt
+}
+\`\`\`
+
+## Beispiel: Division durch Null
+
+\`\`\`java
+try {
+    int ergebnis = 10 / 0;  // Fehler!
+} catch (ArithmeticException e) {
+    System.out.println("Fehler: Division durch Null!");
+}
+\`\`\`
+
+## Häufige Exception-Typen
+
+| Exception | Ursache |
+|-----------|---------|
+| ArithmeticException | Division durch 0 |
+| NullPointerException | Zugriff auf null |
+| ArrayIndexOutOfBoundsException | Ungültiger Array-Index |
+| NumberFormatException | Ungültige Zahlenkonvertierung |
+
+## Aufgabe
+
+Schreibe Code, der versucht durch 0 zu teilen und den Fehler abfängt. Gib "Division durch Null nicht möglich!" aus.`,
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        int a = 10;
+        int b = 0;
+        
+        // Versuche a / b und fange den Fehler ab
+        
+    }
+}`,
+          expectedOutput: "Division durch Null nicht möglich!",
+          hints: [
+            "try { int ergebnis = a / b; }",
+            "catch (ArithmeticException e) { ... }",
+            "System.out.println(\"Division durch Null nicht möglich!\");"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        int a = 10;
+        int b = 0;
+        
+        try {
+            int ergebnis = a / b;
+            System.out.println(ergebnis);
+        } catch (ArithmeticException e) {
+            System.out.println("Division durch Null nicht möglich!");
+        }
+    }
+}`
+        }
+      },
+      {
+        id: "5-2",
+        chapterId: "chapter-5",
+        title: "Finally Block",
+        order: 2,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Der Finally Block 🔚
+
+Der **finally**-Block wird IMMER ausgeführt, egal ob ein Fehler auftritt oder nicht.
+
+## Struktur
+
+\`\`\`java
+try {
+    // Riskanter Code
+} catch (Exception e) {
+    // Fehlerbehandlung
+} finally {
+    // Wird immer ausgeführt
+}
+\`\`\`
+
+## Wofür?
+
+- Ressourcen freigeben (Dateien schließen, etc.)
+- Aufräumarbeiten durchführen
+- Logging/Protokollierung
+
+## Beispiel
+
+\`\`\`java
+try {
+    System.out.println("Versuche...");
+    int x = 10 / 0;
+} catch (ArithmeticException e) {
+    System.out.println("Fehler aufgetreten!");
+} finally {
+    System.out.println("Aufräumen...");
+}
+\`\`\`
+
+## Aufgabe
+
+Erstelle einen try-catch-finally Block. Versuche eine Division, fange den Fehler ab und gib im finally "Fertig!" aus.`,
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        // try-catch-finally mit Division durch 0
+        // catch soll "Fehler!" ausgeben
+        // finally soll "Fertig!" ausgeben
+        
+    }
+}`,
+          expectedOutput: `Fehler!
+Fertig!`,
+          hints: [
+            "try { int x = 5 / 0; }",
+            "catch (ArithmeticException e) { System.out.println(\"Fehler!\"); }",
+            "finally { System.out.println(\"Fertig!\"); }"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        try {
+            int x = 5 / 0;
+        } catch (ArithmeticException e) {
+            System.out.println("Fehler!");
+        } finally {
+            System.out.println("Fertig!");
+        }
+    }
+}`
+        }
+      },
+      {
+        id: "5-3",
+        chapterId: "chapter-5",
+        title: "Mehrere Catch-Blöcke",
+        order: 3,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Mehrere Catch-Blöcke 🎯
+
+Du kannst verschiedene Fehlertypen unterschiedlich behandeln.
+
+## Syntax
+
+\`\`\`java
+try {
+    // Code
+} catch (ArithmeticException e) {
+    // Mathe-Fehler
+} catch (NullPointerException e) {
+    // Null-Fehler
+} catch (Exception e) {
+    // Alle anderen Fehler
+}
+\`\`\`
+
+## Wichtig!
+
+Spezifischere Exceptions müssen **vor** allgemeineren stehen!
+
+\`\`\`java
+// RICHTIG:
+catch (ArithmeticException e) { }
+catch (Exception e) { }
+
+// FALSCH:
+catch (Exception e) { }  // Fängt alles ab
+catch (ArithmeticException e) { }  // Wird nie erreicht!
+\`\`\`
+
+## Aufgabe
+
+Fange einen ArrayIndexOutOfBoundsException ab und gib "Ungültiger Index!" aus.`,
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        int[] zahlen = {1, 2, 3};
+        
+        // Versuche auf zahlen[10] zuzugreifen
+        // und fange den Fehler ab
+        
+    }
+}`,
+          expectedOutput: "Ungültiger Index!",
+          hints: [
+            "try { int x = zahlen[10]; }",
+            "catch (ArrayIndexOutOfBoundsException e)",
+            "System.out.println(\"Ungültiger Index!\");"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        int[] zahlen = {1, 2, 3};
+        
+        try {
+            int x = zahlen[10];
+            System.out.println(x);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Ungültiger Index!");
+        }
+    }
+}`
+        }
+      }
+    ]
+  },
+  {
+    id: "chapter-6",
+    title: "Kapitel 6: Collections",
+    description: "ArrayList, HashMap und andere nützliche Datenstrukturen",
+    order: 6,
+    isUnlocked: false,
+    lessons: [
+      {
+        id: "6-1",
+        chapterId: "chapter-6",
+        title: "ArrayList Grundlagen",
+        order: 1,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# ArrayList: Dynamische Listen 📋
+
+Arrays haben eine feste Größe. **ArrayList** wächst automatisch!
+
+## Import
+
+\`\`\`java
+import java.util.ArrayList;
+\`\`\`
+
+## ArrayList erstellen
+
+\`\`\`java
+ArrayList<String> namen = new ArrayList<>();
+\`\`\`
+
+## Wichtige Methoden
+
+| Methode | Beschreibung |
+|---------|--------------|
+| add(element) | Element hinzufügen |
+| get(index) | Element abrufen |
+| remove(index) | Element entfernen |
+| size() | Anzahl Elemente |
+| clear() | Alle löschen |
+
+## Beispiel
+
+\`\`\`java
+ArrayList<String> tiere = new ArrayList<>();
+tiere.add("Hund");
+tiere.add("Katze");
+System.out.println(tiere.get(0));  // Hund
+System.out.println(tiere.size());  // 2
+\`\`\`
+
+## Aufgabe
+
+Erstelle eine ArrayList mit den Zahlen 10, 20, 30 und gib alle aus.`,
+          codeTemplate: `import java.util.ArrayList;
+
+public class Main {
+    public static void main(String[] args) {
+        // Erstelle eine ArrayList<Integer>
+        
+        // Füge 10, 20, 30 hinzu
+        
+        // Gib alle Elemente mit einer for-Schleife aus
+        
+    }
+}`,
+          expectedOutput: `10
+20
+30`,
+          hints: [
+            "ArrayList<Integer> zahlen = new ArrayList<>();",
+            "zahlen.add(10);",
+            "for (int i = 0; i < zahlen.size(); i++)"
+          ],
+          solution: `import java.util.ArrayList;
+
+public class Main {
+    public static void main(String[] args) {
+        ArrayList<Integer> zahlen = new ArrayList<>();
+        zahlen.add(10);
+        zahlen.add(20);
+        zahlen.add(30);
+        
+        for (int i = 0; i < zahlen.size(); i++) {
+            System.out.println(zahlen.get(i));
+        }
+    }
+}`
+        }
+      },
+      {
+        id: "6-2",
+        chapterId: "chapter-6",
+        title: "For-Each Schleife",
+        order: 2,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# For-Each Schleife 🔄
+
+Eine elegantere Art, durch Collections zu iterieren.
+
+## Syntax
+
+\`\`\`java
+for (Typ element : collection) {
+    // element verwenden
+}
+\`\`\`
+
+## Beispiel
+
+\`\`\`java
+ArrayList<String> farben = new ArrayList<>();
+farben.add("Rot");
+farben.add("Grün");
+farben.add("Blau");
+
+for (String farbe : farben) {
+    System.out.println(farbe);
+}
+\`\`\`
+
+## Vergleich
+
+\`\`\`java
+// Klassische for-Schleife
+for (int i = 0; i < farben.size(); i++) {
+    System.out.println(farben.get(i));
+}
+
+// For-Each (einfacher!)
+for (String farbe : farben) {
+    System.out.println(farbe);
+}
+\`\`\`
+
+## Aufgabe
+
+Erstelle eine ArrayList mit "A", "B", "C" und gib sie mit for-each aus.`,
+          codeTemplate: `import java.util.ArrayList;
+
+public class Main {
+    public static void main(String[] args) {
+        ArrayList<String> buchstaben = new ArrayList<>();
+        buchstaben.add("A");
+        buchstaben.add("B");
+        buchstaben.add("C");
+        
+        // Gib alle Buchstaben mit for-each aus
+        
+    }
+}`,
+          expectedOutput: `A
+B
+C`,
+          hints: [
+            "for (String buchstabe : buchstaben)",
+            "System.out.println(buchstabe);",
+            "Kein Index nötig bei for-each!"
+          ],
+          solution: `import java.util.ArrayList;
+
+public class Main {
+    public static void main(String[] args) {
+        ArrayList<String> buchstaben = new ArrayList<>();
+        buchstaben.add("A");
+        buchstaben.add("B");
+        buchstaben.add("C");
+        
+        for (String buchstabe : buchstaben) {
+            System.out.println(buchstabe);
+        }
+    }
+}`
+        }
+      },
+      {
+        id: "6-3",
+        chapterId: "chapter-6",
+        title: "HashMap: Schlüssel-Wert-Paare",
+        order: 3,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# HashMap: Wörterbuch-Struktur 📖
+
+Eine **HashMap** speichert Daten als Schlüssel-Wert-Paare.
+
+## Import
+
+\`\`\`java
+import java.util.HashMap;
+\`\`\`
+
+## HashMap erstellen
+
+\`\`\`java
+HashMap<String, Integer> alter = new HashMap<>();
+\`\`\`
+
+## Wichtige Methoden
+
+| Methode | Beschreibung |
+|---------|--------------|
+| put(key, value) | Eintrag hinzufügen |
+| get(key) | Wert abrufen |
+| containsKey(key) | Schlüssel prüfen |
+| remove(key) | Eintrag entfernen |
+| size() | Anzahl Einträge |
+
+## Beispiel
+
+\`\`\`java
+HashMap<String, Integer> noten = new HashMap<>();
+noten.put("Mathe", 2);
+noten.put("Deutsch", 1);
+System.out.println(noten.get("Mathe"));  // 2
+\`\`\`
+
+## Aufgabe
+
+Erstelle eine HashMap für Hauptstädte und gib die Hauptstadt von Deutschland aus.`,
+          codeTemplate: `import java.util.HashMap;
+
+public class Main {
+    public static void main(String[] args) {
+        // Erstelle HashMap<String, String> für Land -> Hauptstadt
+        
+        // Füge hinzu: Deutschland -> Berlin, Frankreich -> Paris
+        
+        // Gib die Hauptstadt von Deutschland aus
+        
+    }
+}`,
+          expectedOutput: "Berlin",
+          hints: [
+            "HashMap<String, String> hauptstaedte = new HashMap<>();",
+            "hauptstaedte.put(\"Deutschland\", \"Berlin\");",
+            "System.out.println(hauptstaedte.get(\"Deutschland\"));"
+          ],
+          solution: `import java.util.HashMap;
+
+public class Main {
+    public static void main(String[] args) {
+        HashMap<String, String> hauptstaedte = new HashMap<>();
+        hauptstaedte.put("Deutschland", "Berlin");
+        hauptstaedte.put("Frankreich", "Paris");
+        
+        System.out.println(hauptstaedte.get("Deutschland"));
+    }
+}`
+        }
+      },
+      {
+        id: "6-4",
+        chapterId: "chapter-6",
+        title: "Challenge: Kontaktliste",
+        order: 4,
+        type: "challenge",
+        isCompleted: false,
+        content: {
+          explanation: `# 🏆 Challenge: Kontaktliste
+
+Erstelle eine einfache Kontaktliste mit HashMap!
+
+## Anforderungen
+
+1. Erstelle eine HashMap für Name → Telefonnummer
+2. Füge 3 Kontakte hinzu:
+   - "Max" → "0171-1234567"
+   - "Anna" → "0172-9876543"
+   - "Tom" → "0173-5555555"
+3. Gib die Anzahl der Kontakte aus
+4. Gib die Nummer von "Anna" aus
+
+## Erwartete Ausgabe
+
+\`\`\`
+Kontakte: 3
+Anna: 0172-9876543
+\`\`\``,
+          codeTemplate: `import java.util.HashMap;
+
+public class Main {
+    public static void main(String[] args) {
+        // Erstelle die Kontakt-HashMap
+        
+        // Füge die 3 Kontakte hinzu
+        
+        // Gib "Kontakte: [anzahl]" aus
+        
+        // Gib "Anna: [nummer]" aus
+        
+    }
+}`,
+          expectedOutput: `Kontakte: 3
+Anna: 0172-9876543`,
+          hints: [
+            "HashMap<String, String> kontakte = new HashMap<>();",
+            "kontakte.size() gibt die Anzahl zurück",
+            "kontakte.get(\"Anna\") gibt Annas Nummer zurück"
+          ],
+          solution: `import java.util.HashMap;
+
+public class Main {
+    public static void main(String[] args) {
+        HashMap<String, String> kontakte = new HashMap<>();
+        kontakte.put("Max", "0171-1234567");
+        kontakte.put("Anna", "0172-9876543");
+        kontakte.put("Tom", "0173-5555555");
+        
+        System.out.println("Kontakte: " + kontakte.size());
+        System.out.println("Anna: " + kontakte.get("Anna"));
+    }
+}`
+        }
+      }
+    ]
+  },
+  {
+    id: "chapter-7",
+    title: "Kapitel 7: String-Methoden",
+    description: "Fortgeschrittene Textverarbeitung in Java",
+    order: 7,
+    isUnlocked: false,
+    lessons: [
+      {
+        id: "7-1",
+        chapterId: "chapter-7",
+        title: "String-Manipulation",
+        order: 1,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# String-Methoden 🔤
+
+Strings haben viele nützliche Methoden zur Textverarbeitung.
+
+## Wichtige Methoden
+
+| Methode | Beschreibung | Beispiel |
+|---------|--------------|----------|
+| length() | Länge | "Hallo".length() → 5 |
+| toUpperCase() | Großbuchstaben | "hi".toUpperCase() → "HI" |
+| toLowerCase() | Kleinbuchstaben | "HI".toLowerCase() → "hi" |
+| trim() | Leerzeichen entfernen | " hi ".trim() → "hi" |
+| substring(start, end) | Teilstring | "Hallo".substring(0,3) → "Hal" |
+| replace(alt, neu) | Ersetzen | "Hallo".replace("l","x") → "Haxxo" |
+| contains(text) | Enthält? | "Hallo".contains("all") → true |
+| startsWith(text) | Beginnt mit? | "Hallo".startsWith("Ha") → true |
+
+## Beispiel
+
+\`\`\`java
+String text = "  Java ist super!  ";
+System.out.println(text.trim());           // "Java ist super!"
+System.out.println(text.toUpperCase());    // "  JAVA IST SUPER!  "
+System.out.println(text.length());         // 20
+\`\`\`
+
+## Aufgabe
+
+Nimm den String "java programmierung" und gib ihn in Großbuchstaben aus.`,
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        String text = "java programmierung";
+        
+        // Gib den Text in Großbuchstaben aus
+        
+    }
+}`,
+          expectedOutput: "JAVA PROGRAMMIERUNG",
+          hints: [
+            "text.toUpperCase()",
+            "System.out.println(text.toUpperCase());",
+            "toUpperCase() ändert den Original-String nicht!"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        String text = "java programmierung";
+        System.out.println(text.toUpperCase());
+    }
+}`
+        }
+      },
+      {
+        id: "7-2",
+        chapterId: "chapter-7",
+        title: "Split und Join",
+        order: 2,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Split und Join 🔪
+
+## String aufteilen: split()
+
+Teilt einen String in ein Array.
+
+\`\`\`java
+String satz = "Ich lerne Java";
+String[] woerter = satz.split(" ");
+// woerter = ["Ich", "lerne", "Java"]
+\`\`\`
+
+## Strings verbinden: String.join()
+
+Verbindet Array-Elemente mit einem Trennzeichen.
+
+\`\`\`java
+String[] woerter = {"Rot", "Grün", "Blau"};
+String ergebnis = String.join("-", woerter);
+// ergebnis = "Rot-Grün-Blau"
+\`\`\`
+
+## Praktisches Beispiel
+
+\`\`\`java
+String csv = "Max,25,Berlin";
+String[] teile = csv.split(",");
+System.out.println("Name: " + teile[0]);   // Max
+System.out.println("Alter: " + teile[1]);  // 25
+\`\`\`
+
+## Aufgabe
+
+Teile "Apfel,Birne,Orange" bei Kommas und gib jede Frucht auf einer neuen Zeile aus.`,
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        String fruechte = "Apfel,Birne,Orange";
+        
+        // Teile den String bei Kommas
+        
+        // Gib jede Frucht aus
+        
+    }
+}`,
+          expectedOutput: `Apfel
+Birne
+Orange`,
+          hints: [
+            "String[] teile = fruechte.split(\",\");",
+            "for (String frucht : teile)",
+            "System.out.println(frucht);"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        String fruechte = "Apfel,Birne,Orange";
+        String[] teile = fruechte.split(",");
+        
+        for (String frucht : teile) {
+            System.out.println(frucht);
+        }
+    }
+}`
+        }
+      }
+    ]
   }
 ];
 
