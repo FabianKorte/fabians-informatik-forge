@@ -32,10 +32,16 @@ export default function JavaLearning() {
 
   const progressPercentage = Math.round((completedCount / totalLessons) * 100);
 
+  // Sort chapters by order property for correct navigation
+  const sortedCurriculum = useMemo(() => 
+    [...javaCurriculum].sort((a, b) => a.order - b.order),
+    []
+  );
+
   // Get current lesson
   const currentChapter = useMemo(() => 
-    javaCurriculum.find(ch => ch.id === currentChapterId) || javaCurriculum[0],
-    [currentChapterId]
+    sortedCurriculum.find(ch => ch.id === currentChapterId) || sortedCurriculum[0],
+    [currentChapterId, sortedCurriculum]
   );
 
   const currentLesson = useMemo(() => 
@@ -56,10 +62,10 @@ export default function JavaLearning() {
       };
     }
 
-    // First lesson of next chapter
-    const currentChapterIndex = javaCurriculum.findIndex(ch => ch.id === currentChapterId);
-    if (currentChapterIndex < javaCurriculum.length - 1) {
-      const nextChapter = javaCurriculum[currentChapterIndex + 1];
+    // First lesson of next chapter (using sorted curriculum)
+    const currentChapterIndex = sortedCurriculum.findIndex(ch => ch.id === currentChapterId);
+    if (currentChapterIndex < sortedCurriculum.length - 1) {
+      const nextChapter = sortedCurriculum[currentChapterIndex + 1];
       return {
         hasNext: true,
         nextChapterId: nextChapter.id,
@@ -68,7 +74,7 @@ export default function JavaLearning() {
     }
 
     return { hasNext: false, nextChapterId: "", nextLessonId: "" };
-  }, [currentChapterId, currentLessonId, currentChapter]);
+  }, [currentChapterId, currentLessonId, currentChapter, sortedCurriculum]);
 
   const handleComplete = useCallback(() => {
     markLessonComplete(currentLessonId);
@@ -221,7 +227,7 @@ export default function JavaLearning() {
                   {/* Sidebar - Chapter Progress */}
                   <aside className="lg:sticky lg:top-28 lg:self-start">
                     <ChapterProgress
-                      chapters={javaCurriculum}
+                      chapters={sortedCurriculum}
                       currentChapterId={currentChapterId}
                       currentLessonId={currentLessonId}
                       completedLessons={completedLessons}
