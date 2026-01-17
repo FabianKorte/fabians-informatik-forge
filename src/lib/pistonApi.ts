@@ -260,6 +260,14 @@ function normalizeUmlauts(text: string): string {
 }
 
 /**
+ * Some runtimes replace non-ASCII chars with question marks.
+ * In the reported case, one umlaut becomes "??".
+ */
+function normalizeLostUmlauts(text: string): string {
+  return text.replace(/[äöüÄÖÜß]/g, "??");
+}
+
+/**
  * Normalize output for comparison - handles UTF-8, line endings, and umlauts
  */
 export function normalizeOutput(output: string): string {
@@ -269,7 +277,7 @@ export function normalizeOutput(output: string): string {
     .replace(/\r\n/g, "\n")
     .replace(/\r/g, "\n")
     .split("\n")
-    .map(line => line.trimEnd())
+    .map((line) => line.trimEnd())
     .join("\n");
 }
 
@@ -279,33 +287,26 @@ export function normalizeOutput(output: string): string {
 export function compareOutputs(expected: string, actual: string): boolean {
   const normalizedExpected = normalizeOutput(expected);
   const normalizedActual = normalizeOutput(actual);
-  
+
   // Direct comparison
-  if (normalizedExpected === normalizedActual) {
-    return true;
-  }
-  
+  if (normalizedExpected === normalizedActual) return true;
+
   // Fallback 1: Compare with NFD normalization (decomposed Unicode)
   const expectedNFD = normalizedExpected.normalize("NFD");
   const actualNFD = normalizedActual.normalize("NFD");
-  
-  if (expectedNFD === actualNFD) {
-    return true;
-  }
-  
+  if (expectedNFD === actualNFD) return true;
+
   // Fallback 2: Compare with umlauts converted to ASCII equivalents
-  // This handles cases where the Piston API returns different umlaut encoding
   const expectedAscii = normalizeUmlauts(normalizedExpected);
   const actualAscii = normalizeUmlauts(normalizedActual);
-  
-  if (expectedAscii === actualAscii) {
-    return true;
-  }
-  
-  // Fallback 3: Case-insensitive comparison with ASCII umlauts
-  if (expectedAscii.toLowerCase() === actualAscii.toLowerCase()) {
-    return true;
-  }
-  
+  if (expectedAscii === actualAscii) return true;
+  if (expectedAscii.toLowerCase() === actualAscii.toLowerCase()) return true;
+
+  // Fallback 3: Handle broken runtime output like "n??tzlich" for "nützlich"
+  // (data loss already happened; we can only accept it during comparison)
+  const expectedQuestionMarks = normalizeLostUmlauts(normalizedExpected);
+  if (expectedQuestionMarks === normalizedActual) return true;
+  if (expectedQuestionMarks.toLowerCase() === normalizedActual.toLowerCase()) return true;
+
   return false;
 }
