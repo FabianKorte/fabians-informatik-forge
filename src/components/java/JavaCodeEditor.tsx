@@ -14,6 +14,16 @@ export function JavaCodeEditor({ value, onChange, readOnly = false, height = "30
   const handleEditorMount: OnMount = useCallback((editor, monaco) => {
     editorRef.current = editor;
 
+    // Disable the find widget completely
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyF, () => {});
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyH, () => {});
+    
+    // Hide any widgets that might be visible
+    const findWidget = editor.getContribution('editor.contrib.findController');
+    if (findWidget && typeof (findWidget as any).closeFindWidget === 'function') {
+      (findWidget as any).closeFindWidget();
+    }
+
     // Configure Java language completions
     monaco.languages.registerCompletionItemProvider("java", {
       provideCompletionItems: (model, position) => {
@@ -70,12 +80,12 @@ export function JavaCodeEditor({ value, onChange, readOnly = false, height = "30
       },
     });
 
-    // Focus editor
+    // Focus editor after short delay
     setTimeout(() => editor.focus(), 100);
   }, []);
 
   return (
-    <div className="rounded-lg overflow-hidden border border-border bg-[#1e1e1e]">
+    <div className="rounded-lg overflow-hidden border border-border [&_.monaco-editor_.find-widget]:!hidden [&_.monaco-editor_.findInput]:!hidden [&_.monaco-editor-background]:!bg-[#1e1e1e]">
       <Editor
         height={height}
         language="java"
@@ -94,10 +104,30 @@ export function JavaCodeEditor({ value, onChange, readOnly = false, height = "30
           tabSize: 4,
           wordWrap: "on",
           padding: { top: 12, bottom: 12 },
-          suggestOnTriggerCharacters: true,
-          quickSuggestions: true,
           cursorBlinking: "smooth",
           bracketPairColorization: { enabled: true },
+          overviewRulerBorder: false,
+          overviewRulerLanes: 0,
+          hideCursorInOverviewRuler: true,
+          // Disable all problematic features
+          renameOnType: false,
+          quickSuggestions: false,
+          parameterHints: { enabled: false },
+          hover: { enabled: false },
+          links: false,
+          contextmenu: false,
+          scrollbar: {
+            vertical: "auto",
+            horizontal: "auto",
+            verticalScrollbarSize: 8,
+            horizontalScrollbarSize: 8,
+            useShadows: false,
+          },
+          find: {
+            addExtraSpaceOnTop: false,
+            autoFindInSelection: "never",
+            seedSearchStringFromSelection: "never",
+          },
         }}
         loading={
           <div className="h-full flex items-center justify-center bg-[#1e1e1e] text-white/70" style={{ height }}>
