@@ -1,15 +1,18 @@
-import { useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { SEO } from "@/components/SEO";
 import { javaCurriculum } from "@/data/java/curriculum";
 import { LessonView } from "@/components/java/LessonView";
 import { ChapterProgress } from "@/components/java/ChapterProgress";
+import { PracticeMode } from "@/components/java/PracticeMode";
 import { useJavaProgress } from "@/hooks/useJavaProgress";
-import { Coffee, ArrowLeft, Trophy, Flame, Loader2, Cloud } from "lucide-react";
-import { motion } from "framer-motion";
+import { Coffee, ArrowLeft, Trophy, Flame, Loader2, Cloud, Shuffle } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function JavaLearning() {
+  const [showPracticeMode, setShowPracticeMode] = useState(false);
+  
   const {
     completedLessons,
     currentChapterId,
@@ -118,7 +121,7 @@ export default function JavaLearning() {
               </div>
             </div>
 
-            {/* Stats */}
+            {/* Stats & Practice Mode Button */}
             <div className="flex items-center gap-4">
               {isSyncing && (
                 <div className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -126,6 +129,17 @@ export default function JavaLearning() {
                   <span>Speichern...</span>
                 </div>
               )}
+              
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => setShowPracticeMode(true)}
+                className="hidden sm:flex"
+              >
+                <Shuffle className="w-4 h-4 mr-2" />
+                Übungsmodus
+              </Button>
+              
               <div className="flex items-center gap-2 text-sm">
                 <Flame className="w-4 h-4 text-orange-500" />
                 <span>{streak} Streak</span>
@@ -139,33 +153,66 @@ export default function JavaLearning() {
         </header>
 
         <main className="max-w-7xl mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-[320px,1fr] gap-8">
-            {/* Sidebar - Chapter Progress */}
-            <aside className="lg:sticky lg:top-24 lg:self-start">
-              <ChapterProgress
-                chapters={javaCurriculum}
-                currentChapterId={currentChapterId}
-                currentLessonId={currentLessonId}
-                completedLessons={completedLessons}
-                onSelectLesson={handleSelectLesson}
-              />
-            </aside>
+          <AnimatePresence mode="wait">
+            {showPracticeMode ? (
+              <motion.div
+                key="practice"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+              >
+                <PracticeMode 
+                  completedLessons={completedLessons}
+                  onClose={() => setShowPracticeMode(false)}
+                />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="learning"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <div className="grid grid-cols-1 lg:grid-cols-[320px,1fr] gap-8">
+                  {/* Sidebar - Chapter Progress */}
+                  <aside className="lg:sticky lg:top-24 lg:self-start">
+                    <ChapterProgress
+                      chapters={javaCurriculum}
+                      currentChapterId={currentChapterId}
+                      currentLessonId={currentLessonId}
+                      completedLessons={completedLessons}
+                      onSelectLesson={handleSelectLesson}
+                    />
+                    
+                    {/* Mobile Practice Mode Button */}
+                    <Button 
+                      variant="outline" 
+                      className="w-full mt-4 sm:hidden"
+                      onClick={() => setShowPracticeMode(true)}
+                    >
+                      <Shuffle className="w-4 h-4 mr-2" />
+                      Übungsmodus
+                    </Button>
+                  </aside>
 
-            {/* Main Content - Lesson View */}
-            <motion.div
-              key={currentLessonId}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <LessonView
-                lesson={currentLesson}
-                onComplete={handleComplete}
-                onNext={handleNext}
-                hasNext={hasNext}
-              />
-            </motion.div>
-          </div>
+                  {/* Main Content - Lesson View */}
+                  <motion.div
+                    key={currentLessonId}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <LessonView
+                      lesson={currentLesson}
+                      onComplete={handleComplete}
+                      onNext={handleNext}
+                      hasNext={hasNext}
+                    />
+                  </motion.div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </main>
       </div>
     </>
