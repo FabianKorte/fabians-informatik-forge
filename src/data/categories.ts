@@ -16,7 +16,11 @@ import {
   Lock,
   Cable,
   Braces,
-  Coffee
+  Coffee,
+  Table2,
+  Calculator,
+  Cloud,
+  Cpu
 } from "lucide-react";
 
 export interface Category {
@@ -210,5 +214,45 @@ export const categories: Category[] = [
     icon: Brain,
     difficulty: "Fortgeschritten",
     gradient: "from-violet-500 to-fuchsia-600"
+  },
+  {
+    id: "tabellenkalkulation",
+    title: "Tabellenkalkulation (Excel)",
+    description: "Excel-Formeln, Pivot-Tabellen, Diagramme und Datenanalyse für die IHK-Prüfung",
+    totalElements: 60,
+    completedElements: 0,
+    icon: Table2,
+    difficulty: "Anfänger",
+    gradient: "from-green-500 to-emerald-600"
+  },
+  {
+    id: "fachrechnen",
+    title: "Fachbezogenes Rechnen",
+    description: "Zahlensysteme, IT-Berechnungen, Subnetting und technische Mathematik",
+    totalElements: 70,
+    completedElements: 0,
+    icon: Calculator,
+    difficulty: "Fortgeschritten",
+    gradient: "from-blue-500 to-cyan-600"
+  },
+  {
+    id: "cloud-aws",
+    title: "Cloud-Computing (AWS)",
+    description: "AWS-Services, Cloud-Konzepte und Vorbereitung auf AWS CLF-C02 Zertifizierung",
+    totalElements: 80,
+    completedElements: 0,
+    icon: Cloud,
+    difficulty: "Fortgeschritten",
+    gradient: "from-orange-500 to-amber-600"
+  },
+  {
+    id: "digitaltechnik",
+    title: "Digitaltechnik",
+    description: "Logikgatter, Schaltungen, Flip-Flops und Speichertechnologien",
+    totalElements: 65,
+    completedElements: 0,
+    icon: Cpu,
+    difficulty: "Fortgeschritten",
+    gradient: "from-purple-500 to-indigo-600"
   }
 ];

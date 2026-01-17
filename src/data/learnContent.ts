@@ -14,6 +14,10 @@ import { systemadministrationModules } from "./learn/systemadministration";
 import { mobileEntwicklungContent } from "./learn/mobile-entwicklung";
 import { grundlagenItContent } from "./learn/grundlagen-it";
 import { itSicherheitAdvancedContent } from "./learn/it-sicherheit-advanced";
+import { tabellenkalkulationContent } from "./learn/tabellenkalkulation";
+import { fachrechnenContent } from "./learn/fachrechnen";
+import { cloudAwsContent } from "./learn/cloud-aws";
+import { digitaltechnikContent } from "./learn/digitaltechnik";
 
 // Main learning content mapped to category IDs from the database
 export const learnContent: Record<string, LearnModule[]> = {
@@ -90,4 +94,8 @@ export const learnContent: Record<string, LearnModule[]> = {
   "englisch-it": englischItContent,
   "mathematik-logik": mathematikLogikContent,
   "innovation-trends": innovationTrendsContent,
+  tabellenkalkulation: tabellenkalkulationContent,
+  fachrechnen: fachrechnenContent,
+  "cloud-aws": cloudAwsContent,
+  digitaltechnik: digitaltechnikContent,
 };
