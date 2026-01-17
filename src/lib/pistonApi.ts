@@ -90,8 +90,13 @@ export async function executeJavaCode(code: string, stdin?: string): Promise<Cod
   }
 }
 
+/**
+ * Normalize output for comparison - handles UTF-8 and line endings
+ */
 export function normalizeOutput(output: string): string {
+  // Ensure proper UTF-8 handling and normalize whitespace
   return output
+    .normalize("NFC") // Normalize Unicode characters (important for Umlauts)
     .trim()
     .replace(/\r\n/g, "\n")
     .replace(/\r/g, "\n")
@@ -100,6 +105,21 @@ export function normalizeOutput(output: string): string {
     .join("\n");
 }
 
+/**
+ * Compare outputs with tolerance for encoding differences
+ */
 export function compareOutputs(expected: string, actual: string): boolean {
-  return normalizeOutput(expected) === normalizeOutput(actual);
+  const normalizedExpected = normalizeOutput(expected);
+  const normalizedActual = normalizeOutput(actual);
+  
+  // Direct comparison
+  if (normalizedExpected === normalizedActual) {
+    return true;
+  }
+  
+  // Fallback: Compare with normalized Unicode (handles Umlaut encoding variants)
+  const expectedNFD = normalizedExpected.normalize("NFD");
+  const actualNFD = normalizedActual.normalize("NFD");
+  
+  return expectedNFD === actualNFD;
 }

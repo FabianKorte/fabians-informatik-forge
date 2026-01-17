@@ -1,6 +1,337 @@
 import type { JavaChapter } from "@/types/javaLearning";
 
 export const javaCurriculum: JavaChapter[] = [
+  // ============================================
+  // KAPITEL 0: EINFÜHRUNG (Nur Theorie, kein Code)
+  // ============================================
+  {
+    id: "chapter-0",
+    title: "Kapitel 0: Einführung",
+    description: "Bevor du programmierst - verstehe die Grundlagen und lerne die Plattform kennen",
+    order: 0,
+    isUnlocked: true,
+    lessons: [
+      {
+        id: "0-1",
+        chapterId: "chapter-0",
+        title: "Was ist Programmieren?",
+        order: 1,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Willkommen! 🎉
+
+Schön, dass du hier bist! Du bist dabei, eine der wichtigsten Fähigkeiten des 21. Jahrhunderts zu lernen: **Programmieren**.
+
+## Was ist Programmieren eigentlich?
+
+Stell dir vor, du gibst einem sehr präzisen, aber etwas begriffsstutzigen Helfer Anweisungen. Dieser Helfer (der Computer) macht **exakt** das, was du ihm sagst - nicht mehr und nicht weniger.
+
+**Programmieren** bedeutet:
+- 📝 Anweisungen schreiben, die ein Computer verstehen kann
+- 🧩 Probleme in kleine, lösbare Schritte aufteilen
+- 🔄 Diese Schritte in einer logischen Reihenfolge anordnen
+
+## Ein Beispiel aus dem Alltag
+
+Stell dir vor, du erklärst jemandem, wie man einen Tee macht:
+
+1. Nimm eine Tasse
+2. Fülle Wasser in den Wasserkocher
+3. Schalte den Wasserkocher ein
+4. Warte, bis das Wasser kocht
+5. Gieße das Wasser in die Tasse
+6. Lege einen Teebeutel hinein
+7. Warte 3 Minuten
+8. Entferne den Teebeutel
+
+Das ist im Grunde ein **Programm**! Eine Reihe von Anweisungen, die nacheinander ausgeführt werden.
+
+## Warum solltest du Programmieren lernen?
+
+- 💼 **Karriere**: Programmierer sind sehr gefragt
+- 🧠 **Denken**: Du lernst, Probleme strukturiert zu lösen
+- 🎮 **Kreativität**: Du kannst deine eigenen Apps, Spiele und Websites erstellen
+- 🌍 **Zukunft**: Technologie ist überall - verstehe sie!
+
+## Keine Angst!
+
+Programmieren wirkt am Anfang kompliziert, aber jeder kann es lernen. Wir gehen **Schritt für Schritt** vor.
+
+---
+
+**Klicke unten auf "Code ausführen", um zur nächsten Lektion zu gehen!**
+
+*(Keine Sorge - in dieser Lektion musst du noch nichts schreiben)*`,
+          codeTemplate: `// Diese Lektion ist nur zum Lesen!
+// Du musst hier noch nichts ändern.
+// 
+// Klicke einfach auf "Code ausführen" um fortzufahren.
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Lektion abgeschlossen!");
+    }
+}`,
+          expectedOutput: "Lektion abgeschlossen!",
+          hints: [
+            "Du musst nichts ändern - klicke einfach auf 'Code ausführen'",
+            "Diese Lektion ist nur zum Lesen und Verstehen"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("Lektion abgeschlossen!");
+    }
+}`
+        }
+      },
+      {
+        id: "0-2",
+        chapterId: "chapter-0",
+        title: "Was ist Java?",
+        order: 2,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Java - Die Programmiersprache ☕
+
+## Warum heißt es Java?
+
+Die Entwickler bei Sun Microsystems tranken gerne Kaffee - besonders Kaffee von der Insel Java in Indonesien. So entstand der Name! ☕
+
+## Wo wird Java verwendet?
+
+Java ist **überall**:
+
+| Bereich | Beispiele |
+|---------|-----------|
+| 📱 **Android Apps** | WhatsApp, Spotify, Netflix |
+| 🌐 **Webseiten** | Amazon, LinkedIn, eBay |
+| 🏦 **Banken** | Über 90% der Finanzinstitute |
+| 🎮 **Spiele** | Minecraft wurde in Java geschrieben! |
+| 🚗 **Autos** | Bordcomputer und Navigationssysteme |
+
+## Warum ist Java so beliebt?
+
+### 1. "Write Once, Run Anywhere" (WORA)
+Java-Programme laufen auf jedem Computer - egal ob Windows, Mac oder Linux.
+
+### 2. Leicht zu lernen
+Die Syntax (Schreibweise) ist logisch und gut lesbar.
+
+### 3. Riesige Community
+Millionen Entwickler helfen sich gegenseitig. Jede Frage wurde schon mal gestellt!
+
+### 4. Jobchancen
+Java ist seit über 25 Jahren eine der Top-Programmiersprachen weltweit.
+
+## Java vs. JavaScript
+
+**Achtung, häufiger Irrtum!**
+
+| Java | JavaScript |
+|------|------------|
+| ☕ Für Apps, Server, Android | 🌐 Für Websites im Browser |
+| Kompilierte Sprache | Interpretierte Sprache |
+| Von Sun/Oracle | Von Netscape |
+
+Sie haben ähnliche Namen, sind aber **komplett verschiedene Sprachen**!
+
+## Fun Fact
+
+Minecraft, eines der meistverkauften Spiele aller Zeiten, wurde ursprünglich komplett in Java geschrieben!
+
+---
+
+**Klicke auf "Code ausführen", um fortzufahren!**`,
+          codeTemplate: `// Java-Fakten!
+// Du musst hier nichts ändern.
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Java wurde 1995 veröffentlicht!");
+    }
+}`,
+          expectedOutput: "Java wurde 1995 veröffentlicht!",
+          hints: [
+            "Klicke einfach auf 'Code ausführen'",
+            "Du musst den Code nicht verändern"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("Java wurde 1995 veröffentlicht!");
+    }
+}`
+        }
+      },
+      {
+        id: "0-3",
+        chapterId: "chapter-0",
+        title: "So nutzt du diese Plattform",
+        order: 3,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Die Plattform verstehen 🖥️
+
+Lass uns kurz erklären, wie diese Lernplattform funktioniert.
+
+## Die Bestandteile
+
+### 1. 📖 Der Erklärungsbereich (hier oben)
+Hier findest du die Theorie und Aufgabenstellung. **Lies immer zuerst die Erklärung!**
+
+### 2. ✏️ Der Code-Editor
+Das dunkle Feld unten, in dem du Code schreiben kannst. Hier tippst du deine Lösungen.
+
+### 3. ▶️ Der "Code ausführen"-Button
+Klicke hier, um deinen Code auszuführen und zu prüfen.
+
+### 4. 💡 Die Tipps
+Kommst du nicht weiter? Klicke auf "Tipp" für Hilfe. Du kannst mehrere Tipps nacheinander anzeigen.
+
+### 5. 👁️ Die Lösung
+Als letzter Ausweg kannst du die Lösung anzeigen. **Versuche aber erst selbst!**
+
+## So löst du Aufgaben
+
+1. **Lies die Erklärung** - Verstehe das Konzept
+2. **Lies die Aufgabe** - Was sollst du tun?
+3. **Schreibe Code** - Tippe im Editor
+4. **Führe aus** - Klicke "Code ausführen"
+5. **Prüfe das Ergebnis** - Richtig? Super! Falsch? Noch mal versuchen!
+
+## Tipps für Anfänger
+
+- ⌨️ **Tippe den Code selbst** - Nicht nur kopieren! Durch Tippen lernst du besser
+- 🐛 **Fehler sind normal** - Jeder macht Fehler, auch Profis!
+- 🔄 **Wiederholen hilft** - Mach Lektionen ruhig mehrmals
+- ☕ **Pausen machen** - Programmieren ist anstrengend für das Gehirn
+
+## Tastenkürzel
+
+| Kürzel | Aktion |
+|--------|--------|
+| Tab | Einrücken |
+| Shift + Tab | Ausrücken |
+
+---
+
+**Bereit? Klicke auf "Code ausführen"!**`,
+          codeTemplate: `// Du weißt jetzt, wie die Plattform funktioniert!
+// Klicke auf "Code ausführen" um fortzufahren.
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Ich bin bereit zu lernen!");
+    }
+}`,
+          expectedOutput: "Ich bin bereit zu lernen!",
+          hints: [
+            "Klicke auf den grünen Button 'Code ausführen'",
+            "Du musst den Code nicht ändern"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("Ich bin bereit zu lernen!");
+    }
+}`
+        }
+      },
+      {
+        id: "0-4",
+        chapterId: "chapter-0",
+        title: "Beobachte und verstehe",
+        order: 4,
+        type: "theory",
+        isCompleted: false,
+        content: {
+          explanation: `# Code lesen lernen 👀
+
+Bevor du selbst programmierst, lass uns **fertigen Code lesen und verstehen**.
+
+## Schau dir diesen Code an:
+
+\`\`\`java
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hallo!");
+        System.out.println("Wie geht es dir?");
+        System.out.println("Mir geht es gut!");
+    }
+}
+\`\`\`
+
+## Was siehst du?
+
+### Zeile 1: \`public class Main\`
+- Das ist der **Name** unseres Programms
+- Jedes Java-Programm braucht mindestens eine Klasse
+- Der Name "Main" ist Tradition für das Hauptprogramm
+
+### Zeile 2: \`public static void main(String[] args)\`
+- Das ist der **Startpunkt** des Programms
+- Wenn du "Ausführen" klickst, startet Java hier
+- Merke dir: Das ist die "main-Methode"
+
+### Zeilen 3-5: \`System.out.println("...")\`
+- Diese Zeilen geben Text aus
+- \`println\` = "print line" = "drucke eine Zeile"
+- Der Text zwischen den Anführungszeichen wird angezeigt
+
+### Die geschweiften Klammern \`{ }\`
+- Sie gruppieren zusammengehörenden Code
+- Wie Absätze in einem Text
+
+### Die Semikolons \`;\`
+- Jede Anweisung endet mit \`;\`
+- Wie ein Punkt am Satzende
+
+## Was passiert, wenn der Code läuft?
+
+Die Ausgabe wäre:
+\`\`\`
+Hallo!
+Wie geht es dir?
+Mir geht es gut!
+\`\`\`
+
+Drei Zeilen, weil wir dreimal \`println\` verwendet haben!
+
+---
+
+**Führe den Code unten aus und beobachte die Ausgabe!**`,
+          codeTemplate: `// Beobachte, was passiert!
+// Jede println-Anweisung gibt eine Zeile aus.
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Zeile 1");
+        System.out.println("Zeile 2");
+        System.out.println("Zeile 3");
+    }
+}`,
+          expectedOutput: `Zeile 1
+Zeile 2
+Zeile 3`,
+          hints: [
+            "Klicke auf 'Code ausführen' und beobachte",
+            "Jedes println erzeugt eine neue Zeile"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("Zeile 1");
+        System.out.println("Zeile 2");
+        System.out.println("Zeile 3");
+    }
+}`
+        }
+      }
+    ]
+  },
+  // ============================================
+  // KAPITEL 1: ERSTE SCHRITTE
+  // ============================================
   {
     id: "chapter-1",
     title: "Kapitel 1: Erste Schritte",
@@ -8,6 +339,61 @@ export const javaCurriculum: JavaChapter[] = [
     order: 1,
     isUnlocked: true,
     lessons: [
+      {
+        id: "1-0",
+        chapterId: "chapter-1",
+        title: "Abschreiben: Dein erstes Programm",
+        order: 0,
+        type: "exercise",
+        isCompleted: false,
+        content: {
+          explanation: `# Deine erste echte Aufgabe! ✨
+
+Jetzt wird es ernst - aber keine Sorge, wir fangen ganz einfach an.
+
+## Deine Aufgabe
+
+Schreibe **exakt** diesen Text zwischen die Anführungszeichen:
+
+\`\`\`
+Hallo Welt!
+\`\`\`
+
+## So sieht die Lösung aus:
+
+Du musst nur den Text \`Hallo Welt!\` an die richtige Stelle schreiben:
+
+\`\`\`java
+System.out.println("Hallo Welt!");
+\`\`\`
+
+## Wichtig:
+- ✅ Achte auf die **exakte Schreibweise**
+- ✅ Das Ausrufezeichen gehört dazu!
+- ✅ Vergiss das Semikolon \`;\` am Ende nicht
+
+---
+
+**Tippe den Text und klicke dann "Code ausführen"!**`,
+          codeTemplate: `public class Main {
+    public static void main(String[] args) {
+        // Ersetze die Unterstriche durch: Hallo Welt!
+        System.out.println("________");
+    }
+}`,
+          expectedOutput: "Hallo Welt!",
+          hints: [
+            "Ersetze ________ durch Hallo Welt!",
+            "Achte auf das Ausrufezeichen!",
+            "Die Anführungszeichen müssen bleiben"
+          ],
+          solution: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hallo Welt!");
+    }
+}`
+        }
+      },
       {
         id: "1-1",
         chapterId: "chapter-1",
