@@ -21,7 +21,9 @@ import {
   Calculator,
   Cloud,
   Cpu,
-  HardDrive
+  HardDrive,
+  Presentation,
+  FileType
 } from "lucide-react";
 
 export interface Category {
@@ -265,5 +267,25 @@ export const categories: Category[] = [
     icon: HardDrive,
     difficulty: "Fortgeschritten",
     gradient: "from-slate-500 to-zinc-600"
+  },
+  {
+    id: "praesentationsprogramme",
+    title: "Präsentationsprogramme (PowerPoint)",
+    description: "Präsentationen erstellen, Foliengestaltung, Animationen und Vortragstechniken",
+    totalElements: 70,
+    completedElements: 0,
+    icon: Presentation,
+    difficulty: "Anfänger",
+    gradient: "from-orange-500 to-red-600"
+  },
+  {
+    id: "textverarbeitung",
+    title: "Textverarbeitung (Word)",
+    description: "Dokumentformatierung, Seitengestaltung, Tabellen und professionelle Textverarbeitung",
+    totalElements: 80,
+    completedElements: 0,
+    icon: FileType,
+    difficulty: "Anfänger",
+    gradient: "from-blue-500 to-indigo-600"
   }
 ];
