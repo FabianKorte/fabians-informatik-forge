@@ -20,6 +20,8 @@ import { cloudAwsContent } from "./learn/cloud-aws";
 import { digitaltechnikContent } from "./learn/digitaltechnik";
 import { systemintegrationVertiefungContent } from "./learn/systemintegration-vertiefung";
 import { speicherloesungenContent } from "./learn/speicherloesungen";
+import { praesentationsprogrammeModules } from "./learn/praesentationsprogramme";
+import { textverarbeitungModules } from "./learn/textverarbeitung";
 
 // Main learning content mapped to category IDs from the database
 export const learnContent: Record<string, LearnModule[]> = {
@@ -92,4 +94,6 @@ export const learnContent: Record<string, LearnModule[]> = {
   "cloud-aws": cloudAwsContent,
   digitaltechnik: digitaltechnikContent,
   speicherloesungen: speicherloesungenContent,
+  praesentationsprogramme: praesentationsprogrammeModules,
+  textverarbeitung: textverarbeitungModules,
 };

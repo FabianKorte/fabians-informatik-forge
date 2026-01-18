@@ -33,7 +33,9 @@ export const categoryLearningMethods: Record<string, string[]> = {
   fachrechnen: ["flashcards", "quiz"],
   "cloud-aws": ["flashcards", "quiz"],
   digitaltechnik: ["flashcards", "quiz"],
-  speicherloesungen: ["flashcards", "quiz"]
+  speicherloesungen: ["flashcards", "quiz"],
+  praesentationsprogramme: ["flashcards", "quiz"],
+  textverarbeitung: ["flashcards", "quiz"]
 };
 
 export const getAvailableMethodsForCategory = (categoryId: string): string[] => {
