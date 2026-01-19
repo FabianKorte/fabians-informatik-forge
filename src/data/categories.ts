@@ -23,7 +23,8 @@ import {
   Cpu,
   HardDrive,
   Presentation,
-  FileType
+  FileType,
+  Building2
 } from "lucide-react";
 
 export interface Category {
@@ -287,5 +288,15 @@ export const categories: Category[] = [
     icon: FileType,
     difficulty: "Anfänger",
     gradient: "from-blue-500 to-indigo-600"
+  },
+  {
+    id: "sap-erp",
+    title: "SAP/ERP Grundlagen",
+    description: "SAP-Navigation, Module (FI, CO, MM, SD), Geschäftsprozesse und Zertifizierungsvorbereitung",
+    totalElements: 90,
+    completedElements: 0,
+    icon: Building2,
+    difficulty: "Fortgeschritten",
+    gradient: "from-blue-600 to-cyan-600"
   }
 ];

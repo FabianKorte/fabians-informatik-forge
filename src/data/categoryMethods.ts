@@ -35,7 +35,8 @@ export const categoryLearningMethods: Record<string, string[]> = {
   digitaltechnik: ["flashcards", "quiz"],
   speicherloesungen: ["flashcards", "quiz"],
   praesentationsprogramme: ["flashcards", "quiz"],
-  textverarbeitung: ["flashcards", "quiz"]
+  textverarbeitung: ["flashcards", "quiz"],
+  "sap-erp": ["flashcards", "quiz"]
 };
 
 export const getAvailableMethodsForCategory = (categoryId: string): string[] => {

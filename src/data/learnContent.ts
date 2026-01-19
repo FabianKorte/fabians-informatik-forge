@@ -22,6 +22,7 @@ import { systemintegrationVertiefungContent } from "./learn/systemintegration-ve
 import { speicherloesungenContent } from "./learn/speicherloesungen";
 import { praesentationsprogrammeModules } from "./learn/praesentationsprogramme";
 import { textverarbeitungModules } from "./learn/textverarbeitung";
+import { sapErpContent } from "./learn/sap-erp";
 
 // Main learning content mapped to category IDs from the database
 export const learnContent: Record<string, LearnModule[]> = {
@@ -96,4 +97,5 @@ export const learnContent: Record<string, LearnModule[]> = {
   speicherloesungen: speicherloesungenContent,
   praesentationsprogramme: praesentationsprogrammeModules,
   textverarbeitung: textverarbeitungModules,
+  "sap-erp": sapErpContent,
 };
