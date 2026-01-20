@@ -24,7 +24,8 @@ import {
   HardDrive,
   Presentation,
   FileType,
-  Building2
+  Building2,
+  GraduationCap
 } from "lucide-react";
 
 export interface Category {
@@ -36,99 +37,43 @@ export interface Category {
   icon: any;
   difficulty: "Anfänger" | "Fortgeschritten" | "Experte";
   gradient: string;
+  group?: "grundlagen" | "programmierung" | "infrastruktur" | "business" | "pruefung" | "spezial";
 }
 
+// ============================================================
+// KATEGORIEN - LOGISCH GRUPPIERT
+// ============================================================
+
 export const categories: Category[] = [
+  // ==========================================
+  // 🎓 PRÜFUNGSVORBEREITUNG (Oben, prominent)
+  // ==========================================
   {
-    id: "java",
-    title: "Java Programmierung",
-    description: "Lerne Java von Grund auf: Von Hello World bis zu fortgeschrittenen Konzepten wie OOP, Collections und Streams",
-    totalElements: 200,
-    completedElements: 0,
-    icon: Coffee,
-    difficulty: "Anfänger",
-    gradient: "from-orange-500 to-red-600"
-  },
-  {
-    id: "programmierung",
-    title: "Programmierung",
-    description: "Grundlagen der Softwareentwicklung, Algorithmen und Datenstrukturen",
-    totalElements: 120,
-    completedElements: 0,
-    icon: Code2,
-    difficulty: "Fortgeschritten",
-    gradient: "from-blue-500 to-indigo-600"
-  },
-  {
-    id: "datenbanken",
-    title: "Datenbanken",
-    description: "SQL, Datenbankdesign, Normalisierung und Datenbankmanagement",
-    totalElements: 85,
-    completedElements: 0,
-    icon: Database,
-    difficulty: "Fortgeschritten",
-    gradient: "from-emerald-500 to-teal-600"
-  },
-  {
-    id: "it-sicherheit",
-    title: "IT-Sicherheit",
-    description: "Cybersecurity, Verschlüsselung, Firewalls und Sicherheitskonzepte",
-    totalElements: 95,
-    completedElements: 0,
-    icon: Shield,
-    difficulty: "Experte",
-    gradient: "from-red-500 to-rose-600"
-  },
-  {
-    id: "netzwerktechnik",
-    title: "Netzwerktechnik",
-    description: "TCP/IP, Routing, Switching und Netzwerkprotokolle",
-    totalElements: 110,
-    completedElements: 0,
-    icon: Network,
-    difficulty: "Fortgeschritten",
-    gradient: "from-purple-500 to-violet-600"
-  },
-  {
-    id: "systemadministration",
-    title: "Systemadministration",
-    description: "Server-Management, Betriebssysteme und Systemwartung",
+    id: "ihk-pruefung",
+    title: "IHK-Prüfungssimulator",
+    description: "Realistische Prüfungssimulationen für AP Teil 1 & 2 mit Timer, Punktebewertung und Auswertung",
     totalElements: 100,
     completedElements: 0,
-    icon: Server,
+    icon: GraduationCap,
     difficulty: "Experte",
-    gradient: "from-orange-500 to-amber-600"
+    gradient: "from-yellow-500 to-amber-600",
+    group: "pruefung"
   },
   {
-    id: "mobile-entwicklung",
-    title: "Mobile Entwicklung",
-    description: "App-Entwicklung für iOS und Android, mobile Technologien",
-    totalElements: 75,
+    id: "zufallstraining",
+    title: "Zufallstraining",
+    description: "Gemischte Aufgaben aus allen Kategorien - perfekt zur Prüfungsvorbereitung",
+    totalElements: 500,
     completedElements: 0,
-    icon: Smartphone,
+    icon: Brain,
     difficulty: "Fortgeschritten",
-    gradient: "from-pink-500 to-rose-600"
+    gradient: "from-violet-500 to-fuchsia-600",
+    group: "pruefung"
   },
-  {
-    id: "web-technologien",
-    title: "Web-Technologien",
-    description: "HTML, CSS, JavaScript, Frameworks und Web-Standards",
-    totalElements: 130,
-    completedElements: 0,
-    icon: Globe,
-    difficulty: "Anfänger",
-    gradient: "from-cyan-500 to-blue-600"
-  },
-  {
-    id: "projektmanagement",
-    title: "Projektmanagement",
-    description: "Agile Methoden, Scrum, Kanban und Projektplanung",
-    totalElements: 60,
-    completedElements: 0,
-    icon: Settings,
-    difficulty: "Anfänger",
-    gradient: "from-slate-500 to-gray-600"
-  },
+
+  // ==========================================
+  // 📚 IT-GRUNDLAGEN
+  // ==========================================
   {
     id: "grundlagen-it",
     title: "IT-Grundlagen",
@@ -137,117 +82,8 @@ export const categories: Category[] = [
     completedElements: 0,
     icon: BookOpen,
     difficulty: "Anfänger",
-    gradient: "from-green-500 to-emerald-600"
-  },
-  {
-    id: "kommunikation",
-    title: "Kommunikation & Teamwork",
-    description: "Soft Skills, Präsentationstechniken und Teamarbeit",
-    totalElements: 45,
-    completedElements: 0,
-    icon: Users,
-    difficulty: "Anfänger",
-    gradient: "from-yellow-500 to-orange-600"
-  },
-  {
-    id: "rechtliche-grundlagen",
-    title: "Rechtliche Grundlagen",
-    description: "Datenschutz, Urheberrecht und IT-Recht",
-    totalElements: 55,
-    completedElements: 0,
-    icon: FileText,
-    difficulty: "Anfänger",
-    gradient: "from-indigo-500 to-purple-600"
-  },
-  {
-    id: "bwl",
-    title: "BWL",
-    description: "Kostenrechnung, Bilanz, Kennzahlen und Investitionen",
-    totalElements: 70,
-    completedElements: 0,
-    icon: BarChart3,
-    difficulty: "Fortgeschritten",
-    gradient: "from-amber-500 to-yellow-600"
-  },
-  {
-    id: "wiso",
-    title: "Wirtschafts- und Sozialkunde (WiSo)",
-    description: "Arbeitsrecht, Wirtschaft, Soziales und Tarifverträge",
-    totalElements: 80,
-    completedElements: 0,
-    icon: Scale,
-    difficulty: "Anfänger",
-    gradient: "from-lime-500 to-green-600"
-  },
-  {
-    id: "datenschutz",
-    title: "Datenschutz",
-    description: "DSGVO, TOMs, Verzeichnisse und Betroffenenrechte",
-    totalElements: 75,
-    completedElements: 0,
-    icon: Lock,
-    difficulty: "Fortgeschritten",
-    gradient: "from-teal-500 to-emerald-600"
-  },
-  {
-    id: "fachmodul-systemintegration",
-    title: "Fachmodul Systemintegration",
-    description: "Netzwerke, Server, Virtualisierung und IT-Betrieb",
-    totalElements: 120,
-    completedElements: 0,
-    icon: Cable,
-    difficulty: "Experte",
-    gradient: "from-sky-500 to-blue-600"
-  },
-  {
-    id: "fachmodul-anwendungsentwicklung",
-    title: "Fachmodul Anwendungsentwicklung",
-    description: "OOP, Entwurfsmuster, Testing und Clean Code",
-    totalElements: 120,
-    completedElements: 0,
-    icon: Braces,
-    difficulty: "Experte",
-    gradient: "from-fuchsia-500 to-purple-600"
-  },
-  {
-    id: "zufallstraining",
-    title: "Zufallstraining",
-    description: "Alle Aufgaben aus allen Kategorien - Perfekt zur Prüfungsvorbereitung",
-    totalElements: 500,
-    completedElements: 0,
-    icon: Brain,
-    difficulty: "Fortgeschritten",
-    gradient: "from-violet-500 to-fuchsia-600"
-  },
-  {
-    id: "tabellenkalkulation",
-    title: "Tabellenkalkulation (Excel)",
-    description: "Excel-Formeln, Pivot-Tabellen, Diagramme und Datenanalyse für die IHK-Prüfung",
-    totalElements: 60,
-    completedElements: 0,
-    icon: Table2,
-    difficulty: "Anfänger",
-    gradient: "from-green-500 to-emerald-600"
-  },
-  {
-    id: "fachrechnen",
-    title: "Fachbezogenes Rechnen",
-    description: "Zahlensysteme, IT-Berechnungen, Subnetting und technische Mathematik",
-    totalElements: 70,
-    completedElements: 0,
-    icon: Calculator,
-    difficulty: "Fortgeschritten",
-    gradient: "from-blue-500 to-cyan-600"
-  },
-  {
-    id: "cloud-aws",
-    title: "Cloud-Computing (AWS)",
-    description: "AWS-Services, Cloud-Konzepte und Vorbereitung auf AWS CLF-C02 Zertifizierung",
-    totalElements: 80,
-    completedElements: 0,
-    icon: Cloud,
-    difficulty: "Fortgeschritten",
-    gradient: "from-orange-500 to-amber-600"
+    gradient: "from-green-500 to-emerald-600",
+    group: "grundlagen"
   },
   {
     id: "digitaltechnik",
@@ -257,7 +93,115 @@ export const categories: Category[] = [
     completedElements: 0,
     icon: Cpu,
     difficulty: "Fortgeschritten",
-    gradient: "from-purple-500 to-indigo-600"
+    gradient: "from-purple-500 to-indigo-600",
+    group: "grundlagen"
+  },
+  {
+    id: "fachrechnen",
+    title: "Fachrechnen & Mathematik",
+    description: "Zahlensysteme, IT-Berechnungen, Subnetting und technische Mathematik",
+    totalElements: 70,
+    completedElements: 0,
+    icon: Calculator,
+    difficulty: "Fortgeschritten",
+    gradient: "from-blue-500 to-cyan-600",
+    group: "grundlagen"
+  },
+
+  // ==========================================
+  // 💻 PROGRAMMIERUNG & ENTWICKLUNG
+  // ==========================================
+  {
+    id: "java",
+    title: "Java Programmierung",
+    description: "Von Hello World bis OOP, Collections und Streams - interaktiver Java-Kurs",
+    totalElements: 200,
+    completedElements: 0,
+    icon: Coffee,
+    difficulty: "Anfänger",
+    gradient: "from-orange-500 to-red-600",
+    group: "programmierung"
+  },
+  {
+    id: "programmierung",
+    title: "Programmierung allgemein",
+    description: "Grundlagen der Softwareentwicklung, Algorithmen und Datenstrukturen",
+    totalElements: 120,
+    completedElements: 0,
+    icon: Code2,
+    difficulty: "Fortgeschritten",
+    gradient: "from-blue-500 to-indigo-600",
+    group: "programmierung"
+  },
+  {
+    id: "web-technologien",
+    title: "Web-Technologien",
+    description: "HTML, CSS, JavaScript, Frameworks und Web-Standards",
+    totalElements: 130,
+    completedElements: 0,
+    icon: Globe,
+    difficulty: "Anfänger",
+    gradient: "from-cyan-500 to-blue-600",
+    group: "programmierung"
+  },
+  {
+    id: "mobile-entwicklung",
+    title: "Mobile Entwicklung",
+    description: "App-Entwicklung für iOS und Android, mobile Technologien",
+    totalElements: 75,
+    completedElements: 0,
+    icon: Smartphone,
+    difficulty: "Fortgeschritten",
+    gradient: "from-pink-500 to-rose-600",
+    group: "programmierung"
+  },
+  {
+    id: "datenbanken",
+    title: "Datenbanken & SQL",
+    description: "SQL, Datenbankdesign, Normalisierung und Datenbankmanagement",
+    totalElements: 85,
+    completedElements: 0,
+    icon: Database,
+    difficulty: "Fortgeschritten",
+    gradient: "from-emerald-500 to-teal-600",
+    group: "programmierung"
+  },
+  {
+    id: "fachmodul-anwendungsentwicklung",
+    title: "Fachmodul Anwendungsentwicklung",
+    description: "OOP, Entwurfsmuster, Testing und Clean Code",
+    totalElements: 120,
+    completedElements: 0,
+    icon: Braces,
+    difficulty: "Experte",
+    gradient: "from-fuchsia-500 to-purple-600",
+    group: "programmierung"
+  },
+
+  // ==========================================
+  // 🖥️ INFRASTRUKTUR & NETZWERK
+  // ==========================================
+  {
+    id: "netzwerktechnik",
+    title: "Netzwerktechnik",
+    description: "TCP/IP, Routing, Switching und Netzwerkprotokolle",
+    totalElements: 110,
+    completedElements: 0,
+    icon: Network,
+    difficulty: "Fortgeschritten",
+    gradient: "from-purple-500 to-violet-600",
+    group: "infrastruktur"
+  },
+  {
+    id: "systemadministration",
+    title: "Systemadministration",
+    description: "Server-Management, Betriebssysteme und Systemwartung",
+    totalElements: 100,
+    completedElements: 0,
+    icon: Server,
+    difficulty: "Experte",
+    gradient: "from-orange-500 to-amber-600",
+    group: "infrastruktur"
   },
   {
     id: "speicherloesungen",
@@ -267,36 +211,172 @@ export const categories: Category[] = [
     completedElements: 0,
     icon: HardDrive,
     difficulty: "Fortgeschritten",
-    gradient: "from-slate-500 to-zinc-600"
+    gradient: "from-slate-500 to-zinc-600",
+    group: "infrastruktur"
   },
   {
-    id: "praesentationsprogramme",
-    title: "Präsentationsprogramme (PowerPoint)",
-    description: "Präsentationen erstellen, Foliengestaltung, Animationen und Vortragstechniken",
-    totalElements: 70,
-    completedElements: 0,
-    icon: Presentation,
-    difficulty: "Anfänger",
-    gradient: "from-orange-500 to-red-600"
-  },
-  {
-    id: "textverarbeitung",
-    title: "Textverarbeitung (Word)",
-    description: "Dokumentformatierung, Seitengestaltung, Tabellen und professionelle Textverarbeitung",
+    id: "cloud-aws",
+    title: "Cloud-Computing (AWS)",
+    description: "AWS-Services, Cloud-Konzepte und Vorbereitung auf AWS CLF-C02",
     totalElements: 80,
     completedElements: 0,
-    icon: FileType,
+    icon: Cloud,
+    difficulty: "Fortgeschritten",
+    gradient: "from-orange-500 to-amber-600",
+    group: "infrastruktur"
+  },
+  {
+    id: "fachmodul-systemintegration",
+    title: "Fachmodul Systemintegration",
+    description: "Netzwerke, Server, Virtualisierung und IT-Betrieb",
+    totalElements: 120,
+    completedElements: 0,
+    icon: Cable,
+    difficulty: "Experte",
+    gradient: "from-sky-500 to-blue-600",
+    group: "infrastruktur"
+  },
+
+  // ==========================================
+  // 🔒 SICHERHEIT & DATENSCHUTZ
+  // ==========================================
+  {
+    id: "it-sicherheit",
+    title: "IT-Sicherheit",
+    description: "Cybersecurity, Verschlüsselung, Firewalls und Sicherheitskonzepte",
+    totalElements: 95,
+    completedElements: 0,
+    icon: Shield,
+    difficulty: "Experte",
+    gradient: "from-red-500 to-rose-600",
+    group: "infrastruktur"
+  },
+  {
+    id: "datenschutz",
+    title: "Datenschutz (DSGVO)",
+    description: "DSGVO, TOMs, Verzeichnisse und Betroffenenrechte",
+    totalElements: 75,
+    completedElements: 0,
+    icon: Lock,
+    difficulty: "Fortgeschritten",
+    gradient: "from-teal-500 to-emerald-600",
+    group: "infrastruktur"
+  },
+
+  // ==========================================
+  // 📊 BUSINESS & MANAGEMENT
+  // ==========================================
+  {
+    id: "projektmanagement",
+    title: "Projektmanagement",
+    description: "Agile Methoden, Scrum, Kanban und Projektplanung",
+    totalElements: 60,
+    completedElements: 0,
+    icon: Settings,
     difficulty: "Anfänger",
-    gradient: "from-blue-500 to-indigo-600"
+    gradient: "from-slate-500 to-gray-600",
+    group: "business"
+  },
+  {
+    id: "bwl",
+    title: "Betriebswirtschaft (BWL)",
+    description: "Kostenrechnung, Bilanz, Kennzahlen und Investitionen",
+    totalElements: 70,
+    completedElements: 0,
+    icon: BarChart3,
+    difficulty: "Fortgeschritten",
+    gradient: "from-amber-500 to-yellow-600",
+    group: "business"
+  },
+  {
+    id: "wiso",
+    title: "Wirtschafts- und Sozialkunde",
+    description: "Arbeitsrecht, Wirtschaft, Soziales und Tarifverträge",
+    totalElements: 80,
+    completedElements: 0,
+    icon: Scale,
+    difficulty: "Anfänger",
+    gradient: "from-lime-500 to-green-600",
+    group: "business"
+  },
+  {
+    id: "rechtliche-grundlagen",
+    title: "Rechtliche Grundlagen",
+    description: "Datenschutz, Urheberrecht und IT-Recht",
+    totalElements: 55,
+    completedElements: 0,
+    icon: FileText,
+    difficulty: "Anfänger",
+    gradient: "from-indigo-500 to-purple-600",
+    group: "business"
   },
   {
     id: "sap-erp",
     title: "SAP/ERP Grundlagen",
-    description: "SAP-Navigation, Module (FI, CO, MM, SD), Geschäftsprozesse und Zertifizierungsvorbereitung",
+    description: "SAP-Navigation, Module (FI, CO, MM, SD) und Geschäftsprozesse",
     totalElements: 90,
     completedElements: 0,
     icon: Building2,
     difficulty: "Fortgeschritten",
-    gradient: "from-blue-600 to-cyan-600"
+    gradient: "from-blue-600 to-cyan-600",
+    group: "business"
+  },
+  {
+    id: "kommunikation",
+    title: "Kommunikation & Soft Skills",
+    description: "Präsentationstechniken, Teamarbeit und Kundenkommunikation",
+    totalElements: 45,
+    completedElements: 0,
+    icon: Users,
+    difficulty: "Anfänger",
+    gradient: "from-yellow-500 to-orange-600",
+    group: "business"
+  },
+
+  // ==========================================
+  // 🛠️ OFFICE & WERKZEUGE
+  // ==========================================
+  {
+    id: "tabellenkalkulation",
+    title: "Tabellenkalkulation (Excel)",
+    description: "Formeln, Pivot-Tabellen, Diagramme und Datenanalyse",
+    totalElements: 60,
+    completedElements: 0,
+    icon: Table2,
+    difficulty: "Anfänger",
+    gradient: "from-green-500 to-emerald-600",
+    group: "spezial"
+  },
+  {
+    id: "praesentationsprogramme",
+    title: "Präsentationen (PowerPoint)",
+    description: "Foliengestaltung, Animationen und Vortragstechniken",
+    totalElements: 70,
+    completedElements: 0,
+    icon: Presentation,
+    difficulty: "Anfänger",
+    gradient: "from-orange-500 to-red-600",
+    group: "spezial"
+  },
+  {
+    id: "textverarbeitung",
+    title: "Textverarbeitung (Word)",
+    description: "Dokumentformatierung, Seitengestaltung und professionelle Texte",
+    totalElements: 80,
+    completedElements: 0,
+    icon: FileType,
+    difficulty: "Anfänger",
+    gradient: "from-blue-500 to-indigo-600",
+    group: "spezial"
   }
 ];
+
+// Kategorie-Gruppen für strukturierte Anzeige
+export const categoryGroups = {
+  pruefung: { title: "🎓 Prüfungsvorbereitung", order: 1 },
+  grundlagen: { title: "📚 IT-Grundlagen", order: 2 },
+  programmierung: { title: "💻 Programmierung & Entwicklung", order: 3 },
+  infrastruktur: { title: "🖥️ Infrastruktur & Sicherheit", order: 4 },
+  business: { title: "📊 Business & Management", order: 5 },
+  spezial: { title: "🛠️ Office & Werkzeuge", order: 6 }
+};

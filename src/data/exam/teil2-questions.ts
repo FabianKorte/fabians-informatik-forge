@@ -1,7 +1,9 @@
 import type { ExamQuestion } from "@/types/exam";
 
 export const teil2Questions: ExamQuestion[] = [
-  // ===== Systemintegration Kernbereich (ca. 40%) =====
+  // =============================================================
+  // SYSTEMINTEGRATION KERNBEREICH (ca. 40%)
+  // =============================================================
   {
     id: "t2-si-001",
     question: "Welche RAID-Konfiguration bietet Redundanz ohne Paritätsinformationen?",
@@ -142,8 +144,85 @@ export const teil2Questions: ExamQuestion[] = [
     category: "Systemintegration",
     difficulty: "mittel"
   },
+  {
+    id: "t2-si-011",
+    question: "Was ist ein Container im Vergleich zu einer virtuellen Maschine?",
+    options: [
+      "Ein Container ist größer und langsamer",
+      "Container teilen den Kernel mit dem Host und sind leichtgewichtiger als VMs",
+      "VMs sind sicherer als Container",
+      "Es gibt keinen Unterschied"
+    ],
+    correctIndex: 1,
+    explanation: "Container (Docker, Kubernetes) teilen den Host-Kernel und isolieren nur Prozesse - schneller Start, weniger Ressourcen. VMs virtualisieren komplette Hardware mit eigenem Betriebssystem.",
+    points: 15,
+    category: "Systemintegration",
+    difficulty: "schwer"
+  },
+  {
+    id: "t2-si-012",
+    question: "Was ist der Zweck von Gruppenrichtlinien (GPO) in Active Directory?",
+    options: [
+      "Nur für Benutzeranmeldung",
+      "Zentrale Konfiguration und Verwaltung von Computern und Benutzern im Netzwerk",
+      "Nur für Druckerverwaltung",
+      "Nur für Firewall-Regeln"
+    ],
+    correctIndex: 1,
+    explanation: "GPOs (Group Policy Objects) ermöglichen zentrale Konfiguration: Sicherheitseinstellungen, Software-Installation, Desktop-Richtlinien für Benutzer und Computer im AD.",
+    points: 10,
+    category: "Systemintegration",
+    difficulty: "mittel"
+  },
+  {
+    id: "t2-si-013",
+    question: "Was macht der Linux-Befehl 'grep -r \"error\" /var/log/'?",
+    options: [
+      "Löscht alle Error-Dateien",
+      "Sucht rekursiv nach 'error' in allen Dateien unter /var/log/",
+      "Zeigt nur Fehlermeldungen an",
+      "Startet den Error-Dienst"
+    ],
+    correctIndex: 1,
+    explanation: "grep durchsucht Dateien nach Muster. -r = rekursiv (alle Unterverzeichnisse). Hier: Sucht 'error' in allen Log-Dateien. Wichtig für Fehleranalyse.",
+    points: 10,
+    category: "Systemintegration",
+    difficulty: "mittel"
+  },
+  {
+    id: "t2-si-014",
+    question: "Was ist ein Reverse Proxy?",
+    options: [
+      "Ein Proxy für rückwärtige Verbindungen",
+      "Ein Server vor Webservern, der Anfragen entgegennimmt und an Backend-Server verteilt",
+      "Ein VPN-Dienst",
+      "Ein Backup-Proxy"
+    ],
+    correctIndex: 1,
+    explanation: "Ein Reverse Proxy (z.B. nginx, HAProxy) sitzt vor Backend-Servern, verteilt Last (Load Balancing), terminiert SSL, cached Inhalte und schützt die echten Server.",
+    points: 15,
+    category: "Systemintegration",
+    difficulty: "schwer"
+  },
+  {
+    id: "t2-si-015",
+    question: "Was ist der Unterschied zwischen LVM und klassischen Partitionen?",
+    options: [
+      "LVM ist langsamer",
+      "LVM (Logical Volume Manager) ermöglicht flexible Größenänderung von Volumes zur Laufzeit",
+      "Klassische Partitionen sind flexibler",
+      "Es gibt keinen Unterschied"
+    ],
+    correctIndex: 1,
+    explanation: "LVM abstrahiert physische Speicher. Volumes können dynamisch vergrößert/verkleinert werden ohne Neustart. Ermöglicht auch Snapshots und RAID-ähnliche Funktionen.",
+    points: 10,
+    category: "Systemintegration",
+    difficulty: "mittel"
+  },
 
-  // ===== Netzwerk-Vertiefung (ca. 25%) =====
+  // =============================================================
+  // NETZWERK-VERTIEFUNG (ca. 25%)
+  // =============================================================
   {
     id: "t2-nw-001",
     question: "Berechnen Sie: Welche Netzwerkadresse hat 192.168.10.67/28?",
@@ -214,8 +293,65 @@ export const teil2Questions: ExamQuestion[] = [
     category: "Netzwerktechnik",
     difficulty: "schwer"
   },
+  {
+    id: "t2-nw-007",
+    question: "Was ist VLAN Trunking (802.1Q)?",
+    options: [
+      "Eine Backup-Methode",
+      "Übertragung mehrerer VLANs über eine physische Leitung mit VLAN-Tags",
+      "Eine Verschlüsselungsmethode",
+      "Ein Routing-Protokoll"
+    ],
+    correctIndex: 1,
+    explanation: "802.1Q Trunking ermöglicht die Übertragung mehrerer VLANs über eine Leitung. Frames werden mit VLAN-Tags (VLAN-ID) versehen, um sie zuzuordnen.",
+    points: 15,
+    category: "Netzwerktechnik",
+    difficulty: "schwer"
+  },
+  {
+    id: "t2-nw-008",
+    question: "Was ist Spanning Tree Protocol (STP)?",
+    options: [
+      "Ein Routing-Protokoll",
+      "Verhindert Schleifen in Netzwerken mit redundanten Pfaden durch Blockieren",
+      "Ein DNS-Protokoll",
+      "Ein Verschlüsselungsprotokoll"
+    ],
+    correctIndex: 1,
+    explanation: "STP (802.1D) verhindert Broadcast-Stürme durch Schleifen. Es blockiert redundante Pfade und aktiviert sie nur bei Ausfall des primären Pfades.",
+    points: 15,
+    category: "Netzwerktechnik",
+    difficulty: "schwer"
+  },
+  {
+    id: "t2-nw-009",
+    question: "Welche IPv6-Adresse ist eine Link-Local-Adresse?",
+    options: ["2001:db8::1", "fe80::1", "::1", "ff02::1"],
+    correctIndex: 1,
+    explanation: "Link-Local-Adressen beginnen mit fe80::/10 und sind nur im lokalen Netzwerksegment gültig. Sie werden automatisch konfiguriert.",
+    points: 10,
+    category: "Netzwerktechnik",
+    difficulty: "mittel"
+  },
+  {
+    id: "t2-nw-010",
+    question: "Was macht Port-Mirroring auf einem Switch?",
+    options: [
+      "Dupliziert MAC-Adressen",
+      "Kopiert den Datenverkehr eines Ports auf einen anderen Port zur Analyse",
+      "Spiegelt IP-Adressen",
+      "Verschlüsselt Port-Daten"
+    ],
+    correctIndex: 1,
+    explanation: "Port-Mirroring (SPAN) kopiert den Datenverkehr von einem oder mehreren Ports auf einen Monitor-Port für Analyse, Troubleshooting oder IDS/IPS.",
+    points: 10,
+    category: "Netzwerktechnik",
+    difficulty: "mittel"
+  },
 
-  // ===== Datenbankadministration (ca. 15%) =====
+  // =============================================================
+  // DATENBANKADMINISTRATION (ca. 15%)
+  // =============================================================
   {
     id: "t2-db-001",
     question: "Was ist Normalisierung in Datenbanken?",
@@ -291,8 +427,55 @@ export const teil2Questions: ExamQuestion[] = [
     category: "Datenbanken",
     difficulty: "schwer"
   },
+  {
+    id: "t2-db-006",
+    question: "Was ist der Unterschied zwischen LEFT JOIN und INNER JOIN?",
+    options: [
+      "LEFT JOIN ist schneller",
+      "LEFT JOIN gibt alle Zeilen der linken Tabelle zurück, auch ohne Übereinstimmung",
+      "Es gibt keinen Unterschied",
+      "INNER JOIN gibt mehr Zeilen zurück"
+    ],
+    correctIndex: 1,
+    explanation: "LEFT JOIN gibt alle Zeilen der linken Tabelle zurück. Wenn keine Übereinstimmung in der rechten Tabelle existiert, werden NULL-Werte eingefügt.",
+    points: 10,
+    category: "Datenbanken",
+    difficulty: "mittel"
+  },
+  {
+    id: "t2-db-007",
+    question: "Was ist ein Fremdschlüssel (Foreign Key)?",
+    options: [
+      "Ein Schlüssel für externe Benutzer",
+      "Ein Verweis auf den Primärschlüssel einer anderen Tabelle zur Beziehungsherstellung",
+      "Ein verschlüsselter Schlüssel",
+      "Ein alternativer Primärschlüssel"
+    ],
+    correctIndex: 1,
+    explanation: "Ein Fremdschlüssel (FK) verweist auf den Primärschlüssel einer anderen Tabelle und stellt referenzielle Integrität sicher (keine verwaisten Datensätze).",
+    points: 10,
+    category: "Datenbanken",
+    difficulty: "mittel"
+  },
+  {
+    id: "t2-db-008",
+    question: "Was bewirkt die SQL-Klausel GROUP BY?",
+    options: [
+      "Sortiert die Ergebnisse",
+      "Gruppiert Zeilen mit gleichen Werten für Aggregatfunktionen (COUNT, SUM, AVG)",
+      "Limitiert die Ergebnisse",
+      "Filtert die Ergebnisse"
+    ],
+    correctIndex: 1,
+    explanation: "GROUP BY gruppiert Zeilen mit identischen Werten in den angegebenen Spalten. Ermöglicht Aggregatfunktionen wie COUNT(), SUM(), AVG() pro Gruppe.",
+    points: 10,
+    category: "Datenbanken",
+    difficulty: "mittel"
+  },
 
-  // ===== IT-Service-Management (ca. 10%) =====
+  // =============================================================
+  // IT-SERVICE-MANAGEMENT (ca. 10%)
+  // =============================================================
   {
     id: "t2-itsm-001",
     question: "Was ist ITIL?",
@@ -353,8 +536,40 @@ export const teil2Questions: ExamQuestion[] = [
     category: "IT-Service-Management",
     difficulty: "mittel"
   },
+  {
+    id: "t2-itsm-005",
+    question: "Was ist ein CMDB (Configuration Management Database)?",
+    options: [
+      "Eine Backup-Datenbank",
+      "Eine Datenbank mit allen IT-Konfigurationselementen und deren Beziehungen",
+      "Eine Kundendatenbank",
+      "Eine Code-Management-Datenbank"
+    ],
+    correctIndex: 1,
+    explanation: "Die CMDB enthält alle Configuration Items (CIs): Hardware, Software, Dokumentation und deren Abhängigkeiten. Zentral für Change und Incident Management.",
+    points: 10,
+    category: "IT-Service-Management",
+    difficulty: "mittel"
+  },
+  {
+    id: "t2-itsm-006",
+    question: "Was bedeutet MTTR und MTBF?",
+    options: [
+      "Netzwerkprotokolle",
+      "Mean Time To Repair (Reparaturzeit) und Mean Time Between Failures (Zeit zwischen Ausfällen)",
+      "Verschlüsselungsstandards",
+      "Backup-Methoden"
+    ],
+    correctIndex: 1,
+    explanation: "MTTR: Durchschnittliche Zeit zur Wiederherstellung nach Ausfall. MTBF: Durchschnittliche Zeit zwischen Ausfällen. Beide sind Verfügbarkeitskennzahlen.",
+    points: 15,
+    category: "IT-Service-Management",
+    difficulty: "schwer"
+  },
 
-  // ===== Sicherheit & Compliance (ca. 10%) =====
+  // =============================================================
+  // SICHERHEIT & COMPLIANCE (ca. 10%)
+  // =============================================================
   {
     id: "t2-sec-001",
     question: "Was ist ein Penetrationstest?",
@@ -429,5 +644,129 @@ export const teil2Questions: ExamQuestion[] = [
     points: 15,
     category: "IT-Sicherheit",
     difficulty: "schwer"
+  },
+  {
+    id: "t2-sec-006",
+    question: "Was ist Zero Trust Security?",
+    options: [
+      "Niemand darf das Netzwerk nutzen",
+      "Niemals vertrauen, immer verifizieren - auch interne Zugriffe werden überprüft",
+      "Nur externe Zugriffe werden überprüft",
+      "Eine Art von Firewall"
+    ],
+    correctIndex: 1,
+    explanation: "Zero Trust: 'Never trust, always verify'. Auch interne Nutzer und Geräte werden kontinuierlich authentifiziert/autorisiert. Keine Annahme von Vertrauen im Netzwerk.",
+    points: 15,
+    category: "IT-Sicherheit",
+    difficulty: "schwer"
+  },
+  {
+    id: "t2-sec-007",
+    question: "Was ist ein IDS/IPS?",
+    options: [
+      "Internet-Dienste-Service",
+      "Intrusion Detection/Prevention System - erkennt und blockiert Angriffe",
+      "Internet-Daten-Speicher",
+      "Ein DNS-Dienst"
+    ],
+    correctIndex: 1,
+    explanation: "IDS (Intrusion Detection System) erkennt Angriffe und meldet sie. IPS (Intrusion Prevention System) erkennt UND blockiert Angriffe automatisch.",
+    points: 10,
+    category: "IT-Sicherheit",
+    difficulty: "mittel"
+  },
+  {
+    id: "t2-sec-008",
+    question: "Was ist SIEM?",
+    options: [
+      "Ein Backup-System",
+      "Security Information and Event Management - zentrale Sicherheitsüberwachung",
+      "Ein Verschlüsselungsstandard",
+      "Ein VPN-Protokoll"
+    ],
+    correctIndex: 1,
+    explanation: "SIEM (Security Information and Event Management) sammelt, korreliert und analysiert Sicherheitsereignisse aus verschiedenen Quellen für zentrale Überwachung und Alarmierung.",
+    points: 10,
+    category: "IT-Sicherheit",
+    difficulty: "mittel"
+  },
+
+  // =============================================================
+  // WEITERE SYSTEMINTEGRATION
+  // =============================================================
+  {
+    id: "t2-si-016",
+    question: "Was ist der Unterschied zwischen Hot, Warm und Cold Standby?",
+    options: [
+      "Nur Temperaturunterschiede",
+      "Bereitschaftsgrade: Hot (sofort einsatzbereit), Warm (schnell aktivierbar), Cold (manuell)",
+      "Backup-Speicherorte",
+      "Netzwerk-Topologien"
+    ],
+    correctIndex: 1,
+    explanation: "Hot Standby: System läuft parallel, sofortige Übernahme. Warm Standby: System bereit, schneller Start nötig. Cold Standby: Hardware vorhanden, muss manuell gestartet werden.",
+    points: 15,
+    category: "Systemintegration",
+    difficulty: "schwer"
+  },
+  {
+    id: "t2-si-017",
+    question: "Was ist RAID 10?",
+    options: [
+      "10 Festplatten werden benötigt",
+      "Kombination aus RAID 1 (Mirroring) und RAID 0 (Striping) - hohe Performance und Redundanz",
+      "RAID Level 10 von 100",
+      "Ein Software-RAID"
+    ],
+    correctIndex: 1,
+    explanation: "RAID 10 (1+0) kombiniert Mirroring und Striping: Erst gespiegelt (Redundanz), dann gestriped (Performance). Mindestens 4 Platten, 50% Kapazität nutzbar.",
+    points: 15,
+    category: "Systemintegration",
+    difficulty: "schwer"
+  },
+  {
+    id: "t2-si-018",
+    question: "Was macht der Linux-Befehl 'systemctl status nginx'?",
+    options: [
+      "Installiert nginx",
+      "Zeigt den Status des nginx-Dienstes an (läuft/gestoppt, Logs)",
+      "Löscht nginx",
+      "Aktualisiert nginx"
+    ],
+    correctIndex: 1,
+    explanation: "systemctl ist das Systemd-Verwaltungstool. 'status' zeigt: ob der Dienst läuft, PID, Speicherverbrauch, letzte Log-Einträge, Autostart-Einstellung.",
+    points: 5,
+    category: "Systemintegration",
+    difficulty: "leicht"
+  },
+  {
+    id: "t2-si-019",
+    question: "Was ist iSCSI?",
+    options: [
+      "Ein Backup-Protokoll",
+      "Internet Small Computer System Interface - Block-Storage über TCP/IP-Netzwerk",
+      "Ein Virtualisierungstool",
+      "Ein DNS-Dienst"
+    ],
+    correctIndex: 1,
+    explanation: "iSCSI transportiert SCSI-Befehle über TCP/IP. Ermöglicht Block-Level-Storage-Zugriff über normale Netzwerkinfrastruktur - günstiger als Fibre Channel SAN.",
+    points: 10,
+    category: "Systemintegration",
+    difficulty: "mittel"
+  },
+  {
+    id: "t2-si-020",
+    question: "Was ist Ansible?",
+    options: [
+      "Ein Betriebssystem",
+      "Ein Automatisierungstool für Konfigurationsmanagement und Deployment",
+      "Eine Programmiersprache",
+      "Ein Monitoring-Tool"
+    ],
+    correctIndex: 1,
+    explanation: "Ansible ist ein agentenloser Automatisierungsframework. Nutzt YAML-Playbooks zur Konfiguration von Servern, Deployment von Software und Orchestrierung - über SSH.",
+    points: 10,
+    category: "Systemintegration",
+    difficulty: "mittel"
   }
 ];

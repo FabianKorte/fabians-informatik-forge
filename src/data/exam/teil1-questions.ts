@@ -1,7 +1,9 @@
 import type { ExamQuestion } from "@/types/exam";
 
 export const teil1Questions: ExamQuestion[] = [
-  // ===== IT-Grundlagen (ca. 20%) =====
+  // =============================================================
+  // IT-GRUNDLAGEN (ca. 20%)
+  // =============================================================
   {
     id: "t1-it-001",
     question: "Welche Einheit wird verwendet, um die Taktfrequenz eines Prozessors anzugeben?",
@@ -62,8 +64,85 @@ export const teil1Questions: ExamQuestion[] = [
     category: "IT-Grundlagen",
     difficulty: "mittel"
   },
-  
-  // ===== Netzwerktechnik (ca. 25%) =====
+  {
+    id: "t1-it-006",
+    question: "Was ist der Unterschied zwischen SSD und HDD?",
+    options: [
+      "SSDs haben bewegliche Teile, HDDs nicht",
+      "SSDs nutzen Flash-Speicher ohne bewegliche Teile, HDDs haben rotierende Magnetscheiben",
+      "HDDs sind schneller als SSDs",
+      "SSDs können nur lesen, HDDs können lesen und schreiben"
+    ],
+    correctIndex: 1,
+    explanation: "SSDs (Solid State Drives) nutzen Flash-Speicherchips ohne bewegliche Teile - schneller, leiser, stoßunempfindlich. HDDs haben rotierende Magnetscheiben mit Lese/Schreibköpfen.",
+    points: 5,
+    category: "IT-Grundlagen",
+    difficulty: "leicht"
+  },
+  {
+    id: "t1-it-007",
+    question: "Was ist der Zweck eines BIOS/UEFI?",
+    options: [
+      "Es ist das Hauptbetriebssystem",
+      "Es initialisiert die Hardware und startet das Betriebssystem",
+      "Es speichert Benutzerdaten",
+      "Es ist nur für Grafikkarten zuständig"
+    ],
+    correctIndex: 1,
+    explanation: "BIOS/UEFI ist die Firmware, die beim Einschalten als erstes läuft. Sie initialisiert Hardware (POST), konfiguriert Komponenten und lädt dann das Betriebssystem.",
+    points: 5,
+    category: "IT-Grundlagen",
+    difficulty: "leicht"
+  },
+  {
+    id: "t1-it-008",
+    question: "Welche Aussage über Cache-Speicher ist korrekt?",
+    options: [
+      "Cache ist langsamer als RAM",
+      "Cache ist sehr schneller Zwischenspeicher zwischen CPU und RAM",
+      "Cache wird nur für Grafik verwendet",
+      "Cache ersetzt den Arbeitsspeicher"
+    ],
+    correctIndex: 1,
+    explanation: "Cache ist ein sehr schneller Zwischenspeicher, der häufig benötigte Daten näher an der CPU hält. L1-Cache ist am schnellsten, gefolgt von L2 und L3.",
+    points: 10,
+    category: "IT-Grundlagen",
+    difficulty: "mittel"
+  },
+  {
+    id: "t1-it-009",
+    question: "Was bedeutet Multi-Core bei Prozessoren?",
+    options: [
+      "Der Prozessor hat mehrere Gehäuse",
+      "Mehrere unabhängige Rechenkerne auf einem Chip für parallele Verarbeitung",
+      "Der Prozessor kann mehrere Monitore ansteuern",
+      "Der Prozessor hat eine höhere Taktfrequenz"
+    ],
+    correctIndex: 1,
+    explanation: "Multi-Core bedeutet, dass ein Prozessor mehrere unabhängige Rechenkerne auf einem Chip hat. So können mehrere Aufgaben gleichzeitig parallel bearbeitet werden.",
+    points: 5,
+    category: "IT-Grundlagen",
+    difficulty: "leicht"
+  },
+  {
+    id: "t1-it-010",
+    question: "Was ist der Unterschied zwischen 32-Bit und 64-Bit Systemen?",
+    options: [
+      "64-Bit ist immer schneller",
+      "64-Bit kann mehr Arbeitsspeicher adressieren (>4GB) und größere Datenmengen verarbeiten",
+      "32-Bit ist sicherer",
+      "Es gibt keinen praktischen Unterschied"
+    ],
+    correctIndex: 1,
+    explanation: "64-Bit Systeme können mehr als 4GB RAM adressieren (theoretisch 16 Exabyte) und verarbeiten größere Datenblöcke pro Takt. 32-Bit ist auf ~4GB RAM beschränkt.",
+    points: 10,
+    category: "IT-Grundlagen",
+    difficulty: "mittel"
+  },
+
+  // =============================================================
+  // NETZWERKTECHNIK (ca. 25%)
+  // =============================================================
   {
     id: "t1-nw-001",
     question: "Auf welcher Schicht des OSI-Modells arbeitet ein Switch?",
@@ -154,8 +233,95 @@ export const teil1Questions: ExamQuestion[] = [
     category: "Netzwerktechnik",
     difficulty: "leicht"
   },
+  {
+    id: "t1-nw-009",
+    question: "Welche Schichten hat das OSI-Modell?",
+    options: [
+      "4 Schichten",
+      "7 Schichten: Physical, Data Link, Network, Transport, Session, Presentation, Application",
+      "5 Schichten",
+      "3 Schichten"
+    ],
+    correctIndex: 1,
+    explanation: "Das OSI-Modell hat 7 Schichten. Von unten: Physical (1), Data Link (2), Network (3), Transport (4), Session (5), Presentation (6), Application (7).",
+    points: 5,
+    category: "Netzwerktechnik",
+    difficulty: "leicht"
+  },
+  {
+    id: "t1-nw-010",
+    question: "Was macht das ARP-Protokoll?",
+    options: [
+      "Übersetzt Domainnamen in IP-Adressen",
+      "Löst IP-Adressen in MAC-Adressen auf",
+      "Verteilt IP-Adressen automatisch",
+      "Verschlüsselt Netzwerkverkehr"
+    ],
+    correctIndex: 1,
+    explanation: "ARP (Address Resolution Protocol) löst IP-Adressen in MAC-Adressen auf. Nötig, da Ethernet MAC-Adressen für die Kommunikation im lokalen Netz benötigt.",
+    points: 10,
+    category: "Netzwerktechnik",
+    difficulty: "mittel"
+  },
+  {
+    id: "t1-nw-011",
+    question: "Was ist eine MAC-Adresse?",
+    options: [
+      "Die IP-Adresse eines Apple-Computers",
+      "Eine eindeutige 48-Bit Hardware-Adresse einer Netzwerkkarte",
+      "Die Adresse des Routers",
+      "Eine verschlüsselte IP-Adresse"
+    ],
+    correctIndex: 1,
+    explanation: "MAC (Media Access Control) ist eine eindeutige 48-Bit Adresse, die jeder Netzwerkkarte bei der Herstellung zugewiesen wird. Format: XX:XX:XX:XX:XX:XX.",
+    points: 5,
+    category: "Netzwerktechnik",
+    difficulty: "leicht"
+  },
+  {
+    id: "t1-nw-012",
+    question: "Welches Protokoll nutzt DNS standardmäßig?",
+    options: ["TCP Port 80", "UDP Port 53", "TCP Port 443", "UDP Port 161"],
+    correctIndex: 1,
+    explanation: "DNS verwendet standardmäßig UDP Port 53 für schnelle Anfragen. Bei großen Antworten (>512 Bytes) oder Zonentransfers wird TCP Port 53 verwendet.",
+    points: 5,
+    category: "Netzwerktechnik",
+    difficulty: "leicht"
+  },
+  {
+    id: "t1-nw-013",
+    question: "Was ist ein Default Gateway?",
+    options: [
+      "Der erste Computer im Netzwerk",
+      "Der Router, über den Pakete an andere Netzwerke weitergeleitet werden",
+      "Der DNS-Server",
+      "Ein Backup-Server"
+    ],
+    correctIndex: 1,
+    explanation: "Das Default Gateway ist die IP-Adresse des Routers, an den Pakete gesendet werden, wenn das Ziel nicht im lokalen Netzwerk liegt.",
+    points: 5,
+    category: "Netzwerktechnik",
+    difficulty: "leicht"
+  },
+  {
+    id: "t1-nw-014",
+    question: "Was bedeutet CIDR-Notation /28?",
+    options: [
+      "28 verfügbare Hosts",
+      "28 Bits für Netzwerkteil, 4 Bits für Hostteil = 16 Adressen",
+      "28 Netzwerke möglich",
+      "Subnetzmaske 255.255.255.0"
+    ],
+    correctIndex: 1,
+    explanation: "/28 = 28 Netzwerkbits, 4 Hostbits. 2^4 = 16 Adressen gesamt, davon 14 nutzbar (minus Netzwerk- und Broadcast). Maske: 255.255.255.240.",
+    points: 10,
+    category: "Netzwerktechnik",
+    difficulty: "mittel"
+  },
 
-  // ===== IT-Sicherheit (ca. 20%) =====
+  // =============================================================
+  // IT-SICHERHEIT (ca. 20%)
+  // =============================================================
   {
     id: "t1-sec-001",
     question: "Was versteht man unter dem CIA-Prinzip in der IT-Sicherheit?",
@@ -246,8 +412,70 @@ export const teil1Questions: ExamQuestion[] = [
     category: "IT-Sicherheit",
     difficulty: "mittel"
   },
+  {
+    id: "t1-sec-007",
+    question: "Was ist Ransomware?",
+    options: [
+      "Eine Antivirensoftware",
+      "Schadsoftware, die Daten verschlüsselt und Lösegeld fordert",
+      "Ein Backup-Programm",
+      "Eine Firewall-Regel"
+    ],
+    correctIndex: 1,
+    explanation: "Ransomware verschlüsselt Daten auf dem Computer und fordert ein Lösegeld (Ransom) für die Entschlüsselung. Prävention: Backups, Updates, Vorsicht bei E-Mails.",
+    points: 5,
+    category: "IT-Sicherheit",
+    difficulty: "leicht"
+  },
+  {
+    id: "t1-sec-008",
+    question: "Was ist der Unterschied zwischen asymmetrischer und symmetrischer Verschlüsselung?",
+    options: [
+      "Asymmetrisch ist schneller",
+      "Asymmetrisch nutzt Schlüsselpaar (öffentlich/privat), symmetrisch einen gemeinsamen Schlüssel",
+      "Symmetrisch ist sicherer",
+      "Es gibt keinen Unterschied"
+    ],
+    correctIndex: 1,
+    explanation: "Asymmetrisch: Öffentlicher Schlüssel zum Verschlüsseln, privater zum Entschlüsseln. Symmetrisch: Gleicher Schlüssel für beides. Asymmetrisch löst Schlüsselaustauschproblem.",
+    points: 10,
+    category: "IT-Sicherheit",
+    difficulty: "mittel"
+  },
+  {
+    id: "t1-sec-009",
+    question: "Was ist ein DDoS-Angriff?",
+    options: [
+      "Ein Datensicherungsverfahren",
+      "Distributed Denial of Service - Überlastung eines Dienstes durch viele Anfragen",
+      "Eine Verschlüsselungsmethode",
+      "Ein Authentifizierungsverfahren"
+    ],
+    correctIndex: 1,
+    explanation: "DDoS (Distributed Denial of Service) überflutet Server mit Anfragen von vielen kompromittierten Systemen (Botnet), um Dienste unerreichbar zu machen.",
+    points: 10,
+    category: "IT-Sicherheit",
+    difficulty: "mittel"
+  },
+  {
+    id: "t1-sec-010",
+    question: "Was ist Social Engineering?",
+    options: [
+      "Software-Entwicklung in Teams",
+      "Manipulation von Menschen, um an vertrauliche Informationen zu gelangen",
+      "Die Planung von sozialen Netzwerken",
+      "Eine Programmiersprache"
+    ],
+    correctIndex: 1,
+    explanation: "Social Engineering manipuliert Menschen psychologisch, um Sicherheitsmaßnahmen zu umgehen. Methoden: Phishing, Pretexting, Tailgating, Baiting.",
+    points: 5,
+    category: "IT-Sicherheit",
+    difficulty: "leicht"
+  },
 
-  // ===== Projektmanagement (ca. 15%) =====
+  // =============================================================
+  // PROJEKTMANAGEMENT (ca. 15%)
+  // =============================================================
   {
     id: "t1-pm-001",
     question: "Was ist ein Meilenstein in einem Projekt?",
@@ -323,8 +551,55 @@ export const teil1Questions: ExamQuestion[] = [
     category: "Projektmanagement",
     difficulty: "mittel"
   },
+  {
+    id: "t1-pm-006",
+    question: "Was sind die drei Rollen in Scrum?",
+    options: [
+      "Manager, Entwickler, Tester",
+      "Product Owner, Scrum Master, Development Team",
+      "CEO, CTO, Entwickler",
+      "Projektleiter, Analyst, Programmierer"
+    ],
+    correctIndex: 1,
+    explanation: "Scrum definiert 3 Rollen: Product Owner (Was wird gebaut?), Scrum Master (Prozesscoach), Development Team (Umsetzung).",
+    points: 5,
+    category: "Projektmanagement",
+    difficulty: "leicht"
+  },
+  {
+    id: "t1-pm-007",
+    question: "Was ist ein Sprint in Scrum?",
+    options: [
+      "Ein Wettlauf zwischen Teams",
+      "Eine feste Zeitbox (meist 2-4 Wochen) für die Entwicklung",
+      "Das finale Release",
+      "Eine Art von Test"
+    ],
+    correctIndex: 1,
+    explanation: "Ein Sprint ist eine feste Zeitbox (typisch 2-4 Wochen), in der ein fertiges, nutzbares Produktinkrement erstellt wird. Am Ende steht ein Sprint Review.",
+    points: 5,
+    category: "Projektmanagement",
+    difficulty: "leicht"
+  },
+  {
+    id: "t1-pm-008",
+    question: "Was ist der Zweck eines Lastenhefts?",
+    options: [
+      "Technische Lösung beschreiben",
+      "Anforderungen des Auftraggebers dokumentieren (Was soll erreicht werden?)",
+      "Projektkosten kalkulieren",
+      "Testfälle definieren"
+    ],
+    correctIndex: 1,
+    explanation: "Das Lastenheft beschreibt aus Sicht des Auftraggebers, WAS erreicht werden soll (Anforderungen). Das Pflichtenheft beschreibt später, WIE es umgesetzt wird.",
+    points: 10,
+    category: "Projektmanagement",
+    difficulty: "mittel"
+  },
 
-  // ===== Wirtschafts- und Sozialkunde (ca. 10%) =====
+  // =============================================================
+  // WIRTSCHAFTS- UND SOZIALKUNDE (ca. 10%)
+  // =============================================================
   {
     id: "t1-wiso-001",
     question: "Welche Aussage zum Arbeitsvertrag ist korrekt?",
@@ -385,8 +660,40 @@ export const teil1Questions: ExamQuestion[] = [
     category: "WiSo",
     difficulty: "leicht"
   },
+  {
+    id: "t1-wiso-005",
+    question: "Was ist Kurzarbeit?",
+    options: [
+      "Arbeit mit verkürzten Pausen",
+      "Vorübergehende Reduzierung der Arbeitszeit bei Arbeitsausfall, mit Lohnausgleich durch die Agentur für Arbeit",
+      "Teilzeitarbeit",
+      "Arbeit am Wochenende"
+    ],
+    correctIndex: 1,
+    explanation: "Bei Kurzarbeit wird die Arbeitszeit vorübergehend reduziert (z.B. bei Auftragsmangel). Die Agentur für Arbeit zahlt Kurzarbeitergeld als teilweisen Lohnausgleich.",
+    points: 10,
+    category: "WiSo",
+    difficulty: "mittel"
+  },
+  {
+    id: "t1-wiso-006",
+    question: "Wie lang ist die gesetzliche Kündigungsfrist in der Probezeit?",
+    options: [
+      "1 Woche",
+      "2 Wochen",
+      "4 Wochen",
+      "Sofort fristlos"
+    ],
+    correctIndex: 1,
+    explanation: "In der Probezeit (max. 6 Monate) gilt eine Kündigungsfrist von 2 Wochen. Nach der Probezeit gilt die gesetzliche Frist von 4 Wochen zum 15. oder Monatsende.",
+    points: 5,
+    category: "WiSo",
+    difficulty: "leicht"
+  },
 
-  // ===== Datenschutz (ca. 10%) =====
+  // =============================================================
+  // DATENSCHUTZ (ca. 10%)
+  // =============================================================
   {
     id: "t1-ds-001",
     question: "Wofür steht DSGVO?",
@@ -446,5 +753,118 @@ export const teil1Questions: ExamQuestion[] = [
     points: 5,
     category: "Datenschutz",
     difficulty: "leicht"
+  },
+  {
+    id: "t1-ds-005",
+    question: "Was ist eine Datenschutz-Folgenabschätzung (DSFA)?",
+    options: [
+      "Eine jährliche Überprüfung",
+      "Eine Risikobewertung bei Verarbeitungen mit hohem Risiko für Betroffene",
+      "Ein Backup-Plan",
+      "Eine Verschlüsselungsmethode"
+    ],
+    correctIndex: 1,
+    explanation: "Die DSFA (Art. 35 DSGVO) ist eine Risikobewertung, die bei Verarbeitungen mit voraussichtlich hohem Risiko für die Rechte der Betroffenen durchgeführt werden muss.",
+    points: 10,
+    category: "Datenschutz",
+    difficulty: "mittel"
+  },
+  {
+    id: "t1-ds-006",
+    question: "Was ist das Verzeichnis von Verarbeitungstätigkeiten?",
+    options: [
+      "Eine Liste aller Mitarbeiter",
+      "Eine Dokumentation aller Datenverarbeitungen im Unternehmen nach Art. 30 DSGVO",
+      "Eine Backup-Übersicht",
+      "Eine Software-Liste"
+    ],
+    correctIndex: 1,
+    explanation: "Das Verzeichnis von Verarbeitungstätigkeiten dokumentiert alle Datenverarbeitungen (Zweck, Kategorien, Empfänger, Löschfristen). Es ist eine Pflicht nach Art. 30 DSGVO.",
+    points: 5,
+    category: "Datenschutz",
+    difficulty: "leicht"
+  },
+
+  // =============================================================
+  // WEITERE IT-GRUNDLAGEN
+  // =============================================================
+  {
+    id: "t1-it-011",
+    question: "Was ist ein Betriebssystem?",
+    options: [
+      "Eine Anwendungssoftware",
+      "Systemsoftware, die Hardware verwaltet und Schnittstelle für Programme bietet",
+      "Ein Hardwarebauteil",
+      "Eine Programmiersprache"
+    ],
+    correctIndex: 1,
+    explanation: "Ein Betriebssystem (Windows, Linux, macOS) ist Systemsoftware, die Hardware verwaltet, Ressourcen zuteilt und Schnittstellen (APIs) für Anwendungsprogramme bereitstellt.",
+    points: 5,
+    category: "IT-Grundlagen",
+    difficulty: "leicht"
+  },
+  {
+    id: "t1-it-012",
+    question: "Was ist der Unterschied zwischen Firmware und Software?",
+    options: [
+      "Es gibt keinen Unterschied",
+      "Firmware ist auf Hardwarekomponenten gespeichert und eng mit Hardware verbunden",
+      "Software ist langsamer",
+      "Firmware ist nur für große Unternehmen"
+    ],
+    correctIndex: 1,
+    explanation: "Firmware ist spezialisierte Software, die dauerhaft auf Hardwarekomponenten (BIOS, Router, Drucker) gespeichert ist und diese direkt steuert.",
+    points: 10,
+    category: "IT-Grundlagen",
+    difficulty: "mittel"
+  },
+  {
+    id: "t1-it-013",
+    question: "Was bedeutet USB 3.0 SuperSpeed?",
+    options: [
+      "Eine Wireless-Verbindung",
+      "USB-Standard mit bis zu 5 Gbit/s Übertragungsrate",
+      "USB für Serveranwendungen",
+      "Ein veralteter Standard"
+    ],
+    correctIndex: 1,
+    explanation: "USB 3.0 SuperSpeed bietet Übertragungsraten bis 5 Gbit/s - 10x schneller als USB 2.0 (480 Mbit/s). Erkennbar an blauen Anschlüssen.",
+    points: 5,
+    category: "IT-Grundlagen",
+    difficulty: "leicht"
+  },
+
+  // =============================================================
+  // WEITERE NETZWERKTECHNIK
+  // =============================================================
+  {
+    id: "t1-nw-015",
+    question: "Was ist ein Proxy-Server?",
+    options: [
+      "Ein Backup-Server",
+      "Ein Vermittler zwischen Client und Zielserver für Anfragen",
+      "Ein DNS-Server",
+      "Ein Mailserver"
+    ],
+    correctIndex: 1,
+    explanation: "Ein Proxy-Server fungiert als Vermittler: Er empfängt Clientanfragen, leitet sie weiter und kann dabei cachen, filtern oder anonymisieren.",
+    points: 10,
+    category: "Netzwerktechnik",
+    difficulty: "mittel"
+  },
+  {
+    id: "t1-nw-016",
+    question: "Welche Topologie hat das höchste Ausfallrisiko bei Kabelbruch?",
+    options: [
+      "Stern-Topologie",
+      "Bus-Topologie",
+      "Mesh-Topologie",
+      "Ring-Topologie ohne Redundanz"
+    ],
+    correctIndex: 1,
+    explanation: "Bei Bus-Topologie sind alle Geräte an einem Kabel. Ein Kabelbruch unterbricht die gesamte Kommunikation. Stern-Topologie ist robuster.",
+    points: 10,
+    category: "Netzwerktechnik",
+    difficulty: "mittel"
   }
 ];
