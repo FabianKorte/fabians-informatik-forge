@@ -866,5 +866,459 @@ export const teil1Questions: ExamQuestion[] = [
     points: 10,
     category: "Netzwerktechnik",
     difficulty: "mittel"
+  },
+
+  // =============================================================
+  // ZUSÄTZLICHE IT-GRUNDLAGEN
+  // =============================================================
+  {
+    id: "t1-it-011",
+    question: "Was ist der Unterschied zwischen USB 2.0 und USB 3.0?",
+    options: [
+      "USB 3.0 hat weniger Pins",
+      "USB 3.0 bietet 5 Gbit/s statt 480 Mbit/s und mehr Stromversorgung",
+      "USB 2.0 ist schneller",
+      "Es gibt keinen Unterschied"
+    ],
+    correctIndex: 1,
+    explanation: "USB 3.0 bietet bis zu 5 Gbit/s (SuperSpeed) vs. 480 Mbit/s bei USB 2.0. Erkennbar am blauen Anschluss. USB 3.0 liefert auch mehr Strom (900mA vs 500mA).",
+    points: 5,
+    category: "IT-Grundlagen",
+    difficulty: "leicht"
+  },
+  {
+    id: "t1-it-012",
+    question: "Welche Funktion hat der Northbridge-Chip auf älteren Mainboards?",
+    options: [
+      "Verbindung mit USB-Geräten",
+      "Verbindung von CPU, RAM und PCIe/AGP (Hochgeschwindigkeitskomponenten)",
+      "Netzwerkkontroller",
+      "Audio-Verarbeitung"
+    ],
+    correctIndex: 1,
+    explanation: "Die Northbridge verbindet CPU mit RAM und schnellen Bussen (PCIe, AGP). Bei modernen CPUs ist diese Funktion meist in die CPU integriert.",
+    points: 10,
+    category: "IT-Grundlagen",
+    difficulty: "mittel"
+  },
+  {
+    id: "t1-it-013",
+    question: "Was bedeutet ECC bei Arbeitsspeicher?",
+    options: [
+      "Extended Computer Cache",
+      "Error Correcting Code - Erkennung und Korrektur von Bit-Fehlern",
+      "Enhanced Clock Control",
+      "External Communication Controller"
+    ],
+    correctIndex: 1,
+    explanation: "ECC-RAM kann Einzelbit-Fehler automatisch korrigieren und Doppelbit-Fehler erkennen. Wichtig für Server und kritische Systeme zur Datensicherheit.",
+    points: 10,
+    category: "IT-Grundlagen",
+    difficulty: "mittel"
+  },
+  {
+    id: "t1-it-014",
+    question: "Was ist der Unterschied zwischen DDR4 und DDR5 RAM?",
+    options: [
+      "DDR4 ist neuer",
+      "DDR5 bietet höhere Bandbreite, Spannung von 1.1V und On-Die ECC",
+      "DDR5 ist langsamer",
+      "Es gibt keinen praktischen Unterschied"
+    ],
+    correctIndex: 1,
+    explanation: "DDR5 bietet höhere Bandbreite (bis 8400 MT/s), niedrigere Spannung (1.1V vs 1.2V), On-Die ECC und zwei 32-Bit Kanäle pro DIMM.",
+    points: 10,
+    category: "IT-Grundlagen",
+    difficulty: "mittel"
+  },
+  {
+    id: "t1-it-015",
+    question: "Was ist NVMe?",
+    options: [
+      "Ein Betriebssystem",
+      "Ein Protokoll für Hochgeschwindigkeits-SSDs über PCIe",
+      "Ein Netzwerkprotokoll",
+      "Eine Virtualisierungstechnologie"
+    ],
+    correctIndex: 1,
+    explanation: "NVMe (Non-Volatile Memory Express) ist ein Protokoll für SSDs über PCIe. Bietet niedrigere Latenz und höheren Durchsatz als SATA (bis 7000+ MB/s).",
+    points: 10,
+    category: "IT-Grundlagen",
+    difficulty: "mittel"
+  },
+  {
+    id: "t1-it-016",
+    question: "Welche Aufgabe hat das TPM (Trusted Platform Module)?",
+    options: [
+      "Grafikbeschleunigung",
+      "Sichere Speicherung von Verschlüsselungsschlüsseln und Integritätsprüfung",
+      "Netzwerkverschlüsselung",
+      "Audio-Verarbeitung"
+    ],
+    correctIndex: 1,
+    explanation: "TPM ist ein Sicherheitschip für sichere Speicherung von Schlüsseln, Integritätsprüfung beim Boot und Hardware-basierte Verschlüsselung (BitLocker).",
+    points: 10,
+    category: "IT-Grundlagen",
+    difficulty: "mittel"
+  },
+
+  // =============================================================
+  // ZUSÄTZLICHE NETZWERKTECHNIK
+  // =============================================================
+  {
+    id: "t1-nw-017",
+    question: "Was ist der Unterschied zwischen Unicast, Broadcast und Multicast?",
+    options: [
+      "Es gibt keinen Unterschied",
+      "Unicast: 1:1, Broadcast: 1:alle, Multicast: 1:Gruppe",
+      "Broadcast ist schneller",
+      "Multicast ist veraltet"
+    ],
+    correctIndex: 1,
+    explanation: "Unicast: Ein Sender, ein Empfänger. Broadcast: Ein Sender, alle im Netz. Multicast: Ein Sender, ausgewählte Gruppe - effizient für Streaming.",
+    points: 10,
+    category: "Netzwerktechnik",
+    difficulty: "mittel"
+  },
+  {
+    id: "t1-nw-018",
+    question: "Welcher Port wird für SSH verwendet?",
+    options: ["21", "23", "22", "25"],
+    correctIndex: 2,
+    explanation: "SSH (Secure Shell) verwendet standardmäßig Port 22. Telnet (unsicher) verwendet Port 23, FTP Port 21, SMTP Port 25.",
+    points: 5,
+    category: "Netzwerktechnik",
+    difficulty: "leicht"
+  },
+  {
+    id: "t1-nw-019",
+    question: "Was ist ein APIPA-Adresse?",
+    options: [
+      "Eine öffentliche IP-Adresse",
+      "Eine selbst zugewiesene Adresse aus 169.254.x.x wenn DHCP fehlschlägt",
+      "Eine IPv6-Adresse",
+      "Eine Multicast-Adresse"
+    ],
+    correctIndex: 1,
+    explanation: "APIPA (Automatic Private IP Addressing) weist 169.254.x.x zu, wenn kein DHCP-Server erreichbar ist. Ermöglicht lokale Kommunikation ohne DHCP.",
+    points: 10,
+    category: "Netzwerktechnik",
+    difficulty: "mittel"
+  },
+  {
+    id: "t1-nw-020",
+    question: "Was macht das ICMP-Protokoll?",
+    options: [
+      "Überträgt E-Mails",
+      "Sendet Steuer- und Fehlermeldungen (z.B. Ping, Unreachable)",
+      "Verschlüsselt Daten",
+      "Verteilt IP-Adressen"
+    ],
+    correctIndex: 1,
+    explanation: "ICMP (Internet Control Message Protocol) dient für Fehlermeldungen und Diagnose. Bekannt durch Ping (Echo Request/Reply) und Traceroute.",
+    points: 5,
+    category: "Netzwerktechnik",
+    difficulty: "leicht"
+  },
+  {
+    id: "t1-nw-021",
+    question: "Was ist ein FQDN?",
+    options: [
+      "Fast Query Domain Name",
+      "Fully Qualified Domain Name - vollständiger Domainname inkl. TLD",
+      "File Query Data Network",
+      "Firewall Qualified Data Network"
+    ],
+    correctIndex: 1,
+    explanation: "FQDN ist der vollständige Domainname mit allen Ebenen, z.B. server.firma.de. Enthält Hostname, Domain und Top-Level-Domain.",
+    points: 5,
+    category: "Netzwerktechnik",
+    difficulty: "leicht"
+  },
+  {
+    id: "t1-nw-022",
+    question: "Wie funktioniert ein 3-Way-Handshake bei TCP?",
+    options: [
+      "SYN → ACK → FIN",
+      "SYN → SYN-ACK → ACK",
+      "ACK → SYN → FIN",
+      "FIN → ACK → RST"
+    ],
+    correctIndex: 1,
+    explanation: "TCP-Verbindungsaufbau: Client sendet SYN, Server antwortet mit SYN-ACK, Client bestätigt mit ACK. Dann ist die Verbindung etabliert.",
+    points: 10,
+    category: "Netzwerktechnik",
+    difficulty: "mittel"
+  },
+
+  // =============================================================
+  // ZUSÄTZLICHE IT-SICHERHEIT
+  // =============================================================
+  {
+    id: "t1-sec-013",
+    question: "Was ist ein Man-in-the-Middle-Angriff?",
+    options: [
+      "Ein physischer Einbruch",
+      "Angreifer schaltet sich zwischen Kommunikationspartner und kann Daten mitlesen/ändern",
+      "Ein Virus",
+      "Ein Denial-of-Service-Angriff"
+    ],
+    correctIndex: 1,
+    explanation: "Bei MitM platziert sich der Angreifer zwischen Sender und Empfänger. Kann Daten abfangen, lesen und manipulieren. Schutz: TLS, Zertifikate.",
+    points: 10,
+    category: "IT-Sicherheit",
+    difficulty: "mittel"
+  },
+  {
+    id: "t1-sec-014",
+    question: "Was ist das Prinzip der geringsten Rechte (Least Privilege)?",
+    options: [
+      "Jeder Benutzer bekommt Admin-Rechte",
+      "Benutzer erhalten nur die minimal notwendigen Berechtigungen für ihre Aufgaben",
+      "Alle Rechte werden zentral verwaltet",
+      "Gäste haben die gleichen Rechte wie Admins"
+    ],
+    correctIndex: 1,
+    explanation: "Least Privilege bedeutet, dass Benutzer und Prozesse nur die minimal notwendigen Rechte erhalten. Reduziert Angriffsfläche und Schadenspotenzial.",
+    points: 10,
+    category: "IT-Sicherheit",
+    difficulty: "mittel"
+  },
+  {
+    id: "t1-sec-015",
+    question: "Was ist ein Keylogger?",
+    options: [
+      "Ein Passwort-Manager",
+      "Schadsoftware, die alle Tastatureingaben aufzeichnet",
+      "Ein Verschlüsselungstool",
+      "Eine Firewall"
+    ],
+    correctIndex: 1,
+    explanation: "Ein Keylogger zeichnet alle Tastatureingaben auf, um Passwörter, Kreditkartendaten etc. zu stehlen. Kann als Software oder Hardware existieren.",
+    points: 5,
+    category: "IT-Sicherheit",
+    difficulty: "leicht"
+  },
+  {
+    id: "t1-sec-016",
+    question: "Was bedeutet Zero Trust?",
+    options: [
+      "Niemandem wird vertraut",
+      "Nie blind vertrauen, immer verifizieren - auch im internen Netzwerk",
+      "Alle Verbindungen sind unsicher",
+      "Keine Verschlüsselung verwenden"
+    ],
+    correctIndex: 1,
+    explanation: "Zero Trust: 'Never trust, always verify'. Kein automatisches Vertrauen basierend auf Netzwerk-Location. Jeder Zugriff wird authentifiziert und autorisiert.",
+    points: 10,
+    category: "IT-Sicherheit",
+    difficulty: "mittel"
+  },
+  {
+    id: "t1-sec-017",
+    question: "Was ist ein Sicherheitsaudit?",
+    options: [
+      "Installation von Antivirus",
+      "Systematische Überprüfung der IT-Sicherheit auf Schwachstellen und Compliance",
+      "Backup aller Daten",
+      "Update aller Systeme"
+    ],
+    correctIndex: 1,
+    explanation: "Ein Sicherheitsaudit ist eine systematische Überprüfung der IT-Infrastruktur auf Sicherheitslücken, Compliance-Verletzungen und Best Practices.",
+    points: 10,
+    category: "IT-Sicherheit",
+    difficulty: "mittel"
+  },
+  {
+    id: "t1-sec-018",
+    question: "Was ist XSS (Cross-Site Scripting)?",
+    options: [
+      "Eine Verschlüsselungsmethode",
+      "Einschleusen von Schadcode in Webseiten, der im Browser anderer Nutzer ausgeführt wird",
+      "Ein Netzwerkprotokoll",
+      "Eine Firewall-Regel"
+    ],
+    correctIndex: 1,
+    explanation: "XSS ermöglicht Angreifern, JavaScript-Code in Webseiten einzuschleusen, der bei anderen Nutzern ausgeführt wird. Kann Cookies stehlen, Sessions hijacken.",
+    points: 10,
+    category: "IT-Sicherheit",
+    difficulty: "mittel"
+  },
+
+  // =============================================================
+  // ZUSÄTZLICHE BETRIEBSSYSTEME
+  // =============================================================
+  {
+    id: "t1-os-009",
+    question: "Was ist ein Bootloader?",
+    options: [
+      "Ein Antivirenprogramm",
+      "Software, die das Betriebssystem in den Speicher lädt und startet",
+      "Ein Netzwerkprotokoll",
+      "Ein Dateisystem"
+    ],
+    correctIndex: 1,
+    explanation: "Ein Bootloader (z.B. GRUB, Windows Boot Manager) wird vom BIOS/UEFI geladen und startet das Betriebssystem. Kann bei Multi-Boot zwischen OS wählen.",
+    points: 5,
+    category: "Betriebssysteme",
+    difficulty: "leicht"
+  },
+  {
+    id: "t1-os-010",
+    question: "Was ist der Unterschied zwischen MBR und GPT?",
+    options: [
+      "MBR ist neuer",
+      "GPT unterstützt größere Festplatten (>2TB) und mehr Partitionen als MBR",
+      "Es gibt keinen Unterschied",
+      "GPT ist nur für USB-Sticks"
+    ],
+    correctIndex: 1,
+    explanation: "MBR: Max 2TB, 4 primäre Partitionen. GPT: Unterstützt 9.4 ZB, 128+ Partitionen, CRC-Prüfsummen, benötigt UEFI. GPT ist der moderne Standard.",
+    points: 10,
+    category: "Betriebssysteme",
+    difficulty: "mittel"
+  },
+  {
+    id: "t1-os-011",
+    question: "Was ist ein Kernel?",
+    options: [
+      "Das Benutzerinterface",
+      "Der zentrale Kern des Betriebssystems, der Hardware-Zugriff und Prozesse verwaltet",
+      "Ein Anwendungsprogramm",
+      "Der Desktop-Manager"
+    ],
+    correctIndex: 1,
+    explanation: "Der Kernel ist der zentrale Teil des OS. Er verwaltet Hardware-Zugriff, Speicher, Prozesse und bietet Schnittstellen für Programme.",
+    points: 5,
+    category: "Betriebssysteme",
+    difficulty: "leicht"
+  },
+  {
+    id: "t1-os-012",
+    question: "Was ist Paging im Zusammenhang mit Speicherverwaltung?",
+    options: [
+      "Das Ausdrucken von Dokumenten",
+      "Aufteilung des Speichers in feste Blöcke (Pages) für virtuelle Speicherverwaltung",
+      "Das Erstellen von Webseiten",
+      "Ein Backup-Verfahren"
+    ],
+    correctIndex: 1,
+    explanation: "Paging teilt den Speicher in feste Blöcke (Pages). Ermöglicht virtuellen Speicher - nicht benötigte Pages werden auf Festplatte ausgelagert (Swap).",
+    points: 15,
+    category: "Betriebssysteme",
+    difficulty: "schwer"
+  },
+
+  // =============================================================
+  // ZUSÄTZLICHE PROGRAMMIERUNG
+  // =============================================================
+  {
+    id: "t1-prog-009",
+    question: "Was ist der Unterschied zwischen Kompilieren und Interpretieren?",
+    options: [
+      "Es gibt keinen Unterschied",
+      "Compiler übersetzt einmal komplett, Interpreter führt zeilenweise aus",
+      "Interpreter ist schneller",
+      "Compiler sind veraltet"
+    ],
+    correctIndex: 1,
+    explanation: "Compiler: Übersetzt gesamten Code vor Ausführung in Maschinencode (C, Java). Interpreter: Führt Code zeilenweise aus (Python, JavaScript). Compiler meist schneller.",
+    points: 10,
+    category: "Programmierung",
+    difficulty: "mittel"
+  },
+  {
+    id: "t1-prog-010",
+    question: "Was ist Pseudocode?",
+    options: [
+      "Fehlerhafter Code",
+      "Informelle, sprachunabhängige Beschreibung eines Algorithmus",
+      "Ein Programmiersprache",
+      "Verschlüsselter Code"
+    ],
+    correctIndex: 1,
+    explanation: "Pseudocode ist eine informelle Notation zur Beschreibung von Algorithmen in lesbarer Form, unabhängig von einer konkreten Programmiersprache.",
+    points: 5,
+    category: "Programmierung",
+    difficulty: "leicht"
+  },
+  {
+    id: "t1-prog-011",
+    question: "Was ist ein Struktogramm (Nassi-Shneiderman-Diagramm)?",
+    options: [
+      "Ein Netzwerkdiagramm",
+      "Grafische Darstellung von Programmabläufen mit verschachtelten Blöcken",
+      "Ein Datenbankschema",
+      "Ein UML-Klassendiagramm"
+    ],
+    correctIndex: 1,
+    explanation: "Struktogramme visualisieren Programmlogik. Blöcke für Sequenz, Verzweigung, Schleifen werden verschachtelt dargestellt - zeigt Programmstruktur.",
+    points: 10,
+    category: "Programmierung",
+    difficulty: "mittel"
+  },
+  {
+    id: "t1-prog-012",
+    question: "Was bedeutet 'rekursiv' in der Programmierung?",
+    options: [
+      "Eine Schleife",
+      "Eine Funktion ruft sich selbst auf",
+      "Parallele Ausführung",
+      "Fehlerbehandlung"
+    ],
+    correctIndex: 1,
+    explanation: "Rekursion bedeutet, dass eine Funktion sich selbst aufruft. Benötigt eine Abbruchbedingung, sonst entsteht eine Endlosschleife (Stack Overflow).",
+    points: 10,
+    category: "Programmierung",
+    difficulty: "mittel"
+  },
+
+  // =============================================================
+  // ZUSÄTZLICHE PROJEKTMANAGEMENT
+  // =============================================================
+  {
+    id: "t1-pm-006",
+    question: "Was ist ein Gantt-Diagramm?",
+    options: [
+      "Ein Netzwerkdiagramm",
+      "Balkendiagramm zur Darstellung von Projektplänen mit Zeitachse",
+      "Ein Organigramm",
+      "Ein Kostendiagramm"
+    ],
+    correctIndex: 1,
+    explanation: "Gantt-Diagramm zeigt Projektaufgaben als horizontale Balken auf einer Zeitachse. Visualisiert Dauer, Überlappungen und Abhängigkeiten.",
+    points: 5,
+    category: "Projektmanagement",
+    difficulty: "leicht"
+  },
+  {
+    id: "t1-pm-007",
+    question: "Was ist der kritische Pfad?",
+    options: [
+      "Der wichtigste Mitarbeiter",
+      "Die längste Kette abhängiger Aufgaben, die die Mindestprojektdauer bestimmt",
+      "Der riskanteste Teil des Projekts",
+      "Der Pfad mit den meisten Kosten"
+    ],
+    correctIndex: 1,
+    explanation: "Der kritische Pfad ist die längste Abfolge abhängiger Aufgaben. Verzögerungen auf diesem Pfad verzögern das gesamte Projekt.",
+    points: 10,
+    category: "Projektmanagement",
+    difficulty: "mittel"
+  },
+  {
+    id: "t1-pm-008",
+    question: "Was sind Meilensteine im Projektmanagement?",
+    options: [
+      "Tägliche Aufgaben",
+      "Wichtige Zwischenziele oder Ereignisse mit festen Terminen",
+      "Die Projektkosten",
+      "Die Teammitglieder"
+    ],
+    correctIndex: 1,
+    explanation: "Meilensteine sind wichtige Zwischenziele (z.B. 'Design abgeschlossen', 'Testphase begonnen'). Sie haben keine Dauer, markieren Ereignisse.",
+    points: 5,
+    category: "Projektmanagement",
+    difficulty: "leicht"
   }
 ];
