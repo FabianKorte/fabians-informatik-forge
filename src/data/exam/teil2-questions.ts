@@ -768,5 +768,494 @@ export const teil2Questions: ExamQuestion[] = [
     points: 10,
     category: "Systemintegration",
     difficulty: "mittel"
+  },
+
+  // =============================================================
+  // ZUSÄTZLICHE SYSTEMINTEGRATION
+  // =============================================================
+  {
+    id: "t2-si-021",
+    question: "Was ist Kubernetes?",
+    options: [
+      "Ein Betriebssystem",
+      "Eine Container-Orchestrierungsplattform für automatisiertes Deployment und Skalierung",
+      "Eine Programmiersprache",
+      "Ein Backup-Tool"
+    ],
+    correctIndex: 1,
+    explanation: "Kubernetes (K8s) orchestriert Container: automatisches Deployment, Skalierung, Load Balancing, Self-Healing. Entwickelt von Google, jetzt CNCF.",
+    points: 15,
+    category: "Systemintegration",
+    difficulty: "schwer"
+  },
+  {
+    id: "t2-si-022",
+    question: "Was ist der Unterschied zwischen Docker und Kubernetes?",
+    options: [
+      "Es gibt keinen Unterschied",
+      "Docker ist Container-Runtime, Kubernetes ist Container-Orchestrierung",
+      "Kubernetes ist älter",
+      "Docker kann keine Container starten"
+    ],
+    correctIndex: 1,
+    explanation: "Docker erstellt und läuft Container. Kubernetes orchestriert viele Container über mehrere Hosts: Scheduling, Scaling, Networking, Service Discovery.",
+    points: 15,
+    category: "Systemintegration",
+    difficulty: "schwer"
+  },
+  {
+    id: "t2-si-023",
+    question: "Was ist ein Load Balancer?",
+    options: [
+      "Ein Backup-System",
+      "Verteilt eingehende Anfragen auf mehrere Server für bessere Performance und Verfügbarkeit",
+      "Ein Monitoring-Tool",
+      "Ein Verschlüsselungsdienst"
+    ],
+    correctIndex: 1,
+    explanation: "Load Balancer verteilen Traffic auf mehrere Server. Algorithmen: Round Robin, Least Connections, IP Hash. Erhöht Verfügbarkeit und Performance.",
+    points: 10,
+    category: "Systemintegration",
+    difficulty: "mittel"
+  },
+  {
+    id: "t2-si-024",
+    question: "Was macht der Linux-Befehl 'systemctl enable nginx'?",
+    options: [
+      "Startet nginx sofort",
+      "Konfiguriert nginx zum automatischen Start beim Systemboot",
+      "Installiert nginx",
+      "Stoppt nginx"
+    ],
+    correctIndex: 1,
+    explanation: "systemctl enable aktiviert einen Dienst für den automatischen Start beim Boot. Erstellt Symlinks in systemd. 'start' startet sofort, 'enable' beim nächsten Boot.",
+    points: 5,
+    category: "Systemintegration",
+    difficulty: "leicht"
+  },
+  {
+    id: "t2-si-025",
+    question: "Was ist LDAP?",
+    options: [
+      "Ein Verschlüsselungsprotokoll",
+      "Lightweight Directory Access Protocol - Protokoll für Verzeichnisdienste",
+      "Ein Backup-Protokoll",
+      "Ein Routing-Protokoll"
+    ],
+    correctIndex: 1,
+    explanation: "LDAP ist ein Protokoll für Zugriff auf Verzeichnisdienste (z.B. Active Directory, OpenLDAP). Speichert Benutzer, Gruppen, Ressourcen hierarchisch.",
+    points: 10,
+    category: "Systemintegration",
+    difficulty: "mittel"
+  },
+  {
+    id: "t2-si-026",
+    question: "Was ist High Availability (HA)?",
+    options: [
+      "Schnelle Server",
+      "Systemdesign für minimale Ausfallzeiten durch Redundanz und Failover",
+      "Hohe Bandbreite",
+      "Große Speicherkapazität"
+    ],
+    correctIndex: 1,
+    explanation: "HA bedeutet kontinuierliche Verfügbarkeit durch redundante Komponenten. Bei Ausfall übernimmt Backup automatisch. Gemessen in 'Nines' (99.99% = 52 Min/Jahr Downtime).",
+    points: 15,
+    category: "Systemintegration",
+    difficulty: "schwer"
+  },
+  {
+    id: "t2-si-027",
+    question: "Was ist ein Failover-Cluster?",
+    options: [
+      "Ein Backup-System",
+      "Mehrere Server, die sich gegenseitig überwachen und bei Ausfall automatisch übernehmen",
+      "Ein Load Balancer",
+      "Ein Monitoring-Tool"
+    ],
+    correctIndex: 1,
+    explanation: "Ein Failover-Cluster besteht aus 2+ Servern. Bei Ausfall des aktiven Servers übernimmt der passive automatisch - minimiert Downtime.",
+    points: 10,
+    category: "Systemintegration",
+    difficulty: "mittel"
+  },
+  {
+    id: "t2-si-028",
+    question: "Was ist Terraform?",
+    options: [
+      "Ein Betriebssystem",
+      "Infrastructure as Code Tool zur Provisionierung von Cloud-Ressourcen",
+      "Eine Programmiersprache",
+      "Ein Monitoring-Tool"
+    ],
+    correctIndex: 1,
+    explanation: "Terraform von HashiCorp definiert Infrastruktur als Code (HCL). Provisioniert Cloud-Ressourcen (AWS, Azure, GCP) deklarativ und versionierbar.",
+    points: 15,
+    category: "Systemintegration",
+    difficulty: "schwer"
+  },
+
+  // =============================================================
+  // ZUSÄTZLICHE NETZWERK-VERTIEFUNG
+  // =============================================================
+  {
+    id: "t2-nw-011",
+    question: "Was ist BGP?",
+    options: [
+      "Ein lokales Routing-Protokoll",
+      "Border Gateway Protocol - Routing-Protokoll zwischen autonomen Systemen im Internet",
+      "Ein VPN-Protokoll",
+      "Ein DNS-Protokoll"
+    ],
+    correctIndex: 1,
+    explanation: "BGP ist das Routing-Protokoll des Internets. Verbindet autonome Systeme (AS) und trifft Routing-Entscheidungen basierend auf Policies, nicht nur Metriken.",
+    points: 15,
+    category: "Netzwerktechnik",
+    difficulty: "schwer"
+  },
+  {
+    id: "t2-nw-012",
+    question: "Was ist der Unterschied zwischen Layer 4 und Layer 7 Load Balancing?",
+    options: [
+      "Es gibt keinen Unterschied",
+      "L4 arbeitet mit TCP/UDP (Ports), L7 mit HTTP/HTTPS (Content-basiert)",
+      "L4 ist langsamer",
+      "L7 kann keine SSL-Terminierung"
+    ],
+    correctIndex: 1,
+    explanation: "L4 Load Balancing: Entscheidet auf IP/Port-Basis, schnell. L7: Analysiert HTTP-Inhalt (URLs, Headers, Cookies), ermöglicht intelligenteres Routing.",
+    points: 15,
+    category: "Netzwerktechnik",
+    difficulty: "schwer"
+  },
+  {
+    id: "t2-nw-013",
+    question: "Was ist SD-WAN?",
+    options: [
+      "Ein Kabeltyp",
+      "Software-Defined WAN - zentral verwaltetes, softwaredefiniertes Weitverkehrsnetz",
+      "Ein VPN-Protokoll",
+      "Ein Monitoring-Tool"
+    ],
+    correctIndex: 1,
+    explanation: "SD-WAN abstrahiert die WAN-Verbindungen. Ermöglicht zentrale Verwaltung, intelligentes Routing über mehrere Links (MPLS, Internet, LTE), reduziert Kosten.",
+    points: 15,
+    category: "Netzwerktechnik",
+    difficulty: "schwer"
+  },
+  {
+    id: "t2-nw-014",
+    question: "Was ist Network Segmentation?",
+    options: [
+      "Aufteilung der Bandbreite",
+      "Aufteilung des Netzwerks in isolierte Segmente zur Sicherheit und Performance",
+      "Verdoppelung der Netzwerkkarten",
+      "Komprimierung des Netzwerkverkehrs"
+    ],
+    correctIndex: 1,
+    explanation: "Network Segmentation teilt Netzwerke in isolierte Bereiche (VLANs, Subnets). Begrenzt Broadcast-Domains, erhöht Sicherheit (Lateral Movement verhindern).",
+    points: 10,
+    category: "Netzwerktechnik",
+    difficulty: "mittel"
+  },
+  {
+    id: "t2-nw-015",
+    question: "Was ist ein Dual-Stack Betrieb?",
+    options: [
+      "Zwei Server parallel",
+      "Gleichzeitiger Betrieb von IPv4 und IPv6 auf einem System",
+      "Zwei Netzwerkkarten",
+      "Backup-Netzwerk"
+    ],
+    correctIndex: 1,
+    explanation: "Dual-Stack bedeutet paralleler Betrieb von IPv4 und IPv6. Geräte haben beide Protokolle und können mit IPv4- und IPv6-Hosts kommunizieren.",
+    points: 10,
+    category: "Netzwerktechnik",
+    difficulty: "mittel"
+  },
+
+  // =============================================================
+  // ZUSÄTZLICHE DATENBANKEN
+  // =============================================================
+  {
+    id: "t2-db-011",
+    question: "Was ist der Unterschied zwischen SQL und NoSQL?",
+    options: [
+      "NoSQL ist schneller",
+      "SQL: relationale Datenbanken mit Schema, NoSQL: flexible Datenmodelle ohne festes Schema",
+      "SQL ist veraltet",
+      "Es gibt keinen Unterschied"
+    ],
+    correctIndex: 1,
+    explanation: "SQL: Tabellen, festes Schema, ACID, Joins (MySQL, PostgreSQL). NoSQL: Flexibel, horizontal skalierbar, verschiedene Modelle (MongoDB, Redis, Cassandra).",
+    points: 10,
+    category: "Datenbanken",
+    difficulty: "mittel"
+  },
+  {
+    id: "t2-db-012",
+    question: "Was ist ein Deadlock in Datenbanken?",
+    options: [
+      "Ein Backup-Fehler",
+      "Zwei Transaktionen blockieren sich gegenseitig beim Warten auf Ressourcen",
+      "Ein Verbindungsfehler",
+      "Eine langsame Abfrage"
+    ],
+    correctIndex: 1,
+    explanation: "Deadlock: Transaktion A wartet auf Ressource von B, B wartet auf Ressource von A. Keiner kann fortfahren. DBMS erkennt und bricht eine Transaktion ab.",
+    points: 15,
+    category: "Datenbanken",
+    difficulty: "schwer"
+  },
+  {
+    id: "t2-db-013",
+    question: "Was sind die 3 Normalformen in der Datenbank-Normalisierung?",
+    options: [
+      "Klein, Mittel, Groß",
+      "1NF: Atomare Werte, 2NF: Keine Teil-Abhängigkeiten, 3NF: Keine transitiven Abhängigkeiten",
+      "Read, Write, Delete",
+      "Primary, Foreign, Composite"
+    ],
+    correctIndex: 1,
+    explanation: "1NF: Atomare Werte, keine Wiederholgruppen. 2NF: 1NF + keine partiellen Abhängigkeiten. 3NF: 2NF + keine transitiven Abhängigkeiten vom Primärschlüssel.",
+    points: 15,
+    category: "Datenbanken",
+    difficulty: "schwer"
+  },
+  {
+    id: "t2-db-014",
+    question: "Was ist Replikation in Datenbanken?",
+    options: [
+      "Daten löschen",
+      "Synchrone/Asynchrone Kopie von Daten auf mehrere Server für Verfügbarkeit und Ausfallsicherheit",
+      "Daten komprimieren",
+      "Daten verschlüsseln"
+    ],
+    correctIndex: 1,
+    explanation: "Replikation kopiert Daten auf mehrere Server. Master-Slave: Lesen von Slaves. Master-Master: Schreiben auf alle. Erhöht Verfügbarkeit und Leseleistung.",
+    points: 10,
+    category: "Datenbanken",
+    difficulty: "mittel"
+  },
+  {
+    id: "t2-db-015",
+    question: "Was ist Sharding?",
+    options: [
+      "Datenbank-Backup",
+      "Horizontale Partitionierung von Daten über mehrere Datenbank-Server",
+      "Datenkomprimierung",
+      "Index-Optimierung"
+    ],
+    correctIndex: 1,
+    explanation: "Sharding verteilt Daten horizontal auf mehrere Server nach Shard-Key. Ermöglicht horizontale Skalierung für große Datenmengen und hohen Durchsatz.",
+    points: 15,
+    category: "Datenbanken",
+    difficulty: "schwer"
+  },
+
+  // =============================================================
+  // ZUSÄTZLICHE IT-SICHERHEIT VERTIEFUNG
+  // =============================================================
+  {
+    id: "t2-sec-011",
+    question: "Was ist ein Security Information and Event Management (SIEM)?",
+    options: [
+      "Ein Antivirenprogramm",
+      "Zentrales System zur Sammlung, Analyse und Korrelation von Sicherheitsereignissen",
+      "Eine Firewall",
+      "Ein Backup-System"
+    ],
+    correctIndex: 1,
+    explanation: "SIEM sammelt Logs von allen Systemen, korreliert Ereignisse, erkennt Anomalien und Angriffe in Echtzeit. Beispiele: Splunk, QRadar, Elastic SIEM.",
+    points: 15,
+    category: "IT-Sicherheit",
+    difficulty: "schwer"
+  },
+  {
+    id: "t2-sec-012",
+    question: "Was ist der Unterschied zwischen IDS und IPS?",
+    options: [
+      "Es gibt keinen Unterschied",
+      "IDS erkennt und meldet Angriffe, IPS erkennt und blockiert sie aktiv",
+      "IDS ist neuer",
+      "IPS ist nur für Wireless"
+    ],
+    correctIndex: 1,
+    explanation: "IDS (Intrusion Detection): Passiv, erkennt und meldet. IPS (Intrusion Prevention): Aktiv, erkennt und blockiert Angriffe inline im Netzwerkverkehr.",
+    points: 10,
+    category: "IT-Sicherheit",
+    difficulty: "mittel"
+  },
+  {
+    id: "t2-sec-013",
+    question: "Was ist Penetration Testing?",
+    options: [
+      "Ein Backup-Verfahren",
+      "Autorisierter simulierter Angriff zur Identifikation von Sicherheitslücken",
+      "Ein Verschlüsselungstest",
+      "Ein Performance-Test"
+    ],
+    correctIndex: 1,
+    explanation: "Pentest: Ethische Hacker testen Systeme auf Schwachstellen mit autorisierten Angriffen. Scopes: Black Box (ohne Info), White Box (mit Info), Gray Box.",
+    points: 10,
+    category: "IT-Sicherheit",
+    difficulty: "mittel"
+  },
+  {
+    id: "t2-sec-014",
+    question: "Was ist Patch Management?",
+    options: [
+      "Neue Software installieren",
+      "Systematischer Prozess zur Identifikation, Testung und Installation von Sicherheitsupdates",
+      "Hardware austauschen",
+      "Benutzer verwalten"
+    ],
+    correctIndex: 1,
+    explanation: "Patch Management: Kontinuierlicher Prozess - Patches identifizieren, priorisieren, testen, ausrollen, verifizieren. Kritisch für Sicherheit, Teil von Vulnerability Management.",
+    points: 10,
+    category: "IT-Sicherheit",
+    difficulty: "mittel"
+  },
+
+  // =============================================================
+  // ZUSÄTZLICHE PROJEKTMANAGEMENT & BETRIEBSWIRTSCHAFT
+  // =============================================================
+  {
+    id: "t2-pm-006",
+    question: "Was ist ein Service Level Agreement (SLA)?",
+    options: [
+      "Ein Arbeitsvertrag",
+      "Vereinbarung über Qualität und Umfang von IT-Services zwischen Anbieter und Kunde",
+      "Eine Softwarelizenz",
+      "Ein Netzwerkprotokoll"
+    ],
+    correctIndex: 1,
+    explanation: "SLA definiert messbare Leistungskennzahlen: Verfügbarkeit (99.9%), Reaktionszeit, Support-Zeiten, Strafen bei Nicht-Einhaltung. Grundlage für IT-Service-Verträge.",
+    points: 10,
+    category: "Betriebswirtschaft",
+    difficulty: "mittel"
+  },
+  {
+    id: "t2-pm-007",
+    question: "Was ist ITIL?",
+    options: [
+      "Eine Programmiersprache",
+      "Information Technology Infrastructure Library - Best Practices für IT-Service-Management",
+      "Ein Betriebssystem",
+      "Ein Netzwerkprotokoll"
+    ],
+    correctIndex: 1,
+    explanation: "ITIL ist ein Framework für IT-Service-Management mit Best Practices für Service Strategy, Design, Transition, Operation und Continual Improvement.",
+    points: 10,
+    category: "Betriebswirtschaft",
+    difficulty: "mittel"
+  },
+  {
+    id: "t2-pm-008",
+    question: "Was ist ein Change Request im IT-Betrieb?",
+    options: [
+      "Ein Fehler im System",
+      "Formaler Antrag zur Änderung an IT-Systemen mit Genehmigungsprozess",
+      "Ein Backup-Verfahren",
+      "Eine Kündigung"
+    ],
+    correctIndex: 1,
+    explanation: "Change Request ist ein formaler Antrag für Änderungen. Teil des Change Management: Dokumentation, Risikoanalyse, Genehmigung, Implementierung, Review.",
+    points: 10,
+    category: "Betriebswirtschaft",
+    difficulty: "mittel"
+  },
+  {
+    id: "t2-pm-009",
+    question: "Was ist TCO (Total Cost of Ownership)?",
+    options: [
+      "Die Anschaffungskosten",
+      "Gesamtkosten über den Lebenszyklus: Anschaffung, Betrieb, Wartung, Entsorgung",
+      "Die monatliche Miete",
+      "Die Personalkosten"
+    ],
+    correctIndex: 1,
+    explanation: "TCO umfasst alle Kosten: Anschaffung, Installation, Betrieb, Wartung, Support, Schulung, Energie, Entsorgung. Wichtig für IT-Investitionsentscheidungen.",
+    points: 10,
+    category: "Betriebswirtschaft",
+    difficulty: "mittel"
+  },
+  {
+    id: "t2-pm-010",
+    question: "Was ist Business Continuity Management (BCM)?",
+    options: [
+      "Marketing-Strategie",
+      "Planung zur Aufrechterhaltung kritischer Geschäftsprozesse bei Störungen/Katastrophen",
+      "Finanzplanung",
+      "Personalmanagement"
+    ],
+    correctIndex: 1,
+    explanation: "BCM identifiziert kritische Prozesse, analysiert Risiken, entwickelt Notfallpläne. Ziel: Geschäftsbetrieb bei Krisen aufrechterhalten. Enthält BIA, DR-Plan.",
+    points: 15,
+    category: "Betriebswirtschaft",
+    difficulty: "schwer"
+  },
+
+  // =============================================================
+  // CLOUD COMPUTING VERTIEFUNG
+  // =============================================================
+  {
+    id: "t2-cloud-001",
+    question: "Was ist der Unterschied zwischen IaaS, PaaS und SaaS?",
+    options: [
+      "Es gibt keinen Unterschied",
+      "IaaS: Infrastruktur, PaaS: Plattform + Runtime, SaaS: Komplette Anwendung",
+      "Alle sind identisch",
+      "SaaS ist am teuersten"
+    ],
+    correctIndex: 1,
+    explanation: "IaaS: VMs, Storage (AWS EC2). PaaS: + Runtime, Middleware (Azure App Service). SaaS: Komplette Anwendung (Office 365). Mehr Abstraktion = weniger Verantwortung.",
+    points: 10,
+    category: "Cloud Computing",
+    difficulty: "mittel"
+  },
+  {
+    id: "t2-cloud-002",
+    question: "Was bedeutet 'Elasticity' in der Cloud?",
+    options: [
+      "Flexibele Preise",
+      "Automatische Skalierung von Ressourcen basierend auf Nachfrage",
+      "Flexible Verträge",
+      "Geografische Flexibilität"
+    ],
+    correctIndex: 1,
+    explanation: "Elasticity: Ressourcen skalieren automatisch hoch/runter basierend auf Last. Zahlung nur für tatsächlich genutzte Ressourcen. Unterschied zu Scalability: automatisch vs. manuell.",
+    points: 10,
+    category: "Cloud Computing",
+    difficulty: "mittel"
+  },
+  {
+    id: "t2-cloud-003",
+    question: "Was ist Multi-Cloud?",
+    options: [
+      "Mehrere Server in einer Cloud",
+      "Nutzung von Cloud-Services verschiedener Anbieter parallel",
+      "Mehrere Benutzer in der Cloud",
+      "Mehrere Regionen"
+    ],
+    correctIndex: 1,
+    explanation: "Multi-Cloud: Nutzung mehrerer Cloud-Provider (AWS + Azure + GCP). Vorteile: Vendor Lock-in vermeiden, Best-of-Breed, Ausfallsicherheit. Herausforderung: Komplexität.",
+    points: 10,
+    category: "Cloud Computing",
+    difficulty: "mittel"
+  },
+  {
+    id: "t2-cloud-004",
+    question: "Was ist Serverless Computing?",
+    options: [
+      "Computing ohne Server",
+      "Ausführung von Code ohne Serververwaltung, bezahlt pro Aufruf",
+      "Ein Offline-Computing-Modell",
+      "Ein Backup-Dienst"
+    ],
+    correctIndex: 1,
+    explanation: "Serverless (FaaS): Code läuft in Containern, die bei Bedarf gestartet werden. AWS Lambda, Azure Functions. Keine Serververwaltung, bezahlt pro Aufruf/Ausführungszeit.",
+    points: 10,
+    category: "Cloud Computing",
+    difficulty: "mittel"
   }
 ];
