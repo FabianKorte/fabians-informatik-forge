@@ -15,7 +15,6 @@ import { useKeyboardNavigation } from "@/hooks/useKeyboardNavigation";
 import { logger } from "@/lib/logger";
 import type { Category } from "@/data/categories";
 import { Sparkles } from "lucide-react";
-import logo from "@/assets/logo.png";
 import type { LearnModule } from "@/types/learn";
 
 
@@ -154,13 +153,13 @@ const Index = () => {
       </div>
 
       {randomTrainingCategory && (
-        <section className="py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-violet-500/5 via-fuchsia-500/5 to-purple-500/5 backdrop-blur-sm">
+        <section className="py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-primary/5 via-accent/5 to-primary/5 backdrop-blur-sm">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-6 sm:mb-8">
               <div className="inline-flex items-center gap-2 mb-3 sm:mb-4">
-                <Sparkles className="w-4 h-4 sm:w-6 sm:h-6 text-violet-500" />
+                <Sparkles className="w-4 h-4 sm:w-6 sm:h-6 text-primary" />
                 <h2 className="text-xl sm:text-3xl font-medium text-foreground">Zufallstraining</h2>
-                <Sparkles className="w-4 h-4 sm:w-6 sm:h-6 text-fuchsia-500" />
+                <Sparkles className="w-4 h-4 sm:w-6 sm:h-6 text-accent" />
               </div>
               <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-8 px-4">
                 Alle Aufgaben aus allen Kategorien in einem Training - Perfekt zur Prüfungsvorbereitung
@@ -269,23 +268,7 @@ const Index = () => {
         </div>
       </section>
 
-      <footer className="py-6 sm:py-12 px-4 sm:px-6 border-t border-border bg-background/50 backdrop-blur-sm">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="mb-4 sm:mb-6">
-            <img 
-              src={logo} 
-              alt="Fabian Korte - Fachinformatiker" 
-              className="mx-auto h-12 sm:h-16 w-auto object-contain opacity-80"
-            />
-          </div>
-          <p className="text-xs sm:text-sm text-muted-foreground mb-4 sm:mb-6">
-            Vorbereitung auf die IHK IT-Prüfungen.
-          </p>
-          <p className="text-xs text-muted-foreground">
-            © 2025 Fabian Korte. Alle Rechte vorbehalten.
-          </p>
-        </div>
-      </footer>
+      {/* Footer wird global in App.tsx gerendert */}
       </div>
     </>
   );

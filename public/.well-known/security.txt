@@ -1,9 +1,8 @@
-Contact: mailto:fabian.korte@example.com
-Expires: 2026-12-31T23:59:59.000Z
+Contact: https://informatik-lernplattform.lovable.app/report-error
+Expires: 2027-12-31T23:59:59.000Z
 Preferred-Languages: de, en
-Canonical: https://informatik.fabiankorte.net/.well-known/security.txt
-Policy: https://informatik.fabiankorte.net/privacy
-Hiring: https://informatik.fabiankorte.net/
+Canonical: https://informatik-lernplattform.lovable.app/.well-known/security.txt
+Policy: https://informatik-lernplattform.lovable.app/privacy
 
-# This is a security policy for informatik.fabiankorte.net
-# If you discover any security issues, please report them to the contact above
+# Sicherheitsrichtlinie für die IT-Lernplattform
+# Bei Sicherheitsproblemen bitte über den Fehler-melden-Link Kontakt aufnehmen

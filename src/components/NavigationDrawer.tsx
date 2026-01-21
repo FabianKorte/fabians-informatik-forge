@@ -24,6 +24,7 @@ import { cn } from "@/lib/utils";
 
 const mainItems = [
   { title: "Home", url: "/", icon: Home },
+  { title: "IHK-Prüfungssimulator", url: "/exam", icon: GraduationCap },
   { title: "Fortschritt", url: "/progress", icon: TrendingUp },
   { title: "Roadmap", url: "/roadmap", icon: MapPin },
 ];
