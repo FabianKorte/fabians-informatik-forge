@@ -109,12 +109,21 @@ const Index = () => {
     } else if (categoryId === 'ihk-pruefung') {
       navigate('/exam');
     } else if (categoryId === 'zufallstraining') {
-      // Zufallstraining wird im Zufallstraining-Bereich behandelt
-      document.getElementById('categories-section')?.scrollIntoView({ behavior: 'smooth' });
+      // Navigiere zu einer zufälligen Kategorie mit Lerninhalten
+      const categoriesWithContent = regularCategories.filter(c => 
+        allModules[c.id] && allModules[c.id].length > 0
+      );
+      if (categoriesWithContent.length > 0) {
+        const randomCategory = categoriesWithContent[Math.floor(Math.random() * categoriesWithContent.length)];
+        navigate(`/learn/${randomCategory.id}`);
+      } else {
+        // Fallback: Navigiere zur ersten Kategorie
+        navigate('/learn/grundlagen-it');
+      }
     } else {
       navigate(`/learn/${categoryId}`);
     }
-  }, [navigate]);
+  }, [navigate, regularCategories, allModules]);
   const handleFeedbackSubmitted = useCallback(() => setFeedbackRefreshTrigger(prev => prev + 1), []);
 
   // Keyboard shortcuts
