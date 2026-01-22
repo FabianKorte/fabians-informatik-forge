@@ -224,7 +224,7 @@ const Profile = () => {
         title="Mein Profil | IHK IT-Prüfungsvorbereitung"
         description="Verwalte dein Profil, deine Lernstatistiken, Achievements und Einstellungen für die IHK IT-Prüfungsvorbereitung."
         keywords="Profil, Benutzer, Statistiken, Achievements, IHK, Fachinformatiker"
-        canonical="https://informatik.fabiankorte.net/profile"
+        canonical="https://informatik-lernplattform.lovable.app/profile"
       />
       <div className="min-h-screen bg-background p-4">
       <div className="max-w-4xl mx-auto space-y-6">

@@ -5,7 +5,7 @@ Disallow: /admin
 Disallow: /api/
 
 # Sitemap
-Sitemap: https://informatik.fabiankorte.net/sitemap.xml
+Sitemap: https://informatik-lernplattform.lovable.app/sitemap.xml
 
 # Crawl-Verzögerung (optional, um Server zu schonen)
 Crawl-delay: 1
