@@ -49,7 +49,7 @@ export const PasswordResetEmail = ({
         </Text>
         <Text style={footer}>
           <Link
-            href="https://informatik.fabiankorte.net"
+            href="https://informatik-lernplattform.lovable.app"
             target="_blank"
             style={{ ...link, color: '#898989' }}
           >

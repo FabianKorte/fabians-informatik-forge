@@ -14,7 +14,7 @@ import { getAllModules } from "@/lib/learnContentUtils";
 import { useKeyboardNavigation } from "@/hooks/useKeyboardNavigation";
 import { logger } from "@/lib/logger";
 import type { Category } from "@/data/categories";
-import { Sparkles } from "lucide-react";
+import { Sparkles, GraduationCap, ArrowRight } from "lucide-react";
 import type { LearnModule } from "@/types/learn";
 
 
@@ -59,9 +59,14 @@ const Index = () => {
     }, 0);
   }, []);
 
-  const { regularCategories, randomTrainingCategory, stats } = useMemo(() => {
+  const { regularCategories, randomTrainingCategory, examCategory, stats } = useMemo(() => {
     const random = categories.find(c => c.id === 'zufallstraining');
-    const regular = categories.filter(c => c.id !== 'zufallstraining');
+    const exam = categories.find(c => c.id === 'ihk-pruefung');
+    // Filtere spezielle Kategorien aus der normalen Anzeige
+    const regular = categories.filter(c => 
+      c.id !== 'zufallstraining' && 
+      c.id !== 'ihk-pruefung'
+    );
     
     const dynamicTotalsByCategory: Record<string, number> = Object.fromEntries(
       categories.map((cat) => [cat.id, countElements(allModules[cat.id] || [])])
@@ -74,6 +79,7 @@ const Index = () => {
     return {
       regularCategories: regular,
       randomTrainingCategory: random,
+      examCategory: exam,
       stats: {
         totalCategories: regular.length,
         totalQuestions,
@@ -97,9 +103,14 @@ const Index = () => {
 
   const handleShowProgress = useCallback(() => navigate('/progress'), [navigate]);
   const handleCategoryStart = useCallback((categoryId: string) => {
-    // Java hat eine eigene spezielle Lernplattform
+    // Spezielle Routen für bestimmte Kategorien
     if (categoryId === 'java') {
       navigate('/java');
+    } else if (categoryId === 'ihk-pruefung') {
+      navigate('/exam');
+    } else if (categoryId === 'zufallstraining') {
+      // Zufallstraining wird im Zufallstraining-Bereich behandelt
+      document.getElementById('categories-section')?.scrollIntoView({ behavior: 'smooth' });
     } else {
       navigate(`/learn/${categoryId}`);
     }
@@ -151,6 +162,35 @@ const Index = () => {
           onShowProgress={handleShowProgress}
         />
       </div>
+
+      {/* IHK-Prüfungssimulator - Prominent */}
+      {examCategory && (
+        <section className="py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-warning/10 via-warning/5 to-accent/10 backdrop-blur-sm">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-6 sm:mb-8">
+              <div className="inline-flex items-center gap-2 mb-3 sm:mb-4">
+                <GraduationCap className="w-4 h-4 sm:w-6 sm:h-6 text-warning" />
+                <h2 className="text-xl sm:text-3xl font-medium text-foreground">IHK-Prüfungssimulator</h2>
+                <GraduationCap className="w-4 h-4 sm:w-6 sm:h-6 text-warning" />
+              </div>
+              <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-8 px-4">
+                Realistische Prüfungssimulationen für AP Teil 1 & 2 mit Timer, Punktebewertung und Auswertung
+              </p>
+            </div>
+            <div className="flex justify-center">
+              <Button 
+                onClick={() => navigate('/exam')}
+                size="lg"
+                className="bg-gradient-to-r from-warning to-accent hover:opacity-90 text-primary-foreground font-medium"
+              >
+                <GraduationCap className="w-5 h-5 mr-2" />
+                Prüfungssimulator starten
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </div>
+          </div>
+        </section>
+      )}
 
       {randomTrainingCategory && (
         <section className="py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-primary/5 via-accent/5 to-primary/5 backdrop-blur-sm">

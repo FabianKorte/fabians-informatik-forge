@@ -6,189 +6,261 @@
   
   <!-- Hauptseite -->
   <url>
-    <loc>https://informatik.fabiankorte.net/</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   
+  <!-- IHK-Prüfungssimulator -->
+  <url>
+    <loc>https://informatik-lernplattform.lovable.app/exam</loc>
+    <lastmod>2025-01-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  
   <!-- Authentifizierung -->
   <url>
-    <loc>https://informatik.fabiankorte.net/auth</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/auth</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <!-- Lernkategorien -->
   <url>
-    <loc>https://informatik.fabiankorte.net/learn/grundlagen-it</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/learn/grundlagen-it</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://informatik.fabiankorte.net/learn/webentwicklung</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/learn/web-technologien</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://informatik.fabiankorte.net/learn/datenbanken</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/learn/datenbanken</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://informatik.fabiankorte.net/learn/it-sicherheit-advanced</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/learn/it-sicherheit</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://informatik.fabiankorte.net/learn/systemadministration</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/learn/systemadministration</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://informatik.fabiankorte.net/learn/mobile-entwicklung</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/learn/mobile-entwicklung</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://informatik.fabiankorte.net/learn/projektmanagement</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/learn/projektmanagement</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://informatik.fabiankorte.net/learn/qualitaetsmanagement</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/learn/bwl</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://informatik.fabiankorte.net/learn/betriebswirtschaft</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/learn/wiso</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://informatik.fabiankorte.net/learn/wiso</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/learn/rechtliche-grundlagen</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://informatik.fabiankorte.net/learn/rechtliche-grundlagen</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/learn/kommunikation</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://informatik.fabiankorte.net/learn/kommunikation</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/learn/netzwerktechnik</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://informatik.fabiankorte.net/learn/englisch-it</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/learn/datenschutz</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://informatik.fabiankorte.net/learn/mathematik-logik</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/learn/fachmodul-systemintegration</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://informatik.fabiankorte.net/learn/innovation-trends</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/learn/fachmodul-anwendungsentwicklung</loc>
+    <lastmod>2025-01-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://informatik-lernplattform.lovable.app/learn/tabellenkalkulation</loc>
+    <lastmod>2025-01-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://informatik-lernplattform.lovable.app/learn/praesentationsprogramme</loc>
+    <lastmod>2025-01-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://informatik-lernplattform.lovable.app/learn/textverarbeitung</loc>
+    <lastmod>2025-01-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://informatik-lernplattform.lovable.app/learn/cloud-aws</loc>
+    <lastmod>2025-01-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://informatik-lernplattform.lovable.app/learn/digitaltechnik</loc>
+    <lastmod>2025-01-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://informatik-lernplattform.lovable.app/learn/fachrechnen</loc>
+    <lastmod>2025-01-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://informatik-lernplattform.lovable.app/learn/speicherloesungen</loc>
+    <lastmod>2025-01-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://informatik-lernplattform.lovable.app/learn/sap-erp</loc>
+    <lastmod>2025-01-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Java Lernpfad -->
+  <url>
+    <loc>https://informatik-lernplattform.lovable.app/java</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <!-- Hauptfunktionen -->
   <url>
-    <loc>https://informatik.fabiankorte.net/progress</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/progress</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://informatik.fabiankorte.net/profile</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/profile</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://informatik.fabiankorte.net/chat</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/chat</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://informatik.fabiankorte.net/lexikon</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/lexikon</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://informatik.fabiankorte.net/roadmap</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/roadmap</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://informatik.fabiankorte.net/study-groups</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/study-groups</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <!-- Rechtliches -->
   <url>
-    <loc>https://informatik.fabiankorte.net/privacy</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/privacy</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <!-- PWA Installation -->
   <url>
-    <loc>https://informatik.fabiankorte.net/install</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/install</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <!-- Fehlermeldung -->
   <url>
-    <loc>https://informatik.fabiankorte.net/report-error</loc>
-    <lastmod>2025-12-02</lastmod>
+    <loc>https://informatik-lernplattform.lovable.app/report-error</loc>
+    <lastmod>2025-01-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>

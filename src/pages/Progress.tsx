@@ -141,7 +141,7 @@ const Progress = () => {
         title="Lernfortschritt & Statistiken | IHK IT-Prüfungsvorbereitung"
         description="Verfolge deinen Lernfortschritt, sieh deine Statistiken und erkenne deine Stärken und Schwächen bei der IHK IT-Prüfungsvorbereitung."
         keywords="Lernfortschritt, Statistiken, Prüfungsvorbereitung, IHK, IT-Ausbildung, Fachinformatiker"
-        canonical="https://informatik.fabiankorte.net/progress"
+        canonical="https://informatik-lernplattform.lovable.app/progress"
       />
       <div className="min-h-screen bg-background">
       {/* Header */}

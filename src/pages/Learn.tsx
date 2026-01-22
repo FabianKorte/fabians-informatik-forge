@@ -92,7 +92,7 @@ const LearnPage = () => {
         title={`${category?.title || "Lernen"} | IHK IT-Prüfungsvorbereitung`}
         description={category?.description || "Lerne mit interaktiven Übungen für deine IHK IT-Prüfung"}
         keywords={`${category?.title}, IHK, IT-Prüfung, Lernen, Übungen, Fachinformatiker`}
-        canonical={`https://informatik.fabiankorte.net/learn/${categoryId}`}
+        canonical={`https://informatik-lernplattform.lovable.app/learn/${categoryId}`}
       />
       {category && <CourseStructuredData category={category} totalModules={modules.length} />}
       <main className="min-h-screen bg-background">
@@ -187,15 +187,21 @@ const LearnPage = () => {
                 </Card>
               </div>
 
-              {/* Exam Mode - Coming Soon */}
+              {/* Link zum IHK-Prüfungssimulator */}
               <div className="md:col-span-3 mb-4">
-                <Card className="p-6 opacity-60">
-                  <Button disabled className="w-full" variant="outline">
-                    🚧 Prüfungsmodus (Coming Soon)
-                  </Button>
-                  <p className="text-xs text-muted-foreground text-center mt-2">
-                    Der Prüfungsmodus wird derzeit entwickelt
-                  </p>
+                <Card className="p-6 bg-gradient-to-br from-primary/5 to-accent/5 cursor-pointer hover:border-primary/50 transition-colors"
+                  onClick={() => navigate('/exam')}>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-medium text-foreground">🎓 IHK-Prüfungssimulator</h4>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Realistische Prüfungssimulation mit Timer und Punktebewertung
+                      </p>
+                    </div>
+                    <Button variant="outline" onClick={(e) => { e.stopPropagation(); navigate('/exam'); }}>
+                      Prüfung starten
+                    </Button>
+                  </div>
                 </Card>
               </div>
 
