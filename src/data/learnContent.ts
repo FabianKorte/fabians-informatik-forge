@@ -28,6 +28,7 @@ import { sapErpContent } from "./learn/sap-erp";
 export const learnContent: Record<string, LearnModule[]> = {
   "web-technologien": webentwicklungContent,
   projektmanagement: projektmanagementContent,
+  qualitaetsmanagement: qualitaetsmanagementContent,
   bwl: betriebswirtschaftContent,
   "rechtliche-grundlagen": rechtlicheGrundlagenContent,
   kommunikation: kommunikationContent,
@@ -85,7 +86,9 @@ export const learnContent: Record<string, LearnModule[]> = {
       ]
     }
   ],
-  programmierung: [],
+  // programmierung und zufallstraining haben spezielles Handling:
+  // - programmierung: Nutzer werden zu spezialisierten Kategorien geleitet (Java, Web-Tech, etc.)
+  // - zufallstraining: Wählt zufällig eine Kategorie mit Inhalt
   zufallstraining: [],
   "englisch-it": englischItContent,
   "mathematik-logik": mathematikLogikContent,

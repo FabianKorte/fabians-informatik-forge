@@ -125,8 +125,8 @@ export const categories: Category[] = [
   {
     id: "programmierung",
     title: "Programmierung allgemein",
-    description: "Grundlagen der Softwareentwicklung, Algorithmen und Datenstrukturen",
-    totalElements: 120,
+    description: "Überblick über Programmiersprachen - wähle Java, Web oder andere Sprachen",
+    totalElements: 0,
     completedElements: 0,
     icon: Code2,
     difficulty: "Fortgeschritten",
@@ -278,6 +278,17 @@ export const categories: Category[] = [
     group: "business"
   },
   {
+    id: "qualitaetsmanagement",
+    title: "Qualitätsmanagement",
+    description: "ISO 9001, PDCA, Lean Management, Six Sigma und Qualitätssicherung",
+    totalElements: 50,
+    completedElements: 0,
+    icon: Settings,
+    difficulty: "Fortgeschritten",
+    gradient: "from-teal-500 to-cyan-600",
+    group: "business"
+  },
+  {
     id: "bwl",
     title: "Betriebswirtschaft (BWL)",
     description: "Kostenrechnung, Bilanz, Kennzahlen und Investitionen",
@@ -367,6 +378,43 @@ export const categories: Category[] = [
     icon: FileType,
     difficulty: "Anfänger",
     gradient: "from-blue-500 to-indigo-600",
+    group: "spezial"
+  },
+
+  // ==========================================
+  // 🌐 WEITERE THEMEN
+  // ==========================================
+  {
+    id: "englisch-it",
+    title: "Englisch für IT-Berufe",
+    description: "Fachbegriffe, Kommunikation und Dokumentation auf Englisch",
+    totalElements: 60,
+    completedElements: 0,
+    icon: Globe,
+    difficulty: "Anfänger",
+    gradient: "from-red-500 to-pink-600",
+    group: "spezial"
+  },
+  {
+    id: "mathematik-logik",
+    title: "Mathematik & Logik",
+    description: "Logische Operatoren, Boolesche Algebra und mathematische Grundlagen",
+    totalElements: 55,
+    completedElements: 0,
+    icon: Calculator,
+    difficulty: "Fortgeschritten",
+    gradient: "from-violet-500 to-purple-600",
+    group: "grundlagen"
+  },
+  {
+    id: "innovation-trends",
+    title: "Innovation & Trends",
+    description: "KI, Machine Learning, IoT und aktuelle Technologie-Trends",
+    totalElements: 50,
+    completedElements: 0,
+    icon: Brain,
+    difficulty: "Fortgeschritten",
+    gradient: "from-cyan-500 to-teal-600",
     group: "spezial"
   }
 ];
