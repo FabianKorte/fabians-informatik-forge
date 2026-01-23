@@ -86,9 +86,7 @@ export const learnContent: Record<string, LearnModule[]> = {
       ]
     }
   ],
-  // programmierung und zufallstraining haben spezielles Handling:
-  // - programmierung: Nutzer werden zu spezialisierten Kategorien geleitet (Java, Web-Tech, etc.)
-  // - zufallstraining: Wählt zufällig eine Kategorie mit Inhalt
+  programmierung: [],
   zufallstraining: [],
   "englisch-it": englischItContent,
   "mathematik-logik": mathematikLogikContent,
