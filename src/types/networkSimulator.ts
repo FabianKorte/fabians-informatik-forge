@@ -50,12 +50,20 @@ export interface PacketInfo {
   ttl: number;
 }
 
+export interface ScenarioTheory {
+  title: string;
+  content: string;
+  keywords: string[];
+}
+
 export interface NetworkScenario {
   id: string;
   title: string;
   description: string;
   difficulty: 'leicht' | 'mittel' | 'schwer';
   points: number;
+  category?: string;
+  theory?: ScenarioTheory;
   initialTopology: NetworkTopology;
   objectives: ScenarioObjective[];
   hints: string[];
