@@ -128,6 +128,55 @@ const LearnPage = () => {
                 </p>
               </div>
 
+              {/* Network Simulator Link for Netzwerktechnik */}
+              {categoryId === "netzwerktechnik" && (
+                <div className="space-y-3 mb-8">
+                  <h3 className="text-lg font-semibold text-foreground">🖧 Praxis-Simulator</h3>
+                  <Card
+                    className="cursor-pointer p-6 hover:scale-[1.02] transition-transform bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-500/20"
+                    onClick={() => navigate("/network-simulator")}
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Netzwerk-Simulator öffnen"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        navigate("/network-simulator");
+                      }
+                    }}
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 flex items-center justify-center shrink-0">
+                        <span className="text-2xl">🌐</span>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs uppercase tracking-wider text-blue-500">Interaktives Lernen</p>
+                        <h4 className="text-xl font-bold text-foreground">Netzwerk-Simulator</h4>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Baue Netzwerke, konfiguriere IP-Adressen, teste Routing und löse praxisnahe Aufgaben
+                        </p>
+                        <div className="flex flex-wrap gap-2 mt-3">
+                          <span className="px-2 py-1 bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xs rounded-full">
+                            5 Lektionen
+                          </span>
+                          <span className="px-2 py-1 bg-green-500/10 text-green-600 dark:text-green-400 text-xs rounded-full">
+                            IP-Konfiguration
+                          </span>
+                          <span className="px-2 py-1 bg-purple-500/10 text-purple-600 dark:text-purple-400 text-xs rounded-full">
+                            Routing
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-5">
+                      <Button className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600">
+                        Simulator öffnen
+                      </Button>
+                    </div>
+                  </Card>
+                </div>
+              )}
+
               {/* Programmiersprachen (Unterkategorien) */}
               {categoryId === "programmierung" && (
                 <div className="space-y-3">

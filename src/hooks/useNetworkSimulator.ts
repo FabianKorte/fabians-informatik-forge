@@ -268,7 +268,7 @@ export function useNetworkSimulator() {
     if (!path) {
       toast({
         title: "Ping fehlgeschlagen",
-        description: "Kein physischer Pfad zwischen den Geräten.",
+        description: "Kein physischer Pfad zwischen den Geräten. Verbinde die Geräte zuerst!",
         variant: "destructive"
       });
       return false;
@@ -282,11 +282,26 @@ export function useNetworkSimulator() {
     const sameNetwork = areInSameNetwork(sourceIP, targetIP, sourceMask);
 
     if (!sameNetwork) {
-      // Need gateway
+      // Need gateway for cross-network communication
       if (!sourceDevice.config.gateway) {
         toast({
           title: "Ping fehlgeschlagen",
-          description: "Ziel nicht im selben Netzwerk. Gateway erforderlich.",
+          description: `Ziel ${targetIP} ist nicht im selben Netzwerk. Konfiguriere ein Gateway auf ${sourceDevice.name}!`,
+          variant: "destructive"
+        });
+        return false;
+      }
+      
+      // Check if there's a router in the path
+      const hasRouter = path.some(deviceId => {
+        const device = state.topology.devices.find(d => d.id === deviceId);
+        return device?.type === 'router';
+      });
+      
+      if (!hasRouter) {
+        toast({
+          title: "Ping fehlgeschlagen",
+          description: "Kein Router im Pfad gefunden. Für netzwerkübergreifende Kommunikation wird ein Router benötigt.",
           variant: "destructive"
         });
         return false;
@@ -324,24 +339,37 @@ export function useNetworkSimulator() {
     }));
 
     toast({
-      title: "Ping erfolgreich!",
+      title: "Ping erfolgreich! ✓",
       description: `Reply von ${targetIP}: Zeit=${path.length * 10}ms TTL=64`
     });
 
-    // Check objectives
-    checkObjectives();
+    // Mark ping objectives as complete
+    if (state.currentScenario) {
+      const pingObjective = state.currentScenario.objectives.find(
+        obj => obj.type === 'ping' && 
+               obj.target.sourceDevice === sourceId && 
+               obj.target.targetDevice === targetId
+      );
+      
+      if (pingObjective && !state.completedObjectives.includes(pingObjective.id)) {
+        setState(prev => ({
+          ...prev,
+          completedObjectives: [...prev.completedObjectives, pingObjective.id]
+        }));
+      }
+    }
 
     return true;
-  }, [state.topology, findPath]);
+  }, [state.topology, state.currentScenario, state.completedObjectives, findPath]);
 
   const checkObjectives = useCallback(() => {
     if (!state.currentScenario) return;
 
-    const completedIds: string[] = [];
+    const newCompletedIds: string[] = [...state.completedObjectives];
     
     for (const objective of state.currentScenario.objectives) {
-      if (state.completedObjectives.includes(objective.id)) {
-        completedIds.push(objective.id);
+      // Skip if already completed
+      if (newCompletedIds.includes(objective.id)) {
         continue;
       }
 
@@ -350,9 +378,15 @@ export function useNetworkSimulator() {
       switch (objective.type) {
         case 'connect-devices':
           if (objective.target.sourceDevice && objective.target.targetDevice) {
+            // Check specific connection
             completed = state.topology.connections.some(
               c => (c.sourceId === objective.target.sourceDevice && c.targetId === objective.target.targetDevice) ||
                    (c.sourceId === objective.target.targetDevice && c.targetId === objective.target.sourceDevice)
+            );
+          } else if (objective.target.sourceDevice) {
+            // Check if source device has ANY connection
+            completed = state.topology.connections.some(
+              c => c.sourceId === objective.target.sourceDevice || c.targetId === objective.target.sourceDevice
             );
           }
           break;
@@ -360,7 +394,7 @@ export function useNetworkSimulator() {
         case 'configure-ip':
           if (objective.target.sourceDevice) {
             const device = state.topology.devices.find(d => d.id === objective.target.sourceDevice);
-            if (device) {
+            if (device && device.config.ipAddress) {
               const ipMatch = !objective.target.requiredIP || device.config.ipAddress === objective.target.requiredIP;
               const maskMatch = !objective.target.requiredMask || device.config.subnetMask === objective.target.requiredMask;
               const gwMatch = !objective.target.requiredGateway || device.config.gateway === objective.target.requiredGateway;
@@ -370,19 +404,23 @@ export function useNetworkSimulator() {
           break;
 
         case 'ping':
-          // Ping objectives are checked when ping is successful
+          // Ping objectives are completed when a successful ping happens
+          // This is tracked separately in simulatePing
           break;
       }
 
-      if (completed) {
-        completedIds.push(objective.id);
+      if (completed && !newCompletedIds.includes(objective.id)) {
+        newCompletedIds.push(objective.id);
       }
     }
 
-    setState(prev => ({
-      ...prev,
-      completedObjectives: completedIds
-    }));
+    // Only update state if something changed
+    if (newCompletedIds.length !== state.completedObjectives.length) {
+      setState(prev => ({
+        ...prev,
+        completedObjectives: newCompletedIds
+      }));
+    }
   }, [state.currentScenario, state.topology, state.completedObjectives]);
 
   const completeScenario = useCallback(async () => {
