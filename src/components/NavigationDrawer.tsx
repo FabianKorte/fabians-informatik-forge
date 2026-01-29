@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Home, BookOpen, TrendingUp, User, MessageSquare, Users, Shield, Download, MapPin, LogIn, LogOut, Menu, FileText, Activity, ChevronDown, ChevronRight, AlertCircle, BarChart3, GraduationCap, Network } from "lucide-react";
+import { Home, BookOpen, TrendingUp, User, MessageSquare, Users, Shield, Download, MapPin, LogIn, LogOut, Menu, FileText, Activity, ChevronDown, ChevronRight, AlertCircle, BarChart3, GraduationCap, Network, GitBranch } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useAdminCounts } from "@/hooks/useAdminCounts";
@@ -26,6 +26,7 @@ const mainItems = [
   { title: "Home", url: "/", icon: Home },
   { title: "IHK-Prüfungssimulator", url: "/exam", icon: GraduationCap },
   { title: "Netzwerk-Simulator", url: "/network-simulator", icon: Network },
+  { title: "Netzplantechnik (CPM)", url: "/cpm-tool", icon: GitBranch },
   { title: "Fortschritt", url: "/progress", icon: TrendingUp },
   { title: "Roadmap", url: "/roadmap", icon: MapPin },
 ];

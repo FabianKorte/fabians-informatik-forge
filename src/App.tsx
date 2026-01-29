@@ -42,6 +42,7 @@ const JavaLearning = lazy(() => import("./pages/JavaLearning"));
 const ExamOverview = lazy(() => import("./pages/ExamOverview"));
 const ExamSimulator = lazy(() => import("./pages/ExamSimulator"));
 const NetworkSimulatorPage = lazy(() => import("./pages/NetworkSimulator"));
+const CPMToolPage = lazy(() => import("./pages/CPMTool"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -102,6 +103,7 @@ const AppRoutes = () => {
             <Route path="/exam" element={<ExamOverview />} />
             <Route path="/exam/:examId" element={<ExamSimulator />} />
             <Route path="/network-simulator" element={<NetworkSimulatorPage />} />
+            <Route path="/cpm-tool" element={<CPMToolPage />} />
             <Route path="/chat" element={
               <ChatErrorBoundary>
                 <Chat />
