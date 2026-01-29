@@ -154,10 +154,24 @@ export const networkScenarios: NetworkScenario[] = [
     },
     objectives: [
       {
-        id: 'connect-all',
-        description: 'Schritt 1: Verbinde alle 3 PCs mit dem Switch',
+        id: 'connect-pc1',
+        description: 'Schritt 1a: Verbinde PC-1 mit dem Switch',
         type: 'connect-devices',
         target: { sourceDevice: 'switch1', targetDevice: 'pc1' },
+        completed: false
+      },
+      {
+        id: 'connect-pc2',
+        description: 'Schritt 1b: Verbinde PC-2 mit dem Switch',
+        type: 'connect-devices',
+        target: { sourceDevice: 'switch1', targetDevice: 'pc2' },
+        completed: false
+      },
+      {
+        id: 'connect-pc3',
+        description: 'Schritt 1c: Verbinde PC-3 mit dem Switch',
+        type: 'connect-devices',
+        target: { sourceDevice: 'switch1', targetDevice: 'pc3' },
         completed: false
       },
       {
@@ -433,10 +447,17 @@ Wenn PC-A (192.168.1.10) PC-B (192.168.2.10) erreichen will:
     },
     objectives: [
       {
-        id: 'connect-switches',
-        description: 'Schritt 1: Verbinde beide Switches mit dem Router',
+        id: 'connect-router-switch1',
+        description: 'Schritt 1a: Verbinde den Router mit Abteilung-A Switch',
         type: 'connect-devices',
         target: { sourceDevice: 'router1', targetDevice: 'switch1' },
+        completed: false
+      },
+      {
+        id: 'connect-router-switch2',
+        description: 'Schritt 1b: Verbinde den Router mit Abteilung-B Switch',
+        type: 'connect-devices',
+        target: { sourceDevice: 'router1', targetDevice: 'switch2' },
         completed: false
       },
       {
