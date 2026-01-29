@@ -51,12 +51,17 @@ export const NetworkCanvas: React.FC<NetworkCanvasProps> = ({
   const handleDeviceMouseDown = (e: React.MouseEvent, deviceId: string) => {
     if (e.button !== 0) return; // Only left click
     const device = devices.find(d => d.id === deviceId);
-    if (!device) return;
+    if (!device || !canvasRef.current) return;
 
+    // Calculate offset from device position to mouse position within the canvas
+    const rect = canvasRef.current.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    
     setDraggingDevice(deviceId);
     setDragOffset({
-      x: e.clientX - device.x,
-      y: e.clientY - device.y
+      x: mouseX - device.x,
+      y: mouseY - device.y
     });
   };
 
@@ -64,8 +69,13 @@ export const NetworkCanvas: React.FC<NetworkCanvasProps> = ({
     if (!draggingDevice || !canvasRef.current) return;
 
     const rect = canvasRef.current.getBoundingClientRect();
-    const x = Math.max(0, Math.min(rect.width - 70, e.clientX - rect.left - dragOffset.x));
-    const y = Math.max(0, Math.min(rect.height - 70, e.clientY - rect.top - dragOffset.y));
+    // Calculate new position based on mouse position minus the initial offset
+    const newX = e.clientX - rect.left - dragOffset.x;
+    const newY = e.clientY - rect.top - dragOffset.y;
+    
+    // Clamp to canvas bounds (device is 70x70)
+    const x = Math.max(0, Math.min(rect.width - 70, newX));
+    const y = Math.max(0, Math.min(rect.height - 70, newY));
     onDeviceMove(draggingDevice, x, y);
   }, [draggingDevice, dragOffset, onDeviceMove]);
 
@@ -189,8 +199,8 @@ export const NetworkCanvas: React.FC<NetworkCanvasProps> = ({
               animate={{ x: target.x - 8, y: target.y - 8 }}
               exit={{ opacity: 0 }}
               transition={{ duration: packet.currentPath.length * 0.3 }}
-              className="absolute w-4 h-4 bg-yellow-400 rounded-full shadow-lg z-20"
-              style={{ boxShadow: '0 0 10px 2px rgba(250, 204, 21, 0.6)' }}
+              className="absolute w-4 h-4 bg-accent rounded-full shadow-lg z-20"
+              style={{ boxShadow: '0 0 10px 2px hsl(var(--accent) / 0.6)' }}
             />
           );
         })}

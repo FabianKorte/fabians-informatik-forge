@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { 
   NetworkDevice, 
   NetworkConnection, 
@@ -30,6 +30,9 @@ export function useNetworkSimulator() {
     completedObjectives: [],
     earnedPoints: 0
   });
+
+  // Ref for checkObjectives to avoid stale closures
+  const checkObjectivesRef = React.useRef<() => void>();
 
   // Load local progress for guests
   useEffect(() => {
@@ -116,15 +119,22 @@ export function useNetworkSimulator() {
   }, []);
 
   const updateDeviceConfig = useCallback((deviceId: string, config: Partial<DeviceConfig>) => {
-    setState(prev => ({
-      ...prev,
-      topology: {
+    setState(prev => {
+      const newTopology = {
         ...prev.topology,
         devices: prev.topology.devices.map(d =>
           d.id === deviceId ? { ...d, config: { ...d.config, ...config } } : d
         )
-      }
-    }));
+      };
+      return {
+        ...prev,
+        topology: newTopology
+      };
+    });
+    // Schedule objective check after state update
+    setTimeout(() => {
+      checkObjectivesRef.current?.();
+    }, 0);
   }, []);
 
   const updateDeviceName = useCallback((deviceId: string, name: string) => {
@@ -173,7 +183,10 @@ export function useNetworkSimulator() {
       }
     }));
 
-    checkObjectives();
+    // Schedule objective check after state update
+    setTimeout(() => {
+      checkObjectivesRef.current?.();
+    }, 0);
   }, [state.topology.connections]);
 
   const removeConnection = useCallback((connectionId: string) => {
@@ -422,6 +435,11 @@ export function useNetworkSimulator() {
       }));
     }
   }, [state.currentScenario, state.topology, state.completedObjectives]);
+
+  // Update the ref whenever checkObjectives changes
+  useEffect(() => {
+    checkObjectivesRef.current = checkObjectives;
+  }, [checkObjectives]);
 
   const completeScenario = useCallback(async () => {
     if (!state.currentScenario) return;
