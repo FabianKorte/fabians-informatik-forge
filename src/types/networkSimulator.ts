@@ -46,6 +46,7 @@ export interface PacketInfo {
   sourceIP: string;
   targetIP: string;
   currentPath: string[];
+  currentHop?: { from: string; to: string }; // Current hop for animation
   status: 'traveling' | 'delivered' | 'dropped' | 'timeout';
   ttl: number;
 }

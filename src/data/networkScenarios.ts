@@ -112,8 +112,19 @@ export const networkScenarios: NetworkScenario[] = [
 **Vorteile von Switches:**
 - Jeder Port hat volle Bandbreite
 - Nur der Zielport erhält das Paket (nicht alle Ports wie beim Hub)
-- Keine Kollisionen zwischen Ports`,
-      keywords: ['Switch', 'MAC-Adresse', 'Layer 2', 'Broadcast-Domain']
+- Keine Kollisionen zwischen Ports
+
+**⚠️ Hinweis zu den IP-Adressen:**
+In dieser Lektion verwenden wir das **10.0.0.0/24** Netzwerk statt 192.168.x.x.
+Das zeigt dir: Es gibt viele verschiedene private IP-Bereiche!
+
+**Private IP-Bereiche (RFC 1918):**
+• 10.0.0.0 – 10.255.255.255 (Klasse A, /8)
+• 172.16.0.0 – 172.31.255.255 (Klasse B, /12)  
+• 192.168.0.0 – 192.168.255.255 (Klasse C, /16)
+
+Alle drei Bereiche kannst du in lokalen Netzwerken frei verwenden!`,
+      keywords: ['Switch', 'MAC-Adresse', 'Layer 2', 'Broadcast-Domain', 'Private IP']
     },
     initialTopology: {
       devices: [
@@ -176,7 +187,7 @@ export const networkScenarios: NetworkScenario[] = [
       },
       {
         id: 'config-pc1',
-        description: 'Schritt 2: Konfiguriere PC-1 mit IP 10.0.0.1/24',
+        description: 'Schritt 2: Konfiguriere PC-1 mit IP 10.0.0.1/24 (10er-Netzwerk für Abwechslung!)',
         type: 'configure-ip',
         target: { 
           sourceDevice: 'pc1', 
@@ -217,6 +228,7 @@ export const networkScenarios: NetworkScenario[] = [
     ],
     hints: [
       '💡 Ein Switch braucht selbst keine IP-Adresse um zu funktionieren',
+      '💡 10.0.0.x ist ein privater IP-Bereich, genau wie 192.168.x.x',
       '💡 Alle PCs müssen im selben Subnetz sein (hier: 10.0.0.0/24)',
       '💡 Der Switch leitet Pakete basierend auf MAC-Adressen weiter'
     ],

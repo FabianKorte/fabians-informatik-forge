@@ -6,15 +6,16 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { CheckCircle2, Circle, Clock, Star, Lightbulb, Play, BookOpen, GraduationCap } from 'lucide-react';
+import { CheckCircle2, Circle, Clock, Star, Lightbulb, Play, BookOpen, GraduationCap, CheckCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ScenarioSelectorProps {
   scenarios: NetworkScenario[];
+  completedScenarioIds?: string[];
   onSelect: (scenario: NetworkScenario) => void;
 }
 
-export const ScenarioSelector: React.FC<ScenarioSelectorProps> = ({ scenarios, onSelect }) => {
+export const ScenarioSelector: React.FC<ScenarioSelectorProps> = ({ scenarios, completedScenarioIds = [], onSelect }) => {
   const difficultyColors = {
     leicht: 'bg-green-500/10 text-green-500 border-green-500/20',
     mittel: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',
@@ -35,50 +36,69 @@ export const ScenarioSelector: React.FC<ScenarioSelectorProps> = ({ scenarios, o
             <h3 className="text-lg font-semibold">Lernlektionen</h3>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
-            {lessons.map((scenario, index) => (
-              <Card 
-                key={scenario.id} 
-                className="hover:border-primary/50 transition-all cursor-pointer group"
-                onClick={() => onSelect(scenario)}
-              >
-                <CardHeader className="pb-2">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm font-bold text-primary">
-                        {index + 1}
-                      </div>
-                      <CardTitle className="text-base group-hover:text-primary transition-colors">
-                        {scenario.title}
-                      </CardTitle>
-                    </div>
-                    <Badge className={cn("text-xs", difficultyColors[scenario.difficulty])}>
-                      {scenario.difficulty}
-                    </Badge>
-                  </div>
-                  <CardDescription className="ml-10">{scenario.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between ml-10">
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                      <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 text-yellow-500" />
-                        <span>{scenario.points} Punkte</span>
-                      </div>
-                      {scenario.timeLimit && (
-                        <div className="flex items-center gap-1">
-                          <Clock className="w-4 h-4" />
-                          <span>{Math.floor(scenario.timeLimit / 60)} Min.</span>
+            {lessons.map((scenario, index) => {
+              const isCompleted = completedScenarioIds.includes(scenario.id);
+              
+              return (
+                <Card 
+                  key={scenario.id} 
+                  className={cn(
+                    "hover:border-primary/50 transition-all cursor-pointer group",
+                    isCompleted && "border-green-500/50 bg-green-500/5"
+                  )}
+                  onClick={() => onSelect(scenario)}
+                >
+                  <CardHeader className="pb-2">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className={cn(
+                          "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold",
+                          isCompleted 
+                            ? "bg-green-500/20 text-green-500" 
+                            : "bg-primary/10 text-primary"
+                        )}>
+                          {isCompleted ? <CheckCheck className="w-4 h-4" /> : index + 1}
                         </div>
-                      )}
+                        <CardTitle className="text-base group-hover:text-primary transition-colors">
+                          {scenario.title}
+                        </CardTitle>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {isCompleted && (
+                          <Badge className="bg-green-500/10 text-green-500 border-green-500/20 text-xs">
+                            ✓ Erledigt
+                          </Badge>
+                        )}
+                        <Badge className={cn("text-xs", difficultyColors[scenario.difficulty])}>
+                          {scenario.difficulty}
+                        </Badge>
+                      </div>
                     </div>
-                    <Button size="sm" variant="ghost" className="group-hover:bg-primary group-hover:text-primary-foreground">
-                      <Play className="w-4 h-4 mr-1" />
-                      Starten
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                    <CardDescription className="ml-10">{scenario.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between ml-10">
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                          <Star className="w-4 h-4 text-yellow-500" />
+                          <span>{scenario.points} Punkte</span>
+                        </div>
+                        {scenario.timeLimit && (
+                          <div className="flex items-center gap-1">
+                            <Clock className="w-4 h-4" />
+                            <span>{Math.floor(scenario.timeLimit / 60)} Min.</span>
+                          </div>
+                        )}
+                      </div>
+                      <Button size="sm" variant="ghost" className="group-hover:bg-primary group-hover:text-primary-foreground">
+                        <Play className="w-4 h-4 mr-1" />
+                        {isCompleted ? 'Wiederholen' : 'Starten'}
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </div>
       )}
@@ -91,45 +111,59 @@ export const ScenarioSelector: React.FC<ScenarioSelectorProps> = ({ scenarios, o
             <h3 className="text-lg font-semibold">Prüfungsaufgaben</h3>
           </div>
           <div className="grid gap-4">
-            {challenges.map(scenario => (
-              <Card 
-                key={scenario.id} 
-                className="hover:border-destructive/50 transition-all cursor-pointer group border-destructive/20 bg-gradient-to-br from-destructive/5 to-transparent"
-                onClick={() => onSelect(scenario)}
-              >
-                <CardHeader className="pb-2">
-                  <div className="flex items-start justify-between">
-                    <CardTitle className="text-lg group-hover:text-destructive transition-colors">
-                      🎓 {scenario.title}
-                    </CardTitle>
-                    <Badge className={cn("text-xs", difficultyColors[scenario.difficulty])}>
-                      {scenario.difficulty}
-                    </Badge>
-                  </div>
-                  <CardDescription>{scenario.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                      <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 text-yellow-500" />
-                        <span className="font-semibold text-yellow-600">{scenario.points} Punkte</span>
+            {challenges.map(scenario => {
+              const isCompleted = completedScenarioIds.includes(scenario.id);
+              
+              return (
+                <Card 
+                  key={scenario.id} 
+                  className={cn(
+                    "hover:border-destructive/50 transition-all cursor-pointer group border-destructive/20 bg-gradient-to-br from-destructive/5 to-transparent",
+                    isCompleted && "border-green-500/50"
+                  )}
+                  onClick={() => onSelect(scenario)}
+                >
+                  <CardHeader className="pb-2">
+                    <div className="flex items-start justify-between">
+                      <CardTitle className="text-lg group-hover:text-destructive transition-colors">
+                        {isCompleted ? '✅' : '🎓'} {scenario.title}
+                      </CardTitle>
+                      <div className="flex items-center gap-2">
+                        {isCompleted && (
+                          <Badge className="bg-green-500/10 text-green-500 border-green-500/20 text-xs">
+                            ✓ Bestanden
+                          </Badge>
+                        )}
+                        <Badge className={cn("text-xs", difficultyColors[scenario.difficulty])}>
+                          {scenario.difficulty}
+                        </Badge>
                       </div>
-                      {scenario.timeLimit && (
-                        <div className="flex items-center gap-1">
-                          <Clock className="w-4 h-4" />
-                          <span>{Math.floor(scenario.timeLimit / 60)} Min.</span>
-                        </div>
-                      )}
                     </div>
-                    <Button size="sm" className="bg-destructive hover:bg-destructive/90">
-                      <Play className="w-4 h-4 mr-1" />
-                      Prüfung starten
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                    <CardDescription>{scenario.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                          <Star className="w-4 h-4 text-yellow-500" />
+                          <span className="font-semibold text-yellow-600">{scenario.points} Punkte</span>
+                        </div>
+                        {scenario.timeLimit && (
+                          <div className="flex items-center gap-1">
+                            <Clock className="w-4 h-4" />
+                            <span>{Math.floor(scenario.timeLimit / 60)} Min.</span>
+                          </div>
+                        )}
+                      </div>
+                      <Button size="sm" className="bg-destructive hover:bg-destructive/90">
+                        <Play className="w-4 h-4 mr-1" />
+                        {isCompleted ? 'Wiederholen' : 'Prüfung starten'}
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </div>
       )}

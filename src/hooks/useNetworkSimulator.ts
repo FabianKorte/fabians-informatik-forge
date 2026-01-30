@@ -16,10 +16,21 @@ import { useGamification } from '@/hooks/useGamification';
 import { toast } from '@/hooks/use-toast';
 
 const STORAGE_KEY = 'network-simulator-progress';
+const COMPLETED_SCENARIOS_KEY = 'network-simulator-completed-scenarios';
 
 export function useNetworkSimulator() {
   const { user } = useAuth();
   const { addXP } = useGamification();
+  
+  // Track which scenarios have been completed to prevent point farming
+  const [completedScenarioIds, setCompletedScenarioIds] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem(COMPLETED_SCENARIOS_KEY);
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
   
   const [state, setState] = useState<SimulatorState>({
     topology: { devices: [], connections: [] },
@@ -321,7 +332,7 @@ export function useNetworkSimulator() {
       }
     }
 
-    // Create packet animation
+    // Create packet animation that follows the actual connection path
     const packetId = `packet-${Date.now()}`;
     const packet: PacketInfo = {
       id: packetId,
@@ -340,20 +351,36 @@ export function useNetworkSimulator() {
       packets: [...prev.packets, packet]
     }));
 
-    // Animate packet
-    await new Promise(resolve => setTimeout(resolve, path.length * 300));
+    // Animate packet through each hop in the path
+    for (let i = 0; i < path.length - 1; i++) {
+      const fromId = path[i];
+      const toId = path[i + 1];
+      
+      // Update packet position to current hop
+      setState(prev => ({
+        ...prev,
+        packets: prev.packets.map(p =>
+          p.id === packetId 
+            ? { ...p, currentHop: { from: fromId, to: toId } } 
+            : p
+        )
+      }));
+      
+      // Wait for animation to complete before moving to next hop
+      await new Promise(resolve => setTimeout(resolve, 400));
+    }
 
     setState(prev => ({
       ...prev,
       isSimulating: false,
       packets: prev.packets.map(p =>
-        p.id === packetId ? { ...p, status: 'delivered' as const } : p
+        p.id === packetId ? { ...p, status: 'delivered' as const, currentHop: undefined } : p
       )
     }));
 
     toast({
       title: "Ping erfolgreich! ✓",
-      description: `Reply von ${targetIP}: Zeit=${path.length * 10}ms TTL=64`
+      description: `Reply von ${targetIP}: Zeit=${path.length * 10}ms TTL=64 (Route: ${path.length} Hops)`
     });
 
     // Mark ping objectives as complete
@@ -441,8 +468,25 @@ export function useNetworkSimulator() {
     checkObjectivesRef.current = checkObjectives;
   }, [checkObjectives]);
 
+  // Save completed scenarios to localStorage
+  useEffect(() => {
+    localStorage.setItem(COMPLETED_SCENARIOS_KEY, JSON.stringify(completedScenarioIds));
+  }, [completedScenarioIds]);
+
   const completeScenario = useCallback(async () => {
     if (!state.currentScenario) return;
+
+    const scenarioId = state.currentScenario.id;
+    
+    // Check if already completed - prevent point farming
+    if (completedScenarioIds.includes(scenarioId)) {
+      toast({
+        title: "Bereits abgeschlossen ✓",
+        description: "Du hast diese Lektion bereits abgeschlossen. Probiere eine andere!",
+        variant: "default"
+      });
+      return;
+    }
 
     const points = state.currentScenario.points;
     
@@ -450,6 +494,9 @@ export function useNetworkSimulator() {
       // Award XP for logged-in users
       addXP({ xp: points, reason: `Netzwerk-Szenario: ${state.currentScenario.title}` });
     }
+
+    // Mark scenario as completed
+    setCompletedScenarioIds(prev => [...prev, scenarioId]);
 
     setState(prev => ({
       ...prev,
@@ -460,10 +507,11 @@ export function useNetworkSimulator() {
       title: "Szenario abgeschlossen! 🎉",
       description: `Du hast ${points} Punkte verdient!`
     });
-  }, [state.currentScenario, user, addXP]);
+  }, [state.currentScenario, user, addXP, completedScenarioIds]);
 
   return {
     state,
+    completedScenarioIds,
     addDevice,
     removeDevice,
     updateDevicePosition,
