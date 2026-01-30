@@ -14,7 +14,7 @@ import { getAllModules } from "@/lib/learnContentUtils";
 import { useKeyboardNavigation } from "@/hooks/useKeyboardNavigation";
 import { logger } from "@/lib/logger";
 import type { Category } from "@/data/categories";
-import { Sparkles, GraduationCap, ArrowRight, Network, GitBranch } from "lucide-react";
+import { Sparkles, GraduationCap, ArrowRight, Network, GitBranch, Layers } from "lucide-react";
 import type { LearnModule } from "@/types/learn";
 
 
@@ -249,6 +249,33 @@ const Index = () => {
             >
               <GitBranch className="w-5 h-5 mr-2" />
               Netzplantechnik üben
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* OSI-Modell - Prominent */}
+      <section className="py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-pink-500/10 backdrop-blur-sm">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-6 sm:mb-8">
+            <div className="inline-flex items-center gap-2 mb-3 sm:mb-4">
+              <Layers className="w-4 h-4 sm:w-6 sm:h-6 text-indigo-500" />
+              <h2 className="text-xl sm:text-3xl font-medium text-foreground">OSI-Modell</h2>
+              <Layers className="w-4 h-4 sm:w-6 sm:h-6 text-pink-500" />
+            </div>
+            <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-8 px-4">
+              Interaktiver Drag-and-Drop Stack: Ordne Protokolle (TCP, HTTP, IP) und Hardware (Switch, Router) den korrekten OSI-Schichten zu
+            </p>
+          </div>
+          <div className="flex justify-center">
+            <Button 
+              onClick={() => navigate('/osi-model')}
+              size="lg"
+              className="bg-gradient-to-r from-indigo-500 to-pink-500 hover:opacity-90 text-white font-medium"
+            >
+              <Layers className="w-5 h-5 mr-2" />
+              OSI-Modell lernen
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </div>
