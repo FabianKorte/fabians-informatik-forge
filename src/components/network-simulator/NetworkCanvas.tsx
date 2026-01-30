@@ -182,25 +182,25 @@ export const NetworkCanvas: React.FC<NetworkCanvasProps> = ({
         )}
       </svg>
 
-      {/* Animated Packets */}
+      {/* Animated Packets - Hop by Hop */}
       <AnimatePresence>
-        {packets.filter(p => p.status === 'traveling').map(packet => {
-          const sourceDevice = devices.find(d => d.id === packet.sourceId);
-          const targetDevice = devices.find(d => d.id === packet.targetId);
-          if (!sourceDevice || !targetDevice) return null;
+        {packets.filter(p => p.status === 'traveling' && p.currentHop).map(packet => {
+          const fromDevice = devices.find(d => d.id === packet.currentHop?.from);
+          const toDevice = devices.find(d => d.id === packet.currentHop?.to);
+          if (!fromDevice || !toDevice) return null;
 
-          const source = getDeviceCenter(sourceDevice);
-          const target = getDeviceCenter(targetDevice);
+          const from = getDeviceCenter(fromDevice);
+          const to = getDeviceCenter(toDevice);
 
           return (
             <motion.div
-              key={packet.id}
-              initial={{ x: source.x - 8, y: source.y - 8 }}
-              animate={{ x: target.x - 8, y: target.y - 8 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: packet.currentPath.length * 0.3 }}
+              key={`${packet.id}-${packet.currentHop?.from}-${packet.currentHop?.to}`}
+              initial={{ x: from.x - 8, y: from.y - 8, scale: 0.5 }}
+              animate={{ x: to.x - 8, y: to.y - 8, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.5 }}
+              transition={{ duration: 0.35, ease: "easeInOut" }}
               className="absolute w-4 h-4 bg-accent rounded-full shadow-lg z-20"
-              style={{ boxShadow: '0 0 10px 2px hsl(var(--accent) / 0.6)' }}
+              style={{ boxShadow: '0 0 12px 3px hsl(var(--accent) / 0.7)' }}
             />
           );
         })}

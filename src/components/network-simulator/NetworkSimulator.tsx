@@ -37,6 +37,7 @@ export const NetworkSimulator: React.FC = () => {
   const { user } = useAuth();
   const {
     state,
+    completedScenarioIds,
     addDevice,
     removeDevice,
     updateDevicePosition,
@@ -299,6 +300,7 @@ export const NetworkSimulator: React.FC = () => {
         <TabsContent value="scenarios" className="mt-4">
           <ScenarioSelector
             scenarios={networkScenarios}
+            completedScenarioIds={completedScenarioIds}
             onSelect={(scenario) => {
               loadScenario(scenario);
               setActiveTab('active');
