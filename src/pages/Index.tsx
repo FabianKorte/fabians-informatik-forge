@@ -14,7 +14,7 @@ import { getAllModules } from "@/lib/learnContentUtils";
 import { useKeyboardNavigation } from "@/hooks/useKeyboardNavigation";
 import { logger } from "@/lib/logger";
 import type { Category } from "@/data/categories";
-import { Sparkles, GraduationCap, ArrowRight, Network, GitBranch, Layers, Database, Calculator, Cpu, Workflow } from "lucide-react";
+import { Sparkles, GraduationCap, ArrowRight, Network, GitBranch, Layers, Database, Calculator, Cpu, Workflow, Binary } from "lucide-react";
 import type { LearnModule } from "@/types/learn";
 
 
@@ -384,6 +384,33 @@ const Index = () => {
             >
               <Workflow className="w-5 h-5 mr-2" />
               Struktogramm erstellen
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Bit-/Byte-Rechner - Prominent */}
+      <section className="py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-sky-500/10 via-blue-500/5 to-indigo-500/10 backdrop-blur-sm">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-6 sm:mb-8">
+            <div className="inline-flex items-center gap-2 mb-3 sm:mb-4">
+              <Binary className="w-4 h-4 sm:w-6 sm:h-6 text-sky-500" />
+              <h2 className="text-xl sm:text-3xl font-medium text-foreground">Bit-/Byte-Rechner</h2>
+              <Binary className="w-4 h-4 sm:w-6 sm:h-6 text-blue-500" />
+            </div>
+            <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-8 px-4">
+              Konvertiere zwischen Binär, Dezimal und Hex. Führe bitweise Operationen durch und rechne Speichergrößen um
+            </p>
+          </div>
+          <div className="flex justify-center">
+            <Button 
+              onClick={() => navigate('/bit-calculator')}
+              size="lg"
+              className="bg-gradient-to-r from-sky-500 to-blue-500 hover:opacity-90 text-white font-medium"
+            >
+              <Binary className="w-5 h-5 mr-2" />
+              Bit-Rechner öffnen
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </div>
