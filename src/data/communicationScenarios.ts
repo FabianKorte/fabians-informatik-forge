@@ -1,0 +1,321 @@
+import { CommunicationScenario, CommunicationExercise } from '@/types/communication';
+
+export const communicationScenarios: CommunicationScenario[] = [
+  {
+    id: 'buero-1',
+    title: 'Im Büro: Der Drucker',
+    description: 'Ein Kollege bemerkt, dass das Papier im Drucker leer ist',
+    context: 'Zwei Kollegen arbeiten im gleichen Büro. Einer steht am Drucker.',
+    difficulty: 'leicht',
+    points: 15,
+    messages: [
+      {
+        text: 'Das Papier im Drucker ist leer.',
+        sachinhalt: 'Der Drucker hat kein Papier mehr.',
+        selbstkundgabe: 'Ich habe das Problem bemerkt / Ich brauche den Drucker.',
+        beziehung: 'Du bist zuständig oder in der Nähe des Papierlagers.',
+        appell: 'Bitte fülle Papier nach.',
+      },
+    ],
+    tips: ['Achte darauf, wie die gleiche Aussage unterschiedlich interpretiert werden kann.'],
+  },
+  {
+    id: 'buero-2',
+    title: 'Im Büro: Die Deadline',
+    description: 'Der Chef spricht über ein Projekt',
+    context: 'Teammeeting am Montagmorgen. Der Projektleiter schaut in die Runde.',
+    difficulty: 'leicht',
+    points: 15,
+    messages: [
+      {
+        text: 'Der Kunde erwartet die Präsentation bis Freitag.',
+        sachinhalt: 'Die Deadline für die Präsentation ist Freitag.',
+        selbstkundgabe: 'Ich bin unter Druck / Das Projekt ist mir wichtig.',
+        beziehung: 'Ich erwarte, dass ihr das Team seid, das liefert.',
+        appell: 'Priorisiert diese Aufgabe und haltet die Deadline ein.',
+      },
+    ],
+  },
+  {
+    id: 'alltag-1',
+    title: 'Zu Hause: Das Essen',
+    description: 'Ein Klassiker der Kommunikation',
+    context: 'Am Esstisch. Ein Partner schaut auf den Teller.',
+    difficulty: 'leicht',
+    points: 15,
+    messages: [
+      {
+        text: 'Die Suppe ist versalzen.',
+        sachinhalt: 'Die Suppe enthält zu viel Salz.',
+        selbstkundgabe: 'Mir schmeckt die Suppe nicht / Ich bin enttäuscht.',
+        beziehung: 'Du hättest besser aufpassen sollen / Kritik an deiner Kochkunst.',
+        appell: 'Koch beim nächsten Mal besser / Mach mir etwas anderes.',
+      },
+    ],
+    tips: ['Dieses Beispiel zeigt, wie schnell Sachaussagen als Kritik verstanden werden können.'],
+  },
+  {
+    id: 'alltag-2',
+    title: 'Im Auto: Die Ampel',
+    description: 'Das berühmte Beispiel von Schulz von Thun',
+    context: 'Ein Paar sitzt im Auto. Sie fährt, er ist Beifahrer.',
+    difficulty: 'mittel',
+    points: 20,
+    messages: [
+      {
+        text: 'Du, da vorne ist grün!',
+        sachinhalt: 'Die Ampel zeigt grünes Licht.',
+        selbstkundgabe: 'Ich habe es eilig / Ich bin aufmerksam.',
+        beziehung: 'Du brauchst meine Hinweise / Du fährst nicht aufmerksam genug.',
+        appell: 'Fahr los! Gib Gas!',
+      },
+      {
+        text: 'Fährst du oder fahre ich?',
+        sachinhalt: 'Es gibt die Möglichkeit, dass einer von uns beiden fährt.',
+        selbstkundgabe: 'Ich fühle mich bevormundet / Dein Kommentar nervt mich.',
+        beziehung: 'Du solltest mir mehr vertrauen / Ich bin die Fahrerin.',
+        appell: 'Hör auf, mir Anweisungen zu geben.',
+      },
+    ],
+    tips: ['Die Antwort zeigt, dass die Nachricht primär auf dem Beziehungsohr empfangen wurde.'],
+  },
+  {
+    id: 'konflikt-1',
+    title: 'Teamkonflikt: Die Verspätung',
+    description: 'Ein Teammitglied kommt wiederholt zu spät',
+    context: 'Ein Kollege betritt 15 Minuten nach Meetingbeginn den Raum.',
+    difficulty: 'mittel',
+    points: 20,
+    messages: [
+      {
+        text: 'Schön, dass du auch noch kommst.',
+        sachinhalt: 'Du bist angekommen.',
+        selbstkundgabe: 'Ich bin genervt / Ich finde das unhöflich.',
+        beziehung: 'Du nimmst das Meeting nicht ernst / Du respektierst unsere Zeit nicht.',
+        appell: 'Sei beim nächsten Mal pünktlich.',
+      },
+      {
+        text: 'Die S-Bahn hatte Verspätung.',
+        sachinhalt: 'Der öffentliche Nahverkehr war unpünktlich.',
+        selbstkundgabe: 'Ich fühle mich angegriffen / Ich möchte mich rechtfertigen.',
+        beziehung: 'Ich bin nicht schuld / Bitte versteh meine Situation.',
+        appell: 'Akzeptiere meine Erklärung und kritisiere mich nicht.',
+      },
+    ],
+  },
+  {
+    id: 'feedback-1',
+    title: 'Feedbackgespräch',
+    description: 'Vorgesetzter gibt Feedback zu einer Präsentation',
+    context: 'Nach einer Präsentation im Besprechungsraum.',
+    difficulty: 'mittel',
+    points: 20,
+    messages: [
+      {
+        text: 'Die Zahlen auf Folie 3 waren interessant.',
+        sachinhalt: 'Folie 3 enthielt Zahlen, die bemerkenswert waren.',
+        selbstkundgabe: 'Ich habe die Präsentation aufmerksam verfolgt.',
+        beziehung: 'Ich schätze deine Arbeit und gebe konstruktives Feedback.',
+        appell: 'Nutze mehr solche Daten in zukünftigen Präsentationen.',
+      },
+      {
+        text: 'Beim nächsten Mal könntest du die Einleitung kürzer halten.',
+        sachinhalt: 'Die Einleitung war länger als optimal.',
+        selbstkundgabe: 'Ich habe Verbesserungsvorschläge / Ich möchte helfen.',
+        beziehung: 'Ich traue dir zu, dich zu verbessern.',
+        appell: 'Verkürze die Einleitung bei der nächsten Präsentation.',
+      },
+    ],
+  },
+  {
+    id: 'kunde-1',
+    title: 'Kundengespräch',
+    description: 'Ein Kunde beschwert sich über ein Produkt',
+    context: 'Telefonat mit dem Kundenservice.',
+    difficulty: 'schwer',
+    points: 30,
+    messages: [
+      {
+        text: 'Ich warte jetzt schon drei Wochen auf meine Lieferung!',
+        sachinhalt: 'Die Lieferung ist seit drei Wochen ausstehend.',
+        selbstkundgabe: 'Ich bin frustriert und verärgert / Meine Geduld ist am Ende.',
+        beziehung: 'Ihr Unternehmen nimmt mich als Kunden nicht ernst.',
+        appell: 'Lösen Sie das Problem sofort / Erklären Sie, was los ist.',
+      },
+      {
+        text: 'Das ist wirklich ärgerlich. Ich schaue sofort nach, was da passiert ist.',
+        sachinhalt: 'Ich werde die Situation prüfen.',
+        selbstkundgabe: 'Ich verstehe Ihren Ärger / Ich bin kompetent.',
+        beziehung: 'Ich nehme Sie als Kunden ernst und respektiere Ihre Zeit.',
+        appell: 'Bitte haben Sie einen Moment Geduld, während ich recherchiere.',
+      },
+    ],
+    tips: ['Die Antwort zeigt gute Kommunikation: Verständnis auf der Beziehungsebene, klarer Appell.'],
+  },
+  {
+    id: 'bewerbung-1',
+    title: 'Bewerbungsgespräch',
+    description: 'Typische Fragen und ihre versteckten Botschaften',
+    context: 'Vorstellungsgespräch für eine IT-Stelle.',
+    difficulty: 'schwer',
+    points: 30,
+    messages: [
+      {
+        text: 'Wo sehen Sie sich in fünf Jahren?',
+        sachinhalt: 'Frage nach zukünftigen Karriereplänen.',
+        selbstkundgabe: 'Ich interessiere mich für Ihre langfristige Motivation.',
+        beziehung: 'Ich prüfe, ob Sie zu unserem Unternehmen passen.',
+        appell: 'Zeigen Sie Ambition, aber auch Loyalität zum Unternehmen.',
+      },
+      {
+        text: 'Ich möchte mich fachlich weiterentwickeln und mehr Verantwortung übernehmen.',
+        sachinhalt: 'Meine Ziele sind Weiterentwicklung und mehr Verantwortung.',
+        selbstkundgabe: 'Ich bin ambitioniert und lernbereit.',
+        beziehung: 'Ich sehe Potenzial in Ihrem Unternehmen für meine Entwicklung.',
+        appell: 'Sehen Sie mich als langfristige Investition.',
+      },
+    ],
+  },
+  {
+    id: 'it-support-1',
+    title: 'IT-Support Anfrage',
+    description: 'Ein Mitarbeiter meldet ein Computerproblem',
+    context: 'Helpdesk-Ticket per E-Mail.',
+    difficulty: 'mittel',
+    points: 20,
+    messages: [
+      {
+        text: 'Mein Computer macht schon wieder Probleme. Seit dem letzten Update geht gar nichts mehr!',
+        sachinhalt: 'Der Computer funktioniert nicht richtig nach dem Update.',
+        selbstkundgabe: 'Ich bin frustriert / Ich verstehe nicht, was passiert ist.',
+        beziehung: 'Die IT macht Updates, die Probleme verursachen.',
+        appell: 'Repariert das schnell / Macht keine Updates mehr ohne Vorwarnung.',
+      },
+      {
+        text: 'Ich verstehe den Frust. Können Sie mir beschreiben, was genau nicht funktioniert?',
+        sachinhalt: 'Ich brauche mehr Informationen zur Fehlerdiagnose.',
+        selbstkundgabe: 'Ich bin geduldig und möchte helfen.',
+        beziehung: 'Ich nehme Ihr Problem ernst.',
+        appell: 'Bitte geben Sie mir Details, damit ich helfen kann.',
+      },
+    ],
+  },
+];
+
+export const communicationExercises: CommunicationExercise[] = [
+  // Büro-1: Drucker
+  {
+    id: 'ex-buero-1-sach',
+    scenarioId: 'buero-1',
+    messageIndex: 0,
+    targetEar: 'sachinhalt',
+    options: [
+      'Der Drucker hat kein Papier mehr.',
+      'Ich brauche dringend einen Ausdruck.',
+      'Du bist schuld, dass das Papier leer ist.',
+      'Füll bitte das Papier auf.',
+    ],
+    correctAnswer: 0,
+    explanation: 'Der Sachinhalt ist die reine Fakteninformation: Der Drucker ist ohne Papier.',
+  },
+  {
+    id: 'ex-buero-1-appell',
+    scenarioId: 'buero-1',
+    messageIndex: 0,
+    targetEar: 'appell',
+    options: [
+      'Beachte diese interessante Information.',
+      'Sei mir nicht böse.',
+      'Bitte fülle Papier nach.',
+      'Der Drucker ist defekt.',
+    ],
+    correctAnswer: 2,
+    explanation: 'Der versteckte Appell ist die Aufforderung, das Papier aufzufüllen.',
+  },
+  // Alltag-2: Ampel
+  {
+    id: 'ex-alltag-2-beziehung',
+    scenarioId: 'alltag-2',
+    messageIndex: 0,
+    targetEar: 'beziehung',
+    options: [
+      'Die Ampel funktioniert einwandfrei.',
+      'Ich möchte schneller ans Ziel kommen.',
+      'Du fährst nicht aufmerksam genug / Du brauchst meine Hilfe.',
+      'Fahr bitte los.',
+    ],
+    correctAnswer: 2,
+    explanation: 'Auf der Beziehungsebene kann die Aussage als Kritik an der Fahrweise verstanden werden.',
+  },
+  {
+    id: 'ex-alltag-2-selbst',
+    scenarioId: 'alltag-2',
+    messageIndex: 1,
+    targetEar: 'selbstkundgabe',
+    options: [
+      'Es gibt zwei mögliche Fahrer.',
+      'Ich fühle mich bevormundet und genervt.',
+      'Du solltest nicht fahren.',
+      'Lass mich in Ruhe.',
+    ],
+    correctAnswer: 1,
+    explanation: 'Die Selbstkundgabe zeigt Ärger und das Gefühl, nicht respektiert zu werden.',
+  },
+  // Konflikt-1
+  {
+    id: 'ex-konflikt-1-selbst',
+    scenarioId: 'konflikt-1',
+    messageIndex: 0,
+    targetEar: 'selbstkundgabe',
+    options: [
+      'Du bist zu spät.',
+      'Ich bin genervt über die Verspätung.',
+      'Meetings sind wichtig.',
+      'Komm nicht mehr zu spät.',
+    ],
+    correctAnswer: 1,
+    explanation: 'Die Selbstkundgabe zeigt den eigenen Ärger und die Frustration.',
+  },
+  // Feedback-1
+  {
+    id: 'ex-feedback-1-appell',
+    scenarioId: 'feedback-1',
+    messageIndex: 1,
+    targetEar: 'appell',
+    options: [
+      'Die Einleitung war zu lang.',
+      'Ich bin kritisch, aber fair.',
+      'Ich schätze deine Arbeit.',
+      'Verkürze beim nächsten Mal die Einleitung.',
+    ],
+    correctAnswer: 3,
+    explanation: 'Der Appell ist die konkrete Handlungsaufforderung für die Zukunft.',
+  },
+  // Kunde-1
+  {
+    id: 'ex-kunde-1-beziehung',
+    scenarioId: 'kunde-1',
+    messageIndex: 0,
+    targetEar: 'beziehung',
+    options: [
+      'Die Lieferung ist drei Wochen überfällig.',
+      'Ich bin ein unzufriedener Kunde.',
+      'Ihr Unternehmen nimmt mich als Kunden nicht ernst.',
+      'Liefern Sie sofort.',
+    ],
+    correctAnswer: 2,
+    explanation: 'Auf der Beziehungsebene drückt der Kunde aus, dass er sich nicht wertgeschätzt fühlt.',
+  },
+];
+
+export const getScenarioById = (id: string): CommunicationScenario | undefined => {
+  return communicationScenarios.find(s => s.id === id);
+};
+
+export const getExercisesForScenario = (scenarioId: string): CommunicationExercise[] => {
+  return communicationExercises.filter(e => e.scenarioId === scenarioId);
+};
+
+export const getScenariosByDifficulty = (difficulty: CommunicationScenario['difficulty']): CommunicationScenario[] => {
+  return communicationScenarios.filter(s => s.difficulty === difficulty);
+};
