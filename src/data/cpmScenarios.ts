@@ -204,5 +204,106 @@ Vorgang C hat GP = 3 Tage:
       "Vorgang C hat einen Puffer von 5 Tagen",
       "Eine Verzögerung von B um 2 Tage verlängert das Projekt um 2 Tage"
     ]
+  },
+  {
+    id: "cpm-multi-path",
+    title: "Lektion 5: Komplexe Netzpläne",
+    description: "Arbeite mit mehreren parallelen Pfaden und berechne Puffer für alle Vorgänge.",
+    difficulty: "schwer",
+    points: 125,
+    theory: {
+      title: "Komplexe Netzpläne verstehen",
+      content: `## Mehrere parallele Pfade
+
+Bei komplexen Projekten gibt es oft mehrere Wege vom Start zum Ende. Der **längste Pfad** ist der kritische Pfad.
+
+### Berechnung bei Verzweigungen:
+- **Vorwärts**: FAZ = Maximum aller FEZ der Vorgänger
+- **Rückwärts**: SEZ = Minimum aller SAZ der Nachfolger
+
+### Freier Puffer vs. Gesamtpuffer:
+- **GP** = SAZ - FAZ (kann Nachfolger beeinflussen)
+- **FP** = min(FAZ Nachfolger) - FEZ (beeinflusst Nachfolger NICHT)
+
+Ein Vorgang kann GP > 0 aber FP = 0 haben!`,
+      keywords: ["Parallele Pfade", "Freier Puffer", "Komplexe Netzpläne"]
+    },
+    project: {
+      id: "complex-project",
+      name: "App-Entwicklung mit mehreren Teams",
+      activities: [
+        { id: "A", name: "Kickoff", duration: 1, predecessors: [], faz: null, fez: null, saz: null, sez: null, gp: null, fp: null, isCritical: false },
+        { id: "B", name: "Backend-Design", duration: 3, predecessors: ["A"], faz: null, fez: null, saz: null, sez: null, gp: null, fp: null, isCritical: false },
+        { id: "C", name: "Frontend-Design", duration: 2, predecessors: ["A"], faz: null, fez: null, saz: null, sez: null, gp: null, fp: null, isCritical: false },
+        { id: "D", name: "Datenbank-Setup", duration: 2, predecessors: ["A"], faz: null, fez: null, saz: null, sez: null, gp: null, fp: null, isCritical: false },
+        { id: "E", name: "API-Entwicklung", duration: 5, predecessors: ["B", "D"], faz: null, fez: null, saz: null, sez: null, gp: null, fp: null, isCritical: false },
+        { id: "F", name: "UI-Entwicklung", duration: 4, predecessors: ["C"], faz: null, fez: null, saz: null, sez: null, gp: null, fp: null, isCritical: false },
+        { id: "G", name: "Integration", duration: 3, predecessors: ["E", "F"], faz: null, fez: null, saz: null, sez: null, gp: null, fp: null, isCritical: false },
+        { id: "H", name: "Testing", duration: 2, predecessors: ["G"], faz: null, fez: null, saz: null, sez: null, gp: null, fp: null, isCritical: false },
+      ],
+      projectDuration: null
+    },
+    objectives: [
+      { id: "obj-1", description: "Berechne alle FAZ und FEZ Werte", type: "calculate-faz-fez", completed: false },
+      { id: "obj-2", description: "Berechne SAZ und SEZ für alle Vorgänge", type: "calculate-saz-sez", completed: false },
+      { id: "obj-3", description: "Markiere den kritischen Pfad", type: "mark-critical-path", completed: false },
+      { id: "obj-4", description: "Bestimme die Projektgesamtdauer", type: "identify-duration", target: { requiredValue: 14 }, completed: false },
+    ],
+    hints: [
+      "Die Projektdauer beträgt 14 Tage",
+      "Der kritische Pfad: A → B → E → G → H",
+      "Vorgang C und F haben zusammen einen Puffer von 3 Tagen"
+    ]
+  },
+  {
+    id: "cpm-resource",
+    title: "Lektion 6: Ressourcenplanung",
+    description: "Optimiere den Netzplan unter Berücksichtigung von Ressourcen und Personal.",
+    difficulty: "schwer",
+    points: 150,
+    theory: {
+      title: "Ressourcen im Netzplan",
+      content: `## Ressourcenplanung
+
+Der Netzplan zeigt die **zeitliche** Planung. In der Praxis müssen auch **Ressourcen** (Personal, Maschinen) berücksichtigt werden.
+
+### Ressourcenglättung:
+Nutze Pufferzeiten, um Ressourcenspitzen zu vermeiden:
+- Verschiebe unkritische Vorgänge innerhalb ihres Puffers
+- Ziel: Gleichmäßige Auslastung
+
+### Ressourcenbeschränkung:
+Wenn nur begrenzte Ressourcen verfügbar sind:
+- Vorgänge können nicht mehr parallel laufen
+- Projektdauer kann sich verlängern
+
+### IHK-Prüfungsrelevanz:
+"Wie wirkt sich die Verschiebung von Vorgang X um Y Tage auf die Ressourcenauslastung aus?"`,
+      keywords: ["Ressourcenplanung", "Ressourcenglättung", "Personal"]
+    },
+    project: {
+      id: "resource-project",
+      name: "Büroumzug mit begrenztem Personal",
+      activities: [
+        { id: "A", name: "Planung", duration: 2, predecessors: [], faz: null, fez: null, saz: null, sez: null, gp: null, fp: null, isCritical: false },
+        { id: "B", name: "IT-Inventur", duration: 3, predecessors: ["A"], faz: null, fez: null, saz: null, sez: null, gp: null, fp: null, isCritical: false },
+        { id: "C", name: "Möbelbestellung", duration: 5, predecessors: ["A"], faz: null, fez: null, saz: null, sez: null, gp: null, fp: null, isCritical: false },
+        { id: "D", name: "Netzwerk-Vorbereitung", duration: 2, predecessors: ["B"], faz: null, fez: null, saz: null, sez: null, gp: null, fp: null, isCritical: false },
+        { id: "E", name: "Möbelaufbau", duration: 3, predecessors: ["C"], faz: null, fez: null, saz: null, sez: null, gp: null, fp: null, isCritical: false },
+        { id: "F", name: "IT-Umzug", duration: 2, predecessors: ["D", "E"], faz: null, fez: null, saz: null, sez: null, gp: null, fp: null, isCritical: false },
+        { id: "G", name: "Arbeitsplatz-Einrichtung", duration: 2, predecessors: ["F"], faz: null, fez: null, saz: null, sez: null, gp: null, fp: null, isCritical: false },
+      ],
+      projectDuration: null
+    },
+    objectives: [
+      { id: "obj-1", description: "Vollständige Vorwärtsrechnung", type: "calculate-faz-fez", completed: false },
+      { id: "obj-2", description: "Vollständige Rückwärtsrechnung", type: "calculate-saz-sez", completed: false },
+      { id: "obj-3", description: "Kritischen Pfad markieren", type: "mark-critical-path", completed: false },
+    ],
+    hints: [
+      "Die Projektdauer beträgt 14 Tage",
+      "Der kritische Pfad führt durch: A → C → E → F → G",
+      "Vorgang B und D haben zusammen einen Puffer von 3 Tagen"
+    ]
   }
 ];

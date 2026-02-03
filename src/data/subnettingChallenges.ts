@@ -254,7 +254,7 @@ const expertenChallenges: SubnettingChallenge[] = [
     difficulty: 'experte',
     question: 'Wie viele /30 Subnetze können aus einem /24 Netzwerk erstellt werden?',
     givenData: { cidr: 24 },
-    expectedAnswers: { hostCount: 64 }, // Reusing hostCount field for subnet count
+    expectedAnswers: { hostCount: 64 },
     hints: [
       'Ein /24 hat 256 Adressen',
       'Ein /30 hat 4 Adressen',
@@ -263,6 +263,41 @@ const expertenChallenges: SubnettingChallenge[] = [
     explanation: '/24 = 256 Adressen. /30 = 4 Adressen. 256 / 4 = 64 mögliche /30 Subnetze.',
     timeLimit: 60,
     points: 30
+  }),
+  // Neue Experten-Challenges
+  createChallenge('exp-6', {
+    type: 'mixed',
+    difficulty: 'experte',
+    question: 'Berechne für 192.168.100.200/25: Netzwerkadresse, Broadcast und Host-Bereich',
+    givenData: { ip: '192.168.100.200', cidr: 25 },
+    expectedAnswers: { 
+      networkAddress: '192.168.100.128',
+      broadcastAddress: '192.168.100.255',
+      hostCount: 126
+    },
+    hints: [
+      '/25 teilt das letzte Oktett in zwei Hälften',
+      '200 liegt in der zweiten Hälfte (128-255)',
+      '7 Host-Bits = 128 Adressen - 2'
+    ],
+    explanation: '/25: Grenzen bei 0 und 128. 200 > 128, also Netzwerk 192.168.100.128. 2^7 - 2 = 126 Hosts.',
+    timeLimit: 75,
+    points: 40
+  }),
+  createChallenge('exp-7', {
+    type: 'network-address',
+    difficulty: 'experte',
+    question: 'Ein Unternehmen hat das Netzwerk 10.0.0.0/8. Welche Netzwerkadresse hat das 100. /16 Subnetz?',
+    givenData: { cidr: 8 },
+    expectedAnswers: { networkAddress: '10.99.0.0' },
+    hints: [
+      'Das erste /16 ist 10.0.0.0/16',
+      'Das zweite ist 10.1.0.0/16',
+      'Das 100. wäre 10.99.0.0/16 (Zählung bei 0 beginnend)'
+    ],
+    explanation: 'Bei /16 Subnetzen ändert sich das zweite Oktett. Das 100. Subnetz (Index 99) ist 10.99.0.0/16.',
+    timeLimit: 90,
+    points: 45
   })
 ];
 

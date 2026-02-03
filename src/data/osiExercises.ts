@@ -321,6 +321,57 @@ export const quizQuestions: OSIQuizQuestion[] = [
     correctIndex: 2,
     explanation: "TCP ist verbindungsorientiert und bestätigt den Empfang von Daten (ACK). UDP ist schneller aber unzuverlässig.",
     relatedLayer: 4
+  },
+  // Neue Quiz-Fragen
+  {
+    id: "q11",
+    question: "Was bedeutet das Akronym CSMA/CD?",
+    options: [
+      "Carrier Sense Multiple Access / Collision Detection",
+      "Common Standard Media Access / Connection Demand",
+      "Carrier Signal Modulation Access / Carrier Division",
+      "Central Server Management Access / Client Distribution"
+    ],
+    correctIndex: 0,
+    explanation: "CSMA/CD (Carrier Sense Multiple Access with Collision Detection) ist das Zugriffsverfahren bei Ethernet (Schicht 2).",
+    relatedLayer: 2
+  },
+  {
+    id: "q12",
+    question: "Welcher Port wird standardmäßig von SSH verwendet?",
+    options: ["Port 21", "Port 22", "Port 23", "Port 25"],
+    correctIndex: 1,
+    explanation: "SSH (Secure Shell) verwendet Port 22. FTP nutzt 21, Telnet 23 und SMTP 25.",
+    relatedLayer: 4
+  },
+  {
+    id: "q13",
+    question: "Was ist der Zweck der Sitzungsschicht (Schicht 5)?",
+    options: [
+      "Verschlüsselung von Daten",
+      "Physische Signalübertragung",
+      "Auf- und Abbau von Verbindungen zwischen Anwendungen",
+      "Routing von Paketen"
+    ],
+    correctIndex: 2,
+    explanation: "Die Sitzungsschicht (Session Layer) verwaltet den Dialog zwischen zwei Anwendungen und steuert den Verbindungsauf- und -abbau.",
+    relatedLayer: 5
+  },
+  {
+    id: "q14",
+    question: "Welches Protokoll verwendet ICMP?",
+    options: ["FTP", "Ping", "HTTP", "SMTP"],
+    correctIndex: 1,
+    explanation: "ICMP (Internet Control Message Protocol) wird von Ping verwendet, um die Erreichbarkeit von Hosts zu testen.",
+    relatedLayer: 3
+  },
+  {
+    id: "q15",
+    question: "Was ist die maximale Größe eines Ethernet-Frames?",
+    options: ["1000 Bytes", "1500 Bytes (MTU)", "2000 Bytes", "64 KB"],
+    correctIndex: 1,
+    explanation: "Die Maximum Transmission Unit (MTU) bei Ethernet beträgt 1500 Bytes. Größere Pakete müssen fragmentiert werden.",
+    relatedLayer: 2
   }
 ];
 

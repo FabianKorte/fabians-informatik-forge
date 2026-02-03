@@ -638,6 +638,114 @@ export const puzzleScenarios: PuzzleScenario[] = [
       'Eine AIO-Kühlung ist für High-End CPUs empfehlenswert'
     ],
     xpReward: 100
+  },
+  // Neue Szenarien
+  {
+    id: 'scenario-silent-pc',
+    title: 'Silent Office PC',
+    description: 'Baue einen flüsterleisen Office-PC. Fokus auf geringe Lautstärke bei ausreichender Leistung!',
+    difficulty: 'intermediate',
+    requirements: [
+      'CPU TDP maximal 65W für geräuscharmen Betrieb',
+      'Keine dedizierte GPU nötig (integrierte Grafik)',
+      'Passiver oder leiser Tower-Kühler empfohlen'
+    ],
+    availableComponents: [
+      cpus.find(c => c.id === 'cpu-i3-12100')!,
+      cpus.find(c => c.id === 'cpu-r5-5600x')!,
+      motherboards.find(c => c.id === 'mb-b660-ddr4')!,
+      motherboards.find(c => c.id === 'mb-b550-am4')!,
+      ramModules.find(c => c.id === 'ram-ddr4-16gb-3200')!,
+      ramModules.find(c => c.id === 'ram-ddr4-32gb-3600')!,
+      psus.find(c => c.id === 'psu-550w-bronze')!,
+      psus.find(c => c.id === 'psu-650w-gold')!,
+      storageDevices.find(c => c.id === 'ssd-nvme-1tb')!,
+      storageDevices.find(c => c.id === 'ssd-sata-500gb')!,
+      cases.find(c => c.id === 'case-atx-4000d')!,
+      cases.find(c => c.id === 'case-matx-q300l')!,
+      coolers.find(c => c.id === 'cooler-nhd15')!,
+      coolers.find(c => c.id === 'cooler-basic')!,
+      coolers.find(c => c.id === 'cooler-vetrox5')!,
+    ],
+    hints: [
+      'Der i3-12100 hat nur 60W TDP - ideal für Silent-Builds',
+      'Der Ryzen 5 5600X hat 65W TDP',
+      'Der Noctua NH-D15 ist extrem leise trotz hoher Kühlleistung'
+    ],
+    xpReward: 75
+  },
+  {
+    id: 'scenario-dev-workstation',
+    title: 'Entwickler-Workstation',
+    description: 'Konfiguriere einen PC für Softwareentwicklung mit mehreren VMs und schnellen Compile-Zeiten.',
+    difficulty: 'intermediate',
+    requirements: [
+      'Mindestens 32GB RAM für VMs und Container',
+      'Schnelle NVMe SSD für IDE und Builds',
+      'Viele CPU-Kerne für parallele Builds'
+    ],
+    availableComponents: [
+      cpus.find(c => c.id === 'cpu-i7-12700k')!,
+      cpus.find(c => c.id === 'cpu-i5-13600k')!,
+      cpus.find(c => c.id === 'cpu-r7-7700x')!,
+      motherboards.find(c => c.id === 'mb-z690-ddr5')!,
+      motherboards.find(c => c.id === 'mb-b660-ddr4')!,
+      motherboards.find(c => c.id === 'mb-x670-am5')!,
+      ramModules.find(c => c.id === 'ram-ddr4-32gb-3600')!,
+      ramModules.find(c => c.id === 'ram-ddr5-32gb-6000')!,
+      gpus.find(c => c.id === 'gpu-rtx3060')!,
+      gpus.find(c => c.id === 'gpu-rx7600')!,
+      psus.find(c => c.id === 'psu-650w-gold')!,
+      psus.find(c => c.id === 'psu-750w-gold')!,
+      storageDevices.find(c => c.id === 'ssd-nvme-2tb')!,
+      storageDevices.find(c => c.id === 'ssd-nvme-1tb')!,
+      cases.find(c => c.id === 'case-atx-meshify')!,
+      cases.find(c => c.id === 'case-atx-4000d')!,
+      coolers.find(c => c.id === 'cooler-nhd15')!,
+      coolers.find(c => c.id === 'cooler-h100i')!,
+    ],
+    hints: [
+      'Der i5-13600K hat 14 Kerne - ideal für parallele Builds',
+      'DDR5 bietet mehr Bandbreite für VMs',
+      'Eine dedizierte GPU ist für CUDA-basierte Entwicklung hilfreich'
+    ],
+    xpReward: 75
+  },
+  {
+    id: 'scenario-streaming',
+    title: 'Streaming & Content Creation PC',
+    description: 'Baue einen PC für Live-Streaming und Video-Editing. GPU-Encoding und schnelles Rendering sind wichtig!',
+    difficulty: 'expert',
+    requirements: [
+      'Nvidia GPU für NVENC Hardware-Encoding',
+      'Mindestens 32GB RAM für Video-Editing',
+      'Ausreichend CPU-Kerne für Streaming + Gaming gleichzeitig'
+    ],
+    availableComponents: [
+      cpus.find(c => c.id === 'cpu-i7-12700k')!,
+      cpus.find(c => c.id === 'cpu-i5-13600k')!,
+      cpus.find(c => c.id === 'cpu-r7-7700x')!,
+      motherboards.find(c => c.id === 'mb-z690-ddr5')!,
+      motherboards.find(c => c.id === 'mb-x670-am5')!,
+      ramModules.find(c => c.id === 'ram-ddr5-32gb-6000')!,
+      ramModules.find(c => c.id === 'ram-ddr4-32gb-3600')!,
+      gpus.find(c => c.id === 'gpu-rtx4080')!,
+      gpus.find(c => c.id === 'gpu-rtx4070')!,
+      gpus.find(c => c.id === 'gpu-rtx3060')!,
+      psus.find(c => c.id === 'psu-750w-gold')!,
+      psus.find(c => c.id === 'psu-850w-gold')!,
+      storageDevices.find(c => c.id === 'ssd-nvme-2tb')!,
+      storageDevices.find(c => c.id === 'ssd-nvme-1tb')!,
+      cases.find(c => c.id === 'case-atx-meshify')!,
+      coolers.find(c => c.id === 'cooler-nhd15')!,
+      coolers.find(c => c.id === 'cooler-h100i')!,
+    ],
+    hints: [
+      'RTX 4070 und 4080 haben den neuesten NVENC Encoder',
+      'Der i7-12700K mit 12 Kernen ist ideal fürs Streaming',
+      'Viel schneller Speicher ist für Video-Editing wichtig'
+    ],
+    xpReward: 100
   }
 ];
 
