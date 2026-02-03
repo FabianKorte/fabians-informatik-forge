@@ -14,7 +14,7 @@ import { getAllModules } from "@/lib/learnContentUtils";
 import { useKeyboardNavigation } from "@/hooks/useKeyboardNavigation";
 import { logger } from "@/lib/logger";
 import type { Category } from "@/data/categories";
-import { Sparkles, GraduationCap, ArrowRight, Network, GitBranch, Layers, Database, Calculator, Cpu } from "lucide-react";
+import { Sparkles, GraduationCap, ArrowRight, Network, GitBranch, Layers, Database, Calculator, Cpu, Workflow } from "lucide-react";
 import type { LearnModule } from "@/types/learn";
 
 
@@ -357,6 +357,33 @@ const Index = () => {
             >
               <Cpu className="w-5 h-5 mr-2" />
               Hardware-Puzzle starten
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Struktogramm-Builder - Prominent */}
+      <section className="py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-lime-500/10 via-green-500/5 to-emerald-500/10 backdrop-blur-sm">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-6 sm:mb-8">
+            <div className="inline-flex items-center gap-2 mb-3 sm:mb-4">
+              <Workflow className="w-4 h-4 sm:w-6 sm:h-6 text-lime-500" />
+              <h2 className="text-xl sm:text-3xl font-medium text-foreground">Struktogramm-Builder</h2>
+              <Workflow className="w-4 h-4 sm:w-6 sm:h-6 text-green-500" />
+            </div>
+            <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-8 px-4">
+              Erstelle Nassi-Shneiderman-Diagramme: Visualisiere Algorithmen mit Sequenzen, Verzweigungen und Schleifen
+            </p>
+          </div>
+          <div className="flex justify-center">
+            <Button 
+              onClick={() => navigate('/struktogramm')}
+              size="lg"
+              className="bg-gradient-to-r from-lime-500 to-green-500 hover:opacity-90 text-white font-medium"
+            >
+              <Workflow className="w-5 h-5 mr-2" />
+              Struktogramm erstellen
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </div>

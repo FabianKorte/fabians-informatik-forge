@@ -47,6 +47,7 @@ const OSIModelPage = lazy(() => import("./pages/OSIModel"));
 const SQLSandboxPage = lazy(() => import("./pages/SQLSandbox"));
 const SubnettingChallengePage = lazy(() => import("./pages/SubnettingChallenge"));
 const HardwarePuzzlePage = lazy(() => import("./pages/HardwarePuzzle"));
+const StruktogrammPage = lazy(() => import("./pages/Struktogramm"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -112,6 +113,7 @@ const AppRoutes = () => {
             <Route path="/sql-sandbox" element={<SQLSandboxPage />} />
             <Route path="/subnetting" element={<SubnettingChallengePage />} />
             <Route path="/hardware-puzzle" element={<HardwarePuzzlePage />} />
+            <Route path="/struktogramm" element={<StruktogrammPage />} />
             <Route path="/chat" element={
               <ChatErrorBoundary>
                 <Chat />
