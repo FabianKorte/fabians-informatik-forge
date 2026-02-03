@@ -2,8 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { 
   CommunicationState, 
   CommunicationScenario,
-  CommunicationExercise,
-  EarType
+  CommunicationExercise
 } from '@/types/communication';
 import { communicationScenarios, getExercisesForScenario } from '@/data/communicationScenarios';
 import { useGamification } from '@/hooks/useGamification';

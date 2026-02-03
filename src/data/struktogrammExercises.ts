@@ -340,6 +340,226 @@ export const struktogrammScenarios: StruktogrammScenario[] = [
         ])
       }
     ]
+  },
+  // Neue Algorithmen-Szenarien
+  {
+    id: 'such-algorithmen',
+    title: 'Such-Algorithmen',
+    description: 'Lineare und binäre Suche',
+    difficulty: 'experte',
+    xpReward: 180,
+    exercises: [
+      {
+        id: 'ex11-lineare-suche',
+        title: 'Lineare Suche',
+        description: 'Durchsuche ein Array sequentiell nach einem Element.',
+        difficulty: 'fortgeschritten',
+        xpReward: 35,
+        task: 'Suche einen Wert in einem unsortierten Array und gib die Position aus (-1 wenn nicht gefunden).',
+        hints: [
+          'Durchlaufe das Array von Anfang bis Ende',
+          'Vergleiche jedes Element mit dem Suchwert',
+          'Breche ab, wenn gefunden'
+        ],
+        category: 'algorithmus',
+        solution: createSolution('sol11', 'Lineare Suche', [
+          { id: 'b1', type: 'input', variable: 'n', prompt: 'Array-Länge:' },
+          { id: 'b2', type: 'sequence', content: 'Array A[0..n-1] einlesen' },
+          { id: 'b3', type: 'input', variable: 'suchwert', prompt: 'Suchwert:' },
+          { id: 'b4', type: 'sequence', content: 'position = -1' },
+          { id: 'b5', type: 'sequence', content: 'i = 0' },
+          { 
+            id: 'b6', 
+            type: 'while', 
+            condition: 'i < n AND position == -1',
+            body: [
+              {
+                id: 'b7',
+                type: 'if',
+                condition: 'A[i] == suchwert',
+                thenBranch: [{ id: 'b8', type: 'sequence', content: 'position = i' }],
+                elseBranch: []
+              },
+              { id: 'b9', type: 'sequence', content: 'i = i + 1' }
+            ]
+          },
+          { id: 'b10', type: 'output', content: 'position' }
+        ])
+      },
+      {
+        id: 'ex12-binaere-suche',
+        title: 'Binäre Suche',
+        description: 'Effiziente Suche in einem sortierten Array.',
+        difficulty: 'experte',
+        xpReward: 55,
+        task: 'Suche einen Wert in einem sortierten Array durch Halbierung des Suchbereichs.',
+        hints: [
+          'Setze links = 0, rechts = n-1',
+          'Berechne mitte = (links + rechts) / 2',
+          'Vergleiche und halbiere den Suchbereich'
+        ],
+        category: 'algorithmus',
+        solution: createSolution('sol12', 'Binäre Suche', [
+          { id: 'b1', type: 'input', variable: 'n', prompt: 'Array-Länge:' },
+          { id: 'b2', type: 'sequence', content: 'Sortiertes Array A[0..n-1] einlesen' },
+          { id: 'b3', type: 'input', variable: 'suchwert', prompt: 'Suchwert:' },
+          { id: 'b4', type: 'sequence', content: 'links = 0' },
+          { id: 'b5', type: 'sequence', content: 'rechts = n - 1' },
+          { id: 'b6', type: 'sequence', content: 'gefunden = false' },
+          { 
+            id: 'b7', 
+            type: 'while', 
+            condition: 'links <= rechts AND NOT gefunden',
+            body: [
+              { id: 'b8', type: 'sequence', content: 'mitte = (links + rechts) / 2' },
+              {
+                id: 'b9',
+                type: 'if',
+                condition: 'A[mitte] == suchwert',
+                thenBranch: [{ id: 'b10', type: 'sequence', content: 'gefunden = true' }],
+                elseBranch: [
+                  {
+                    id: 'b11',
+                    type: 'if',
+                    condition: 'A[mitte] < suchwert',
+                    thenBranch: [{ id: 'b12', type: 'sequence', content: 'links = mitte + 1' }],
+                    elseBranch: [{ id: 'b13', type: 'sequence', content: 'rechts = mitte - 1' }]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            id: 'b14',
+            type: 'if',
+            condition: 'gefunden',
+            thenBranch: [{ id: 'b15', type: 'output', content: 'mitte' }],
+            elseBranch: [{ id: 'b16', type: 'output', content: '-1 (nicht gefunden)' }]
+          }
+        ])
+      }
+    ]
+  },
+  {
+    id: 'rekursion',
+    title: 'Rekursive Algorithmen',
+    description: 'Fibonacci, Palindrom und mehr',
+    difficulty: 'experte',
+    xpReward: 200,
+    exercises: [
+      {
+        id: 'ex13-fibonacci',
+        title: 'Fibonacci-Folge',
+        description: 'Berechne die n-te Fibonacci-Zahl iterativ.',
+        difficulty: 'fortgeschritten',
+        xpReward: 40,
+        task: 'Berechne die n-te Fibonacci-Zahl: F(0)=0, F(1)=1, F(n)=F(n-1)+F(n-2)',
+        hints: [
+          'Speichere die letzten zwei Werte',
+          'Iteriere von 2 bis n',
+          'Aktualisiere die Werte in jedem Schritt'
+        ],
+        category: 'algorithmus',
+        solution: createSolution('sol13', 'Fibonacci', [
+          { id: 'b1', type: 'input', variable: 'n', prompt: 'n-te Fibonacci-Zahl:' },
+          {
+            id: 'b2',
+            type: 'if',
+            condition: 'n <= 1',
+            thenBranch: [{ id: 'b3', type: 'output', content: 'n' }],
+            elseBranch: [
+              { id: 'b4', type: 'sequence', content: 'a = 0' },
+              { id: 'b5', type: 'sequence', content: 'b = 1' },
+              { 
+                id: 'b6', 
+                type: 'for', 
+                variable: 'i',
+                start: '2',
+                end: 'n',
+                body: [
+                  { id: 'b7', type: 'sequence', content: 'temp = a + b' },
+                  { id: 'b8', type: 'sequence', content: 'a = b' },
+                  { id: 'b9', type: 'sequence', content: 'b = temp' }
+                ]
+              },
+              { id: 'b10', type: 'output', content: 'b' }
+            ]
+          }
+        ])
+      },
+      {
+        id: 'ex14-palindrom',
+        title: 'Palindrom-Prüfung',
+        description: 'Prüfe, ob ein Wort ein Palindrom ist.',
+        difficulty: 'fortgeschritten',
+        xpReward: 40,
+        task: 'Ein Palindrom liest sich vorwärts und rückwärts gleich (z.B. "ANNA").',
+        hints: [
+          'Vergleiche Zeichen von außen nach innen',
+          'links = 0, rechts = Länge-1',
+          'Abbruch wenn links >= rechts oder ungleich'
+        ],
+        category: 'algorithmus',
+        solution: createSolution('sol14', 'Palindrom', [
+          { id: 'b1', type: 'input', variable: 'wort', prompt: 'Wort eingeben:' },
+          { id: 'b2', type: 'sequence', content: 'n = Länge(wort)' },
+          { id: 'b3', type: 'sequence', content: 'links = 0' },
+          { id: 'b4', type: 'sequence', content: 'rechts = n - 1' },
+          { id: 'b5', type: 'sequence', content: 'istPalindrom = true' },
+          { 
+            id: 'b6', 
+            type: 'while', 
+            condition: 'links < rechts AND istPalindrom',
+            body: [
+              {
+                id: 'b7',
+                type: 'if',
+                condition: 'wort[links] != wort[rechts]',
+                thenBranch: [{ id: 'b8', type: 'sequence', content: 'istPalindrom = false' }],
+                elseBranch: []
+              },
+              { id: 'b9', type: 'sequence', content: 'links = links + 1' },
+              { id: 'b10', type: 'sequence', content: 'rechts = rechts - 1' }
+            ]
+          },
+          {
+            id: 'b11',
+            type: 'if',
+            condition: 'istPalindrom',
+            thenBranch: [{ id: 'b12', type: 'output', content: '"ist Palindrom"' }],
+            elseBranch: [{ id: 'b13', type: 'output', content: '"kein Palindrom"' }]
+          }
+        ])
+      },
+      {
+        id: 'ex15-quersumme',
+        title: 'Quersumme berechnen',
+        description: 'Berechne die Quersumme einer Zahl.',
+        difficulty: 'anfaenger',
+        xpReward: 25,
+        task: 'Die Quersumme ist die Summe aller Ziffern einer Zahl (z.B. 123 → 1+2+3 = 6).',
+        hints: [
+          'Nutze Modulo 10 für die letzte Ziffer',
+          'Teile durch 10 um die letzte Ziffer zu entfernen',
+          'Wiederhole bis die Zahl 0 ist'
+        ],
+        category: 'algorithmus',
+        solution: createSolution('sol15', 'Quersumme', [
+          { id: 'b1', type: 'input', variable: 'zahl', prompt: 'Zahl eingeben:' },
+          { id: 'b2', type: 'sequence', content: 'summe = 0' },
+          { 
+            id: 'b3', 
+            type: 'while', 
+            condition: 'zahl > 0',
+            body: [
+              { id: 'b4', type: 'sequence', content: 'summe = summe + (zahl % 10)' },
+              { id: 'b5', type: 'sequence', content: 'zahl = zahl / 10' }
+            ]
+          },
+          { id: 'b6', type: 'output', content: 'summe' }
+        ])
+      }
+    ]
   }
 ];
 
