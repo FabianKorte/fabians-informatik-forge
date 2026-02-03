@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Home, BookOpen, TrendingUp, User, MessageSquare, Users, Shield, Download, MapPin, LogIn, LogOut, Menu, FileText, Activity, ChevronDown, ChevronRight, AlertCircle, BarChart3, GraduationCap, Network, GitBranch, Layers, Database, Calculator, Cpu } from "lucide-react";
+import { Home, BookOpen, TrendingUp, User, MessageSquare, Users, Shield, Download, MapPin, LogIn, LogOut, Menu, FileText, Activity, ChevronDown, ChevronRight, AlertCircle, BarChart3, GraduationCap, Network, GitBranch, Layers, Database, Calculator, Cpu, Workflow } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useAdminCounts } from "@/hooks/useAdminCounts";
@@ -29,6 +29,7 @@ const mainItems = [
   { title: "OSI-Modell", url: "/osi-model", icon: Layers },
   { title: "Subnetting-Challenge", url: "/subnetting", icon: Calculator },
   { title: "Hardware-Puzzle", url: "/hardware-puzzle", icon: Cpu },
+  { title: "Struktogramm-Builder", url: "/struktogramm", icon: Workflow },
   { title: "Netzplantechnik (CPM)", url: "/cpm-tool", icon: GitBranch },
   { title: "SQL-Sandbox", url: "/sql-sandbox", icon: Database },
   { title: "Fortschritt", url: "/progress", icon: TrendingUp },
