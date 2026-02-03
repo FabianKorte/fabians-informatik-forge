@@ -49,6 +49,7 @@ const SubnettingChallengePage = lazy(() => import("./pages/SubnettingChallenge")
 const HardwarePuzzlePage = lazy(() => import("./pages/HardwarePuzzle"));
 const StruktogrammPage = lazy(() => import("./pages/Struktogramm"));
 const BitCalculatorPage = lazy(() => import("./pages/BitCalculator"));
+const CommunicationTrainerPage = lazy(() => import("./pages/CommunicationTrainer"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -116,6 +117,7 @@ const AppRoutes = () => {
             <Route path="/hardware-puzzle" element={<HardwarePuzzlePage />} />
             <Route path="/struktogramm" element={<StruktogrammPage />} />
             <Route path="/bit-calculator" element={<BitCalculatorPage />} />
+            <Route path="/communication-trainer" element={<CommunicationTrainerPage />} />
             <Route path="/chat" element={
               <ChatErrorBoundary>
                 <Chat />
