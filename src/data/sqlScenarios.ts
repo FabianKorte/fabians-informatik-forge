@@ -373,6 +373,136 @@ const personalExercises: SQLExercise[] = [
   },
 ];
 
+// ER-Model 3: Bibliotheksdatenbank
+const bibliothekModel: ERModel = {
+  id: 'bibliothek',
+  name: 'Bibliotheks-Datenbank',
+  description: 'Verwaltung von Büchern, Mitgliedern und Ausleihen',
+  tables: [
+    {
+      name: 'buecher',
+      columns: [
+        { name: 'buch_id', type: 'INT', primaryKey: true },
+        { name: 'titel', type: 'VARCHAR' },
+        { name: 'autor', type: 'VARCHAR' },
+        { name: 'isbn', type: 'VARCHAR' },
+        { name: 'erscheinungsjahr', type: 'INT' },
+        { name: 'verfuegbar', type: 'BOOLEAN' },
+      ],
+      data: [
+        { buch_id: 1, titel: 'Clean Code', autor: 'Robert C. Martin', isbn: '978-0132350884', erscheinungsjahr: 2008, verfuegbar: true },
+        { buch_id: 2, titel: 'Design Patterns', autor: 'Gang of Four', isbn: '978-0201633610', erscheinungsjahr: 1994, verfuegbar: false },
+        { buch_id: 3, titel: 'The Pragmatic Programmer', autor: 'David Thomas', isbn: '978-0135957059', erscheinungsjahr: 2019, verfuegbar: true },
+        { buch_id: 4, titel: 'Refactoring', autor: 'Martin Fowler', isbn: '978-0134757599', erscheinungsjahr: 2018, verfuegbar: true },
+        { buch_id: 5, titel: 'Code Complete', autor: 'Steve McConnell', isbn: '978-0735619678', erscheinungsjahr: 2004, verfuegbar: false },
+      ],
+    },
+    {
+      name: 'mitglieder',
+      columns: [
+        { name: 'mitglied_id', type: 'INT', primaryKey: true },
+        { name: 'name', type: 'VARCHAR' },
+        { name: 'email', type: 'VARCHAR' },
+        { name: 'mitglied_seit', type: 'DATE' },
+        { name: 'status', type: 'VARCHAR' },
+      ],
+      data: [
+        { mitglied_id: 1, name: 'Max Mustermann', email: 'max@example.de', mitglied_seit: '2022-01-15', status: 'aktiv' },
+        { mitglied_id: 2, name: 'Lisa Weber', email: 'lisa@example.de', mitglied_seit: '2023-03-20', status: 'aktiv' },
+        { mitglied_id: 3, name: 'Tom Schmidt', email: 'tom@example.de', mitglied_seit: '2021-06-01', status: 'gesperrt' },
+      ],
+    },
+    {
+      name: 'ausleihen',
+      columns: [
+        { name: 'ausleihe_id', type: 'INT', primaryKey: true },
+        { name: 'buch_id', type: 'INT', foreignKey: { table: 'buecher', column: 'buch_id' } },
+        { name: 'mitglied_id', type: 'INT', foreignKey: { table: 'mitglieder', column: 'mitglied_id' } },
+        { name: 'ausleihdatum', type: 'DATE' },
+        { name: 'rueckgabedatum', type: 'DATE' },
+      ],
+      data: [
+        { ausleihe_id: 1, buch_id: 2, mitglied_id: 1, ausleihdatum: '2024-03-01', rueckgabedatum: null },
+        { ausleihe_id: 2, buch_id: 5, mitglied_id: 2, ausleihdatum: '2024-03-10', rueckgabedatum: null },
+        { ausleihe_id: 3, buch_id: 1, mitglied_id: 1, ausleihdatum: '2024-02-01', rueckgabedatum: '2024-02-28' },
+      ],
+    },
+  ],
+};
+
+// Exercises für Bibliothek
+const bibliothekExercises: SQLExercise[] = [
+  {
+    id: 'bib-1',
+    title: 'Verfügbare Bücher',
+    description: 'Zeige alle aktuell verfügbaren Bücher an.',
+    difficulty: 'beginner',
+    erModelId: 'bibliothek',
+    hint: 'WHERE verfuegbar = true',
+    expectedQuery: 'SELECT * FROM buecher WHERE verfuegbar = true',
+    expectedResultCheck: (result) => result.length === 3 && result.every(r => r.verfuegbar === true),
+    xpReward: 10,
+  },
+  {
+    id: 'bib-2',
+    title: 'Bücher eines Autors',
+    description: 'Finde alle Bücher von Robert C. Martin.',
+    difficulty: 'beginner',
+    erModelId: 'bibliothek',
+    hint: 'WHERE autor = \'Robert C. Martin\'',
+    expectedQuery: 'SELECT * FROM buecher WHERE autor = \'Robert C. Martin\'',
+    expectedResultCheck: (result) => result.length === 1,
+    xpReward: 10,
+  },
+  {
+    id: 'bib-3',
+    title: 'Aktive Ausleihen mit JOIN',
+    description: 'Zeige alle aktiven Ausleihen mit Buchtitel und Mitgliedsname.',
+    difficulty: 'advanced',
+    erModelId: 'bibliothek',
+    theory: `## Mehrere JOINs verbinden
+    
+\`\`\`sql
+SELECT * FROM tabelle1
+JOIN tabelle2 ON tabelle1.fk = tabelle2.pk
+JOIN tabelle3 ON tabelle2.fk = tabelle3.pk;
+\`\`\``,
+    hint: 'JOIN buecher und mitglieder über ausleihen',
+    expectedQuery: 'SELECT * FROM ausleihen JOIN buecher ON ausleihen.buch_id = buecher.buch_id JOIN mitglieder ON ausleihen.mitglied_id = mitglieder.mitglied_id WHERE rueckgabedatum IS NULL',
+    expectedResultCheck: (result) => result.length === 2 && 'titel' in result[0] && 'name' in result[0],
+    xpReward: 35,
+  },
+  {
+    id: 'bib-4',
+    title: 'NULL-Werte finden',
+    description: 'Finde alle noch nicht zurückgegebenen Ausleihen.',
+    difficulty: 'intermediate',
+    erModelId: 'bibliothek',
+    theory: `## IS NULL / IS NOT NULL
+    
+Prüfe auf fehlende Werte:
+\`\`\`sql
+WHERE spalte IS NULL      -- Wert fehlt
+WHERE spalte IS NOT NULL  -- Wert vorhanden
+\`\`\``,
+    hint: 'WHERE rueckgabedatum IS NULL',
+    expectedQuery: 'SELECT * FROM ausleihen WHERE rueckgabedatum IS NULL',
+    expectedResultCheck: (result) => result.length === 2,
+    xpReward: 20,
+  },
+  {
+    id: 'bib-5',
+    title: 'Neuere Bücher',
+    description: 'Zeige alle Bücher, die nach 2010 erschienen sind.',
+    difficulty: 'beginner',
+    erModelId: 'bibliothek',
+    hint: 'WHERE erscheinungsjahr > 2010',
+    expectedQuery: 'SELECT * FROM buecher WHERE erscheinungsjahr > 2010',
+    expectedResultCheck: (result) => result.length === 2 && result.every(r => Number(r.erscheinungsjahr) > 2010),
+    xpReward: 10,
+  },
+];
+
 // Scenarios
 export const sqlScenarios: SQLScenario[] = [
   {
@@ -388,6 +518,13 @@ export const sqlScenarios: SQLScenario[] = [
     description: 'Fortgeschrittene Abfragen mit Mitarbeiter-, Abteilungs- und Projektdaten.',
     erModel: personalModel,
     exercises: personalExercises,
+  },
+  {
+    id: 'scenario-bibliothek',
+    title: 'Bibliotheksverwaltung',
+    description: 'Übe JOINs und NULL-Handling mit Büchern, Mitgliedern und Ausleihen.',
+    erModel: bibliothekModel,
+    exercises: bibliothekExercises,
   },
 ];
 
