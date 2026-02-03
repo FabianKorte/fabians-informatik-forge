@@ -46,6 +46,7 @@ const CPMToolPage = lazy(() => import("./pages/CPMTool"));
 const OSIModelPage = lazy(() => import("./pages/OSIModel"));
 const SQLSandboxPage = lazy(() => import("./pages/SQLSandbox"));
 const SubnettingChallengePage = lazy(() => import("./pages/SubnettingChallenge"));
+const HardwarePuzzlePage = lazy(() => import("./pages/HardwarePuzzle"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -110,6 +111,7 @@ const AppRoutes = () => {
             <Route path="/osi-model" element={<OSIModelPage />} />
             <Route path="/sql-sandbox" element={<SQLSandboxPage />} />
             <Route path="/subnetting" element={<SubnettingChallengePage />} />
+            <Route path="/hardware-puzzle" element={<HardwarePuzzlePage />} />
             <Route path="/chat" element={
               <ChatErrorBoundary>
                 <Chat />
