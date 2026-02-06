@@ -228,9 +228,10 @@ export function useSubnetting() {
       if (!userValue) return false;
       
       if (typeof value === 'number') {
-        if (parseInt(userValue) !== value) return false;
+        const parsed = Number(userValue);
+        if (isNaN(parsed) || parsed !== value) return false;
       } else {
-        if (userValue !== value) return false;
+        if (userValue.toLowerCase() !== String(value).toLowerCase()) return false;
       }
     }
     return true;

@@ -73,7 +73,8 @@ export function useCPMTool() {
         }
         case 'identify-duration': {
           if (objective.target?.requiredValue !== undefined) {
-            isComplete = state.userInputs['projectDuration'] as unknown as number === objective.target.requiredValue;
+            const userDuration = Number(state.userInputs['projectDuration']);
+            isComplete = !isNaN(userDuration) && userDuration === objective.target.requiredValue;
           }
           break;
         }
