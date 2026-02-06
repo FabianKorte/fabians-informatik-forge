@@ -15,6 +15,7 @@ import { useKeyboardNavigation } from "@/hooks/useKeyboardNavigation";
 import { logger } from "@/lib/logger";
 import type { Category } from "@/data/categories";
 import { Sparkles, GraduationCap, ArrowRight, Network, GitBranch, Layers, Database, Calculator, Cpu, Workflow, Binary, Ear } from "lucide-react";
+
 import type { LearnModule } from "@/types/learn";
 
 
@@ -201,245 +202,42 @@ const Index = () => {
         </section>
       )}
 
-      {/* Netzwerk-Simulator - Prominent */}
-      <section className="py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-blue-500/10 via-cyan-500/5 to-primary/10 backdrop-blur-sm">
+      {/* Interaktive Werkzeuge - Kompakte Grid-Übersicht */}
+      <section className="py-8 sm:py-16 px-4 sm:px-6 bg-muted/20 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-6 sm:mb-8">
-            <div className="inline-flex items-center gap-2 mb-3 sm:mb-4">
-              <Network className="w-4 h-4 sm:w-6 sm:h-6 text-blue-500" />
-              <h2 className="text-xl sm:text-3xl font-medium text-foreground">Netzwerk-Simulator</h2>
-              <Network className="w-4 h-4 sm:w-6 sm:h-6 text-cyan-500" />
-            </div>
-            <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-8 px-4">
-              Interaktive Netzwerk-Topologien erstellen, Routing konfigurieren und Paketfluss simulieren
+          <div className="text-center mb-6 sm:mb-10">
+            <h2 className="text-2xl sm:text-3xl font-medium text-foreground mb-2 sm:mb-3">Interaktive Werkzeuge</h2>
+            <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto">
+              Spezialisierte Trainer und Simulatoren für praxisnahes Lernen
             </p>
           </div>
-          <div className="flex justify-center">
-            <Button 
-              onClick={() => navigate('/network-simulator')}
-              size="lg"
-              className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:opacity-90 text-white font-medium"
-            >
-              <Network className="w-5 h-5 mr-2" />
-              Netzwerk-Simulator öffnen
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Netzplantechnik (CPM) - Prominent */}
-      <section className="py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-violet-500/10 via-purple-500/5 to-primary/10 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-6 sm:mb-8">
-            <div className="inline-flex items-center gap-2 mb-3 sm:mb-4">
-              <GitBranch className="w-4 h-4 sm:w-6 sm:h-6 text-violet-500" />
-              <h2 className="text-xl sm:text-3xl font-medium text-foreground">Netzplantechnik (CPM)</h2>
-              <GitBranch className="w-4 h-4 sm:w-6 sm:h-6 text-purple-500" />
-            </div>
-            <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-8 px-4">
-              Lerne die Critical Path Method: FAZ, FEZ, SAZ, SEZ berechnen und den kritischen Pfad identifizieren
-            </p>
-          </div>
-          <div className="flex justify-center">
-            <Button 
-              onClick={() => navigate('/cpm-tool')}
-              size="lg"
-              className="bg-gradient-to-r from-violet-500 to-purple-500 hover:opacity-90 text-white font-medium"
-            >
-              <GitBranch className="w-5 h-5 mr-2" />
-              Netzplantechnik üben
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* OSI-Modell - Prominent */}
-      <section className="py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-pink-500/10 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-6 sm:mb-8">
-            <div className="inline-flex items-center gap-2 mb-3 sm:mb-4">
-              <Layers className="w-4 h-4 sm:w-6 sm:h-6 text-indigo-500" />
-              <h2 className="text-xl sm:text-3xl font-medium text-foreground">OSI-Modell</h2>
-              <Layers className="w-4 h-4 sm:w-6 sm:h-6 text-pink-500" />
-            </div>
-            <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-8 px-4">
-              Interaktiver Drag-and-Drop Stack: Ordne Protokolle (TCP, HTTP, IP) und Hardware (Switch, Router) den korrekten OSI-Schichten zu
-            </p>
-          </div>
-          <div className="flex justify-center">
-            <Button 
-              onClick={() => navigate('/osi-model')}
-              size="lg"
-              className="bg-gradient-to-r from-indigo-500 to-pink-500 hover:opacity-90 text-white font-medium"
-            >
-              <Layers className="w-5 h-5 mr-2" />
-              OSI-Modell lernen
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* SQL-Sandbox - Prominent */}
-      <section className="py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-emerald-500/10 via-teal-500/5 to-cyan-500/10 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-6 sm:mb-8">
-            <div className="inline-flex items-center gap-2 mb-3 sm:mb-4">
-              <Database className="w-4 h-4 sm:w-6 sm:h-6 text-emerald-500" />
-              <h2 className="text-xl sm:text-3xl font-medium text-foreground">SQL-Sandbox</h2>
-              <Database className="w-4 h-4 sm:w-6 sm:h-6 text-teal-500" />
-            </div>
-            <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-8 px-4">
-              Interaktiver SQL-Editor mit echten Datenbankstrukturen: SELECT, WHERE, JOIN und mehr mit sofortigem Feedback
-            </p>
-          </div>
-          <div className="flex justify-center">
-            <Button 
-              onClick={() => navigate('/sql-sandbox')}
-              size="lg"
-              className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:opacity-90 text-white font-medium"
-            >
-              <Database className="w-5 h-5 mr-2" />
-              SQL-Sandbox öffnen
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Subnetting-Challenge - Prominent */}
-      <section className="py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-orange-500/10 via-amber-500/5 to-yellow-500/10 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-6 sm:mb-8">
-            <div className="inline-flex items-center gap-2 mb-3 sm:mb-4">
-              <Calculator className="w-4 h-4 sm:w-6 sm:h-6 text-orange-500" />
-              <h2 className="text-xl sm:text-3xl font-medium text-foreground">Subnetting-Challenge</h2>
-              <Calculator className="w-4 h-4 sm:w-6 sm:h-6 text-amber-500" />
-            </div>
-            <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-8 px-4">
-              Trainiere Subnetzmasken, Netzwerkadressen und Host-Berechnungen unter Zeitdruck – IHK-Prüfungsniveau
-            </p>
-          </div>
-          <div className="flex justify-center">
-            <Button 
-              onClick={() => navigate('/subnetting')}
-              size="lg"
-              className="bg-gradient-to-r from-orange-500 to-amber-500 hover:opacity-90 text-white font-medium"
-            >
-              <Calculator className="w-5 h-5 mr-2" />
-              Subnetting üben
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Hardware-Puzzle - Prominent */}
-      <section className="py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-rose-500/10 via-red-500/5 to-orange-500/10 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-6 sm:mb-8">
-            <div className="inline-flex items-center gap-2 mb-3 sm:mb-4">
-              <Cpu className="w-4 h-4 sm:w-6 sm:h-6 text-rose-500" />
-              <h2 className="text-xl sm:text-3xl font-medium text-foreground">Hardware-Puzzle</h2>
-              <Cpu className="w-4 h-4 sm:w-6 sm:h-6 text-red-500" />
-            </div>
-            <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-8 px-4">
-              Virtueller PC-Zusammenbau: Wähle kompatible Komponenten (CPU, Mainboard, RAM, GPU) und lerne Hardware-Grundlagen
-            </p>
-          </div>
-          <div className="flex justify-center">
-            <Button 
-              onClick={() => navigate('/hardware-puzzle')}
-              size="lg"
-              className="bg-gradient-to-r from-rose-500 to-red-500 hover:opacity-90 text-white font-medium"
-            >
-              <Cpu className="w-5 h-5 mr-2" />
-              Hardware-Puzzle starten
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Struktogramm-Builder - Prominent */}
-      <section className="py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-lime-500/10 via-green-500/5 to-emerald-500/10 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-6 sm:mb-8">
-            <div className="inline-flex items-center gap-2 mb-3 sm:mb-4">
-              <Workflow className="w-4 h-4 sm:w-6 sm:h-6 text-lime-500" />
-              <h2 className="text-xl sm:text-3xl font-medium text-foreground">Struktogramm-Builder</h2>
-              <Workflow className="w-4 h-4 sm:w-6 sm:h-6 text-green-500" />
-            </div>
-            <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-8 px-4">
-              Erstelle Nassi-Shneiderman-Diagramme: Visualisiere Algorithmen mit Sequenzen, Verzweigungen und Schleifen
-            </p>
-          </div>
-          <div className="flex justify-center">
-            <Button 
-              onClick={() => navigate('/struktogramm')}
-              size="lg"
-              className="bg-gradient-to-r from-lime-500 to-green-500 hover:opacity-90 text-white font-medium"
-            >
-              <Workflow className="w-5 h-5 mr-2" />
-              Struktogramm erstellen
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Bit-/Byte-Rechner - Prominent */}
-      <section className="py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-sky-500/10 via-blue-500/5 to-indigo-500/10 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-6 sm:mb-8">
-            <div className="inline-flex items-center gap-2 mb-3 sm:mb-4">
-              <Binary className="w-4 h-4 sm:w-6 sm:h-6 text-sky-500" />
-              <h2 className="text-xl sm:text-3xl font-medium text-foreground">Bit-/Byte-Rechner</h2>
-              <Binary className="w-4 h-4 sm:w-6 sm:h-6 text-blue-500" />
-            </div>
-            <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-8 px-4">
-              Konvertiere zwischen Binär, Dezimal und Hex. Führe bitweise Operationen durch und rechne Speichergrößen um
-            </p>
-          </div>
-          <div className="flex justify-center">
-            <Button 
-              onClick={() => navigate('/bit-calculator')}
-              size="lg"
-              className="bg-gradient-to-r from-sky-500 to-blue-500 hover:opacity-90 text-white font-medium"
-            >
-              <Binary className="w-5 h-5 mr-2" />
-              Bit-Rechner öffnen
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Kommunikationstrainer - Prominent */}
-      <section className="py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-fuchsia-500/10 via-pink-500/5 to-purple-500/10 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-6 sm:mb-8">
-            <div className="inline-flex items-center gap-2 mb-3 sm:mb-4">
-              <Ear className="w-4 h-4 sm:w-6 sm:h-6 text-fuchsia-500" />
-              <h2 className="text-xl sm:text-3xl font-medium text-foreground">Kommunikationstrainer</h2>
-              <Ear className="w-4 h-4 sm:w-6 sm:h-6 text-pink-500" />
-            </div>
-            <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-8 px-4">
-              Lerne das 4-Ohren-Modell nach Schulz von Thun: Verstehe Sachinhalt, Selbstkundgabe, Beziehung und Appell
-            </p>
-          </div>
-          <div className="flex justify-center">
-            <Button 
-              onClick={() => navigate('/communication-trainer')}
-              size="lg"
-              className="bg-gradient-to-r from-fuchsia-500 to-pink-500 hover:opacity-90 text-white font-medium"
-            >
-              <Ear className="w-5 h-5 mr-2" />
-              Kommunikation trainieren
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            {[
+              { icon: Network, title: "Netzwerk-Simulator", desc: "Topologien erstellen & Routing simulieren", route: "/network-simulator", category: "netzwerktechnik" },
+              { icon: GitBranch, title: "Netzplantechnik (CPM)", desc: "Kritischen Pfad berechnen & Puffer analysieren", route: "/cpm-tool", category: "projektmanagement" },
+              { icon: Layers, title: "OSI-Modell", desc: "Protokolle den 7 Schichten zuordnen", route: "/osi-model", category: "netzwerktechnik" },
+              { icon: Database, title: "SQL-Sandbox", desc: "SQL-Abfragen mit sofortigem Feedback üben", route: "/sql-sandbox", category: "datenbanken" },
+              { icon: Calculator, title: "Subnetting-Challenge", desc: "Subnetzmasken & Netzadressen berechnen", route: "/subnetting", category: "netzwerktechnik" },
+              { icon: Cpu, title: "Hardware-Puzzle", desc: "Kompatible PC-Komponenten zusammenbauen", route: "/hardware-puzzle", category: "grundlagen-it" },
+              { icon: Workflow, title: "Struktogramm-Builder", desc: "Nassi-Shneiderman-Diagramme erstellen", route: "/struktogramm", category: "fachmodul-anwendungsentwicklung" },
+              { icon: Binary, title: "Bit-/Byte-Rechner", desc: "Zahlensysteme konvertieren & Bitoperationen", route: "/bit-calculator", category: "digitaltechnik" },
+              { icon: Ear, title: "Kommunikationstrainer", desc: "4-Ohren-Modell nach Schulz von Thun", route: "/communication-trainer", category: "kommunikation" },
+            ].map(tool => (
+              <button
+                key={tool.route}
+                onClick={() => navigate(tool.route)}
+                className="group flex items-start gap-4 p-4 sm:p-5 bg-card border border-border rounded-xl text-left hover:border-primary/40 hover:shadow-md transition-all duration-200"
+              >
+                <div className="shrink-0 p-2.5 rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
+                  <tool.icon className="w-5 h-5" />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-medium text-foreground text-sm sm:text-base mb-1">{tool.title}</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-snug">{tool.desc}</p>
+                  <span className="inline-block mt-2 text-xs text-primary/70 capitalize">{tool.category.replace(/-/g, ' ')}</span>
+                </div>
+              </button>
+            ))}
           </div>
         </div>
       </section>
