@@ -1,9 +1,16 @@
 import { memo } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Card } from "@/components/ui/card";
 import { GradientShadowCard } from "@/components/ui/gradient-shadow-card";
 import { LucideIcon, ArrowRight } from "lucide-react";
+
+export interface CategoryTool {
+  icon: LucideIcon;
+  title: string;
+  route: string;
+}
 
 interface CategoryCardProps {
   title: string;
@@ -13,6 +20,7 @@ interface CategoryCardProps {
   icon: LucideIcon;
   difficulty?: "Anfänger" | "Fortgeschritten" | "Experte";
   onStart: () => void;
+  tools?: CategoryTool[];
 }
 
 const CategoryCardComponent = ({
@@ -23,7 +31,9 @@ const CategoryCardComponent = ({
   icon: Icon,
   difficulty = "Anfänger",
   onStart,
+  tools,
 }: CategoryCardProps) => {
+  const navigate = useNavigate();
   const progress = totalElements > 0 ? (completedElements / totalElements) * 100 : 0;
 
   return (
@@ -38,6 +48,21 @@ const CategoryCardComponent = ({
           <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{description}</p>
         </div>
       </div>
+
+      {tools && tools.length > 0 && (
+        <div className="mb-4 sm:mb-5 flex flex-wrap gap-2">
+          {tools.map(tool => (
+            <button
+              key={tool.route}
+              onClick={(e) => { e.stopPropagation(); navigate(tool.route); }}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors border border-primary/10"
+            >
+              <tool.icon className="w-3 h-3" />
+              {tool.title}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="flex items-center justify-between mb-4 sm:mb-6">
         <div className="flex items-center gap-2 sm:gap-4 text-xs text-muted-foreground">
