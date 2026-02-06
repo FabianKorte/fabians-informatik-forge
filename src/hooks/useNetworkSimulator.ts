@@ -165,40 +165,42 @@ export function useNetworkSimulator() {
   }, []);
 
   const addConnection = useCallback((sourceId: string, targetId: string) => {
-    // Check if connection already exists
-    const exists = state.topology.connections.some(
-      c => (c.sourceId === sourceId && c.targetId === targetId) ||
-           (c.sourceId === targetId && c.targetId === sourceId)
-    );
+    setState(prev => {
+      // Check if connection already exists
+      const exists = prev.topology.connections.some(
+        c => (c.sourceId === sourceId && c.targetId === targetId) ||
+             (c.sourceId === targetId && c.targetId === sourceId)
+      );
 
-    if (exists) {
-      toast({
-        title: "Verbindung existiert bereits",
-        description: "Diese Geräte sind bereits verbunden.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    const newConnection: NetworkConnection = {
-      id: `conn-${Date.now()}`,
-      sourceId,
-      targetId
-    };
-
-    setState(prev => ({
-      ...prev,
-      topology: {
-        ...prev.topology,
-        connections: [...prev.topology.connections, newConnection]
+      if (exists) {
+        toast({
+          title: "Verbindung existiert bereits",
+          description: "Diese Geräte sind bereits verbunden.",
+          variant: "destructive"
+        });
+        return prev;
       }
-    }));
+
+      const newConnection: NetworkConnection = {
+        id: `conn-${Date.now()}`,
+        sourceId,
+        targetId
+      };
+
+      return {
+        ...prev,
+        topology: {
+          ...prev.topology,
+          connections: [...prev.topology.connections, newConnection]
+        }
+      };
+    });
 
     // Schedule objective check after state update
     setTimeout(() => {
       checkObjectivesRef.current?.();
     }, 0);
-  }, [state.topology.connections]);
+  }, [toast]);
 
   const removeConnection = useCallback((connectionId: string) => {
     setState(prev => ({

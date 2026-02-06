@@ -329,7 +329,7 @@ export const challengeSets: ChallengeSet[] = [
     description: 'IHK-Prüfungsniveau: Kombinierte Berechnungen mit unüblichen CIDR-Werten und praxisnahen IP-Adressen.',
     difficulty: 'experte',
     challenges: expertenChallenges,
-    totalPoints: 170,
+    totalPoints: 255,
     timeLimit: 420, // 7 minutes
     passingScore: 70
   }
