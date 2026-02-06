@@ -15,6 +15,34 @@ import { useKeyboardNavigation } from "@/hooks/useKeyboardNavigation";
 import { logger } from "@/lib/logger";
 import type { Category } from "@/data/categories";
 import { Sparkles, GraduationCap, ArrowRight, Network, GitBranch, Layers, Database, Calculator, Cpu, Workflow, Binary, Ear } from "lucide-react";
+import type { CategoryTool } from "@/components/CategoryCard";
+
+// Tools den jeweiligen Kategorien zuordnen
+const categoryToolsMap: Record<string, CategoryTool[]> = {
+  "netzwerktechnik": [
+    { icon: Network, title: "Netzwerk-Simulator", route: "/network-simulator" },
+    { icon: Layers, title: "OSI-Modell", route: "/osi-model" },
+    { icon: Calculator, title: "Subnetting", route: "/subnetting" },
+  ],
+  "projektmanagement": [
+    { icon: GitBranch, title: "Netzplantechnik (CPM)", route: "/cpm-tool" },
+  ],
+  "datenbanken": [
+    { icon: Database, title: "SQL-Sandbox", route: "/sql-sandbox" },
+  ],
+  "grundlagen-it": [
+    { icon: Cpu, title: "Hardware-Puzzle", route: "/hardware-puzzle" },
+  ],
+  "fachmodul-anwendungsentwicklung": [
+    { icon: Workflow, title: "Struktogramm-Builder", route: "/struktogramm" },
+  ],
+  "digitaltechnik": [
+    { icon: Binary, title: "Bit-/Byte-Rechner", route: "/bit-calculator" },
+  ],
+  "kommunikation": [
+    { icon: Ear, title: "Kommunikationstrainer", route: "/communication-trainer" },
+  ],
+};
 
 import type { LearnModule } from "@/types/learn";
 
@@ -202,45 +230,8 @@ const Index = () => {
         </section>
       )}
 
-      {/* Interaktive Werkzeuge - Kompakte Grid-Übersicht */}
-      <section className="py-8 sm:py-16 px-4 sm:px-6 bg-muted/20 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-6 sm:mb-10">
-            <h2 className="text-2xl sm:text-3xl font-medium text-foreground mb-2 sm:mb-3">Interaktive Werkzeuge</h2>
-            <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-              Spezialisierte Trainer und Simulatoren für praxisnahes Lernen
-            </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {[
-              { icon: Network, title: "Netzwerk-Simulator", desc: "Topologien erstellen & Routing simulieren", route: "/network-simulator", category: "netzwerktechnik" },
-              { icon: GitBranch, title: "Netzplantechnik (CPM)", desc: "Kritischen Pfad berechnen & Puffer analysieren", route: "/cpm-tool", category: "projektmanagement" },
-              { icon: Layers, title: "OSI-Modell", desc: "Protokolle den 7 Schichten zuordnen", route: "/osi-model", category: "netzwerktechnik" },
-              { icon: Database, title: "SQL-Sandbox", desc: "SQL-Abfragen mit sofortigem Feedback üben", route: "/sql-sandbox", category: "datenbanken" },
-              { icon: Calculator, title: "Subnetting-Challenge", desc: "Subnetzmasken & Netzadressen berechnen", route: "/subnetting", category: "netzwerktechnik" },
-              { icon: Cpu, title: "Hardware-Puzzle", desc: "Kompatible PC-Komponenten zusammenbauen", route: "/hardware-puzzle", category: "grundlagen-it" },
-              { icon: Workflow, title: "Struktogramm-Builder", desc: "Nassi-Shneiderman-Diagramme erstellen", route: "/struktogramm", category: "fachmodul-anwendungsentwicklung" },
-              { icon: Binary, title: "Bit-/Byte-Rechner", desc: "Zahlensysteme konvertieren & Bitoperationen", route: "/bit-calculator", category: "digitaltechnik" },
-              { icon: Ear, title: "Kommunikationstrainer", desc: "4-Ohren-Modell nach Schulz von Thun", route: "/communication-trainer", category: "kommunikation" },
-            ].map(tool => (
-              <button
-                key={tool.route}
-                onClick={() => navigate(tool.route)}
-                className="group flex items-start gap-4 p-4 sm:p-5 bg-card border border-border rounded-xl text-left hover:border-primary/40 hover:shadow-md transition-all duration-200"
-              >
-                <div className="shrink-0 p-2.5 rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
-                  <tool.icon className="w-5 h-5" />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="font-medium text-foreground text-sm sm:text-base mb-1">{tool.title}</h3>
-                  <p className="text-xs sm:text-sm text-muted-foreground leading-snug">{tool.desc}</p>
-                  <span className="inline-block mt-2 text-xs text-primary/70 capitalize">{tool.category.replace(/-/g, ' ')}</span>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
+
+
 
       {randomTrainingCategory && (
         <section className="py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-primary/5 via-accent/5 to-primary/5 backdrop-blur-sm">
@@ -321,6 +312,7 @@ const Index = () => {
                   icon={category.icon}
                   difficulty={category.difficulty}
                   onStart={() => handleCategoryStart(category.id)}
+                  tools={categoryToolsMap[category.id]}
                 />
               ))}
             </div>
