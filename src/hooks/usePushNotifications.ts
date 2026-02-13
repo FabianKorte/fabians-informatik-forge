@@ -44,7 +44,7 @@ export const usePushNotifications = () => {
       const registration = await navigator.serviceWorker.ready;
       
       // Check if already subscribed
-      let sub = await registration.pushManager.getSubscription();
+      let sub = await (registration as any).pushManager?.getSubscription();
       
       if (!sub) {
         // For now, just enable notifications without server push

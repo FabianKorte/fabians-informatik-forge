@@ -289,41 +289,39 @@ export default function UserDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold">Mein Dashboard</h1>
-          </div>
-          <div className="flex gap-2">
-            <Button variant="default" onClick={() => navigate("/")}>
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              <span className="hidden sm:inline">Startseite</span>
+        <div className="container mx-auto px-4 py-3 sm:py-4 flex items-center justify-between gap-2">
+          <h1 className="text-lg sm:text-2xl font-bold truncate">Mein Dashboard</h1>
+          <div className="flex gap-1 sm:gap-2 flex-shrink-0">
+            <Button variant="default" size="sm" onClick={() => navigate("/")}>
+              <ArrowLeft className="w-4 h-4" />
+              <span className="hidden sm:inline ml-2">Startseite</span>
             </Button>
-            <Button variant="outline" onClick={() => navigate("/chat")}>
-              <MessageCircle className="w-4 h-4 mr-2" />
-              <span className="hidden sm:inline">Chat</span>
+            <Button variant="outline" size="sm" onClick={() => navigate("/chat")}>
+              <MessageCircle className="w-4 h-4" />
+              <span className="hidden md:inline ml-2">Chat</span>
             </Button>
-            <Button variant="outline" onClick={() => navigate("/profile")}>
-              <User className="w-4 h-4 mr-2" />
-              <span className="hidden sm:inline">Profil</span>
+            <Button variant="outline" size="sm" onClick={() => navigate("/profile")}>
+              <User className="w-4 h-4" />
+              <span className="hidden md:inline ml-2">Profil</span>
             </Button>
             {isAdmin && (
-              <Button variant="default" onClick={() => navigate("/admin")}>
-                <Settings className="w-4 h-4 mr-2" />
-                <span className="hidden sm:inline">Admin</span>
+              <Button variant="default" size="sm" onClick={() => navigate("/admin")}>
+                <Settings className="w-4 h-4" />
+                <span className="hidden md:inline ml-2">Admin</span>
               </Button>
             )}
-            <Button variant="outline" onClick={() => signOut()}>
-              <LogOut className="w-4 h-4 mr-2" />
-              <span className="hidden sm:inline">Abmelden</span>
+            <Button variant="outline" size="sm" onClick={() => signOut()}>
+              <LogOut className="w-4 h-4" />
+              <span className="hidden md:inline ml-2">Abmelden</span>
             </Button>
           </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
-        <div className="mb-6">
-          <h2 className="text-3xl font-bold mb-2">Willkommen, {username}!</h2>
-          <p className="text-muted-foreground">
+      <main className="container mx-auto px-4 py-6 sm:py-8">
+        <div className="mb-4 sm:mb-6">
+          <h2 className="text-xl sm:text-3xl font-bold mb-1 sm:mb-2">Willkommen, {username}!</h2>
+          <p className="text-sm sm:text-base text-muted-foreground">
             Verwalte deine Lernfortschritte und schlage neue Inhalte vor
           </p>
         </div>

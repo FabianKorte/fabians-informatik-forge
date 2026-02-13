@@ -71,7 +71,7 @@ const AppRoutes = () => {
       <SkipToContent />
       <PWAInstallPrompt />
       <OfflineIndicator />
-      <div className="fixed top-16 md:top-4 left-0 right-0 z-40 px-4">
+      <div className="relative z-40 px-3 sm:px-4 pt-14 sm:pt-16 pb-2">
         <div className="max-w-7xl mx-auto">
           <SiteAnnouncementBanner />
         </div>
