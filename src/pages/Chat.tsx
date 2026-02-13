@@ -471,12 +471,12 @@ const Chat = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container max-w-4xl mx-auto p-4 flex flex-col h-screen">
-        <div className="flex items-center gap-4 mb-4">
+      <div className="container max-w-4xl mx-auto px-3 sm:px-4 py-3 sm:py-4 flex flex-col h-screen">
+        <div className="flex items-center gap-3 mb-3 sm:mb-4">
           <Button variant="ghost" size="icon" onClick={() => navigate('/')}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <h1 className="text-2xl font-bold">Community Chat</h1>
+          <h1 className="text-lg sm:text-2xl font-bold">Community Chat</h1>
         </div>
 
         <OnlineUsers users={onlineUsers} />

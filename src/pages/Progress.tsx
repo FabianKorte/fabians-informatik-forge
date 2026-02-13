@@ -146,8 +146,8 @@ const Progress = () => {
       <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b border-border bg-card">
-        <div className="max-w-6xl mx-auto px-6 py-4">
-          <div className="flex items-center gap-4">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             <Button
               variant="outline"
               size="sm"
@@ -158,7 +158,7 @@ const Progress = () => {
               Zurück
             </Button>
             <div>
-              <h1 className="text-2xl font-medium text-foreground">Lernfortschritt</h1>
+              <h1 className="text-lg sm:text-2xl font-medium text-foreground">Lernfortschritt</h1>
               <p className="text-sm text-muted-foreground">
                 Detailierte Übersicht deiner Lernaktivitäten
               </p>
@@ -167,64 +167,64 @@ const Progress = () => {
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto px-6 py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* Overall Statistics */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card className="p-6">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-primary/10 rounded-lg">
-                <Trophy className="w-5 h-5 text-primary" />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
+          <Card className="p-3 sm:p-6">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="p-1.5 sm:p-2 bg-primary/10 rounded-lg">
+                <Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
               </div>
               <div>
-                <p className="text-2xl font-semibold text-foreground">
+                <p className="text-lg sm:text-2xl font-semibold text-foreground">
                   {overallStats.totalCategories}
                 </p>
-                <p className="text-sm text-muted-foreground">Kategorien aktiv</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Kategorien</p>
               </div>
             </div>
           </Card>
 
-          <Card className="p-6">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-accent/10 rounded-lg">
-                <BookOpen className="w-5 h-5 text-accent" />
+          <Card className="p-3 sm:p-6">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="p-1.5 sm:p-2 bg-accent/10 rounded-lg">
+                <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-accent" />
               </div>
               <div>
-                <p className="text-2xl font-semibold text-foreground">
+                <p className="text-lg sm:text-2xl font-semibold text-foreground">
                   {categoryStats.reduce((sum, cat) => sum + cat.completedItems, 0)}
                 </p>
-                <p className="text-sm text-muted-foreground">Abgeschlossen</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Abgeschlossen</p>
               </div>
             </div>
           </Card>
 
-          <Card className="p-6">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-success/10 rounded-lg">
-                <Target className="w-5 h-5 text-success-foreground" />
+          <Card className="p-3 sm:p-6">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="p-1.5 sm:p-2 bg-success/10 rounded-lg">
+                <Target className="w-4 h-4 sm:w-5 sm:h-5 text-success-foreground" />
               </div>
               <div>
-                <p className="text-2xl font-semibold text-foreground">
+                <p className="text-lg sm:text-2xl font-semibold text-foreground">
                   {Math.round(
                     categoryStats.reduce((sum, cat) => sum + cat.completionRate, 0) / 
                     Math.max(categoryStats.length, 1)
                   )}%
                 </p>
-                <p className="text-sm text-muted-foreground">Durchschnitt</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Durchschnitt</p>
               </div>
             </div>
           </Card>
 
-          <Card className="p-6">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-destructive/10 rounded-lg">
-                <Brain className="w-5 h-5 text-destructive" />
+          <Card className="p-3 sm:p-6">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="p-1.5 sm:p-2 bg-destructive/10 rounded-lg">
+                <Brain className="w-4 h-4 sm:w-5 sm:h-5 text-destructive" />
               </div>
               <div>
-                <p className="text-2xl font-semibold text-foreground">
+                <p className="text-lg sm:text-2xl font-semibold text-foreground">
                   {categoryStats.reduce((sum, cat) => sum + cat.difficultItems, 0)}
                 </p>
-                <p className="text-sm text-muted-foreground">Schwierige Inhalte</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Schwierige</p>
               </div>
             </div>
           </Card>
@@ -247,7 +247,7 @@ const Progress = () => {
             ) : (
               <div className="grid gap-6">
                 {categoryStats.map((category) => (
-                  <Card key={category.id} className="p-6">
+                  <Card key={category.id} className="p-4 sm:p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center gap-3">
                         <div className="p-2 bg-accent/10 rounded-lg">
@@ -277,7 +277,7 @@ const Progress = () => {
                       </div>
                       <ProgressBar value={category.completionRate} className="h-2" />
 
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                      <div className="grid grid-cols-3 gap-2 sm:gap-4 pt-2">
                         <div className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-success-foreground" />
                           <span className="text-sm text-muted-foreground">
@@ -298,14 +298,15 @@ const Progress = () => {
                         </div>
                       </div>
 
-                      <div className="flex gap-2 pt-2">
+                      <div className="flex flex-wrap gap-2 pt-2">
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => handleContinueLearning(category.id)}
                         >
                           <BookOpen className="w-4 h-4" />
-                          Weiterlernen
+                          <span className="hidden sm:inline ml-1">Weiterlernen</span>
+                          <span className="sm:hidden ml-1">Lernen</span>
                         </Button>
                         {category.difficultItems > 0 && (
                           <Button
@@ -314,7 +315,8 @@ const Progress = () => {
                             onClick={() => handleFocusLearning(category.id)}
                           >
                             <Brain className="w-4 h-4" />
-                            Schwerpunkt-Training ({category.difficultItems})
+                            <span className="hidden sm:inline ml-1">Schwerpunkt ({category.difficultItems})</span>
+                            <span className="sm:hidden ml-1">Training ({category.difficultItems})</span>
                           </Button>
                         )}
                       </div>

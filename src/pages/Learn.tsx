@@ -96,12 +96,12 @@ const LearnPage = () => {
       />
       {category && <CourseStructuredData category={category} totalModules={modules.length} />}
       <main className="min-h-screen bg-background">
-      <header className="px-6 pt-14 pb-10 bg-gradient-to-b from-background to-background">
-        <div className="max-w-6xl mx-auto space-y-6">
-          <div className="mb-6">
+      <header className="px-4 sm:px-6 pt-10 sm:pt-14 pb-6 sm:pb-10 bg-gradient-to-b from-background to-background">
+        <div className="max-w-6xl mx-auto space-y-4 sm:space-y-6">
+          <div className="mb-4 sm:mb-6">
             <span className="inline-block text-xs uppercase tracking-wider text-muted-foreground">{category.difficulty}</span>
-            <h1 className="text-3xl md:text-4xl font-extrabold text-foreground mt-2">{category.title}</h1>
-            <p className="text-muted-foreground mt-2 max-w-2xl">{category.description}</p>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-foreground mt-2">{category.title}</h1>
+            <p className="text-sm sm:text-base text-muted-foreground mt-2 max-w-2xl">{category.description}</p>
           </div>
           
           {/* Gamification & Streak Display */}
@@ -116,13 +116,13 @@ const LearnPage = () => {
         </div>
       </header>
 
-      <section className="px-6 py-10">
+      <section className="px-4 sm:px-6 py-6 sm:py-10">
         <div className="max-w-6xl mx-auto">
           {!selectedMethod ? (
             // Main Learning Hub
             <div className="space-y-8">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-foreground mb-4">Lernmethoden</h2>
+              <div className="text-center mb-6 sm:mb-12">
+                <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-3 sm:mb-4">Lernmethoden</h2>
                 <p className="text-muted-foreground max-w-2xl mx-auto">
                   Wähle zwischen verschiedenen Lernmethoden oder starte das interaktive Training für eine abwechslungsreiche Lernerfahrung.
                 </p>

@@ -226,19 +226,19 @@ const Profile = () => {
         keywords="Profil, Benutzer, Statistiken, Achievements, IHK, Fachinformatiker"
         canonical="https://informatik-lernplattform.lovable.app/profile"
       />
-      <div className="min-h-screen bg-background p-4">
-      <div className="max-w-4xl mx-auto space-y-6">
-        <div className="flex items-center gap-4">
+      <div className="min-h-screen bg-background p-3 sm:p-4">
+      <div className="max-w-4xl mx-auto space-y-4 sm:space-y-6">
+        <div className="flex items-center gap-3 sm:gap-4">
           <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")}>
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div>
-            <h1 className="text-3xl font-bold">Mein Profil</h1>
-            <p className="text-muted-foreground">Verwalte deine Kontoinformationen</p>
+            <h1 className="text-xl sm:text-3xl font-bold">Mein Profil</h1>
+            <p className="text-sm sm:text-base text-muted-foreground">Verwalte deine Kontoinformationen</p>
           </div>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
           {/* Profile Information Card */}
           <Card>
             <CardHeader>
