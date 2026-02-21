@@ -147,7 +147,5 @@ class MemoryMonitor {
 
 export const memoryMonitor = new MemoryMonitor();
 
-// Start monitoring in development
-if (import.meta.env.DEV) {
-  memoryMonitor.startMonitoring(60000); // Check every minute in dev
-}
+// Memory monitoring is available but not auto-started to avoid unnecessary overhead.
+// Call memoryMonitor.startMonitoring() manually when needed.

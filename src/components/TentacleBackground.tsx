@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, memo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Pause, Play } from 'lucide-react';
 
@@ -14,19 +14,17 @@ class TentacleDot {
   constructor(x: number, y: number) {
     this.x = x;
     this.y = y;
-    this.size = Math.random() * 3 + 2; // Größere Partikel
+    this.size = Math.random() * 3 + 2;
     this.speedY = (Math.random() - 0.5) * 0.5;
     this.speedX = (Math.random() - 0.5) * 0.5;
-    this.baseAlpha = Math.random() * 0.4 + 0.3; // Deutlich sichtbarer
+    this.baseAlpha = Math.random() * 0.4 + 0.3;
     this.alpha = this.baseAlpha;
   }
 
   update(mouse: { x: number; y: number }, bounds: { width: number; height: number }) {
-    // Sanfte zufällige Bewegung
     this.x += this.speedX;
     this.y += this.speedY;
 
-    // Sehr subtile Bewegung zur Maus
     const dx = mouse.x - this.x;
     const dy = mouse.y - this.y;
     const dist = Math.sqrt(dx * dx + dy * dy);
@@ -37,185 +35,183 @@ class TentacleDot {
       this.y += (dy / dist) * force;
     }
 
-    // Sanfte Randabpraller
     if (this.x < 0 || this.x > bounds.width) this.speedX *= -1;
     if (this.y < 0 || this.y > bounds.height) this.speedY *= -1;
     
-    // Bounds begrenzen
     this.x = Math.max(0, Math.min(bounds.width, this.x));
     this.y = Math.max(0, Math.min(bounds.height, this.y));
 
-    // Sanftes Pulsieren
     this.alpha = this.baseAlpha + Math.sin(Date.now() * 0.001) * 0.05;
-  }
-
-  draw(ctx: CanvasRenderingContext2D) {
-    // Draw method removed - now handled in animate loop for proper color
   }
 }
 
-export const TentacleBackground = () => {
+const TentacleBackgroundComponent = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const dotsRef = useRef<TentacleDot[]>([]);
   const mouseRef = useRef({ x: 0, y: 0 });
   const animationFrameRef = useRef<number>();
   const primaryColorRef = useRef<string>('220, 9%, 20%');
   const [isPaused, setIsPaused] = useState(false);
+  const isPausedRef = useRef(false);
   const dprRef = useRef<number>(1);
   const isMobileRef = useRef<boolean>(false);
   const lastFrameTimeRef = useRef<number>(0);
+  const isVisibleRef = useRef<boolean>(true);
+
+  // Sync isPaused to ref so animation loop sees it without re-creating
+  useEffect(() => {
+    isPausedRef.current = isPaused;
+  }, [isPaused]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
-    // Farben aus Design-Token lesen (leuchtender Farbton bevorzugt)
+    // Detect mobile once
+    isMobileRef.current = window.innerWidth < 768;
+
+    // On mobile, don't run canvas animation at all — use CSS fallback
+    if (isMobileRef.current) {
+      canvas.style.display = 'none';
+      return;
+    }
+
+    // Read design tokens
     const computedStyle = getComputedStyle(document.documentElement);
     const glowValue = computedStyle.getPropertyValue('--primary-glow').trim();
     const accentValue = computedStyle.getPropertyValue('--accent').trim();
     const primaryValue = computedStyle.getPropertyValue('--primary').trim();
     const fgValue = computedStyle.getPropertyValue('--foreground').trim();
 
-    if (glowValue) {
-      primaryColorRef.current = glowValue;
-    } else if (accentValue) {
-      primaryColorRef.current = accentValue;
-    } else if (primaryValue) {
-      primaryColorRef.current = primaryValue;
-    } else if (fgValue) {
-      primaryColorRef.current = fgValue;
-    } else {
-      primaryColorRef.current = '217 75% 70%';
-    }
+    primaryColorRef.current = glowValue || accentValue || primaryValue || fgValue || '217 75% 70%';
 
     const resize = () => {
-      // Mobile Detection
-      isMobileRef.current = window.innerWidth < 768;
-      
-      // Reduzierte DPR auf Mobilgeräten für bessere Performance
-      const dpr = isMobileRef.current ? 1 : Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       dprRef.current = dpr;
       canvas.width = Math.floor(window.innerWidth * dpr);
       canvas.height = Math.floor(window.innerHeight * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       mouseRef.current = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-      
-      // Partikelanzahl bei Resize anpassen
-      const targetCount = isMobileRef.current ? 12 : 180;
-      if (dotsRef.current.length > targetCount) {
-        dotsRef.current = dotsRef.current.slice(0, targetCount);
-      } else if (dotsRef.current.length < targetCount) {
-        const needed = targetCount - dotsRef.current.length;
-        for (let i = 0; i < needed; i++) {
-          dotsRef.current.push(
-            new TentacleDot(
-              Math.random() * window.innerWidth,
-              Math.random() * window.innerHeight
-            )
-          );
-        }
-      }
     };
 
     resize();
 
-    // Erstelle initiale Partikel basierend auf Bildschirmgröße
-    if (dotsRef.current.length === 0) {
-      const isMobile = window.innerWidth < 768;
-      const particleCount = isMobile ? 12 : 180; // Minimal auf Mobile
-      
-      for (let i = 0; i < particleCount; i++) {
-        dotsRef.current.push(
-          new TentacleDot(
-            Math.random() * window.innerWidth,
-            Math.random() * window.innerHeight
-          )
-        );
-      }
+    // Reduced particle count: 60 instead of 180
+    const particleCount = 60;
+    for (let i = 0; i < particleCount; i++) {
+      dotsRef.current.push(
+        new TentacleDot(
+          Math.random() * window.innerWidth,
+          Math.random() * window.innerHeight
+        )
+      );
     }
 
+    // Visibility API: pause when tab is hidden
+    const handleVisibility = () => {
+      isVisibleRef.current = !document.hidden;
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+
     const animate = (timestamp: number) => {
-      // Frame-Throttling auf Mobile (30 FPS statt 60 FPS)
-      if (isMobileRef.current) {
-        const elapsed = timestamp - lastFrameTimeRef.current;
-        if (elapsed < 33) { // ~30 FPS
-          animationFrameRef.current = requestAnimationFrame(animate);
-          return;
-        }
-        lastFrameTimeRef.current = timestamp;
+      animationFrameRef.current = requestAnimationFrame(animate);
+
+      // Skip frame if hidden or paused
+      if (!isVisibleRef.current || isPausedRef.current) return;
+
+      // Throttle to ~30 FPS
+      const elapsed = timestamp - lastFrameTimeRef.current;
+      if (elapsed < 33) return;
+      lastFrameTimeRef.current = timestamp;
+
+      const w = canvas.width / dprRef.current;
+      const h = canvas.height / dprRef.current;
+      ctx.clearRect(0, 0, w, h);
+
+      const bounds = { width: w, height: h };
+      const dots = dotsRef.current;
+      const color = primaryColorRef.current;
+
+      // Update & draw dots
+      for (let i = 0; i < dots.length; i++) {
+        const dot = dots[i];
+        dot.update(mouseRef.current, bounds);
+        ctx.globalAlpha = dot.alpha;
+        ctx.fillStyle = `hsl(${color})`;
+        ctx.beginPath();
+        ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+
+      // Connection lines — use spatial grid to avoid O(n²)
+      const connectionDistance = 120;
+      const connectionOpacity = 0.12;
+      const cellSize = connectionDistance;
+      const gridCols = Math.ceil(w / cellSize);
+      const grid = new Map<number, number[]>();
+
+      for (let i = 0; i < dots.length; i++) {
+        const col = Math.floor(dots[i].x / cellSize);
+        const row = Math.floor(dots[i].y / cellSize);
+        const key = row * gridCols + col;
+        const cell = grid.get(key);
+        if (cell) cell.push(i);
+        else grid.set(key, [i]);
       }
 
-      if (!isPaused) {
-        const w = canvas.width / dprRef.current;
-        const h = canvas.height / dprRef.current;
-        ctx.clearRect(0, 0, w, h);
-
-        const bounds = { width: w, height: h };
-
-        // Punkte aktualisieren & zeichnen
-        for (const dot of dotsRef.current) {
-          dot.update(mouseRef.current, bounds);
-          ctx.save();
-          ctx.globalAlpha = dot.alpha;
-          ctx.fillStyle = `hsl(${primaryColorRef.current})`;
-          ctx.beginPath();
-          ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
-        }
-
-        // Verbindungslinien - NUR auf Desktop
-        if (!isMobileRef.current) {
-          const connectionDistance = 150;
-          const connectionOpacity = 0.15;
-          
-          for (let i = 0; i < dotsRef.current.length; i++) {
-            for (let j = i + 1; j < dotsRef.current.length; j++) {
-              const dx = dotsRef.current[i].x - dotsRef.current[j].x;
-              const dy = dotsRef.current[i].y - dotsRef.current[j].y;
-              const dist = Math.sqrt(dx * dx + dy * dy);
-              
-              if (dist < connectionDistance) {
+      ctx.lineWidth = 1;
+      for (const [key, indices] of grid) {
+        const row = Math.floor(key / gridCols);
+        const col = key % gridCols;
+        // Check same cell and 3 neighbors (right, bottom, bottom-right)
+        const neighbors = [key, row * gridCols + col + 1, (row + 1) * gridCols + col, (row + 1) * gridCols + col + 1];
+        for (const nKey of neighbors) {
+          const nIndices = grid.get(nKey);
+          if (!nIndices) continue;
+          for (const i of indices) {
+            for (const j of nIndices) {
+              if (j <= i) continue;
+              const dx = dots[i].x - dots[j].x;
+              const dy = dots[i].y - dots[j].y;
+              const distSq = dx * dx + dy * dy;
+              if (distSq < connectionDistance * connectionDistance) {
+                const dist = Math.sqrt(distSq);
                 const opacity = (1 - dist / connectionDistance) * connectionOpacity;
-                ctx.strokeStyle = `hsla(${primaryColorRef.current} / ${opacity})`;
-                ctx.lineWidth = 1;
+                ctx.strokeStyle = `hsla(${color} / ${opacity})`;
                 ctx.beginPath();
-                ctx.moveTo(dotsRef.current[i].x, dotsRef.current[i].y);
-                ctx.lineTo(dotsRef.current[j].x, dotsRef.current[j].y);
+                ctx.moveTo(dots[i].x, dots[i].y);
+                ctx.lineTo(dots[j].x, dots[j].y);
                 ctx.stroke();
               }
             }
           }
         }
       }
-
-      animationFrameRef.current = requestAnimationFrame(animate);
     };
 
     const handleMouseMove = (e: MouseEvent) => {
       mouseRef.current = { x: e.clientX, y: e.clientY };
     };
 
-    // Nur auf Desktop Maus-Tracking (auf Mobile nicht nötig)
-    if (!isMobileRef.current) {
-      window.addEventListener('mousemove', handleMouseMove);
-    }
-    
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
     window.addEventListener('resize', resize);
     
-    animate(0);
+    animationFrameRef.current = requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', resize);
+      document.removeEventListener('visibilitychange', handleVisibility);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
+      dotsRef.current = [];
     };
-  }, [isPaused]);
+  }, []);
 
   return (
     <>
@@ -224,7 +220,7 @@ export const TentacleBackground = () => {
         className="fixed inset-0 pointer-events-none"
         style={{ 
           zIndex: -1,
-          opacity: window.innerWidth < 768 ? 0.4 : 0.7,
+          opacity: 0.7,
           mixBlendMode: 'screen'
         }}
       />
@@ -240,3 +236,5 @@ export const TentacleBackground = () => {
     </>
   );
 };
+
+export const TentacleBackground = memo(TentacleBackgroundComponent);

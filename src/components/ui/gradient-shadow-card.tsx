@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
 
 interface GradientShadowCardProps {
@@ -12,25 +12,39 @@ export const GradientShadowCard = ({
   className,
   onClick 
 }: GradientShadowCardProps) => {
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
-    const distLeft = mx;
-    const distRight = rect.width - mx;
-    const distTop = my;
-    const distBottom = rect.height - my;
-    const minDist = Math.min(distLeft, distRight, distTop, distBottom);
+  const rafRef = useRef<number | null>(null);
+  const pendingRef = useRef<{ x: number; y: number } | null>(null);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    pendingRef.current = { x: e.clientX, y: e.clientY };
     
-    let gx = mx, gy = my;
-    if (minDist === distLeft) { gx = 0; gy = my; }
-    else if (minDist === distRight) { gx = rect.width; gy = my; }
-    else if (minDist === distTop) { gx = mx; gy = 0; }
-    else { gx = mx; gy = rect.height; }
+    if (rafRef.current) return;
     
-    e.currentTarget.style.setProperty('--glow-x', `${(gx / rect.width) * 100}%`);
-    e.currentTarget.style.setProperty('--glow-y', `${(gy / rect.height) * 100}%`);
-  };
+    const target = e.currentTarget;
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = null;
+      const pos = pendingRef.current;
+      if (!pos) return;
+      
+      const rect = target.getBoundingClientRect();
+      const mx = pos.x - rect.left;
+      const my = pos.y - rect.top;
+      const distLeft = mx;
+      const distRight = rect.width - mx;
+      const distTop = my;
+      const distBottom = rect.height - my;
+      const minDist = Math.min(distLeft, distRight, distTop, distBottom);
+      
+      let gx = mx, gy = my;
+      if (minDist === distLeft) { gx = 0; gy = my; }
+      else if (minDist === distRight) { gx = rect.width; gy = my; }
+      else if (minDist === distTop) { gx = mx; gy = 0; }
+      else { gx = mx; gy = rect.height; }
+      
+      target.style.setProperty('--glow-x', `${(gx / rect.width) * 100}%`);
+      target.style.setProperty('--glow-y', `${(gy / rect.height) * 100}%`);
+    });
+  }, []);
 
   return (
     <div 
