@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { Category } from "@/data/categories";
-import * as Icons from "lucide-react";
+import { Code2, type LucideIcon } from "lucide-react";
 import { logger } from "@/lib/logger";
 
 // Helper to fail fast if a network request hangs
@@ -36,10 +36,13 @@ export async function getCategoriesFromDatabase(): Promise<Category[]> {
 
     logger.info('Fetched', data.length, 'categories from database');
 
+    // Lazy-load the icon map only when needed (avoids importing all icons at module level)
+    const allIcons = await import("lucide-react");
+    
     return data.map(cat => {
-      let IconComponent = Icons.Code2;
-      if (cat.icon && (Icons as any)[cat.icon]) {
-        IconComponent = (Icons as any)[cat.icon];
+      let IconComponent: LucideIcon = Code2;
+      if (cat.icon && (allIcons as any)[cat.icon]) {
+        IconComponent = (allIcons as any)[cat.icon];
       }
       
       return {

@@ -193,10 +193,9 @@ All colors MUST be HSL.
     color: hsl(var(--foreground));
   }
 
-  /* Enable View Transitions API for smooth page transitions */
-  @view-transition {
-    navigation: auto;
-  }
+  /* View Transitions API — let the browser handle transitions natively.
+     Removed conflicting @view-transition block that caused double-animation
+     with the JS useViewTransition hook. */
 }
 
 /* View Transitions API Customization */
@@ -382,19 +381,22 @@ All colors MUST be HSL.
     100% { transform: translateY(0); opacity: 1; }
   }
 
-  .animate-float { animation: float 4s ease-in-out infinite; }
-  .animate-float-reverse { animation: float-reverse 4s ease-in-out infinite; }
+  .animate-float { animation: float 4s ease-in-out infinite; will-change: transform; }
+  .animate-float-reverse { animation: float-reverse 4s ease-in-out infinite; will-change: transform; }
   .animate-fade-in { animation: fade-in 0.5s ease-out; }
   .animate-slide-up { animation: slide-up 0.6s ease-out; }
 
   /* Enhanced gradient shadow effect with mouse tracking */
   .gradient-shadow-card {
     position: relative;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     border-radius: 1rem;
-    will-change: filter, transform;
     --glow-ox: 0px;
     --glow-oy: 0px;
+  }
+
+  .gradient-shadow-card:hover {
+    will-change: filter, transform;
   }
 
   .gradient-shadow-card::before {
@@ -410,6 +412,7 @@ All colors MUST be HSL.
     pointer-events: none;
     z-index: -3;
     filter: blur(20px);
+    contain: strict;
   }
 
   .gradient-shadow-card:hover::before {
@@ -428,6 +431,7 @@ All colors MUST be HSL.
     transition: opacity 0.3s ease;
     z-index: -2;
     pointer-events: none;
+    contain: strict;
   }
 
   .gradient-shadow-card:hover::after {
