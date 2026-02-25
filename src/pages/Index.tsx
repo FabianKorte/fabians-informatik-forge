@@ -203,7 +203,7 @@ const Index = () => {
 
       {/* IHK-Prüfungssimulator - Prominent */}
       {examCategory && (
-        <section className="py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-warning/10 via-warning/5 to-accent/10 backdrop-blur-sm">
+        <section className="py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-warning/10 via-warning/5 to-accent/10">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-6 sm:mb-8">
               <div className="inline-flex items-center gap-2 mb-3 sm:mb-4">
@@ -234,7 +234,7 @@ const Index = () => {
 
 
       {randomTrainingCategory && (
-        <section className="py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-primary/5 via-accent/5 to-primary/5 backdrop-blur-sm">
+        <section className="py-6 sm:py-12 px-4 sm:px-6 bg-gradient-to-br from-primary/5 via-accent/5 to-primary/5">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-6 sm:mb-8">
               <div className="inline-flex items-center gap-2 mb-3 sm:mb-4">
@@ -263,7 +263,7 @@ const Index = () => {
         </section>
       )}
 
-      <section id="categories-section" className="py-8 sm:py-20 px-4 sm:px-6 bg-background/30 backdrop-blur-sm">
+      <section id="categories-section" className="py-8 sm:py-20 px-4 sm:px-6 bg-background/30">
         <main 
           id="main-content"
           tabIndex={-1}
@@ -330,7 +330,7 @@ const Index = () => {
         </main>
       </section>
 
-      <section className="py-8 sm:py-20 px-4 sm:px-6 bg-muted/10 backdrop-blur-sm">
+      <section className="py-8 sm:py-20 px-4 sm:px-6 bg-muted/10">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-8 sm:mb-16">
             <h2 className="text-2xl sm:text-3xl font-medium text-foreground mb-2 sm:mb-4">Feedback</h2>

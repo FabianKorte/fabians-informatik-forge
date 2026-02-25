@@ -31,10 +31,10 @@ export const Hero = ({
       className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-background to-muted/30 view-transition-hero"
       aria-labelledby="hero-title"
     >
-      {/* Subtle floating elements */}
-      <div className="absolute top-1/4 left-1/4 w-2 h-2 rounded-full bg-accent/30 animate-float" aria-hidden="true" />
-      <div className="absolute top-1/3 right-1/3 w-1 h-1 rounded-full bg-primary/20 animate-float" style={{ animationDelay: '2s' }} aria-hidden="true" />
-      <div className="absolute bottom-1/3 left-1/2 w-1.5 h-1.5 rounded-full bg-accent/20 animate-float" style={{ animationDelay: '1s' }} aria-hidden="true" />
+      {/* Subtle floating elements — use GPU-friendly animation */}
+      <div className="absolute top-1/4 left-1/4 w-2 h-2 rounded-full bg-accent/30 animate-float [contain:layout_paint]" aria-hidden="true" />
+      <div className="absolute top-1/3 right-1/3 w-1 h-1 rounded-full bg-primary/20 animate-float [contain:layout_paint]" style={{ animationDelay: '2s' }} aria-hidden="true" />
+      <div className="absolute bottom-1/3 left-1/2 w-1.5 h-1.5 rounded-full bg-accent/20 animate-float [contain:layout_paint]" style={{ animationDelay: '1s' }} aria-hidden="true" />
 
       {/* Main content */}
       <div className="relative z-10 text-center max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-20">
