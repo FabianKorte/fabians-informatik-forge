@@ -21,7 +21,7 @@ interface StoredProgress {
 export function useSubnetting() {
   const { addXP } = useGamification();
   const { toast } = useToast();
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const challengeStartTimeRef = useRef<number>(0);
 
   const [state, setState] = useState<SubnettingState>(() => {

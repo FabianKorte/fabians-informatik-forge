@@ -67,7 +67,7 @@ const Chat = () => {
   const [typingUsers, setTypingUsers] = useState<string[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messageTimestampsRef = useRef<number[]>([]);
-  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
 
   useEffect(() => {
@@ -186,7 +186,7 @@ const Chat = () => {
       });
 
     // Listen for typing events
-    const typingTimers = new Map<string, NodeJS.Timeout>();
+    const typingTimers = new Map<string, ReturnType<typeof setTimeout>>();
     
     channel.on('broadcast', { event: 'typing' }, ({ payload }: any) => {
       if (payload.user_id !== user.id) {

@@ -53,7 +53,7 @@ export function checkSessionTimeout(session: Session): boolean {
  * 
  * @param {() => Session | null} getSession - Function to get current session
  * @param {() => void} onExpired - Callback when session expires
- * @returns {NodeJS.Timeout} Interval ID for cleanup
+ * @returns {ReturnType<typeof setTimeout>} Interval ID for cleanup
  * 
  * @example
  * const intervalId = createSessionCheckInterval(
@@ -65,7 +65,7 @@ export function checkSessionTimeout(session: Session): boolean {
 export function createSessionCheckInterval(
   getSession: () => Session | null,
   onExpired: () => void
-): NodeJS.Timeout {
+): ReturnType<typeof setTimeout> {
   return setInterval(() => {
     const currentSession = getSession();
     if (currentSession && !checkSessionTimeout(currentSession)) {
