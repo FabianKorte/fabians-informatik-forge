@@ -119,6 +119,7 @@ const AppRoutes = () => {
             <Route path="/struktogramm" element={<StruktogrammPage />} />
             <Route path="/bit-calculator" element={<BitCalculatorPage />} />
             <Route path="/communication-trainer" element={<CommunicationTrainerPage />} />
+            <Route path="/device-check" element={<DeviceCheck />} />
             <Route path="/chat" element={
               <ChatErrorBoundary>
                 <Chat />
