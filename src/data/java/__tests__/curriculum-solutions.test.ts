@@ -6,7 +6,7 @@ import { executeJavaCode, compareOutputs } from "@/lib/pistonApi";
 const PISTON_TIMEOUT = 30000;
 
 // Skip API tests in CI unless explicitly enabled
-const SKIP_API_TESTS = process.env.CI === "true" && process.env.TEST_PISTON_API !== "true";
+const SKIP_API_TESTS = (import.meta as any).env.CI === "true" && (import.meta as any).env.TEST_PISTON_API !== "true";
 
 describe("Java Curriculum Solutions", () => {
   it("should have solutions for all lessons", () => {

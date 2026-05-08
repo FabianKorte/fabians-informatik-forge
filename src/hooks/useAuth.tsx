@@ -41,7 +41,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const { toast } = useToast();
 
   useEffect(() => {
-    let timeoutInterval: NodeJS.Timeout | undefined;
+    let timeoutInterval: ReturnType<typeof setTimeout> | undefined;
 
     // Set up auth state listener FIRST to avoid missing events
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, newSession) => {

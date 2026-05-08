@@ -33,7 +33,7 @@ export default function AIChatbot() {
   const { toast } = useToast();
   const { user } = useAuth();
   const retryCountRef = useRef(0);
-  const retryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const retryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const MAX_RETRIES = 3;
 
   // Focus trap when chatbot is open

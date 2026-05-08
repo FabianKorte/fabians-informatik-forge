@@ -21,7 +21,7 @@ export const PWAInstallPrompt = () => {
 
     if (dismissed || isInstalled) return;
 
-    let promptTimer: NodeJS.Timeout;
+    let promptTimer: ReturnType<typeof setTimeout>;
 
     const handler = (e: Event) => {
       e.preventDefault();

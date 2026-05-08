@@ -14,7 +14,7 @@ interface MemorySnapshot {
 class MemoryMonitor {
   private snapshots: MemorySnapshot[] = [];
   private maxSnapshots = 20;
-  private monitoringInterval: NodeJS.Timeout | null = null;
+  private monitoringInterval: ReturnType<typeof setTimeout> | null = null;
 
   /**
    * Start monitoring memory usage
