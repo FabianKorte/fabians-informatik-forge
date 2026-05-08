@@ -50,6 +50,7 @@ const HardwarePuzzlePage = lazy(() => import("./pages/HardwarePuzzle"));
 const StruktogrammPage = lazy(() => import("./pages/Struktogramm"));
 const BitCalculatorPage = lazy(() => import("./pages/BitCalculator"));
 const CommunicationTrainerPage = lazy(() => import("./pages/CommunicationTrainer"));
+const DeviceCheck = lazy(() => import("./pages/DeviceCheck"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
