@@ -50,6 +50,7 @@ const HardwarePuzzlePage = lazy(() => import("./pages/HardwarePuzzle"));
 const StruktogrammPage = lazy(() => import("./pages/Struktogramm"));
 const BitCalculatorPage = lazy(() => import("./pages/BitCalculator"));
 const CommunicationTrainerPage = lazy(() => import("./pages/CommunicationTrainer"));
+const DeviceCheck = lazy(() => import("./pages/DeviceCheck"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -118,6 +119,7 @@ const AppRoutes = () => {
             <Route path="/struktogramm" element={<StruktogrammPage />} />
             <Route path="/bit-calculator" element={<BitCalculatorPage />} />
             <Route path="/communication-trainer" element={<CommunicationTrainerPage />} />
+            <Route path="/device-check" element={<DeviceCheck />} />
             <Route path="/chat" element={
               <ChatErrorBoundary>
                 <Chat />
